@@ -1,0 +1,27 @@
+@import 'common';
+@import 'tool';
+@import './font/iconfont.css';
+@import './fontService/iconfont.css';
+@import './animate.css';
+.mint-tab-container-wrap {
+  height:100%;
+}
+.mint-header {
+  background: #303642;
+}
+.main_color {
+  color:#3395FF;
+}
+.main_bg {
+  background:#3395FF;
+}
+.padding15-h{
+  padding-left:15px;
+  padding-right:15px;
+}
+.dark_99 {
+  color: #999;
+}
+.picker-items{
+  width:100%
+}
