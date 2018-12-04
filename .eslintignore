@@ -3,4 +3,5 @@
 /dist/
 /*.js
 /src/utils/md5.js
+/src/utils/dateFormat.js
 /test/unit/coverage/
