@@ -73,6 +73,12 @@
           </div>
           <p class="weui-grid__label">收款测试</p>
         </a>
+        <a @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_off_download.png" alt="">
+          </div>
+          <p class="weui-grid__label">会议室</p>
+        </a>
       </div>
     </div>
   </div>

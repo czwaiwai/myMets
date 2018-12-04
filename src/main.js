@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import './assets/css/main.scss'
+import './assets/font/meeting/iconfont.css'
 import 'vue-photo-preview/dist/skin.css'
 import Vue from 'vue'
 import App from './App'

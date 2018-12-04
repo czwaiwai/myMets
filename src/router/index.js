@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import sess from '@/utils/sess'
 import customerService from './customerService'
+// 会议室
+import meeting from './meeting'
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
 import TabWork from '@/views/tabWork'
@@ -235,6 +237,7 @@ export default new Router({
       name: 'subDetail',
       component: SubDetail
     },
-    ...customerService
+    ...customerService,
+    ...meeting
   ]
 })

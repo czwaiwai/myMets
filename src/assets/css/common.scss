@@ -36,7 +36,7 @@ html,body {
   -webkit-overflow-scrolling: touch;
   -webkit-transform: translateZ(0px);
   transform: translate(0px);
-  background: #f9f9f9;
+  background-color: #F2F5FB;
 }
 .page_ft {
   height:45px;
@@ -52,4 +52,27 @@ html,body {
 }
 .tab-bar {
   height: 55px;
+}
+input,select,textarea,button{outline:none;border:none;background: none;}
+[v-cloak] {
+  display: none;
+}
+*{
+	word-break: break-all;
+	box-sizing: border-box;
+}
+input{
+	-webkit-appearance: none;
+	border-radius: 0;
+}
+::-webkit-scrollbar {
+	display: none;
+}
+textarea{
+	font: normal 14px Tahoma,"Lucida Grande",Verdana,"Microsoft Yahei",STXihei,hei;
+	resize:none;
+	border: none;
+}
+.page_bg{
+  background-color: #F2F5FB;
 }
