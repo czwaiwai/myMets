@@ -160,7 +160,8 @@ export default {
 </script>
 <style lang="scss">
   .mint-tabbar {
-    background-color:#FFF;
+    background-color: #FFF;
+    padding-top: 1px;
   }
   .mint-tab-item {
     color:#989898;

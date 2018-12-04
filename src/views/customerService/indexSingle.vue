@@ -187,9 +187,9 @@
       'DatetimePicker': DatetimePicker
     },
     computed: {
-      // ...mapGetters({
-      //   'user': 'user'
-      // })
+      ...mapGetters({
+        'user': 'user'
+      })
     },
     created () {
       // 判断是报事还是报修

@@ -123,21 +123,6 @@ export default {
     }
   },
   methods: {
-    // java请求接口
-    async getPageData () {
-      let url = '/ets/payment/trading/getTradingWay'
-      let res = await this.$http.post(url, {
-        orgID: this.orgId
-      })
-      console.log(res)
-      this.actions = res.data.map((item, index) => {
-        let that = this
-        item.method = function () {
-          that['payChoose'] (item.id, item.name)
-        }
-        return item
-      })
-    },
     // .net请求接口
     async getPageDataNet () {
       let p0 = 'UserAppFn_GetTradingWay'
@@ -171,51 +156,12 @@ export default {
       if(this.actions.length === 0) {
         return this.$toast('支付方式正在获取中...,请稍后尝试')
       }
+      if (this.totalMoney <= 0) {
+        return this.$toast('收款金额不能为空')
+      }
       this.sheetVisible = true
     },
-    payChoose (id, name) {
-      this.choosePayId = id
-      this.choosePayType = name
-      console.log('支付通道:', id, name)
-      if (name === 'app银联扫码') {
-        return this.posScan(id, name)
-      }
-      if (name === 'app刷卡') {
-        return this.posCard(id, name)
-      }
-      if (name === 'app扫码') {
-        return this.appScan(id, name)
-      }
-      this.payConfirmVisible = true
-    },
-    // 普通支付
-    normalPay () {
-      this.payFormXml (this.choosePayId, this.choosePayType, '')
-      // this.payForm(this.choosePayId, this.choosePayType, '')
-    },
-    // 扫码支付
-    async scanPay (id, name) {
-      try {
-        let res = await this.$app.scan()
-        this.payForm(id, name, res)
-      } catch (err) {
-        this.$toast('扫码已取消')
-      }
-    },
-    getPayList () {
-      let list = []
-      this.list.forEach(item => {
-        if (item.isCheck) {
-          item.dateData.forEach(sub => {
-            if (sub.id) {
-              list.push({id: sub.id, priFailures: sub.priFailures, lfFailures: sub.lfFailures})
-            }
-          })
-        }
-      })
-      return list
-    },
-    // 扫码
+    // 扫码 java用
     async scanPayByApp () {
       try {
         return await this.$app.scan()
@@ -223,65 +169,123 @@ export default {
         this.$toast('扫码已取消')
       }
     },
-    // 缴费支付
-    async payForm (id, name, scan) {
-      if (this.paying) return
-      this.paying = true
-      let params = {
-        name: name,
-        id: id,
-        fillPro: this.$parent.memberId, // 支付用户的memberID
-        fillProName: this.$parent.userId, //支付用户的userID
-        auth_code: scan, //扫码的结果
-        payList: this.getPayList()
+    payChoose (id, name) {
+      this.choosePayId = id
+      this.choosePayType = name
+      console.log('支付通道:', id, name)
+      if (name.toLowerCase() === 'app银联扫码') {
+        return this.posScan(id, name)
       }
-      let url = '/ets/payment/order/pay'
-      try {
-        this.btnTxt = '写入实收...'
-        let res = await this.$http.post(url, JSON.stringify(params), {
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          transformRequest: [function (data) {
-            return data
-          }]
-        })
-        if (res.data.fnpaidId !== '') {
-          this.$set(this.$parent.choosePersonCash,'totalMoney',this.totalMoney)
-          this.paying = false
-          this.$router.replace({name: 'cashPaySucc', params: {
-              id: res.data.fnpaidId
-            }
-          })
-        } else {
-          this.paying = false
-          this.btnTxt = '写入实收失败，请重试'
-          this.$toast('支付失败')
-        }
-      } catch (err) {
-        this.paying = false
-        this.btnTxt = '写入实收失败，请重试'
-        this.$toast('支付失败')
+      if (name.toLowerCase() === 'app刷卡') {
+        return this.posCard(id, name)
       }
+      if (name.toLowerCase() === 'app扫码') {
+        return this.appScan(id, name)
+      }
+      if (name === '扫码') {
+        return this.appScan(id, name)
+      }
+      this.payConfirmVisible = true
     },
+    // getPayList () {
+    //   let list = []
+    //   this.list.forEach(item => {
+    //     if (item.isCheck) {
+    //       item.dateData.forEach(sub => {
+    //         if (sub.id) {
+    //           list.push({id: sub.id, priFailures: sub.priFailures, lfFailures: sub.lfFailures})
+    //         }
+    //       })
+    //     }
+    //   })
+    //   return list
+    // },
+    // // 扫码支付
+    // async scanPay (id, name) {
+    //   try {
+    //     let res = await this.$app.scan()
+    //     this.payForm(id, name, res)
+    //   } catch (err) {
+    //     this.$toast('扫码已取消')
+    //   }
+    // },
+    // // java请求接口
+    // async getPageData () {
+    //   let url = '/ets/payment/trading/getTradingWay'
+    //   let res = await this.$http.post(url, {
+    //     orgID: this.orgId
+    //   })
+    //   console.log(res)
+    //   this.actions = res.data.map((item, index) => {
+    //     let that = this
+    //     item.method = function () {
+    //       that['payChoose'] (item.id, item.name)
+    //     }
+    //     return item
+    //   })
+    // },
+    // // 缴费支付 java用
+    // async payForm (id, name, scan) {
+    //   if (this.paying) return
+    //   this.paying = true
+    //   let params = {
+    //     name: name,
+    //     id: id,
+    //     fillPro: this.$parent.memberId, // 支付用户的memberID
+    //     fillProName: this.$parent.userId, //支付用户的userID
+    //     auth_code: scan, //扫码的结果
+    //     payList: this.getPayList()
+    //   }
+    //   let url = '/ets/payment/order/pay'
+    //   try {
+    //     this.btnTxt = '写入实收...'
+    //     let res = await this.$http.post(url, JSON.stringify(params), {
+    //       headers: {
+    //         'Content-Type': 'application/json;charset=UTF-8',
+    //         'X-Requested-With': 'XMLHttpRequest'
+    //       },
+    //       transformRequest: [function (data) {
+    //         return data
+    //       }]
+    //     })
+    //     if (res.data.fnpaidId !== '') {
+    //       this.$set(this.$parent.choosePersonCash,'totalMoney',this.totalMoney)
+    //       this.paying = false
+    //       this.$router.replace({name: 'cashPaySucc', params: {
+    //           id: res.data.fnpaidId
+    //         }
+    //       })
+    //     } else {
+    //       this.paying = false
+    //       this.btnTxt = '写入实收失败，请重试'
+    //       this.$toast('支付失败')
+    //     }
+    //   } catch (err) {
+    //     this.paying = false
+    //     this.btnTxt = '写入实收失败，请重试'
+    //     this.$toast('支付失败')
+    //   }
+    // },
     getXmlParamList (id, name) {
       let list = []
       this.list.forEach(item => {
-        item.dateData.forEach(sub => {
-          list.push({
-            RevID: sub.id,
-            RevMoney: sub.priFailures,
-            LFMoney: sub.lfFailures,
-            TradingID: id,
-            Trading: name,
-            Filldate: sub.repYears,
-            RBank: '',
-            RAccount: '',
-            OrgID: this.orgId
+        if (item.isCheck) {
+          item.dateData.forEach(sub => {
+            list.push({
+              RevID: sub.id,
+              RevMoney: sub.priFailures,
+              LFMoney: sub.lfFailures,
+              TradingID: id,
+              Trading: name,
+              Filldate: sub.repYears,
+              RBank: '',
+              RAccount: '',
+              OrgID: this.orgId
+            })
           })
-        })
+        }
       })
+      return list
     },
     async prePay (id, name, scan) {
       let params = {
@@ -289,7 +293,7 @@ export default {
         'Id' : id,
         'FillPro': this.$parent.memberId,
         'FillProName': this.$parent.userId,
-        'AuthCode': scan,
+        'AuthCode': scan || '',
         'PrePaidId':'',
         'Syswin': this.getXmlParamList(id, name)
       }
@@ -302,16 +306,14 @@ export default {
         this.$toast('发起支付失败')
       }
     },
-    async payFormXml (id, name, scan) {
-      if (this.paying) return
-      this.paying = true
+    async payFormXml (id, name, scan, preId) {
       let params = {
         'Name': name,
         'Id' : id,
         'FillPro': this.$parent.memberId,
         'FillProName': this.$parent.userId,
-        'AuthCode': scan,
-        'PrePaidId':'',
+        'AuthCode': scan || '',
+        'PrePaidId': preId || '',
         'Syswin': this.getXmlParamList(id, name)
       }
       try {
@@ -322,10 +324,11 @@ export default {
         if (data.revID) {
           this.$set(this.$parent.choosePersonCash,'totalMoney',this.totalMoney)
           this.paying = false
-          this.$router.replace({name: 'cashPaySucc', params: {
-              id: data.revID
-            }
-          })
+          return data
+          // this.$router.replace({name: 'cashPaySucc', params: {
+          //     id: data.revID
+          //   }
+          // })
         } else {
           this.paying = false
           this.btnTxt = '写入实收失败，请重试'
@@ -377,19 +380,31 @@ export default {
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
         code:'',
-        extOrderNo: prePayId,  // 选填）商户流水号
-        extBillNo: prePayId // 选填）外部订单号
+        extOrderNo: '',  // 选填）商户流水号
+        extBillNo: '' // 选填）外部订单号
       }
       try {
+        console.log('发送pos机的参数', params)
         let res = await this.$app.posPay(params)
         console.log('pos通刷卡返回的数据', res)
-        let data = res
+        let data = typeof res === 'string'? {}: res
         if (typeof res === 'string') {
-          data = res.replace(/("(\{.*\})")/g,'$2')
+          data = JSON.parse(res.replace(/("(\{.*\})")/g,'$2'))
         }
         console.log('pos通刷卡2', data)
-        return data
+        console.log('is Object', typeof data)
+        if (data.transData.resCode === '00' && data.transData.resDesc === '交易成功') {
+          return data
+        } else {
+          if(data.transData) {
+            throw new Error(data.transData.resDesc)
+          } else {
+            throw new Error(JSON.stringify(data))
+          }
+        }
       } catch (err) {
+        console.log(err, '??----------------------err')
+        this.$toast(err.message)
         this.paying = false
         console.warn(err)
       }
@@ -402,19 +417,33 @@ export default {
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
         code:'',
-        extOrderNo: prePayId,  // 选填）商户流水号
-        extBillNo: prePayId // 选填）外部订单号
+        extOrderNo: '',  // 选填）商户流水号
+        extBillNo: '' // 选填）外部订单号
       }
       try {
+        console.log('发送pos机的参数', params)
         let res = await this.$app.posPay(params)
         // 如果扫一扫的结果解析不出来
-        let data = res
+        let data = typeof res === 'string'? {}: res
         if (typeof res === 'string') {
-          data = res.replace(/("(\{.*\})")/g,'$2')
+          data = JSON.parse(res.replace(/("(\{.*\})")/g,'$2'))
         }
+        console.log('is Object', typeof data)
         console.log('pos扫一扫2', data)
-        return data
+
+        if (data.transData.resCode === '00' && data.transData.resDesc === '交易成功') {
+          return data
+        } else {
+          console.error(data, '交易错误')
+          if(data.transData) {
+            throw new Error(data.transData.resDesc)
+          } else {
+            throw new Error(JSON.stringify(data))
+          }
+        }
       } catch (err) {
+        console.log(err, '??----------------------err')
+        this.$toast(err.message)
         this.paying = false
         console.warn(err)
       }
@@ -432,12 +461,37 @@ export default {
       this.paying = false
       this.$toast('支付已成功,写入结果异常,请与服务提供商联系')
     },
+    // 普通支付
+    async normalPay () {
+      console.log('普通支付')
+      // 锁定下单
+      if (this.paying) return
+      this.paying = true
+      let id = this.choosePayId
+      let name = this.choosePayType
+      // let prePayId = await this.prePay (id, name)
+      // if (!prePayId) return
+      // let res = await this.payFormXml (id, name, '', prePayId)
+      let res = await this.payFormXml (id, name)
+      if (!res) return
+      console.log('普通支付 ----end', res)
+      this.jumpSucc(res.RevID)
+      // this.payForm(this.choosePayId, this.choosePayType, '')
+    },
     // app 扫码支付 //通过name区分是支付方式
     async appScan (id, name) {
+      // 锁定下单
+      if (this.paying) return
+      this.paying = true
       // 获取app扫码结果
       let scanRes = await this.scanPayByApp()
       if (!scanRes) return
-      let res = this.payFormXml(id, name, scanRes)
+      // 预下单
+      // let prePayId = await this.prePay(id, name)
+      // if (!prePayId) return
+      // 获取预下单ID 直接发送请求给后台
+      // let res = await this.payFormXml(id, name, scanRes, prePayId)
+      let res = await this.payFormXml(id, name, scanRes)
       if (!res) return
       this.jumpSucc(res.RevID)
     },
@@ -448,12 +502,15 @@ export default {
       this.paying = true
       // 预下单
       let prePayId = await this.prePay(id, name)
-      // 获取域下单ID 调启银联ｐｏｓ机刷卡
       if (!prePayId) return
+      // 获取域下单ID 调启银联ｐｏｓ机刷卡
       let cardObj = await this.payFlashCard(prePayId)
+      console.log(cardObj, '??--')
+      if (!cardObj) return
       // 获取刷卡陈工后的结果并通知后台 尝试3次
       let res = await this.updateBackendData(cardObj,prePayId)
       if (!res) return
+      console.log(res, '支付成功后的结果')
       this.jumpSucc(res.RevID)
     },
     // 银联扫码流程
@@ -466,9 +523,11 @@ export default {
       // 获取域下单ID 调启银联ｐｏｓ机扫一扫
       if (!prePayId) return
       let posObj = await this.payYLScan(prePayId)
+      if (!posObj) return
       // 获取支付成功后的结果通知后台　并且尝试3次
       let res = await this.updateBackendData(posObj, prePayId)
       if (!res) return
+      console.log(res, '支付成功后的结果')
       this.jumpSucc(res.RevID)
     },
     jumpSucc(id) {

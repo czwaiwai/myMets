@@ -87,8 +87,9 @@ export default {
     },
     async getPageDataNet () {
       let postName = 'UserAppFn_GetFeeSingle'
+      console.log(this.$route.params.id, 'cashPayId')
       let res = await this.$xml(postName,{
-        PaidId: '1706081744050001003D'
+        PaidId: this.$route.params.id || '1706081744050001003D'
       })
       let data = res.data[0]
       this.formatData(this.$toLower(data))

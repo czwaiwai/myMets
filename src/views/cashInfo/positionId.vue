@@ -54,6 +54,7 @@ export default {
         })
         this.$store.dispatch('getUserAction')
         this.$store.commit('setRandNum', Date.now())
+        this.$root.back()
       } catch (err) {
         if (this.$dev) {
           this.$store.commit('setRandNum', Date.now())

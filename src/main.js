@@ -16,6 +16,7 @@ import { MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabba
 import FastClick from 'fastclick'
 import bus from './utils/pushMsg'
 console.log(bus)
+import '@/utils/rem'
 import preview from 'vue-photo-preview'
 if (process.env.NODE_ENV === 'development') {
   Vue.prototype.$dev = true

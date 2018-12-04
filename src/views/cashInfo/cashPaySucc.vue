@@ -15,7 +15,7 @@
           </div>
           <div class="weui-form-preview__ft">
             <a @click="$router.back()" class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:">返回</a>
-            <button @click="$router.replace({name:'cashPayDetail', params: {id: $route.params.id}})" class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">查看单据</button>
+            <button @click="routeTo" class="weui-form-preview__btn weui-form-preview__btn_primary" type="button">查看单据</button>
           </div>
         </div>
       </div>
@@ -38,22 +38,26 @@
       this.roomName = this.$parent.roomName
       this.personCash =  this.$parent.choosePersonCash
       this.totalMoney = this.personCash.totalMoney
-      this.getPageData()
+      // this.getPageData()
     },
     methods: {
-      async getPageData () {
-        let url = '/ets/payment/house/getArrearsCost'
-        let res = await this.$http.post(url, {
-          orgID: this.orgId,
-          resID: this.$route.params.roomId
-        })
-        if (res.data) {
-          this.noCash = false
-          this.userList = res.data
-        } else {
-          this.noCash = true
-        }
+      routeTo () {
+        console.log('id:', this.$route.params.id)
+        this.$router.replace({name:'cashPayDetail', params: {id: this.$route.params.id}})
       }
+      // async getPageData () {
+      //   let url = '/ets/payment/house/getArrearsCost'
+      //   let res = await this.$http.post(url, {
+      //     orgID: this.orgId,
+      //     resID: this.$route.params.id
+      //   })
+      //   if (res.data) {
+      //     this.noCash = false
+      //     this.userList = res.data
+      //   } else {
+      //     this.noCash = true
+      //   }
+      // }
     }
   }
 </script>

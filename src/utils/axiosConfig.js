@@ -78,6 +78,7 @@ export default {
       return Promise.reject(error)
     })
     instanceXml.interceptors.response.use(function (response) {
+      Indicator.close()
       let res = response.data.Result
       if (res && res[0]['InfoKey'] === '_ERROR') {
         Vue.toast(res[0]['_Detail'])
@@ -94,7 +95,6 @@ export default {
       if (syswin && syswin[0].status === 1) {
         response.data = syswin[0].data
       }
-      Indicator.close()
       return response
     }, function (error) {
       Indicator.close()

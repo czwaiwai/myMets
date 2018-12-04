@@ -63,12 +63,12 @@
           <div class="weui-cell__ft"></div>
         </a>
       </div>
-      <button @click="testAddData">添加数据</button>
-      <button @click="testGetData">取出出去</button>
-      <button @click="testDelData">删除数据</button>
-      <button @click="testHasData">是否存在数据</button>
+      <!--<button @click="testAddData">添加数据</button>-->
+      <!--<button @click="testGetData">取出出去</button>-->
+      <!--<button @click="testDelData">删除数据</button>-->
+      <!--<button @click="testHasData">是否存在数据</button>-->
       <div class="weui-btn-area">
-        <a @click="logoutHandle" class="weui-btn weui-btn_warn" href="javascript:" id="showTooltips">退出登录</a>
+        <a @click="logoutHandle" class="weui-btn weui-btn_default" href="javascript:" id="showTooltips">退出登录</a>
       </div>
     </div>
   </div>

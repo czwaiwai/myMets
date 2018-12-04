@@ -42,7 +42,7 @@
         </a>
       </div>
       <div class="weui-btn-area">
-        <a @click="logoutHandle" class="weui-btn weui-btn_warn" href="javascript:" id="showTooltips">退出登录</a>
+        <a @click="logoutHandle" class="weui-btn weui-btn_default" href="javascript:" id="showTooltips">退出登录</a>
       </div>
     </div>
   </div>

@@ -4,6 +4,7 @@
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header>
     <div class="page_bd">
+      很健康很快就环境可好就经理
     </div>
   </div>
 </template>

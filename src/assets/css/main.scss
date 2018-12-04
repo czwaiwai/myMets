@@ -3,6 +3,9 @@
 @import './font/iconfont.css';
 @import './fontService/iconfont.css';
 @import './animate.css';
+.mint-toast {
+  z-index: 9999;
+}
 .mint-tab-container-wrap {
   height:100%;
 }
