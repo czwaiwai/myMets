@@ -36,8 +36,8 @@ export default {
       this.$emit('setList', res.data)
       let charStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
       res.data.forEach(item => {
-        item.char = item.EmployeeName.slice(0,1)
-        item.PositionName = item.PositionName.replace(/^.*-/,'')
+        item.char = item.EmployeeName.slice(0, 1)
+        item.PositionName = item.PositionName.replace(/^.*-/, '')
         let char = item.EmployeeNamePY.charAt(0).toLocaleUpperCase()
         if (!obj[char]) obj[char] = []
         if (charStr.indexOf(char) > -1) {
@@ -125,6 +125,5 @@ export default {
 .mint-indexlist-content > .mint-indexsection  .mint-cell:nth-of-type(5n) .icon_color {
   background: #9b89b9;
 }
-
 
 </style>

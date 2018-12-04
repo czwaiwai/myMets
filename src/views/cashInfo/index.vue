@@ -102,7 +102,7 @@ export default {
     detailClick (item) {
       this.payDetailData = item
       this.$router.forward({
-        name:'cashPayDetailProp'
+        name: 'cashPayDetailProp'
       })
       console.log(item)
     }

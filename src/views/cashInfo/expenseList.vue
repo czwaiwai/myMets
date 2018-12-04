@@ -26,7 +26,7 @@
               </div>
               <div v-if="item.subShow" style="padding: 10px 15px 10px 30px;color:#999;">
                 <ul>
-                  <li class="sub_item weui-flex"  v-for="(sub, index) in item.dateData" >
+                  <li class="sub_item weui-flex" :key="index"  v-for="(sub, index) in item.dateData" >
                     <div class="weui-flex__item">{{sub.ipItemName}}</div>
                     <div>￥{{sub.priFailures}}</div>
                   </li>
@@ -59,8 +59,7 @@
   </div>
 </template>
 <script>
-import { Popup } from 'mint-ui';
-import { Actionsheet } from 'mint-ui';
+import { Popup, Actionsheet } from 'mint-ui'
 export default {
   name: 'customerList',
   data () {
@@ -87,7 +86,7 @@ export default {
     this.btnTxt = '确定收款'
     this.orgId = this.$parent.orgId
     this.roomName = this.$parent.roomName
-    this.personCash =  this.$parent.choosePersonCash
+    this.personCash = this.$parent.choosePersonCash
     let list = this.$parent.choosePersonCash.costData.map((item, index) => {
       this.$set(item, 'isCheck', true)
       this.$set(item, 'subShow', false)
@@ -119,7 +118,7 @@ export default {
         }
         return before
       }, 0)
-      return Math.round(parseFloat(money * 100))/100
+      return Math.round(parseFloat(money * 100)) / 100
     }
   },
   methods: {
@@ -132,7 +131,7 @@ export default {
       this.actions = res.data.map((item, index) => {
         let that = this
         item.method = function () {
-          that['payChoose'] (item.id, item.name)
+          that['payChoose'](item.id, item.name)
         }
         return item
       })
@@ -141,9 +140,13 @@ export default {
     isAllClick () {
       console.log(this.list)
       if (this.allCheck) {
-        this.list.forEach(item => item.isCheck = false)
+        this.list.forEach(item => {
+          item.isCheck = false
+        })
       } else {
-        this.list.forEach(item => item.isCheck = true)
+        this.list.forEach(item => {
+          item.isCheck = true
+        })
       }
     },
     selectClick (item) {
@@ -153,7 +156,7 @@ export default {
       item.subShow = !item.subShow
     },
     payUp () {
-      if(this.actions.length === 0) {
+      if (this.actions.length === 0) {
         return this.$toast('支付方式正在获取中...,请稍后尝试')
       }
       if (this.totalMoney <= 0) {
@@ -290,11 +293,11 @@ export default {
     async prePay (id, name, scan) {
       let params = {
         'Name': name,
-        'Id' : id,
+        'Id': id,
         'FillPro': this.$parent.memberId,
         'FillProName': this.$parent.userId,
         'AuthCode': scan || '',
-        'PrePaidId':'',
+        'PrePaidId': '',
         'Syswin': this.getXmlParamList(id, name)
       }
       try {
@@ -309,7 +312,7 @@ export default {
     async payFormXml (id, name, scan, preId) {
       let params = {
         'Name': name,
-        'Id' : id,
+        'Id': id,
         'FillPro': this.$parent.memberId,
         'FillProName': this.$parent.userId,
         'AuthCode': scan || '',
@@ -322,7 +325,7 @@ export default {
         let res = await this.$xml(p0, params)
         let data = this.$toLower(res.data)
         if (data.revID) {
-          this.$set(this.$parent.choosePersonCash,'totalMoney',this.totalMoney)
+          this.$set(this.$parent.choosePersonCash, 'totalMoney', this.totalMoney)
           this.paying = false
           return data
           // this.$router.replace({name: 'cashPaySucc', params: {
@@ -343,7 +346,7 @@ export default {
     async payPOSFormXml (id, name, obj, preId) {
       let params = {
         'Name': name,
-        'Id' : id,
+        'Id': id,
         'FillPro': this.$parent.memberId,
         'FillProName': this.$parent.userId,
         'AuthCode': '', // pos机不需要扫码的值
@@ -358,7 +361,7 @@ export default {
         let res = await this.$xml(p0, params)
         let data = this.$toLower(res.data)
         if (data.revID) {
-          this.$set(this.$parent.choosePersonCash,'totalMoney',this.totalMoney)
+          this.$set(this.$parent.choosePersonCash, 'totalMoney', this.totalMoney)
           this.paying = false
           return data
         } else {
@@ -379,24 +382,24 @@ export default {
         amt: this.totalMoney * 100,
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
-        code:'',
-        extOrderNo: '',  // 选填）商户流水号
+        code: '',
+        extOrderNo: '', // 选填）商户流水号
         extBillNo: '' // 选填）外部订单号
       }
       try {
         console.log('发送pos机的参数', params)
         let res = await this.$app.posPay(params)
         console.log('pos通刷卡返回的数据', res)
-        let data = typeof res === 'string'? {}: res
+        let data = typeof res === 'string' ? {} : res
         if (typeof res === 'string') {
-          data = JSON.parse(res.replace(/("(\{.*\})")/g,'$2'))
+          data = JSON.parse(res.replace(/("(\{.*\})")/g, '$2'))
         }
         console.log('pos通刷卡2', data)
         console.log('is Object', typeof data)
         if (data.transData.resCode === '00' && data.transData.resDesc === '交易成功') {
           return data
         } else {
-          if(data.transData) {
+          if (data.transData) {
             throw new Error(data.transData.resDesc)
           } else {
             throw new Error(JSON.stringify(data))
@@ -416,17 +419,17 @@ export default {
         amt: this.totalMoney * 100,
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
-        code:'',
-        extOrderNo: '',  // 选填）商户流水号
+        code: '',
+        extOrderNo: '', // 选填）商户流水号
         extBillNo: '' // 选填）外部订单号
       }
       try {
         console.log('发送pos机的参数', params)
         let res = await this.$app.posPay(params)
         // 如果扫一扫的结果解析不出来
-        let data = typeof res === 'string'? {}: res
+        let data = typeof res === 'string' ? {} : res
         if (typeof res === 'string') {
-          data = JSON.parse(res.replace(/("(\{.*\})")/g,'$2'))
+          data = JSON.parse(res.replace(/("(\{.*\})")/g, '$2'))
         }
         console.log('is Object', typeof data)
         console.log('pos扫一扫2', data)
@@ -435,7 +438,7 @@ export default {
           return data
         } else {
           console.error(data, '交易错误')
-          if(data.transData) {
+          if (data.transData) {
             throw new Error(data.transData.resDesc)
           } else {
             throw new Error(JSON.stringify(data))
@@ -472,7 +475,7 @@ export default {
       // let prePayId = await this.prePay (id, name)
       // if (!prePayId) return
       // let res = await this.payFormXml (id, name, '', prePayId)
-      let res = await this.payFormXml (id, name)
+      let res = await this.payFormXml(id, name)
       if (!res) return
       console.log('普通支付 ----end', res)
       this.jumpSucc(res.RevID)
@@ -508,7 +511,7 @@ export default {
       console.log(cardObj, '??--')
       if (!cardObj) return
       // 获取刷卡陈工后的结果并通知后台 尝试3次
-      let res = await this.updateBackendData(cardObj,prePayId)
+      let res = await this.updateBackendData(cardObj, prePayId)
       if (!res) return
       console.log(res, '支付成功后的结果')
       this.jumpSucc(res.RevID)
@@ -524,14 +527,15 @@ export default {
       if (!prePayId) return
       let posObj = await this.payYLScan(prePayId)
       if (!posObj) return
-      // 获取支付成功后的结果通知后台　并且尝试3次
+      // 获取支付成功后的结果通知后台并且尝试3次
       let res = await this.updateBackendData(posObj, prePayId)
       if (!res) return
       console.log(res, '支付成功后的结果')
       this.jumpSucc(res.RevID)
     },
-    jumpSucc(id) {
-      this.$router.replace({name: 'cashPaySucc', params: {
+    jumpSucc (id) {
+      this.$router.replace({name: 'cashPaySucc',
+        params: {
           id: id
         }
       })

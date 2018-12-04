@@ -1,6 +1,6 @@
 import sess from '../../utils/sess'
 import app from '../../utils/appApi'
-import {MessageBox, Toast} from 'mint-ui'
+import {Toast} from 'mint-ui'
 function coverAuth (areaInfo) {
   let auth = {}
   areaInfo.forEach(item => {
@@ -14,7 +14,7 @@ export default {
     ip: '',
     auth: '',
     isPos: false,
-    rand: 0,
+    rand: 0
   },
   getters: {
     rand: state => state.rand,
@@ -25,7 +25,7 @@ export default {
       if (!state.user) {
         state.user = sess.get('user')
       }
-      if (!state.user)  {
+      if (!state.user) {
         return {
           UserID: 'test30',
           PositionName: '系统管理员',
@@ -95,7 +95,7 @@ export default {
         //   position: 'bottom',
         //   duration: 1500
         // })
-        return user // 返回User对象　
+        return user // 返回User对象
       } else {
         commit('setIp', '172.31.118.201')
         console.log('网络异常，请重新登录')

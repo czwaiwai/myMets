@@ -45,7 +45,7 @@ export default {
       list: [],
       currType: {},
       currIndex: 0,
-      currSubType: null,
+      currSubType: null
     }
   },
   created () {
@@ -71,7 +71,8 @@ export default {
     itemChoose (item, index) {
       console.log(item, index, this.currIndex)
       if (this.currIndex === index && this.currSubType.ID === item.ID) {
-        return this.currIndex = -1
+        this.currIndex = -1
+        return
       }
       this.currIndex = index
       this.currSubType = item
@@ -99,13 +100,13 @@ export default {
   width:42%;
   width: 42vw;
   z-index: 1;
-  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
   overflow-y:auto;
 }
 .right_content{
   padding-left: 42%;
   height: 100%;
-  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
   overflow: auto;
 }
 .type_ul {
@@ -131,9 +132,6 @@ export default {
   -webkit-transform: scaleY(0.5);
   transform: scaleY(0.5);
   z-index: 2;
-}
-.type_ul {
-
 }
 
 .sub_ul > li {

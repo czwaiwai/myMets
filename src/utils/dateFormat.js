@@ -21,6 +21,5 @@ export default function () {
       return fmt
     }
   }
-  return
+  
 }
-

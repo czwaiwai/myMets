@@ -7,27 +7,26 @@
         <div class="page_sub_hd">
           <ul class="sub_title_cb clearfix">
             <li @click="resetDevice">设备</li>
-            <template v-for="(item, index) in navList">
-              <li> &nbsp;> &nbsp;</li>
-              <li @click="subDeviceSelect(item, index)">{{item.Name}}</li>
-            </template>
+            <li v-for="(item, index) in navList" :key="index" @click="subDeviceSelect(item, index)">
+              &nbsp;> &nbsp;<span>{{item.Name}}</span>
+            </li>
           </ul>
         </div>
         <div class="page_bd">
           <ul class="type_ul">
 
-            <li v-for="(item, index) in list" :key="item.ID">
+            <li v-for="(item, index) in list" :key="item.index">
               <div @click="itemClick(item, index)" class="title">
                 <i class="iconfont icon-wenjianjia padding-right"></i>{{item.Name}}
                 <i class="iconfont float_right " :class="index === activeIndex?'icon-shouqi':'icon-xiala'"></i>
               </div>
               <div  class="sub_bottom" style="background:#FFF;">
                 <ul v-if="activeIndex === index" class="sub_ul clearfix">
-                  <li @click="selectSubClick(sub)" v-for="sub in item.ArchivesList">
+                  <li @click="selectSubClick(sub)" v-for="(sub, subIndex) in item.ArchivesList" :key="subIndex">
                     <i class="iconfont icon-qingdan padding-right"></i>{{sub.EquiName}}
                   </li>
                   <template v-if="item.EquiList.length > 0">
-                   <li v-for="sub in item.EquiList"  @click="setSelectDevice(item)">
+                   <li v-for="(sub, subIndex ) in item.EquiList"  @click="setSelectDevice(item)" :key="subIndex">
                      <i class="iconfont icon-qingdan padding-right"></i>{{sub.Name}}
                      <i class="iconfont float_right icon-xiala"></i>
                    </li>
@@ -47,7 +46,7 @@ export default {
     return {
       navList: [],
       list: [],
-      activeIndex: -1,
+      activeIndex: -1
     }
   },
   created () {
@@ -84,8 +83,9 @@ export default {
       this.activeIndex = -1
     },
     itemClick (item, index) {
-      if (index == this.activeIndex) {
-        return this.activeIndex = -1
+      if (index === this.activeIndex) {
+        this.activeIndex = -1
+        return
       }
       if (item.EquiList.length === 0 && item.ArchivesList.length === 0) return
       this.activeIndex = index
@@ -127,7 +127,6 @@ export default {
   transform: scaleY(0.5);
   z-index: 2;
 }
-
 
 .sub_ul > li {
   position:relative;

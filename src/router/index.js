@@ -17,7 +17,6 @@ import ExpenseList from '@/views/cashInfo/expenseList'
 import CashPaySucc from '@/views/cashInfo/cashPaySucc'
 import CashPayDetail from '@/views/cashInfo/cashPayDetail'
 
-
 /* webpackChunkName:'baseIndex' */
 const Home = () => import(/* webpackChunkName:'baseIndex' */ '@/views/home')
 const Login = () => import(/* webpackChunkName:'baseIndex' */ '@/views/login')

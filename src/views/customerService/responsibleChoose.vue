@@ -45,7 +45,7 @@ export default {
       isFocus: false,
       search: '',
       orgId: '',
-      list: [],
+      list: []
     }
   },
   created () {
@@ -73,7 +73,7 @@ export default {
     },
     async indexListClick (item) {
       console.log(item)
-      let action = await this.$message.confirm(`确定选择＂${item.EmployeeName}＂吗？`)
+      await this.$message.confirm(`确定选择＂${item.EmployeeName}＂吗？`)
       this.$parent.setPerson(item)
       this.$root.back()
     },

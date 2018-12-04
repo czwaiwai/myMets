@@ -80,7 +80,8 @@ export default {
       console.log(item)
       this.$parent.choosePersonCash = item
       // this.$parent.costData = item
-      this.$router.forward({name:'expenseList', params: {
+      this.$router.forward({name: 'expenseList',
+        params: {
           roomId: this.$route.params.roomId
         }
       })

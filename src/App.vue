@@ -27,7 +27,7 @@ export default {
       'ip': 'ip',
       'auth': 'auth',
       'rand': 'rand'
-    }),
+    })
   },
   created () {
     // 首次初始化
@@ -37,7 +37,7 @@ export default {
     let that = this
     pushBus.$on('jPush', function (data) {
       console.log(data, 'pushMsg收到的数据---')
-      that.$app.loadView({url: 'http://'　+ that.ip +'/ETSmobileApproval/#page=0', type:'shenpi'})
+      that.$app.loadView({url: 'http://' + that.ip + '/ETSmobileApproval/#page=0', type: 'shenpi'})
     })
   },
   watch: {
@@ -65,9 +65,11 @@ export default {
   .page-enter-active, .page-leave-active,.page-enter-active,.page-leave-active {
     -webkit-transition-duration: .3s;
     transition-duration: .3s;
+    backface-visibility:hidden;
     -webkit-backface-visibility: hidden;
     -webkit-transition-timing-function: cubic-bezier(.36,.66,.04,1);
     transition-timing-function: cubic-bezier(.36,.66,.04,1);
+    transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
     -webkit-transition-property: opacity,-webkit-transform;
     transition-property: opacity,transform

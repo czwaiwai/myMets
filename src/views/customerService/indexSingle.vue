@@ -41,7 +41,8 @@
               </div>
               <div style="width:60px;" class="weui-cell__ft padding-v" @click="routeTo('locationChoose')" >&nbsp;</div>
             </div>
-            <a  v-if="type==='baoxiu'"  @click="routeTo('deviceChoose')" class="weui-cell weui-cell_access" href="javascript:;">
+            <!-- v-if="type==='baoxiu'" -->
+            <a   @click="routeTo('deviceChoose')" class="weui-cell weui-cell_access" href="javascript:;">
               <div class="weui-cell__hd padding-right15"><i class="iconfont icon-shebei" ></i></div>
               <div class="weui-cell__bd">
                 <p :class="formObj.workPos?'':'dark_99'">{{formObj.workPos?formObj.workPos: '哪个设备'}}</p>
@@ -79,7 +80,7 @@
               </div>
               <div class="weui-cell__ft"  v-if="userList.length > 0">
                 <select class="weui-select" @change="userIndexChange" v-model="userIndex">
-                  <option v-for="(user, index) in userList" :value='index' >{{user.CstName}}</option>
+                  <option v-for="(user, index) in userList" :key="index" :value='index' >{{user.CstName}}</option>
                 </select>
               </div>
             </div>
@@ -92,7 +93,7 @@
               </div>
               <div v-if="userTel.length > 0" class="weui-cell__ft">
                 <select class="weui-select" v-model="userTelIndex" @change="userTelChange">
-                  <option v-for="(tel, index) in userTel" :value='tel' >{{tel}}</option>
+                  <option v-for="(tel, index) in userTel" :key="index" :value='tel' >{{tel}}</option>
                 </select>
               </div>
             </div>
@@ -130,348 +131,349 @@
   </div>
 </template>
 <script>
-  import { DatetimePicker } from 'mint-ui';
-  import {mapGetters} from 'Vuex'
-  import Vue from 'vue'
-  export default {
-    name: 'customerService',
-    data () {
-      return {
-        isSendForm: false,
-        options: [],
-        imgs: [],
-        title: '客服',
-        titleType: '报事',
-        type: 'baoshi',
-        typeTxt: '',
-        dateTime: new Date(),
-        // reservation: '',
-        nav: {},
-        backUrl: '',
-        userList: [],
-        userTel: [],
-        userIndex: '',
-        userTelIndex: '',
-        recTime: '', // 录音的时间
-        formObj: {
-          userName: '', // 用户名称.
-          orgId: '', // 项目ID.
-          orgName: '', // 项目名称.
-          woNo: '', // KF201805021803  SSs.
-          rsDate: '', // 2018-05-02 18:01.
-          woNoBasicId: '', // 主规则ID 最顶层
-          cstId: '', // 空
-          cstName: '', // 报事人名称.
-          workPosFrom: 'Resource', // .
-          woId: '', // 空
-          workPos: '', // 拼接地址.
-          rsWay: '', // PDA 电话.
-          callPhone: '', // 责任人电话.
-          orders: '', // 责任人.
-          ordersId: '', // 责任人ID.
-          ordersDepart: '', // 部门名称.
-          ordersPositionId: '', // 责任人ID.
-          quesTypeId: '', // 问题类型ID. 最后一层
-          quesDesc: '', // 问题描述.
-          createTime: '', // 图1
-          createUser: '', // 图2
-          opTime: '', // 图3
-          image: '', // 图4
-          opUser: '', // 语音.
-          memo: '',
-          rStartTime: ''
-        }
-      }
-    },
-    components: {
-      'DatetimePicker': DatetimePicker
-    },
-    computed: {
-      ...mapGetters({
-        'user': 'user'
-      })
-    },
-    created () {
-      // 判断是报事还是报修
-      this.deviceOrLocation ()
-      //
-      // this.nav = {
-      //   orgId: this.user.OrgID,
-      //   orgName: this.user.OrgName,
-      //   userName: this.user.UserID
-      // }
-      // this.formObj.orgName = this.nav.orgName;
-      // this.formObj.orgId =  this.nav.orgId;
-      // this.formObj.userName =  this.nav.userName;
-      this.setUserInfo ()
-      if (this.type === 'baoxiu') {
-        this.deviceInit()
-        // this.formObj.cstName =  this.nav.userName;
-      }
-      this.getPageData()
-    },
-    methods: {
-      clickBack () {
-        if (this.backUrl) {
-          window.location.href = this.backUrl + '#page=1'
-          return
-        }
-        this.$app.back()
-      },
-      setUserInfo () {
-        let that = this
-        window.set_login_info = function(infos) {
-          console.log(infos, ' infos------------------')
-          let data = JSON.parse(infos);
-          that.nav = {
-            orgId: data.orgId,
-            orgName: data.orgName,
-            userName: data.userName
-          }
-          console.log(that.nav, '--------------------')
-          that.formObj.orgName = data.orgName
-          that.formObj.orgId = data.orgId
-          that.formObj.userName = data.userName
-          if (that.type === 'baoxiu') {
-            that.formObj.cstName = data.userName
-          }
-        }
-        console.log('setUserInfo---', window.callData)
-        if (window.webkit) {
-          window.webkit.messageHandlers.Native_Js_onLoadPage.postMessage('')
-        } else if (window.callData) {
-          console.log()
-          window.callData.Native_Js_onLoadPage()
-        }
-      },
-      deviceOrLocation () {
-        let href = window.location.href
-        if (href.indexOf('ETSRepair') > -1) {
-          this.title = '设备'
-          this.titleType = '报修'
-          this.type = 'baoxiu'
-          this.formObj.workPosFrom = 'Equipment'
-        }
-        if (href.indexOf('ETSReport') > -1) {
-          this.title = '客服'
-          this.titleType = '报事'
-          this.type = 'baoshi'
-          this.formObj.workPosFrom = 'Resource'
-        }
-      },
-      deviceInit () {
-        this.urlinfo = window.location.href.split('?')[1];
-        this.urlinfo = decodeURI(this.urlinfo);
-        // console.log(this.urlinfo, '-0000000000000000000000')
-        if (this.urlinfo.split('=')[0] === 'device_id') {
-          this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
-            barcodeCode: this.urlinfo.split('=')[1]
-          }).then(res => {
-            this.formObj.workPos = res.data[0].EquiName
-          })
-        }
-        if (this.urlinfo.split('=')[0] === 'name') {
-          var data = this.urlinfo.split('&')
-          var par = {}
-          for (var index = 0; index < data.length; index++) {
-            par[data[index].split('=')[0]] = data[index].split('=')[1]
-          }
-          this.formObj.cstName = par.userName
-          this.formObj.orgId = par.orgId
-          this.formObj.orgName = par.orgName
-          this.formObj.workPos =decodeURIComponent(par.name)
-          this.backUrl = decodeURIComponent(par.fromURL.replace(/#.*/,''))
-          console.log(par, '-----par')
-        }
-      },
-      async getPageData () {
-        let res = await this.$http.get('/ets/table/list/userRentGetOptionList?typeName=ReceiptMethod')
-        console.log(res)
-        this.options = res.data
-        if (res.data) {
-          this.formObj.rsWay = res.data[0].showText
-        }
-      },
-      userIndexChange (e) {
-        let val = this.userIndex
-        this.formObj.cstName = this.userList[val].CstName;
-        if (this.userList[val].Mobile.length === 0) {
-          this.userTel = [];
-          this.formObj.callPhone = ''
-        } else if (this.userList[val].Mobile.split(',').length > 0) {
-          this.userTel = this.userList[val].Mobile.split(',')
-          this.formObj.callPhone = this.userList[val].Mobile.split(',')[0]
-        } else {
-          this.formObj.callPhone = ''
-        }
-      },
-      userTelChange () {
-        this.formObj.callPhone = this.userTelIndex
-      },
-      delVoice: function() {
-        this.formObj.opUser = ''
-        this.formObj.memo = ''
-        this.recTime = ''
-      },
-      async voiceClick () {
-        if (!this.recTime) {
-          let mp3 = await this.$app.getRec()
-          this.formObj.opUser = mp3.path
-          this.formObj.memo = mp3.duration
-          this.recTime = `${mp3.duration}''`
-        } else {
-          await this.$app.playAudio(this.formObj.opUser)
-        }
-      },
-      dateClick () {
-        this.$refs.picker.open()
-      },
-      dateConfirm (date) {
-        if (date) {
-          this.formObj.rStartTime = date.format('yyyy-MM-dd hh:mm')
-        } else {
-          this.formObj.rStartTime = ''
-        }
-      },
-      imgDelClick (index) {
-        this.imgs.splice(index,1)
-      },
-      // 设置房号
-      setLocation (data) {
-        this.formObj.cstName = data.cstName
-        this.formObj.callPhone = data.callPhone
-        this.formObj.workPos = data.name
-        this.formObj.woId = data['ResID']
-        this.userList = data.userList
-        console.log(data, 'setLocation----')
-      },
-      // 设置设备
-      setDevice (data) {
-        this.formObj.workPos = data.EquiName;
-        this.formObj.woId = data.ID
-      },
-      // 设置报事类型
-      setType (data, pid) {
-        this.formObj.quesTypeId = data.ID
-        this.formObj.woNoBasicId = pid
-        this.typeTxt = data.Name
-      },
-      // 设置责任人
-      setPerson (person) {
-        console.log(person)
-        this.formObj.orders = person.EmployeeName;
-        this.formObj.ordersId = person.EmployeeID;
-        this.formObj.ordersDepart = person.DeptName;
-        this.formObj.ordersPositionId = person.PositionID;
-      },
-      validate () {
-        if (!this.formObj.quesDesc) {
-          this.$toast(this.titleType + '内容不能为空')
-          return false
-        }
-        if (!this.formObj.workPos) {
-          this.$toast('请输入或选择地址')
-          return false
-        }
-        if (!this.formObj.woNoBasicId) {
-          this.$toast('请选择'+ this.titleType +'类型')
-          return false
-        }
-        if (!this.formObj.cstName) {
-          this.$toast('请输入报事人')
-          return false
-        }
-        if (!this.formObj.callPhone && this.formObj.rsWay === '来电') {
-          this.$toast('来电来源需录入电话')
-          return false
-        }
-        return true
-      },
-      setImgs () {
-        if (this.imgs.length > 0) {
-          this.formObj.createTime = this.imgs[0];
-        }
-        if (this.imgs.length > 1) {
-          this.formObj.createUser = this.imgs[1];
-        }
-        if (this.imgs.length > 2) {
-          this.formObj.opTime = this.imgs[2];
-        }
-        if (this.imgs.length > 3) {
-          this.formObj.image = this.imgs[3];
-        }
-      },
-      async submit () {
-        if(!this.validate()) return
-        if (this.isSendForm) return
-        try {
-          this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS');
-          this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss');
-          this.setImgs()
-          let url = '/ets/syswin/smd/userCSSaveWorkOrdInfo'
-          this.isSendForm = true
-          let res = await this.$http.post(url, this.formObj)
-          console.log(res)
-          this.$toast('提交成功')
-          setTimeout(() => {
-            this.isSendForm = false
-            // this.$root.back()
-            this.$app.back()
-          }, 1500)
-        } catch (err) {
-          console.log(err)
-          this.isSendForm = false
-        }
-      },
-      titleCase(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1)
-        // return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-      },
-      async submitXml () {
-        if(!this.validate()) return
-        if (this.isSendForm) return
-        try {
-          this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS');
-          this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss');
-          this.setImgs()
-          this.isSendForm = true
-          let sendObj = {}
-          let arr = ['RSDate', 'OrdersID', 'WOID', 'WOID', 'QuesTypeID', 'CstID', 'WONoBasicID', 'WONo', 'OrgID', 'RSWay', 'OrdersPositionID']
-          for(let key in this.formObj) {
-            let newkey = arr.find(item => item.toLocaleLowerCase() === key.toLocaleLowerCase())
-            if (newkey) {
-              sendObj[newkey] =  this.formObj[key]
-            } else {
-              sendObj[this.titleCase(key)] = this.formObj[key]
-            }
-          }
-          console.log(sendObj,'this.formObj.userName', '--------------')
-          let res = await this.$xml('UserCS_SaveWorkOrdInfo', sendObj, {
-            p1: this.formObj.userName
-          })
-          console.log(res)
-          this.$toast('提交成功')
-          setTimeout(() => {
-            this.isSendForm = false
-            // this.$root.back()
-            this.$app.back()
-          }, 1500)
-        } catch (err) {
-          console.log(err)
-          this.isSendForm = false
-        }
-      },
-      async getPic () {
-        // this.imgs.push('iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII=')
-        let img = await this.$app.getPic()
-        this.imgs.push(img)
-        this.$previewRefresh()
-      },
-      routeTo (name) {
-        this.$router.push({name})
+import { DatetimePicker } from 'mint-ui'
+import {mapGetters} from 'Vuex'
+export default {
+  name: 'customerService',
+  data () {
+    return {
+      isSendForm: false,
+      options: [],
+      imgs: [],
+      title: '客服',
+      titleType: '报事',
+      type: 'baoshi',
+      typeTxt: '',
+      dateTime: new Date(),
+      // reservation: '',
+      nav: {},
+      backUrl: '',
+      userList: [],
+      userTel: [],
+      userIndex: '',
+      userTelIndex: '',
+      recTime: '', // 录音的时间
+      formObj: {
+        userName: '', // 用户名称.
+        orgId: '', // 项目ID.
+        orgName: '', // 项目名称.
+        woNo: '', // KF201805021803  SSs.
+        rsDate: '', // 2018-05-02 18:01.
+        woNoBasicId: '', // 主规则ID 最顶层
+        cstId: '', // 空
+        cstName: '', // 报事人名称.
+        workPosFrom: 'Resource', // .
+        woId: '', // 空
+        workPos: '', // 拼接地址.
+        rsWay: '', // PDA 电话.
+        callPhone: '', // 责任人电话.
+        orders: '', // 责任人.
+        ordersId: '', // 责任人ID.
+        ordersDepart: '', // 部门名称.
+        ordersPositionId: '', // 责任人ID.
+        quesTypeId: '', // 问题类型ID. 最后一层
+        quesDesc: '', // 问题描述.
+        createTime: '', // 图1
+        createUser: '', // 图2
+        opTime: '', // 图3
+        image: '', // 图4
+        opUser: '', // 语音.
+        memo: '',
+        rStartTime: ''
       }
     }
+  },
+  components: {
+    'DatetimePicker': DatetimePicker
+  },
+  computed: {
+    ...mapGetters({
+      'user': 'user'
+    })
+  },
+  created () {
+    // 判断是报事还是报修
+    this.deviceOrLocation()
+    //
+    if (this.$dev) {
+      this.nav = {
+        orgId: this.user.OrgID,
+        orgName: this.user.OrgName,
+        userName: this.user.UserID
+      }
+      this.formObj.orgName = this.nav.orgName
+      this.formObj.orgId = this.nav.orgId
+      this.formObj.userName = this.nav.userName
+    }
+    this.setUserInfo()
+    if (this.type === 'baoxiu') {
+      this.deviceInit()
+      // this.formObj.cstName =  this.nav.userName;
+    }
+    this.getPageData()
+  },
+  methods: {
+    clickBack () {
+      if (this.backUrl) {
+        window.location.href = this.backUrl + '#page=1'
+        return
+      }
+      this.$app.back()
+    },
+    setUserInfo () {
+      let that = this
+      window.set_login_info = function (infos) {
+        console.log(infos, ' infos------------------')
+        let data = JSON.parse(infos)
+        that.nav = {
+          orgId: data.orgId,
+          orgName: data.orgName,
+          userName: data.userName
+        }
+        console.log(that.nav, '--------------------')
+        that.formObj.orgName = data.orgName
+        that.formObj.orgId = data.orgId
+        that.formObj.userName = data.userName
+        if (that.type === 'baoxiu') {
+          that.formObj.cstName = data.userName
+        }
+      }
+      console.log('setUserInfo---', window.callData)
+      if (window.webkit) {
+        window.webkit.messageHandlers.Native_Js_onLoadPage.postMessage('')
+      } else if (window.callData) {
+        console.log()
+        window.callData.Native_Js_onLoadPage()
+      }
+    },
+    deviceOrLocation () {
+      let href = window.location.href
+      if (href.indexOf('ETSRepair') > -1) {
+        this.title = '设备'
+        this.titleType = '报修'
+        this.type = 'baoxiu'
+        this.formObj.workPosFrom = 'Equipment'
+      }
+      if (href.indexOf('ETSReport') > -1) {
+        this.title = '客服'
+        this.titleType = '报事'
+        this.type = 'baoshi'
+        this.formObj.workPosFrom = 'Resource'
+      }
+    },
+    deviceInit () {
+      this.urlinfo = window.location.href.split('?')[1]
+      this.urlinfo = decodeURI(this.urlinfo)
+      // console.log(this.urlinfo, '-0000000000000000000000')
+      if (this.urlinfo.split('=')[0] === 'device_id') {
+        this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
+          barcodeCode: this.urlinfo.split('=')[1]
+        }).then(res => {
+          this.formObj.workPos = res.data[0].EquiName
+        })
+      }
+      if (this.urlinfo.split('=')[0] === 'name') {
+        var data = this.urlinfo.split('&')
+        var par = {}
+        for (var index = 0; index < data.length; index++) {
+          par[data[index].split('=')[0]] = data[index].split('=')[1]
+        }
+        this.formObj.cstName = par.userName
+        this.formObj.orgId = par.orgId
+        this.formObj.orgName = par.orgName
+        this.formObj.workPos = decodeURIComponent(par.name)
+        this.backUrl = decodeURIComponent(par.fromURL.replace(/#.*/, ''))
+        console.log(par, '-----par')
+      }
+    },
+    async getPageData () {
+      let res = await this.$http.get('/ets/table/list/userRentGetOptionList?typeName=ReceiptMethod')
+      console.log(res)
+      this.options = res.data
+      if (res.data) {
+        this.formObj.rsWay = res.data[0].showText
+      }
+    },
+    userIndexChange (e) {
+      let val = this.userIndex
+      this.formObj.cstName = this.userList[val].CstName
+      if (this.userList[val].Mobile.length === 0) {
+        this.userTel = []
+        this.formObj.callPhone = ''
+      } else if (this.userList[val].Mobile.split(',').length > 0) {
+        this.userTel = this.userList[val].Mobile.split(',')
+        this.formObj.callPhone = this.userList[val].Mobile.split(',')[0]
+      } else {
+        this.formObj.callPhone = ''
+      }
+    },
+    userTelChange () {
+      this.formObj.callPhone = this.userTelIndex
+    },
+    delVoice: function () {
+      this.formObj.opUser = ''
+      this.formObj.memo = ''
+      this.recTime = ''
+    },
+    async voiceClick () {
+      if (!this.recTime) {
+        let mp3 = await this.$app.getRec()
+        this.formObj.opUser = mp3.path
+        this.formObj.memo = mp3.duration
+        this.recTime = `${mp3.duration}''`
+      } else {
+        await this.$app.playAudio(this.formObj.opUser)
+      }
+    },
+    dateClick () {
+      this.$refs.picker.open()
+    },
+    dateConfirm (date) {
+      if (date) {
+        this.formObj.rStartTime = date.format('yyyy-MM-dd hh:mm')
+      } else {
+        this.formObj.rStartTime = ''
+      }
+    },
+    imgDelClick (index) {
+      this.imgs.splice(index, 1)
+    },
+    // 设置房号
+    setLocation (data) {
+      this.formObj.cstName = data.cstName
+      this.formObj.callPhone = data.callPhone
+      this.formObj.workPos = data.name
+      this.formObj.woId = data['ResID']
+      this.userList = data.userList
+      console.log(data, 'setLocation----')
+    },
+    // 设置设备
+    setDevice (data) {
+      this.formObj.workPos = data.EquiName
+      this.formObj.woId = data.ID
+    },
+    // 设置报事类型
+    setType (data, pid) {
+      this.formObj.quesTypeId = data.ID
+      this.formObj.woNoBasicId = pid
+      this.typeTxt = data.Name
+    },
+    // 设置责任人
+    setPerson (person) {
+      console.log(person)
+      this.formObj.orders = person.EmployeeName
+      this.formObj.ordersId = person.EmployeeID
+      this.formObj.ordersDepart = person.DeptName
+      this.formObj.ordersPositionId = person.PositionID
+    },
+    validate () {
+      if (!this.formObj.quesDesc) {
+        this.$toast(this.titleType + '内容不能为空')
+        return false
+      }
+      if (!this.formObj.workPos) {
+        this.$toast('请输入或选择地址')
+        return false
+      }
+      if (!this.formObj.woNoBasicId) {
+        this.$toast('请选择' + this.titleType + '类型')
+        return false
+      }
+      if (!this.formObj.cstName) {
+        this.$toast('请输入报事人')
+        return false
+      }
+      if (!this.formObj.callPhone && this.formObj.rsWay === '来电') {
+        this.$toast('来电来源需录入电话')
+        return false
+      }
+      return true
+    },
+    setImgs () {
+      if (this.imgs.length > 0) {
+        this.formObj.createTime = this.imgs[0]
+      }
+      if (this.imgs.length > 1) {
+        this.formObj.createUser = this.imgs[1]
+      }
+      if (this.imgs.length > 2) {
+        this.formObj.opTime = this.imgs[2]
+      }
+      if (this.imgs.length > 3) {
+        this.formObj.image = this.imgs[3]
+      }
+    },
+    async submit () {
+      if (!this.validate()) return
+      if (this.isSendForm) return
+      try {
+        this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS')
+        this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss')
+        this.setImgs()
+        let url = '/ets/syswin/smd/userCSSaveWorkOrdInfo'
+        this.isSendForm = true
+        let res = await this.$http.post(url, this.formObj)
+        console.log(res)
+        this.$toast('提交成功')
+        setTimeout(() => {
+          this.isSendForm = false
+          // this.$root.back()
+          this.$app.back()
+        }, 1500)
+      } catch (err) {
+        console.log(err)
+        this.isSendForm = false
+      }
+    },
+    titleCase (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+      // return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+    },
+    async submitXml () {
+      if (!this.validate()) return
+      if (this.isSendForm) return
+      try {
+        this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS')
+        this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss')
+        this.setImgs()
+        this.isSendForm = true
+        let sendObj = {}
+        let arr = ['RSDate', 'OrdersID', 'WOID', 'WOID', 'QuesTypeID', 'CstID', 'WONoBasicID', 'WONo', 'OrgID', 'RSWay', 'OrdersPositionID']
+        for (let key in this.formObj) {
+          let newkey = arr.find(item => item.toLocaleLowerCase() === key.toLocaleLowerCase())
+          if (newkey) {
+            sendObj[newkey] = this.formObj[key]
+          } else {
+            sendObj[this.titleCase(key)] = this.formObj[key]
+          }
+        }
+        console.log(sendObj, 'this.formObj.userName', '--------------')
+        let res = await this.$xml('UserCS_SaveWorkOrdInfo', sendObj, {
+          p1: this.formObj.userName
+        })
+        console.log(res)
+        this.$toast('提交成功')
+        setTimeout(() => {
+          this.isSendForm = false
+          // this.$root.back()
+          this.$app.back()
+        }, 1500)
+      } catch (err) {
+        console.log(err)
+        this.isSendForm = false
+      }
+    },
+    async getPic () {
+      // this.imgs.push('iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII=')
+      let img = await this.$app.getPic()
+      this.imgs.push(img)
+      this.$previewRefresh()
+    },
+    routeTo (name) {
+      this.$router.push({name})
+    }
   }
+}
 </script>
 <style>
 .mint-header-title {
@@ -534,9 +536,6 @@
       text-align:center;
       background:url('../../assets/img/tool/close_img.png') no-repeat;
       background-size:cover;
-    }
-    .imgList {
-
     }
   }
 </style>

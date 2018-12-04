@@ -76,12 +76,13 @@ export default {
       }).then(() => {
         this.$store.dispatch('getUserAction')
         this.$store.commit('setRandNum', Date.now())
-        this.$root.back();
+        this.$root.back()
       }).catch(err => {
+        console.log(err)
         if (this.$dev) {
           this.$store.commit('setRandNum', Date.now())
         }
-        this.$root.back();
+        this.$root.back()
       })
     },
     searchClear () {

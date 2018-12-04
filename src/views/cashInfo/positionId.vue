@@ -47,10 +47,10 @@ export default {
     },
     async posiChange (item) {
       try {
-        let res = await this.$app.changePosition({
+        await this.$app.changePosition({
           positionId: item.PositionId,
           positionName: item.PositionName,
-          positionInfo: item.PositionInfo,
+          positionInfo: item.PositionInfo
         })
         this.$store.dispatch('getUserAction')
         this.$store.commit('setRandNum', Date.now())

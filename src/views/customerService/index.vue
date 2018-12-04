@@ -78,7 +78,7 @@
                   </div>
                   <div v-if="userList.length > 0"  class="weui-cell__ft" >
                     <select class="weui-select" @change="userIndexChange" v-model="userIndex">
-                      <option v-for="(user, index) in userList" :value='index' >{{user.CstName}}</option>
+                      <option v-for="(user, index) in userList" :key="index" :value='index' >{{user.CstName}}</option>
                     </select>
                   </div>
                 </div>
@@ -91,7 +91,7 @@
                   </div>
                   <div v-if="userTel.length > 0" class="weui-cell__ft">
                     <select class="weui-select" v-model="userTelIndex" @change="userTelChange">
-                      <option v-for="(tel, index) in userTel" :value='tel' >{{tel}}</option>
+                      <option v-for="(tel, index) in userTel" :key="index" :value='tel' >{{tel}}</option>
                     </select>
                   </div>
                 </div>
@@ -129,9 +129,9 @@
     </div>
 </template>
 <script>
-import { DatetimePicker } from 'mint-ui';
+import { DatetimePicker } from 'mint-ui'
 import {mapGetters} from 'Vuex'
-import Vue from 'vue'
+// import Vue from 'vue'
 export default {
   name: 'customerService',
   data () {
@@ -190,29 +190,29 @@ export default {
   },
   created () {
     // 判断是报事还是报修
-    this.deviceOrLocation ()
+    this.deviceOrLocation()
 
     this.nav = {
       orgId: this.user.OrgID,
       orgName: this.user.OrgName,
       userName: this.user.userName
     }
-    this.formObj.orgName = this.nav.orgName;
-    this.formObj.orgId =  this.nav.orgId;
-    this.formObj.userName =  this.nav.userName;
+    this.formObj.orgName = this.nav.orgName
+    this.formObj.orgId = this.nav.orgId
+    this.formObj.userName = this.nav.userName
     // this.setUserInfo ()
     if (this.type === 'baoxiu') {
       this.deviceInit()
-      this.formObj.cstName =  this.nav.userName;
+      this.formObj.cstName = this.nav.userName
     }
     this.getPageData()
   },
   methods: {
     setUserInfo () {
       let that = this
-      window.set_login_info = function(infos) {
+      window.set_login_info = function (infos) {
         console.log(infos, ' infos------------------')
-        let data = JSON.parse(infos);
+        let data = JSON.parse(infos)
         that.nav = {
           orgId: data.orgId,
           orgName: data.orgName,
@@ -248,8 +248,8 @@ export default {
       }
     },
     deviceInit () {
-      this.urlinfo = window.location.href.split('?')[1];
-      this.urlinfo = decodeURI(this.urlinfo);
+      this.urlinfo = window.location.href.split('?')[1]
+      this.urlinfo = decodeURI(this.urlinfo)
       if (this.urlinfo.split('=')[0] === 'device_id') {
         this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
           barcodeCode: this.urlinfo.split('=')[1]
@@ -280,9 +280,9 @@ export default {
     },
     userIndexChange (e) {
       let val = this.userIndex
-      this.formObj.cstName = this.userList[val].CstName;
+      this.formObj.cstName = this.userList[val].CstName
       if (this.userList[val].Mobile.length === 0) {
-        this.userTel = [];
+        this.userTel = []
         this.formObj.callPhone = ''
       } else if (this.userList[val].Mobile.split(',').length > 0) {
         this.userTel = this.userList[val].Mobile.split(',')
@@ -294,7 +294,7 @@ export default {
     userTelChange () {
       this.formObj.callPhone = this.userTelIndex
     },
-    delVoice: function() {
+    delVoice: function () {
       this.formObj.opUser = ''
       this.recTime = ''
     },
@@ -318,7 +318,7 @@ export default {
       }
     },
     imgDelClick (index) {
-      this.imgs.splice(index,1)
+      this.imgs.splice(index, 1)
     },
     // 设置房号
     setLocation (data) {
@@ -331,7 +331,7 @@ export default {
     },
     // 设置设备
     setDevice (data) {
-      this.formObj.workPos = data.EquiName;
+      this.formObj.workPos = data.EquiName
       this.formObj.woId = data.ID
     },
     // 设置报事类型
@@ -343,10 +343,10 @@ export default {
     // 设置责任人
     setPerson (person) {
       console.log(person)
-      this.formObj.orders = person.EmployeeName;
-      this.formObj.ordersId = person.EmployeeID;
-      this.formObj.ordersDepart = person.DeptName;
-      this.formObj.ordersPositionId = person.PositionID;
+      this.formObj.orders = person.EmployeeName
+      this.formObj.ordersId = person.EmployeeID
+      this.formObj.ordersDepart = person.DeptName
+      this.formObj.ordersPositionId = person.PositionID
     },
     validate () {
       if (!this.formObj.quesDesc) {
@@ -358,7 +358,7 @@ export default {
         return false
       }
       if (!this.formObj.woNoBasicId) {
-        this.$toast('请选择'+ this.titleType +'类型')
+        this.$toast('请选择' + this.titleType + '类型')
         return false
       }
       if (!this.formObj.cstName) {
@@ -373,24 +373,24 @@ export default {
     },
     setImgs () {
       if (this.imgs.length > 0) {
-        this.formObj.createTime = this.imgs[0];
+        this.formObj.createTime = this.imgs[0]
       }
       if (this.imgs.length > 1) {
-        this.formObj.createUser = this.imgs[1];
+        this.formObj.createUser = this.imgs[1]
       }
       if (this.imgs.length > 2) {
-        this.formObj.opTime = this.imgs[2];
+        this.formObj.opTime = this.imgs[2]
       }
       if (this.imgs.length > 3) {
-        this.formObj.image = this.imgs[3];
+        this.formObj.image = this.imgs[3]
       }
     },
     async submit () {
-      if(!this.validate()) return
+      if (!this.validate()) return
       if (this.isSendForm) return
       try {
-        this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS');
-        this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss');
+        this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS')
+        this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss')
         this.setImgs()
         let url = '/ets/syswin/smd/userCSSaveWorkOrdInfo'
         this.isSendForm = true
@@ -472,9 +472,6 @@ export default {
     background: rgba(0, 0, 0, 0.35);
     color:#FFF;
     text-align:center;
-  }
-  .imgList {
-
   }
 }
 </style>

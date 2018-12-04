@@ -45,7 +45,7 @@
                 </div>
                 <div v-if="item.subShow" style="padding: 10px 15px 10px 30px;color:#999;">
                   <ul>
-                    <li class="sub_item weui-flex"  v-for="(sub, index) in item.feeData" >
+                    <li class="sub_item weui-flex" :key="index"  v-for="(sub, index) in item.feeData" >
                       <div class="weui-flex__item">{{sub.ipItemName}}</div>
                       <div>￥{{sub.cvsm}}</div>
                     </li>
@@ -88,7 +88,7 @@ export default {
     async getPageDataNet () {
       let postName = 'UserAppFn_GetFeeSingle'
       console.log(this.$route.params.id, 'cashPayId')
-      let res = await this.$xml(postName,{
+      let res = await this.$xml(postName, {
         PaidId: this.$route.params.id || '1706081744050001003D'
       })
       let data = res.data[0]

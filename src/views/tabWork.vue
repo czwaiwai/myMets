@@ -6,7 +6,7 @@
   <div class="page_bd">
     <div class="scroll">
       <div class="weui-grids light_bg">
-        <a @click="$app.loadView({url: 'http://'　+ ip +'/ETSmobileApproval/#page=0', type:'shenpi'})" href="javascript:;" class="weui-grid">
+        <a @click="$app.loadView({url: 'http://' + ip +'/ETSmobileApproval/#page=0', type:'shenpi'})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_sp.png" alt="">
           </div>
@@ -18,13 +18,13 @@
           </div>
           <p class="weui-grid__label">抄表</p>
         </a>
-        <a  @click="$app.loadView({url: 'http://'　+ ip +'/ETSInspection/#page=0', type:'xunjian'})" href="javascript:;" class="weui-grid">
+        <a  @click="$app.loadView({url: 'http://' + ip +'/ETSInspection/#page=0', type:'xunjian'})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
           </div>
           <p class="weui-grid__label">巡检</p>
         </a>
-        <a  @click="$app.loadView({url:'http://'　+ ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid">
+        <a  @click="$app.loadView({url:'http://' + ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_by.png"  alt="">
           </div>
@@ -96,13 +96,13 @@ export default {
     //   console.log(res, '--------------getUserAction')
     // })
     this.getPageData()
-    this.shenliangTest ()
+    this.shenliangTest()
     console.log(this.user, '--------user--------')
   },
   activated () {
     console.log('调用offlineBadge')
     // 当切换职位或项目之后重新调用更新数据
-    if (this.currRand !== 0 && this.currRand != this.rand) {
+    if (this.currRand !== 0 && this.currRand !== this.rand) {
       this.getPageData()
       this.currRand = this.rand
     } else {
@@ -126,63 +126,66 @@ export default {
       return `http://${this.ip}/ETSMeterList/#/?orgId=${this.user.OrgID}&orgName=${orgName}`
     },
     etsRentUrl () {
-      let app_cst = ''
-      let app_house = ''
-      if (this.auth['APP_Cst']) {
-        app_cst = 'APP_Cst'
-      }
-      if (this.auth['APP_House']) {
-        app_house = 'APP_House'
-      }
-      let orgName = encodeURIComponent(this.user.OrgName)
-      return `http://${this.ip}/ETSRent/#/?mode=${app_cst},${app_house}&orgId=${this.user.OrgID}&orgName=${orgName}&employeeId=${this.user.memberId}&employeeJobId=${this.user.PositionID}`
+      // let app_cst = ''
+      // let app_house = ''
+      // if (this.auth['APP_Cst']) {
+      //   app_cst = 'APP_Cst'
+      // }
+      // if (this.auth['APP_House']) {
+      //   app_house = 'APP_House'
+      // }
+      // let orgName = encodeURIComponent(this.user.OrgName)
+      // return `http://${this.ip}/ETSRent/#/?mode=${app_cst},${app_house}&orgId=${this.user.OrgID}&orgName=${orgName}&employeeId=${this.user.memberId}&employeeJobId=${this.user.PositionID}`
+      return ''
     }
   },
   methods: {
-    stringToBytes ( str ) {
-      var ch, st, re = [];
-      for (var i = 0; i < str.length; i++ ) {
-        ch = str.charCodeAt(i)  // get char
-        st = []                 // set up "stack"
+    stringToBytes (str) {
+      var ch
+      var st
+      var re = []
+      for (var i = 0; i < str.length; i++) {
+        ch = str.charCodeAt(i) // get char
+        st = [] // set up "stack"
         do {
-          st.push( ch & 0xFF )  // push byte to stack
-          ch = ch >> 8        // shift value down by 1 byte
+          st.push(ch & 0xFF) // push byte to stack
+          ch = ch >> 8 // shift value down by 1 byte
         }
-        while ( ch )
+        while (ch)
         // add stack contents to result
         // done because chars have "wrong" endianness
-        re = re.concat( st.reverse() )
+        re = re.concat(st.reverse())
       }
       // return an array of bytes
       return re
     },
-    byteToString(arr) {
-      if(typeof arr === 'string') {
-        return arr;
+    byteToString (arr) {
+      if (typeof arr === 'string') {
+        return arr
       }
-      var str = '',
-        _arr = arr;
-      for(var i = 0; i < _arr.length; i++) {
-        var one = _arr[i].toString(2),
-          v = one.match(/^1+?(?=0)/);
-        if(v && one.length == 8) {
-          var bytesLength = v[0].length;
-          var store = _arr[i].toString(2).slice(7 - bytesLength);
-          for(var st = 1; st < bytesLength; st++) {
-            store += _arr[st + i].toString(2).slice(2);
+      var str = ''
+      var _arr = arr
+      for (var i = 0; i < _arr.length; i++) {
+        var one = _arr[i].toString(2)
+        var v = one.match(/^1+?(?=0)/)
+        if (v && one.length === 8) {
+          var bytesLength = v[0].length
+          var store = _arr[i].toString(2).slice(7 - bytesLength)
+          for (var st = 1; st < bytesLength; st++) {
+            store += _arr[st + i].toString(2).slice(2)
           }
-          str += String.fromCharCode(parseInt(store, 2));
-          i += bytesLength - 1;
+          str += String.fromCharCode(parseInt(store, 2))
+          i += bytesLength - 1
         } else {
-          str += String.fromCharCode(_arr[i]);
+          str += String.fromCharCode(_arr[i])
         }
       }
-      return str;
+      return str
     },
-    encryptDES(psw, key){
-      var iv = [1,2,3,4,5,6,7,8]
-      var ivHex =  CryptoJS.enc.Latin1.parse(this.byteToString(iv));//原java使用的是iv = [1,2,3,4,5,6,7,8]
-      var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex));
+    encryptDES (psw, key) {
+      var iv = [1, 2, 3, 4, 5, 6, 7, 8]
+      var ivHex = CryptoJS.enc.Latin1.parse(this.byteToString(iv))// 原java使用的是iv = [1,2,3,4,5,6,7,8]
+      var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
       var encrypted = CryptoJS.DES.encrypt(psw, keyHex,
         { iv: ivHex,
           mode: CryptoJS.mode.CBC,
@@ -207,27 +210,28 @@ export default {
         },
         transformRequest: [function (data) {
           return JSON.stringify(data)
-        }],
+        }]
       })
       console.log(res, '------')
       let url1 = '/roc/workbench/member/app/getAppList'
       let res1 = this.$http.post(url1, {orgId: this.user.OrgID}, {
         headers: {
-          'X-User-Token':  'user_token_82cdae32-a240-424f-9a33-f824e7023e04'
+          'X-User-Token': 'user_token_82cdae32-a240-424f-9a33-f824e7023e04'
         }
       })
+      console.log(res1)
       // res.data
     },
     md5 (word) {
-      return CryptoJS.MD5(word).toString();
+      return CryptoJS.MD5(word).toString()
     },
     shenliangTest () {
-      var key =    CryptoJS.enc.Base64.parse('SE83232U');
-      var message =    CryptoJS.enc.Base64.parse('test20');
+      var key = CryptoJS.enc.Base64.parse('SE83232U')
+      var message = CryptoJS.enc.Base64.parse('test20')
       var encrypted = CryptoJS.DES.encrypt(message, key, {
         mode: CryptoJS.mode.ECB,
         padding: CryptoJS.pad.Pkcs7
-      });
+      })
       // AZ+wtAtBLpk=
       // qahmXfF8euU=
       console.log(encrypted.ciphertext.toString(), 'encrypted.ciphertext.toString-------------')
@@ -239,7 +243,7 @@ export default {
     },
     async offlineBadge () {
       let res = await this.$app.offlineBadge()
-      this.offBadge = parseInt(res.total? res.total: 0)
+      this.offBadge = parseInt(res.total ? res.total : 0)
       console.log(res, '角标数量', this.offBadge)
     }
   }

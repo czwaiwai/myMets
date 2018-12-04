@@ -125,6 +125,7 @@ export default {
         sess.set('mainImg', res)
         this.$router.forward({path: '/btnFunc'})
       }).catch(err => {
+        console.log(err)
         if (this.$dev) {
           this.quickOut()
           sess.set('mainImg', 'hahahah')
@@ -136,9 +137,9 @@ export default {
       this.$app.scan().then((res) => {
         console.log(res)
         // this.$router.forward({path: '/btnFunc', params:{data: res}})
-        this.$app.loadView({url:`http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
+        this.$app.loadView({url: `http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
       }).catch(err => {
-
+        console.log(err)
       })
     },
     callVoice () {
@@ -148,6 +149,7 @@ export default {
         this.quickOut()
         this.$router.forward({path: '/btnFunc'})
       }).catch(err => {
+        console.log(err)
         if (this.$dev) {
           this.quickOut()
           sess.set('voice', '设置语音')
@@ -199,11 +201,18 @@ export default {
   .animate_rotate {
      transform: rotateZ(135deg);
   }
-  @-webkit-keyframes rotateHalf {
+   @-webkit-keyframes rotateHalf {
+    from {transform: rotateZ(0);}
+    to {transform: rotateZ(135deg);}
+   }
+  @keyframes rotateHalf {
     from {transform: rotateZ(0);}
     to {transform: rotateZ(135deg);}
   }
-
+  @-webkit-keyframes rotateHalfOut {
+    from  {transform: rotateZ(135deg);}
+    to  {transform: rotateZ(0);}
+  }
   @keyframes rotateHalfOut {
     from  {transform: rotateZ(135deg);}
     to  {transform: rotateZ(0);}
@@ -219,13 +228,6 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-  /*.rotate-enter-active, .rotate-leave-active {*/
-    /*transition: transform 1s;*/
-  /*}*/
-  /*.rotate-enter,.rotate-leave-to !* .fade-leave-active below version 2.1.8 *! {*/
-    /*transform: rotateZ(0);*/
-  /*}*/
-
   .tool_content {
     bottom: 16px;
     position: absolute;

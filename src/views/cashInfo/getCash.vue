@@ -73,7 +73,7 @@ export default {
       unitSubItem: null,
       unitSubItemIndex: -1,
       choosePersonCash: null,
-      choosePersonMoney: '',
+      choosePersonMoney: ''
     }
   },
   computed: {
@@ -148,7 +148,7 @@ export default {
     goRoom (item) {
       this.roomName = item.name
       this.$router.forward({
-        name:'customerList',
+        name: 'customerList',
         params: {
           roomId: item['ResID']
         }

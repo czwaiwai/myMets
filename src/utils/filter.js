@@ -1,4 +1,4 @@
-export default function(Vue) {
+export default function (Vue) {
   Vue.filter('setPrice', function (price) {
     if (price > 0) {
       return '+' + price
@@ -14,7 +14,7 @@ export default function(Vue) {
     time = '今天' + ' ' + hour + ':' + minute
     return time
   })
-  Vue.filter ('formatDate', function (time) {
+  Vue.filter('formatDate', function (time) {
     time = new Date(parseInt(time))
     var year = time.getFullYear()
     var month = time.getMonth() + 1

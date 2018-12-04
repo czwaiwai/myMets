@@ -23,43 +23,43 @@
   </div>
 </template>
 <script>
-  export default {
-    name: 'customerList',
-    data () {
-      return {
-        orgId: '',
-        roomName: '',
-        noCash: '',
-        userList: []
-      }
-    },
-    created () {
-      this.orgId = this.$parent.orgId
-      this.roomName = this.$parent.roomName
-      this.personCash =  this.$parent.choosePersonCash
-      this.totalMoney = this.personCash.totalMoney
-      // this.getPageData()
-    },
-    methods: {
-      routeTo () {
-        console.log('id:', this.$route.params.id)
-        this.$router.replace({name:'cashPayDetail', params: {id: this.$route.params.id}})
-      }
-      // async getPageData () {
-      //   let url = '/ets/payment/house/getArrearsCost'
-      //   let res = await this.$http.post(url, {
-      //     orgID: this.orgId,
-      //     resID: this.$route.params.id
-      //   })
-      //   if (res.data) {
-      //     this.noCash = false
-      //     this.userList = res.data
-      //   } else {
-      //     this.noCash = true
-      //   }
-      // }
+export default {
+  name: 'customerList',
+  data () {
+    return {
+      orgId: '',
+      roomName: '',
+      noCash: '',
+      userList: []
     }
+  },
+  created () {
+    this.orgId = this.$parent.orgId
+    this.roomName = this.$parent.roomName
+    this.personCash = this.$parent.choosePersonCash
+    this.totalMoney = this.personCash.totalMoney
+    // this.getPageData()
+  },
+  methods: {
+    routeTo () {
+      console.log('id:', this.$route.params.id)
+      this.$router.replace({name: 'cashPayDetail', params: {id: this.$route.params.id}})
+    }
+    // async getPageData () {
+    //   let url = '/ets/payment/house/getArrearsCost'
+    //   let res = await this.$http.post(url, {
+    //     orgID: this.orgId,
+    //     resID: this.$route.params.id
+    //   })
+    //   if (res.data) {
+    //     this.noCash = false
+    //     this.userList = res.data
+    //   } else {
+    //     this.noCash = true
+    //   }
+    // }
   }
+}
 </script>
 
 <style lang="scss" scoped>

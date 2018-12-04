@@ -98,7 +98,7 @@ export default (function () {
     getUser: 'getUser|1',
     loadView: 'APP_loadView', // 加载webview
     outApp: 'APP_outApp',
-    offlineBadge: 'APP_offlineBadge|1', //　调用offline角标
+    offlineBadge: 'APP_offlineBadge|1', // 调用offline角标
     setOptions: 'APP_setOptions',
     scan: 'Native_Js_ScanPayment|1', // 调用相机扫码
     jumpOffline: 'Native_Js_JumpToOffLineCenter', // 跳转到离线中心
@@ -120,7 +120,7 @@ export default (function () {
     changePosition: 'APP_changePosition', // 切换职位
     changeProject: 'APP_changeProject', // 切换项目
     posPay: 'APP_PosPay|2',
-    goBack: 'Native_Js_Goback|1' //返回键注册
+    goBack: 'Native_Js_Goback|1' // 返回键注册
   }
   let callObj = {}
   if (os.android) {
@@ -135,18 +135,18 @@ export default (function () {
     callObj.isIOS = true
   }
 
-  function isJSON(str) {
-    if (typeof str == 'string') {
+  function isJSON (str) {
+    if (typeof str === 'string') {
       try {
-        let obj=JSON.parse(str);
-        if (typeof obj == 'object' && obj ) {
-          return true;
-        }else{
-          return false;
+        let obj = JSON.parse(str)
+        if (typeof obj === 'object' && obj) {
+          return true
+        } else {
+          return false
         }
-      } catch(e) {
-        console.log('error：'+str+'!!!'+e);
-        return false;
+      } catch (e) {
+        console.log('error：' + str + '!!!' + e)
+        return false
       }
     }
     console.log('It is not a string!')
@@ -179,7 +179,7 @@ export default (function () {
         callObj[name] = function () {
           let args = Array.prototype.slice.call(arguments)
           if (args[0]) {
-            if(typeof args[0] === 'object') {
+            if (typeof args[0] === 'object') {
               args[0] = JSON.stringify(args[0])
             }
           }
@@ -196,7 +196,7 @@ export default (function () {
       if (num === '1') {
         callObj[name] = function () {
           return new Promise(function (resolve, reject) {
-            let that = this
+            // let that = this
             if (glob[value]) {
               appGlob.call(glob, 'app_' + name)
               window['app_' + name] = function (res) {
@@ -214,7 +214,7 @@ export default (function () {
       if (num === '2') {
         callObj[name] = function (msg) {
           return new Promise(function (resolve, reject) {
-            let that = this
+            // let that = this
             msg.callback = 'app_' + name
             if (glob[value]) {
               appGlob.call(glob, JSON.stringify(msg)) // android需要JSON.stringify
@@ -314,7 +314,7 @@ export default (function () {
       let loop = function (res) {
         console.log('传入的参数为：', res)
         console.warn('当前不在app环境 正在调用方法:' + name)
-        return Promise.reject(new Error('不在app环境:' + name))
+        return Promise.reject('当前不在app环境 正在调用方法:' + name)
       }
       callObj[name] = loop // 产生空函数调用 返回 Promise 对象
     })

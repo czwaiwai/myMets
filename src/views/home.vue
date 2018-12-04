@@ -84,9 +84,6 @@ export default {
 .change_wrap {
   padding-top:25%;
   text-align:center;
-  & .pro_btn {
-
-  }
 }
 .cash_wrap {
   padding-top:40px;

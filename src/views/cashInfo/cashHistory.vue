@@ -42,7 +42,7 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-import { DatetimePicker } from 'mint-ui';
+import { DatetimePicker } from 'mint-ui'
 export default {
   name: 'cashHistory',
   data () {
@@ -121,7 +121,7 @@ export default {
     detailClick (item) {
       this.payDetailData = item
       this.$router.forward({
-        name:'cashPayDetailHis'
+        name: 'cashPayDetailHis'
       })
     },
     dateClick () {

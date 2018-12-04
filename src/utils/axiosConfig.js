@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Qs from 'qs'
-import { Indicator } from 'mint-ui';
+import { Indicator } from 'mint-ui'
 import xml from './xml'
 
 export default {

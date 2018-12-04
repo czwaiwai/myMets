@@ -70,7 +70,7 @@ export default {
       unitItem: null,
       unitItemIndex: -1,
       unitSubItem: null,
-      unitSubItemIndex: -1,
+      unitSubItemIndex: -1
     }
   },
   created () {
@@ -141,9 +141,9 @@ export default {
         obj.cstName = resData[0]['CstName']
         let mobileArr = resData[0]['Mobile'].split(',')
         if (mobileArr.length > 0) {
-          obj.callPhone = mobileArr[0];
+          obj.callPhone = mobileArr[0]
         } else if (resData[0]['Mobile'].length > 0) {
-          obj.callPhone = data.data[0].Mobile
+          obj.callPhone = mobileArr[0].Mobile
         } else {
           obj.callPhone = ''
         }

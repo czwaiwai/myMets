@@ -51,7 +51,7 @@ export default {
   activated () {
     // 当切换职位或项目之后重新调用更新数据
     console.log(this.currRand, this.rand, '--rand--')
-    if (this.currRand !== 0 && this.currRand != this.rand) {
+    if (this.currRand !== 0 && this.currRand !== this.rand) {
       this.getPageData()
       this.currRand = this.rand
     } else {
@@ -81,7 +81,7 @@ export default {
       let res = await this.$xml('User_Service_GetWorkordCount', '', {
         p1: this.user.OrgID,
         p2: this.user.memberId,
-        p3: this.user.PositionID,
+        p3: this.user.PositionID
       }, true)
       // let res = await this.$http.post('/ets/syswin/smd/userServiceGetWorkordCount', {
       //   projectId: this.user.OrgID,
@@ -97,16 +97,16 @@ export default {
         './static/tabHome/msg_list_icon_maintain.png'
       ]
       let urlArr = [
-        {url: `http://${this.ip}/ETSServiceList/#page=0`, type:'kefugongdan'},
-        {url: `http://${this.ip}/ETSServiceList/#page=0`, type:'weixiugongdan'},
-        {url: `http://${this.ip}/ETSInspection/#page=0`, type:'xunjian'},
+        {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'},
+        {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
+        {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
         {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
       ]
       this.list = res.data.filter((item, index) => {
         if (item.GDType !== '5') {
           item.name = nameArr[index]
           item.img = imgArr[index]
-          item.num = parseInt(item.GDCount) > 99? '99+' : item.GDCount
+          item.num = parseInt(item.GDCount) > 99 ? '99+' : item.GDCount
           item.url = urlArr[index]
           return true
         } else {

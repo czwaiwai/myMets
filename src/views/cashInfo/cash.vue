@@ -40,7 +40,7 @@
 
           </div>
           <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary"　@click="submit" href="javascript:" id="showTooltips">收款</a>
+            <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:" id="showTooltips">收款</a>
           </div>
         </div>
     </div>
@@ -56,7 +56,7 @@ export default {
         amt: 1,
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
-        code:''
+        code: ''
       }
     }
   },

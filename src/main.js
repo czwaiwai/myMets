@@ -15,9 +15,9 @@ import toLower from './utils/toLower'
 import { MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore } from 'mint-ui'
 import FastClick from 'fastclick'
 import bus from './utils/pushMsg'
-console.log(bus)
 import '@/utils/rem'
 import preview from 'vue-photo-preview'
+console.log(bus)
 if (process.env.NODE_ENV === 'development') {
   Vue.prototype.$dev = true
   Vue.dev = true
@@ -110,12 +110,10 @@ store.dispatch('getUserAction').then(user => {
     })
     vue.$mount('#app')
   } else {
-    // 如果没有获取到登录对象　应该立即退出
+    // 如果没有获取到登录对象应该立即退出
     appApi.logout()
   }
 })
-
-
 
 // var previous = null;
 // var atleast = 10;
