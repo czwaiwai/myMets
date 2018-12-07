@@ -1,7 +1,7 @@
 <template>
   <div class="headerTitle">
     <div class="_content">
-      <i class="iconfont icon-fanhui11 icon" @click.stop="$router.go(-1)"></i>
+      <i class="iconfont icon-fanhui1 icon" @click.stop="$router.go(-1)"></i>
       <p class="title">{{title}}</p>
     </div>
   </div>
@@ -38,7 +38,7 @@ export default {
         line-height: .88rem;
         color: #fff;
         text-align: left;
-        font-size: .4rem;
+        font-size: .34rem;
       }
       .title{
         width: 100vw;

@@ -136,3 +136,127 @@
 .noneBb{
 	border-bottom: none !important;
 }
+
+
+.mint-swipe-indicator{
+	background: #E8E8E8 !important;
+	opacity: 1 !important;
+	&.is-active{
+		background: #0DC88C !important;
+	}
+}
+// 会议室日历插件
+.wh_content_all{
+	background-color: #fff !important;
+}
+.wh_top_changge{
+	background: #F0F2F4 !important;
+	display: block !important;
+	position: relative !important;
+}
+.wh_top_changge::after{
+	display: block;
+	height: 0;
+	content: '';
+	clear: both;
+}
+.wh_top_changge li {
+	&:first-child{
+		position: absolute;
+		left: 32vw;
+		top: 0;
+		display: block;
+		width: 30px;
+		height: 44px;
+	}
+	&:last-child{
+		position: absolute;
+		right: 32vw;
+		top: 0;
+		display: block;
+		width: 30px;
+		height: 44px;
+	}
+}
+.wh_jiantou1 {
+	position: absolute;
+	top: 18px;
+	width: 0 !important;
+	height: 0 !important;
+	overflow: hidden;
+	border-top: 4px solid #0DC88C !important;
+	border-left: 4px solid #0DC88C !important;
+	border-bottom: 4px solid #F0F2F4 !important;
+	border-right: 4px solid #F0F2F4 !important;
+}
+.wh_content_li{
+	height: 44px !important;
+	text-align: center !important;
+	color: #333 !important;
+	line-height: 44px !important;
+	font-size: .3rem !important;
+}
+.wh_jiantou2{
+	position: absolute;
+	top: 18px;
+	width: 0 !important;
+	height: 0 !important;
+	overflow: hidden;
+	border-top: 4px solid #0DC88C !important;
+	border-right: 4px solid #0DC88C !important;
+	border-bottom: 4px solid #F0F2F4 !important;
+	border-left: 4px solid #F0F2F4 !important;
+}
+.wh_item_date,.wh_top_tag{
+	color: #333 !important;
+}
+.wh_other_dayhide{
+	color: #999 !important;
+}
+.wh_content_all .wh_top_changge+.wh_content{
+	background: #F0F2F4 !important;
+}
+.wh_content_item {
+	width: 14% !important;
+}
+.wh_content_item .wh_isToday{
+	background: #fff !important;
+	color: #FC5A5A !important;
+}
+.wh_content_item .wh_chose_day{
+	background: #0DC88C !important;
+	color: #fff !important;
+}
+.wh_item_date{
+	width: 28px !important;
+	height: 28px !important;
+	text-align: center !important;
+}
+.mark1{
+	position: relative;
+	&::before{
+		position: absolute;
+		bottom: -10px;
+		left: 10px;
+		display: block;
+		width: 8px;
+		height: 8px;
+		border-radius: 4px;
+		background: #E8E8E8;
+		content: '';
+	}
+}
+.mark2{
+	position: relative;
+	&::before{
+		position: absolute;
+		bottom: -10px;
+		left: 10px;
+		display: block;
+		width: 8px;
+		height: 8px;
+		border-radius: 4px;
+		background: #0DC88C;
+		content: '';
+	}
+}

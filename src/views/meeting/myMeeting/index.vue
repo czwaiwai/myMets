@@ -2,7 +2,17 @@
   <div class="myMeeting page">
     <nav-title title="我的会议"></nav-title>
     <div class="page_bd _content">
-      <div class="dates"></div>
+      <div class="dates">
+        <span class="today" @click.stop="toInitDay">今天</span>
+        <Calendar
+          ref="Calendar"
+          v-on:choseDay="clickDay"
+          v-on:changeMonth="changeDate"
+          v-on:isToday="clickToday"
+          :markDateMore="arr"
+          :sundayStart="false"
+        ></Calendar>
+      </div>
       <div class="title">以下是您10月26日（周五）要参加的会议：5次</div>
       <ul class="list">
         <li class="items" :class="{'opcity':index % 5 === 3}" v-for="(item,index) in 20" :key="index" @click.stop="toMeetingDetail(item)">
@@ -31,13 +41,26 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import Calendar from 'vue-calendar-component'
+import dateChange from '@/mixins/dateChange'
+import { setTimeout } from 'timers'
 export default {
   name: 'myMeeting',
-  components: {navTitle},
+  components: {navTitle, Calendar},
+  mixins: [dateChange],
   data () {
-    return {}
+    return {
+      arr: [{date: '2018/12/6', className: 'mark1'}, {date: '2018/12/10', className: 'mark1'}, {date: '2018/12/13', className: 'mark2'}]
+    }
   },
   methods: {
+    clickDay () {},
+    changeDate () {},
+    clickToday (data) {
+    },
+    toInitDay () {
+      this.$refs.Calendar.ChoseMonth(this.initToday())
+    },
     com_status (index) {
       if (index % 5 === 0) {
         return '已结束'
@@ -54,6 +77,11 @@ export default {
     toMeetingDetail (item) {
       this.$router.push(`/meetingDetail/123`)
     }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.$refs.Calendar.ChoseMonth(this.initToday())
+    }, 100)
   }
 }
 </script>
@@ -61,9 +89,20 @@ export default {
   .myMeeting{
     ._content{
       .dates{
+        position: relative;
         width: 100vw;
-        height: 5.54rem;
         background: #fff;
+        .today{
+          position: absolute;
+          right: .3rem;
+          top: 0;
+          z-index: 9;
+          display: block;
+          height: 44px;
+          line-height: 44px;
+          font-size: .3rem;
+          color: #3395FF;
+        }
       }
       .title{
         width: 100vw;
