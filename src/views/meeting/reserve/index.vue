@@ -81,50 +81,52 @@
           </p>
           <i class="iconfont icon" :class="showMore?'icon-zhankai1':'icon-zhankai'"></i>
         </div>
-        <div class="more-msg" v-show="showMore">
-          <div class="msg1">
-            <div class="selectItem clearfix">
-              <span class="name">会议形式</span>
-              <span class="value textLeft" v-if="false"></span>
-              <span class="value" v-else >请选择</span>
-              <i class="iconfont icon-tubiao- icon"></i>
+        <transition name="slide-bottom">
+          <div class="more-msg" v-show="showMore">
+            <div class="msg1">
+              <div class="selectItem clearfix">
+                <span class="name">会议形式</span>
+                <span class="value textLeft" v-if="false"></span>
+                <span class="value" v-else >请选择</span>
+                <i class="iconfont icon-tubiao- icon"></i>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">会议用途</span>
+                <span class="value textLeft" v-if="false"></span>
+                <span class="value" v-else >请选择</span>
+                <i class="iconfont icon-tubiao- icon"></i>
+              </div>
+              <div class="inputItem clearfix">
+                <span class="name">参会人数</span>
+                <input class="inputs" type="text" placeholder="请输入参会人数">
+              </div>
+              <div class="inputItem clearfix noneBb">
+                <span class="name">使用部门</span>
+                <input class="inputs" type="text" placeholder="请输入使用部门">
+              </div>
             </div>
-            <div class="selectItem clearfix">
-              <span class="name">会议用途</span>
-              <span class="value textLeft" v-if="false"></span>
-              <span class="value" v-else >请选择</span>
-              <i class="iconfont icon-tubiao- icon"></i>
+            <div class="msg2">
+              <div class="inputItem clearfix">
+                <span class="name">联系人电话</span>
+                <input class="inputs" type="text" placeholder="请输入联系人电话">
+              </div>
+              <div class="inputItem clearfix noneBb">
+                <span class="name">联系人邮箱</span>
+                <input class="inputs" type="text" placeholder="请输入联系人邮箱">
+              </div>
             </div>
-            <div class="inputItem clearfix">
-              <span class="name">参会人数</span>
-              <input class="inputs" type="text" placeholder="请输入参会人数">
-            </div>
-            <div class="inputItem clearfix noneBb">
-              <span class="name">使用部门</span>
-              <input class="inputs" type="text" placeholder="请输入使用部门">
+            <div class="msg3">
+              <div class="inputItem clearfix">
+                <span class="name">单价</span>
+                <input class="inputs" type="text" placeholder="请输入单价">
+              </div>
+              <div class="inputItem clearfix noneBb">
+                <span class="name">预收金额</span>
+                <input class="inputs" type="text" placeholder="请输入预收金额">
+              </div>
             </div>
           </div>
-          <div class="msg2">
-            <div class="inputItem clearfix">
-              <span class="name">联系人电话</span>
-              <input class="inputs" type="text" placeholder="请输入联系人电话">
-            </div>
-            <div class="inputItem clearfix noneBb">
-              <span class="name">联系人邮箱</span>
-              <input class="inputs" type="text" placeholder="请输入联系人邮箱">
-            </div>
-          </div>
-          <div class="msg3">
-            <div class="inputItem clearfix">
-              <span class="name">单价</span>
-              <input class="inputs" type="text" placeholder="请输入单价">
-            </div>
-            <div class="inputItem clearfix noneBb">
-              <span class="name">预收金额</span>
-              <input class="inputs" type="text" placeholder="请输入预收金额">
-            </div>
-          </div>
-        </div>
+        </transition>
       </div>
     </div>
     <div class="_footer">
@@ -300,5 +302,12 @@ export default {
       text-align: center;
       line-height: .8rem;
     }
+  }
+  .slide-bottom-enter-active, .slide-bottom-leave-active {
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  .slide-bottom-enter, .slide-bottom-leave-active {
+    opacity: 0
   }
 </style>

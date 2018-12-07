@@ -1,6 +1,6 @@
 <template>
   <div class="destine page page_bg">
-    <nav-title title="会议"></nav-title>
+    <nav-title title="会议室"></nav-title>
     <div class="org clearfix">
       <i class="iconfont icon-loudong"></i>
       <span class="orgName">银河世纪花园</span>
@@ -15,8 +15,11 @@
       <i class="iconfont icon-shaixuan" @click.stop="dialogShow=true"></i>
     </div>
     <div class="page_bd _content">
-      <ul class="list">
-        <li class="items" v-for="(item,index) in 24" :key="index" @click.stop="toDesitineDetial(item)">
+      <ul class="list"
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="loading"
+        infinite-scroll-distance="10">
+        <li class="items" :class="{'lastItem':index+1==list.length}" v-for="(item,index) in list" :key="index" @click.stop="toDesitineDetial(item)">
           <div class="top clearfix">
             <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543821465&di=e3ad1277bf7c91696edb3cd5bf3749e5&src=http://imgsrc.baidu.com/imgad/pic/item/0b55b319ebc4b745317003c2c5fc1e178b821579.jpg" class="pic">
             <div class="msg">
@@ -41,6 +44,7 @@
             <span v-for="(item, index) in 12" :key="index" :class="{'isSelect':index>6&&index<9}">{{item + 7}}</span>
           </div>
         </li>
+        <li class="load-tip" v-show="showLoadTip">加载中···</li>
       </ul>
     </div>
     <transition name="_dialog">
@@ -69,18 +73,59 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import { Indicator } from 'mint-ui'
+import { setTimeout } from 'timers'
 export default {
   name: 'destine',
-  components: {navTitle},
+  components: {navTitle, Indicator},
   data () {
     return {
-      dialogShow: false
+      dialogShow: false,
+      allLoaded: false,
+      list: [],
+      showLoadTip: false,
+      page: 1,
+      pageSize: 10
     }
   },
   methods: {
+    loadMore () {
+      if (this.page < 10) {
+        this.getList()
+      }
+    },
     toDesitineDetial (item) {
-      this.$router.push(`/destineDetail/123`)
+      this.$router.push({
+        name: 'destineDetail',
+        params: {
+          id: '123'
+        },
+        query: {
+          title: '高效厅'
+        }
+      })
+    },
+    getList () {
+      Indicator.open({spinnerType: 'fading-circle'})
+      for (let i = 0; i < 10; i++) {
+        this.list.push(i)
+      }
+      this.page++
+      setTimeout(() => {
+        this.isLoading = false
+        Indicator.close()
+        if (this.page < 10) {
+          this.showLoadTip = true
+        } else {
+          this.showLoadTip = false
+        }
+      }, 1000)
     }
+  },
+  created () {
+    this.getList()
+  },
+  mounted () {
   }
 }
 </script>
@@ -195,7 +240,7 @@ export default {
           padding: .2rem .3rem;
           background: #fff;
           margin-bottom: .2rem;
-          &:last-child{
+          &.lastItem{
             margin-bottom: 0;
           }
           .top{
@@ -318,116 +363,116 @@ export default {
     }
   }
   ._dialog-enter-active, ._dialog-leave-active {
-      transition: opacity .5s;
-      -webkit-transform: opacity .5s;
-    }
-    ._dialog-enter, ._dialog-leave-active {
-      opacity: 0
-    }
-    ._dialog{
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  ._dialog-enter, ._dialog-leave-active {
+    opacity: 0
+  }
+  ._dialog{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 999;
+    .mark{
       position: absolute;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      z-index: 999;
-      .mark{
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        z-index: 9;
-        background: #000;
-        opacity: .5;
-      }
-      ._d-content{
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 5.76rem;
-        height: 100vh;
-        background: #fff;
-        z-index: 11;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        ._d-list{
-          -webkit-box-flex: 1;
-          -ms-flex: 1;
-          flex: 1;
-          height: 100%;
-          padding-left: .3rem;
-          overflow: auto;
-          -webkit-overflow-scrolling: touch;
-          -webkit-transform: translateZ(0px);
-          transform: translate(0px);
-          ._d-items{
-            padding-top: .2rem;
-            border-bottom: 1px solid #ededed;
-            &:last-child{
-              border-bottom: none;
-            }
-            .title{
-              position: relative;
-              height: .44rem;
-              line-height: .44rem;
+      z-index: 9;
+      background: #000;
+      opacity: .5;
+    }
+    ._d-content{
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 5.76rem;
+      height: 100vh;
+      background: #fff;
+      z-index: 11;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      ._d-list{
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        height: 100%;
+        padding-left: .3rem;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        -webkit-transform: translateZ(0px);
+        transform: translate(0px);
+        ._d-items{
+          padding-top: .2rem;
+          border-bottom: 1px solid #ededed;
+          &:last-child{
+            border-bottom: none;
+          }
+          .title{
+            position: relative;
+            height: .44rem;
+            line-height: .44rem;
+            font-size: .28rem;
+            color: #777E8C;
+            .status{
+              position: absolute;
+              right: .3rem;
+              top: 0;
+              display: block;
               font-size: .28rem;
-              color: #777E8C;
-              .status{
-                position: absolute;
-                right: .3rem;
-                top: 0;
-                display: block;
-                font-size: .28rem;
-                color: #0DC88C;
-                .icon{
-                  color: #999;
-                }
-              }
-            }
-            ._d-box{
-              padding-bottom: .2rem;
-              ._d-btns{
-                float: left;
-                width: 1.58rem;
-                height: .56rem;
-                font-size: .24rem;
-                color: #333;
-                text-align: center;
-                background: #F2F2F4;
-                border-radius: .28rem;
-                margin-right: .2rem;
-                margin-top: .2rem;
-                line-height: .56rem;
+              color: #0DC88C;
+              .icon{
+                color: #999;
               }
             }
           }
-        }
-        ._d-footer{
-          height: 1rem;
-          width: 5.76rem;
-          border-top: 1px solid #ededed;
-          .btn{
-            float: left;
-            width: 2.88rem;
-            height: 1rem;
-            line-height: 1rem;
-            font-size: .34rem;
-            color: #7E7D7D;
-            text-align: center;
-            &:last-child{
-              color: #fff;
-              background: #0DC88C;
+          ._d-box{
+            padding-bottom: .2rem;
+            ._d-btns{
+              float: left;
+              width: 1.58rem;
+              height: .56rem;
+              font-size: .24rem;
+              color: #333;
+              text-align: center;
+              background: #F2F2F4;
+              border-radius: .28rem;
+              margin-right: .2rem;
+              margin-top: .2rem;
+              line-height: .56rem;
             }
+          }
+        }
+      }
+      ._d-footer{
+        height: 1rem;
+        width: 5.76rem;
+        border-top: 1px solid #ededed;
+        .btn{
+          float: left;
+          width: 2.88rem;
+          height: 1rem;
+          line-height: 1rem;
+          font-size: .34rem;
+          color: #7E7D7D;
+          text-align: center;
+          &:last-child{
+            color: #fff;
+            background: #0DC88C;
           }
         }
       }
     }
+  }
 </style>

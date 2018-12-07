@@ -1,6 +1,6 @@
 <template>
   <div class="page page_bg">
-    <nav-title title="会议室"></nav-title>
+    <nav-title title="会议"></nav-title>
     <div class="page_bd meeting">
       <div class="banner">
         <img src="../../../assets/img/meeting/banner.png">

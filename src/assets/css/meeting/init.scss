@@ -136,7 +136,14 @@
 .noneBb{
 	border-bottom: none !important;
 }
-
+.load-tip{
+	height: 44px;
+	width: 100vw;
+	font-size: 15px;
+	text-align: center;
+	line-height: 44px;
+	color: #999;
+}
 
 .mint-swipe-indicator{
 	background: #E8E8E8 !important;
@@ -145,7 +152,21 @@
 		background: #0DC88C !important;
 	}
 }
+.picker-toolbar{
+	padding: 0 .3rem;
+}
+.mint-datetime-cancel{
+	color: #999 !important;
+	text-align: left !important;
+}
+.mint-datetime-confirm{
+	color: #3395FF !important;
+	text-align: right !important;
+}
 // 会议室日历插件
+.wh_container{
+	max-width: none !important;
+}
 .wh_content_all{
 	background-color: #fff !important;
 }
@@ -194,7 +215,7 @@
 	text-align: center !important;
 	color: #333 !important;
 	line-height: 44px !important;
-	font-size: .3rem !important;
+	font-size: 15px !important;
 }
 .wh_jiantou2{
 	position: absolute;

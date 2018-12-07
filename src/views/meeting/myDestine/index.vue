@@ -114,7 +114,7 @@ export default {
           display: block;
           height: 44px;
           line-height: 44px;
-          font-size: .3rem;
+          font-size: 15px;
           color: #3395FF;
         }
       }

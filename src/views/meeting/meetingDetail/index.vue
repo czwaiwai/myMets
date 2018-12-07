@@ -78,75 +78,79 @@
           </p>
           <i class="iconfont icon" :class="showMore?'icon-zhankai1':'icon-zhankai'"></i>
         </div>
-        <div class="more-msg" v-show="showMore">
-          <div class="msg1">
-            <div class="selectItem clearfix">
-              <span class="name">会议形式</span>
-              <span class="value textLeft">会议形式</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">会议用途</span>
-              <span class="value textLeft">会议用途</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">参会人数</span>
-              <span class="value textLeft">21</span>
-            </div>
-            <div class="selectItem clearfix noneBb">
-              <span class="name">使用部门</span>
-              <span class="value textLeft">小卖部</span>
-            </div>
-          </div>
-          <div class="msg2">
-            <div class="selectItem clearfix">
-              <span class="name">会议联系人</span>
-              <span class="value textLeft">小卖部</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">联系人电话</span>
-              <span class="value textLeft">15012345678</span>
-            </div>
-            <div class="selectItem clearfix noneBb">
-              <span class="name">联系人邮箱</span>
-              <span class="value textLeft">小卖部</span>
-            </div>
-          </div>
-          <div class="msg3">
-            <div class="selectItem clearfix">
-              <span class="name">单价</span>
-              <span class="value textLeft">213</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">预收金额</span>
-              <span class="value textLeft">321</span>
-            </div>
-            <div class="selectItem clearfix noneBb">
-              <span class="name">会议套餐</span>
-              <span class="value textLeft">321</span>
-            </div>
-          </div>
-          <div class="summary">
-            <div class="selectItem clearfix noneBb" @click.stop="toSummary">
-              <span class="name">会议纪要</span>
-              <span class="value textLeft">321</span>
-              <i class="iconfont icon-tubiao- icon"></i>
-            </div>
-          </div>
-          <div class="enclosure">
-            <div class="title" @click.stop="showEnclosure=!showEnclosure">
-              <p :class="{'noneBb':!showEnclosure}">
-                <span>附件</span>
-              </p>
-              <i class="iconfont icon" :class="showEnclosure?'icon-zhankai1':'icon-zhankai'"></i>
-            </div>
-            <div class="closure" v-show="showEnclosure">
-              <div class="items" v-for="(item,index) in 5" :key="index">
-                <i class="iconfont icon-zhankai1"></i>
-                <span>会议室预订系统APP端产品线框图.zip</span>
+        <transition name="slide-bottom">
+          <div class="more-msg" v-show="showMore">
+            <div class="msg1">
+              <div class="selectItem clearfix">
+                <span class="name">会议形式</span>
+                <span class="value textLeft">会议形式</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">会议用途</span>
+                <span class="value textLeft">会议用途</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">参会人数</span>
+                <span class="value textLeft">21</span>
+              </div>
+              <div class="selectItem clearfix noneBb">
+                <span class="name">使用部门</span>
+                <span class="value textLeft">小卖部</span>
               </div>
             </div>
+            <div class="msg2">
+              <div class="selectItem clearfix">
+                <span class="name">会议联系人</span>
+                <span class="value textLeft">小卖部</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">联系人电话</span>
+                <span class="value textLeft">15012345678</span>
+              </div>
+              <div class="selectItem clearfix noneBb">
+                <span class="name">联系人邮箱</span>
+                <span class="value textLeft">小卖部</span>
+              </div>
+            </div>
+            <div class="msg3">
+              <div class="selectItem clearfix">
+                <span class="name">单价</span>
+                <span class="value textLeft">213</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">预收金额</span>
+                <span class="value textLeft">321</span>
+              </div>
+              <div class="selectItem clearfix noneBb">
+                <span class="name">会议套餐</span>
+                <span class="value textLeft">321</span>
+              </div>
+            </div>
+            <div class="summary">
+              <div class="selectItem clearfix noneBb" @click.stop="toSummary">
+                <span class="name">会议纪要</span>
+                <span class="value textLeft">321</span>
+                <i class="iconfont icon-tubiao- icon"></i>
+              </div>
+            </div>
+            <div class="enclosure">
+              <div class="title" @click.stop="showEnclosure=!showEnclosure">
+                <p :class="{'noneBb':!showEnclosure}">
+                  <span>附件</span>
+                </p>
+                <i class="iconfont icon" :class="showEnclosure?'icon-zhankai1':'icon-zhankai'"></i>
+              </div>
+              <transition name="closure">
+                <div class="closure" v-show="showEnclosure">
+                  <div class="items" v-for="(item,index) in 5" :key="index">
+                    <i class="iconfont icon-zhankai1"></i>
+                    <span>会议室预订系统APP端产品线框图.zip</span>
+                  </div>
+                </div>
+              </transition>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -271,5 +275,19 @@ export default {
   }
   .textColor{
     color: #3395FF !important;
+  }
+  .slide-bottom-enter-active, .slide-bottom-leave-active {
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  .slide-bottom-enter, .slide-bottom-leave-active {
+    opacity: 0
+  }
+  .closure-enter-active, .closure-leave-active {
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  .closure-enter, .closure-leave-active {
+    opacity: 0
   }
 </style>

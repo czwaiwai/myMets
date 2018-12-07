@@ -1,6 +1,6 @@
 <template>
   <div class="page destineDetail">
-    <nav-title title="高效厅"></nav-title>
+    <nav-title :title="title"></nav-title>
     <div class="_content page_bd">
       <div class="_swipe-wrap">
         <swipe :auto="4000">
@@ -93,8 +93,8 @@
           <p class="date">2018年10月18日  星期四</p>
           <p class="time">16:30 — 18:00</p>
           <div class="btns clearfix">
-            <div class="btn _left" @click.stop="toReserve">确定</div>
-            <div class="btn _right" @click.stop="dialogShow=false">取消</div>
+            <div class="btn _left" @click.stop="dialogShow=false">取消</div>
+            <div class="btn _right" @click.stop="toReserve">确定</div>
           </div>
         </div>
       </div>
@@ -111,6 +111,7 @@ export default {
   mixins: [dateChange],
   data () {
     return {
+      title: '',
       dialogShow: false,
       pickerValue: '',
       dateTime: ''
@@ -166,6 +167,7 @@ export default {
     }
   },
   created () {
+    this.title = this.$route.query.title
     this.pickerValue = this.initToday()
     this.dateTime = this.initToday()
   }
@@ -420,14 +422,14 @@ export default {
             line-height: .68rem;
             &._left{
               float: left;
-              color: #fff;
-              background: #0DC88C;
+              color: #0DC88C;
+              border: 1px solid #0DC88C;
               border-radius: 3px;
             }
             &._right{
               float: right;
-              color: #0DC88C;
-              border: 1px solid #0DC88C;
+              color: #fff;
+              background: #0DC88C;
               border-radius: 3px;
             }
           }

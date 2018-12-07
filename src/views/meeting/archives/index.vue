@@ -37,44 +37,46 @@
           </p>
           <i class="iconfont icon" :class="showMore?'icon-zhankai1':'icon-zhankai'"></i>
         </div>
-        <div class="more-msg" v-show="showMore">
-          <div class="msg1">
-            <div class="selectItem clearfix">
-              <span class="name">会议室编号</span>
-              <span class="value textLeft">1651651</span>
+        <transition name="slide-bottom">
+          <div class="more-msg" v-show="showMore">
+            <div class="msg1">
+              <div class="selectItem clearfix">
+                <span class="name">会议室编号</span>
+                <span class="value textLeft">1651651</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">参与座位数</span>
+                <span class="value textLeft">3</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">主席台座位</span>
+                <span class="value textLeft">21</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">需提前天数</span>
+                <span class="value textLeft">21</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">所属部门</span>
+                <span class="value textLeft">21</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">单价</span>
+                <span class="value textLeft">21</span>
+              </div>
+              <div class="selectItem clearfix noneBb">
+                <span class="name">计费方式</span>
+                <span class="value textLeft">安场次</span>
+              </div>
             </div>
-            <div class="selectItem clearfix">
-              <span class="name">参与座位数</span>
-              <span class="value textLeft">3</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">主席台座位</span>
-              <span class="value textLeft">21</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">需提前天数</span>
-              <span class="value textLeft">21</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">所属部门</span>
-              <span class="value textLeft">21</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">单价</span>
-              <span class="value textLeft">21</span>
-            </div>
-            <div class="selectItem clearfix noneBb">
-              <span class="name">计费方式</span>
-              <span class="value textLeft">安场次</span>
+            <div class="remark">
+              <div class="textShowItem clearfix noneBb">
+                <span class="name">备注</span>
+                <span class="value">会议内容会议内容会议内容会议内容</span>
+              </div>
             </div>
           </div>
-          <div class="remark">
-            <div class="textShowItem clearfix noneBb">
-              <span class="name">备注</span>
-              <span class="value">会议内容会议内容会议内容会议内容</span>
-            </div>
-          </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -231,5 +233,12 @@ export default {
         }
       }
     }
+  }
+  .slide-bottom-enter-active, .slide-bottom-leave-active {
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  .slide-bottom-enter, .slide-bottom-leave-active {
+    opacity: 0
   }
 </style>

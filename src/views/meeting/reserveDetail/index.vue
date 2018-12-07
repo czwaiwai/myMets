@@ -70,54 +70,56 @@
           </p>
           <i class="iconfont icon" :class="showMore?'icon-zhankai1':'icon-zhankai'"></i>
         </div>
-        <div class="more-msg" v-show="showMore">
-          <div class="msg1">
-            <div class="selectItem clearfix">
-              <span class="name">会议形式</span>
-              <span class="value textLeft">会议形式</span>
+        <transition name="slide-bottom">
+          <div class="more-msg" v-show="showMore">
+            <div class="msg1">
+              <div class="selectItem clearfix">
+                <span class="name">会议形式</span>
+                <span class="value textLeft">会议形式</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">会议用途</span>
+                <span class="value textLeft">会议用途</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">参会人数</span>
+                <span class="value textLeft">21</span>
+              </div>
+              <div class="selectItem clearfix noneBb">
+                <span class="name">使用部门</span>
+                <span class="value textLeft">小卖部</span>
+              </div>
             </div>
-            <div class="selectItem clearfix">
-              <span class="name">会议用途</span>
-              <span class="value textLeft">会议用途</span>
+            <div class="msg2">
+              <div class="selectItem clearfix">
+                <span class="name">会议联系人</span>
+                <span class="value textLeft">小卖部</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">联系人电话</span>
+                <span class="value textLeft">15012345678</span>
+              </div>
+              <div class="selectItem clearfix noneBb">
+                <span class="name">联系人邮箱</span>
+                <span class="value textLeft">小卖部</span>
+              </div>
             </div>
-            <div class="selectItem clearfix">
-              <span class="name">参会人数</span>
-              <span class="value textLeft">21</span>
-            </div>
-            <div class="selectItem clearfix noneBb">
-              <span class="name">使用部门</span>
-              <span class="value textLeft">小卖部</span>
+            <div class="msg3">
+              <div class="selectItem clearfix">
+                <span class="name">单价</span>
+                <span class="value textLeft">213</span>
+              </div>
+              <div class="selectItem clearfix">
+                <span class="name">预收金额</span>
+                <span class="value textLeft">321</span>
+              </div>
+              <div class="selectItem clearfix noneBb">
+                <span class="name">会议套餐</span>
+                <span class="value textLeft">321</span>
+              </div>
             </div>
           </div>
-          <div class="msg2">
-            <div class="selectItem clearfix">
-              <span class="name">会议联系人</span>
-              <span class="value textLeft">小卖部</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">联系人电话</span>
-              <span class="value textLeft">15012345678</span>
-            </div>
-            <div class="selectItem clearfix noneBb">
-              <span class="name">联系人邮箱</span>
-              <span class="value textLeft">小卖部</span>
-            </div>
-          </div>
-          <div class="msg3">
-            <div class="selectItem clearfix">
-              <span class="name">单价</span>
-              <span class="value textLeft">213</span>
-            </div>
-            <div class="selectItem clearfix">
-              <span class="name">预收金额</span>
-              <span class="value textLeft">321</span>
-            </div>
-            <div class="selectItem clearfix noneBb">
-              <span class="name">会议套餐</span>
-              <span class="value textLeft">321</span>
-            </div>
-          </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>
@@ -221,5 +223,12 @@ export default {
   }
   .textColor{
     color: #3395FF !important;
+  }
+  .slide-bottom-enter-active, .slide-bottom-leave-active {
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  .slide-bottom-enter, .slide-bottom-leave-active {
+    opacity: 0
   }
 </style>
