@@ -1,5 +1,6 @@
 <template>
   <div class="destine page page_bg">
+    <nav-title title="会议"></nav-title>
     <div class="org clearfix">
       <i class="iconfont icon-loudong"></i>
       <span class="orgName">银河世纪花园</span>
@@ -11,7 +12,7 @@
         <i class="iconfont icon icon-sousuo"></i>
         <input class="search-input" placeholder="请输入会议室名称或所在位置">
       </div>
-      <i class="iconfont icon-shaixuan"></i>
+      <i class="iconfont icon-shaixuan" @click.stop="dialogShow=true"></i>
     </div>
     <div class="page_bd _content">
       <ul class="list">
@@ -42,13 +43,39 @@
         </li>
       </ul>
     </div>
+    <transition name="_dialog">
+      <div class="_dialog" v-if="dialogShow">
+        <div class="mark" @click.stop="dialogShow=false"></div>
+        <div class="_d-content">
+          <ul class="_d-list">
+            <li class="_d-items" v-for="(item,index) in 6" :key="index">
+              <div class="title">
+                <span class="name">类型</span>
+                <span class="status">不限 <i class="iconfont icon-zhankai icon"></i></span>
+              </div>
+              <div class="_d-box clearfix">
+                <span class="_d-btns" v-for="(it,i) in 5" :key="i">会议室</span>
+              </div>
+            </li>
+          </ul>
+          <div class="_d-footer clearfix">
+            <div class="btn">重置</div>
+            <div class="btn">确定</div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'destine',
+  components: {navTitle},
   data () {
-    return {}
+    return {
+      dialogShow: false
+    }
   },
   methods: {
     toDesitineDetial (item) {
@@ -290,4 +317,117 @@ export default {
       }
     }
   }
+  ._dialog-enter-active, ._dialog-leave-active {
+      transition: opacity .5s;
+      -webkit-transform: opacity .5s;
+    }
+    ._dialog-enter, ._dialog-leave-active {
+      opacity: 0
+    }
+    ._dialog{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 999;
+      .mark{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        z-index: 9;
+        background: #000;
+        opacity: .5;
+      }
+      ._d-content{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 5.76rem;
+        height: 100vh;
+        background: #fff;
+        z-index: 11;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        ._d-list{
+          -webkit-box-flex: 1;
+          -ms-flex: 1;
+          flex: 1;
+          height: 100%;
+          padding-left: .3rem;
+          overflow: auto;
+          -webkit-overflow-scrolling: touch;
+          -webkit-transform: translateZ(0px);
+          transform: translate(0px);
+          ._d-items{
+            padding-top: .2rem;
+            border-bottom: 1px solid #ededed;
+            &:last-child{
+              border-bottom: none;
+            }
+            .title{
+              position: relative;
+              height: .44rem;
+              line-height: .44rem;
+              font-size: .28rem;
+              color: #777E8C;
+              .status{
+                position: absolute;
+                right: .3rem;
+                top: 0;
+                display: block;
+                font-size: .28rem;
+                color: #0DC88C;
+                .icon{
+                  color: #999;
+                }
+              }
+            }
+            ._d-box{
+              padding-bottom: .2rem;
+              ._d-btns{
+                float: left;
+                width: 1.58rem;
+                height: .56rem;
+                font-size: .24rem;
+                color: #333;
+                text-align: center;
+                background: #F2F2F4;
+                border-radius: .28rem;
+                margin-right: .2rem;
+                margin-top: .2rem;
+                line-height: .56rem;
+              }
+            }
+          }
+        }
+        ._d-footer{
+          height: 1rem;
+          width: 5.76rem;
+          border-top: 1px solid #ededed;
+          .btn{
+            float: left;
+            width: 2.88rem;
+            height: 1rem;
+            line-height: 1rem;
+            font-size: .34rem;
+            color: #7E7D7D;
+            text-align: center;
+            &:last-child{
+              color: #fff;
+              background: #0DC88C;
+            }
+          }
+        }
+      }
+    }
 </style>

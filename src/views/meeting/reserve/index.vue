@@ -1,5 +1,6 @@
 <template>
   <div class="page reserve">
+    <nav-title title="预订"></nav-title>
     <div class="page_bd _content">
       <div class="date">
         <div class="selectItem">
@@ -126,15 +127,17 @@
         </div>
       </div>
     </div>
-    <div class="footer">
+    <div class="_footer">
       <div class="btn1" @click.stop="$router.go(-1)">取消</div>
       <div class="btn2">确定</div>
     </div>
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'reserve',
+  components: {navTitle},
   data () {
     return {
       showMore: false
@@ -274,7 +277,7 @@ export default {
       }
     }
   }
-  .footer{
+  ._footer{
     .btn1{
       float: left;
       width: 3.3rem;

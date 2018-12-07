@@ -160,4 +160,11 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
+  .mint-swipe-indicator{
+    background: #E8E8E8 !important;
+    opacity: 1 !important;
+    &.is-active{
+      background: #0DC88C !important;
+    }
+  }
 </style>

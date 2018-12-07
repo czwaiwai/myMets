@@ -1,5 +1,6 @@
 <template>
   <div class="page page_bg">
+    <nav-title title="会议室"></nav-title>
     <div class="page_bd meeting">
       <div class="banner">
         <img src="../../../assets/img/meeting/banner.png">
@@ -22,16 +23,13 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'meeting',
+  components: {navTitle},
   data () {
     return {
     }
-  },
-  computed: {
-    ...mapGetters({
-    })
   },
   methods: {
     toDestine () {

@@ -1,5 +1,6 @@
 <template>
   <div class="page hasReserve">
+    <nav-title title="已预订"></nav-title>
     <div class="header">
       <div class="icon-items clearfix">
         <i class="iconfont icon-dizhi icon"></i>
@@ -26,8 +27,10 @@
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'hasReserve',
+  components: {navTitle},
   data () {
     return {}
   }

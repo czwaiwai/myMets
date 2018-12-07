@@ -51,9 +51,25 @@ export default [
     name: 'reserve',
     path: '/reserve/:id',
     meta: {
-      title: '预定'
+      title: '预订'
     },
     component: () => import('@/views/meeting/reserve')
+  },
+  {
+    name: 'reserveDetail',
+    path: '/reserveDetail/:id',
+    meta: {
+      title: '预订详情'
+    },
+    component: () => import('@/views/meeting/reserveDetail')
+  },
+  {
+    name: 'archives',
+    path: '/archives/:id',
+    meta: {
+      title: ''
+    },
+    component: () => import('@/views/meeting/archives')
   },
   {
     name: 'myDestine',
@@ -70,5 +86,21 @@ export default [
       title: '我的会议'
     },
     component: () => import('@/views/meeting/myMeeting')
+  },
+  {
+    name: 'meetingDetail',
+    path: '/meetingDetail/:id',
+    meta: {
+      title: '会议详情'
+    },
+    component: () => import('@/views/meeting/meetingDetail')
+  },
+  {
+    name: 'meetingSummary',
+    path: '/meetingSummary/:id',
+    meta: {
+      title: '会议纪要'
+    },
+    component: () => import('@/views/meeting/meetingSummary')
   }
 ]

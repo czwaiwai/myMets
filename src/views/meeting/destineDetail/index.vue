@@ -1,11 +1,14 @@
 <template>
   <div class="page destineDetail">
-    <div class="content page_bd">
-      <!-- <swiper style="width:100vw; height:3.2rem;" :loop="true" :auto="true" dots-position="center">
-        <swiper-item class="swiper-demo-img" v-for="(item, index) in baseList" :key="index">
-          <img class="pics" :src="item.img">
-        </swiper-item>
-      </swiper> -->
+    <nav-title title="高效厅"></nav-title>
+    <div class="_content page_bd">
+      <div class="_swipe-wrap">
+        <swipe :auto="4000">
+          <swipe-item v-for="(item,index) in 5" :key="index">
+            <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543821465&di=e3ad1277bf7c91696edb3cd5bf3749e5&src=http://imgsrc.baidu.com/imgad/pic/item/0b55b319ebc4b745317003c2c5fc1e178b821579.jpg" class="pics">
+          </swipe-item>
+        </swipe>
+      </div>
       <div class="msg">
         <div class="build-wrap">
           <div class="build clearfix">
@@ -32,9 +35,9 @@
         </div>
       </div>
       <div class="dates">
-        <div class="selectItem">
+        <div class="selectItem" @click.stop="openPicker">
           <span class="name">日期</span>
-          <span class="value textRight">2018年10月18日  周四</span>
+          <span class="value textRight">{{com_date(dateTime)}}</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
         <div class="tips">
@@ -70,9 +73,18 @@
         </ul>
       </div>
     </div>
-    <div class="footer">
+    <div class="_footer">
       <div class="btn" @click.stop="clickBtn">立即预订</div>
     </div>
+    <datetime-picker
+      ref="picker"
+      type="date"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      date-format="{value} 日"
+      @confirm="handleConfirm"
+      v-model="pickerValue">
+    </datetime-picker>
     <transition name="_dialog">
       <div class="_dialog" v-if="dialogShow">
         <div class="mark" @click.stop="dialogShow=false"></div>
@@ -90,30 +102,16 @@
   </div>
 </template>
 <script>
-// import { Swiper, SwiperItem } from 'vux'
+import navTitle from '@/components/navTitle'
+import { Swipe, SwipeItem, DatetimePicker } from 'mint-ui'
 export default {
   name: 'destineDetail',
-  // components: {Swiper, SwiperItem},
+  components: {navTitle, Swipe, SwipeItem, DatetimePicker},
   data () {
     return {
-      baseList: [
-        {
-          url: 'javascript:',
-          img: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg',
-          title: '送你一辆车'
-        },
-        {
-          url: 'javascript:',
-          img: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg',
-          title: '送你一辆车'
-        },
-        {
-          url: 'javascript:',
-          img: 'https://ww1.sinaimg.cn/large/663d3650gy1fq66vw1k2wj20p00goq7n.jpg',
-          title: '送你一辆车'
-        }
-      ],
-      dialogShow: false
+      dialogShow: false,
+      pickerValue: '',
+      dateTime: ''
     }
   },
   methods: {
@@ -139,24 +137,65 @@ export default {
     },
     toReserve () {
       this.$router.push(`/reserve/213`)
+    },
+    openPicker () {
+      this.pickerValue = this.dateTime
+      this.$refs.picker.open()
+    },
+    handleConfirm (date) {
+      console.log(date)
+      this.dateTime = date
+    },
+    com_date (time) {
+      let date = new Date(time)
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let date1 = date.getDate()
+      let arr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+      let day = arr[date.getDay()]
+      return year + '年' + this.add0(month) + '月' + this.add0(date1) + '日 ' + ' ' + day
+    },
+    add0 (num) {
+      if (num > 9) {
+        return num
+      } else {
+        return '0' + num
+      }
+    },
+    initToday () {
+      let date = new Date()
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      let time = year + '-' + month + '-' + strDate
+      return time
     }
+  },
+  created () {
+    this.pickerValue = this.initToday()
+    this.dateTime = this.initToday()
   }
 }
 </script>
 <style lang="scss" scoped>
   .destineDetail{
-    .content{
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 1.2rem;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      .pics{
-        display: block;
+    ._content{
+      ._swipe-wrap{
+        position: relative;
         width: 100vw;
         height: 3.2rem;
+        overflow: hidden;
+        .pics{
+          display: block;
+          width: 100vw;
+          height: 3.2rem;
+        }
       }
       .msg{
         padding-left: .3rem;

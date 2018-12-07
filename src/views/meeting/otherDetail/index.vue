@@ -1,5 +1,6 @@
 <template>
   <div class="otherDetail page">
+    <nav-title title="其他详情"></nav-title>
     <div class="page_bd _content">
       <div class="top">
         <div class="selectItem">
@@ -39,8 +40,10 @@
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'otherDetail',
+  components: {navTitle},
   data () {
     return {}
   }
