@@ -2,7 +2,7 @@
   <div class="page page_bg meetingSummary">
     <nav-title title="会议纪要"></nav-title>
     <div class="page_bd _content">
-      <div class="msg">
+      <div class="msg" v-if="hasData">
         <div class="textCode clearfix">
           <span class="name">会议名称：</span>
           <span class="value">会议室预订系统APP产品预上线动员会</span>
@@ -28,8 +28,9 @@
           </p>
         </div>
       </div>
+      <none-page title="没有会议纪要哦！" v-else></none-page>
     </div>
-    <div class="_footer-btn clearfix">
+    <div class="_footer-btn clearfix" v-show="hasData">
       <div class="last">
         <span>前一页</span>
       </div>
@@ -41,11 +42,13 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import nonePage from '../components/nonePage/index.vue'
 export default {
   name: 'meetingSummary',
-  components: {navTitle},
+  components: {navTitle, nonePage},
   data () {
     return {
+      hasData: false
     }
   },
   methods: {

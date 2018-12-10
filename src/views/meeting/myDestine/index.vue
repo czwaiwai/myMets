@@ -11,29 +11,33 @@
           v-on:isToday="clickToday"
           :markDateMore="arr"
           :sundayStart="false"
+          :textTop="calendarList"
         ></Calendar>
       </div>
-      <div class="title">以下是您10月26日（周五）已预订的会议：5次</div>
-      <ul class="list">
-        <li class="items" :class="{'opcity':index % 5 === 3}" @click.stop="toReserveDetail(item)" v-for="(item,index) in 20" :key="index">
-          <div class="times">
-            <span>09:30 — 11:00</span>
-            <span class="status">{{com_status(index)}}</span>
-          </div>
-          <div class="room">
-            <span>高效厅</span>
-            <span class="people">20人</span>
-          </div>
-          <div class="location">
-            <span>吾悦科技之光大厦</span>
-            <span class="steps">11楼</span>
-          </div>
-          <p class="say">会议室预订系统APP产品预上线动员大会</p>
-          <div class="btns clearfix">
-            <div class="btn" @click.stop="cancel(item)">取消预订</div>
-          </div>
-        </li>
-      </ul>
+      <div class="list-wrap" v-if="true">
+        <div class="title">以下是您{{com_setMD (dayTime)}} 已预订的会议：5次</div>
+        <ul class="list">
+          <li class="items" :class="{'opcity':index % 5 === 3}" @click.stop="toReserveDetail(item)" v-for="(item,index) in 20" :key="index">
+            <div class="times">
+              <span>09:30 — 11:00</span>
+              <span class="status">{{com_status(index)}}</span>
+            </div>
+            <div class="room">
+              <span>高效厅</span>
+              <span class="people">20人</span>
+            </div>
+            <div class="location">
+              <span>吾悦科技之光大厦</span>
+              <span class="steps">11楼</span>
+            </div>
+            <p class="say">会议室预订系统APP产品预上线动员大会</p>
+            <div class="btns clearfix">
+              <div class="btn" @click.stop="cancel(item)">取消预订</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <none-page title="暂无预订！" height="50" v-else></none-page>
     </div>
     <transition name="_dialog">
       <div class="_dialog" v-if="dialogShow">
@@ -54,22 +58,30 @@
 import navTitle from '@/components/navTitle'
 import dateChange from '@/mixins/dateChange'
 import Calendar from 'vue-calendar-component'
+import nonePage from '@/views/meeting/components/nonePage/index.vue'
 export default {
   name: 'myDestine',
-  components: {navTitle, Calendar},
+  components: {navTitle, Calendar, nonePage},
   mixins: [dateChange],
   data () {
     return {
       dialogShow: false,
-      arr: [{date: '2018/12/6', className: 'mark1'}, {date: '2018/12/10', className: 'mark1'}, {date: '2018/12/13', className: 'mark2'}]
+      calendarList: ['一', '二', '三', '四', '五', '六', '日'],
+      arr: [],
+      dayTime: ''
     }
   },
   methods: {
-    clickDay () {},
-    changeDate () {},
+    clickDay (date) {
+      this.dayTime = date
+      console.log(date)
+    },
+    changeDate () {
+    },
     clickToday (data) {
     },
     toInitDay () {
+      this.dayTime = this.initToday()
       this.$refs.Calendar.ChoseMonth(this.initToday())
     },
     com_status (index) {
@@ -93,8 +105,10 @@ export default {
     }
   },
   mounted () {
+    this.dayTime = this.initToday()
     setTimeout(() => {
       this.$refs.Calendar.ChoseMonth(this.initToday())
+      this.arr = [{date: '2018/12/6', className: 'mark1'}, {date: '2018/12/10', className: 'mark1'}, {date: '2018/12/13', className: 'mark2'}]
     }, 100)
   }
 }

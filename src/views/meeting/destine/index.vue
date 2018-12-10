@@ -6,7 +6,20 @@
       <span class="orgName">银河世纪花园</span>
       <i class="iconfont icon-tubiao-"></i>
     </div>
-    <div class="date"></div>
+    <div class="date clearfix">
+      <div class="month" @click.stop="clickMonth">
+        <span>{{monthDate.month}}月</span>
+        <i class="iconfont icon-xiala icon"></i>
+      </div>
+      <div class="day-wrap">
+        <div class="days">
+          <div class="items" :class="{'isSelect':item.isSelect}" @click.stop="selectDate(item,index)" v-for="(item,index) in dateList" :key="index">
+            <span class="name">{{item.name}}</span>
+            <span class="value">{{item.value}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="searchBox clearfix">
       <div class="searchWrap clearfix">
         <i class="iconfont icon icon-sousuo"></i>
@@ -47,6 +60,14 @@
         <li class="load-tip" v-show="showLoadTip">加载中···</li>
       </ul>
     </div>
+    <transition name="dateLog">
+      <div class="_datelog" v-show="showMonth">
+        <div class="mark" @click.stop="showMonth=false"></div>
+        <div class="dateLog">
+          <div class="items" :class="{'isSelect':item.isSelect}" @click.stop="selectMonth(item,index)" v-for="(item,index) in monthList" :key="index">{{item.year}}年{{item.month}}月</div>
+        </div>
+      </div>
+    </transition>
     <transition name="_dialog">
       <div class="_dialog" v-if="dialogShow">
         <div class="mark" @click.stop="dialogShow=false"></div>
@@ -75,11 +96,17 @@
 import navTitle from '@/components/navTitle'
 import { Indicator } from 'mint-ui'
 import { setTimeout } from 'timers'
+import dateChange from '@/mixins/dateChange'
 export default {
   name: 'destine',
   components: {navTitle, Indicator},
+  mixins: [dateChange],
   data () {
     return {
+      monthDate: {year: '', month: ''},
+      monthList: [],
+      dateList: [],
+      showMonth: false,
       dialogShow: false,
       allLoaded: false,
       list: [],
@@ -105,6 +132,125 @@ export default {
         }
       })
     },
+    // 点击月份选中
+    clickMonth () {
+      this.showMonth = !this.showMonth
+    },
+    // 选择月份
+    selectMonth (item, index) {
+      if (!item.isSelect) {
+        this.monthList.forEach(arr => {
+          arr.isSelect = false
+        })
+        item.isSelect = true
+        this.monthDate = {
+          year: item.year,
+          month: item.month
+        }
+        let init = this.getDateNum()
+        let month = init.month
+        if (month === item.month) {
+          this.getDateList()
+        } else {
+          this.setDateList()
+        }
+        this.$el.querySelector('.days').scrollLeft = 0
+      }
+      this.showMonth = false
+    },
+    // 点击选中日期
+    selectDate (item, index) {
+      if (!item.isSelect) {
+        this.dateList.forEach(arr => {
+          if (arr.value === item.value) {
+            arr.isSelect = true
+          } else {
+            arr.isSelect = false
+          }
+        })
+      }
+    },
+    // 获取月份下拉列表
+    getMonthList () {
+      let monthList = []
+      let init = this.getDateNum()
+      let index = 0
+      let month = init.month - 0
+      let year = init.year - 0
+      while (index < 6) {
+        index++
+        let obj = {
+          year: year,
+          month: month,
+          isSelect: false
+        }
+        if (month === init.month) {
+          obj.isSelect = true
+        }
+        monthList.push(obj)
+        if (month === 12 || month === '12') {
+          month = 1
+          year += 1
+        } else {
+          month += 1
+        }
+      }
+      this.monthList = monthList
+    },
+    // 除了本月，其他月份日期列表
+    setDateList () {
+      let dateList = []
+      let weekWorks = ['日', '一', '二', '三', '四', '五', '六']
+      let init = this.getDateNum(this.monthDate.year + '/' + this.monthDate.month + '/1')
+      let dayNum = init.day
+      let index = init.week
+      let maxDay = this.getLastDay(this.monthDate.year, this.monthDate.month)
+      while (dayNum < maxDay + 1) {
+        if (index > 6) {
+          index = 0
+        }
+        let obj = {
+          name: weekWorks[index],
+          value: dayNum,
+          isSelect: false
+        }
+        if (dayNum === init.day) {
+          obj.isSelect = true
+        }
+        dayNum++
+        index++
+        dateList.push(obj)
+      }
+      this.dateList = dateList
+    },
+    // 本月日期列表
+    getDateList () {
+      let dateList = []
+      let weekWorks = ['日', '一', '二', '三', '四', '五', '六']
+      let init = this.getDateNum()
+      let dayNum = init.day
+      let index = init.week
+      let maxDay = this.getLastDay(init.year, init.month)
+      this.monthDate = {year: init.year, month: init.month}
+      while (dayNum < maxDay + 1) {
+        if (index > 6) {
+          index = 0
+        }
+        let obj = {
+          name: weekWorks[index],
+          value: dayNum,
+          isSelect: false
+        }
+        if (dayNum === init.day) {
+          obj.name = '今'
+          obj.isSelect = true
+        }
+        dayNum++
+        index++
+        dateList.push(obj)
+      }
+      this.dateList = dateList
+    },
     getList () {
       Indicator.open({spinnerType: 'fading-circle'})
       for (let i = 0; i < 10; i++) {
@@ -123,6 +269,8 @@ export default {
     }
   },
   created () {
+    this.getDateList()
+    this.getMonthList()
     this.getList()
   },
   mounted () {
@@ -169,10 +317,76 @@ export default {
     }
     .date {
       position: relative;
-      z-index: 10;
+      z-index: 11;
       width: 100vw;
       height: 1.06rem;
       border-bottom: 1px solid #ededed;
+      padding-left: .3rem;
+      .month{
+        float: left;
+        width: .8rem;
+        height: 1.06rem;
+        span{
+          display: block;
+          width: .8rem;
+          height: .6rem;
+          line-height: .8rem;
+          text-align: center;
+          color: #333;
+          font-size: .3rem;
+        }
+        .icon{
+          display: block;
+          width: .8rem;
+          height: .46rem;
+          line-height: .36rem;
+          text-align: center;
+          color: #333;
+          font-size: .3rem;
+        }
+      }
+      .day-wrap{
+        float: left;
+        width: 6.14rem;
+        overflow: hidden;
+        .days{
+          width: auto;
+          height: 1.06rem;
+          padding: .09rem 0;
+          overflow-x: auto;
+          overflow-y: hidden;
+          white-space: nowrap;
+          .items{
+            display: inline-block;
+            width: .8rem;
+            height: .88rem;
+            color: #333;
+            &.isSelect{
+              color: #fff;
+              background: #0DC88C;
+              border-radius: .44rem;
+            }
+            .name{
+              display: block;
+              width: .8rem;
+              height: .46rem;
+              line-height: .5rem;
+              text-align: center;
+              // color: #333;
+              font-size: .3rem;
+            }
+            .value{
+              display: block;
+              width: .8rem;
+              height: .34rem;
+              line-height: .34rem;
+              text-align: center;
+              // color: #333;
+              font-size: .3rem;
+            }
+          }
+        }
+      }
     }
     .searchBox{
       position: relative;
@@ -471,6 +685,57 @@ export default {
             color: #fff;
             background: #0DC88C;
           }
+        }
+      }
+    }
+  }
+  .dateLog-enter-active, .dateLog-leave-active {
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  .dateLog-enter, .dateLog-leave-active {
+    opacity: 0
+  }
+  ._datelog{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 9999;
+    .mark{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #fff;
+      opacity: 0;
+      z-index: 9;
+    }
+    .dateLog{
+      position: absolute;
+      top: 2.82rem;
+      left: 0;
+      z-index: 10;
+      width: 2.8rem;
+      background: #fff;
+      box-shadow: 2px 0px 2px #888888;
+      .items{
+        width: 2.8rem;
+        height: .88rem;
+        line-height: .88rem;
+        font-size: .3rem;
+        color: #333;
+        text-align: center;
+        border-bottom: 1px solid #ededed;
+        &:last-child{
+          border-bottom: none;
+        }
+        &.isSelect{
+          color: #0DC88C;
         }
       }
     }

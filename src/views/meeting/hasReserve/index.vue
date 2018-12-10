@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="page_bd _content">
-      <ul class="list">
+      <ul class="list" v-if="false">
         <li class="items" v-for="(item,index) in 20" :key="index">
           <p class="times">09:30 — 11:00</p>
           <p class="title">会议室预订系统APP产品预上线动员大会</p>
@@ -23,14 +23,16 @@
           </div>
         </li>
       </ul>
+      <none-page title="还没有人预订我！" v-else></none-page>
     </div>
   </div>
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import nonePage from '../components/nonePage/index.vue'
 export default {
   name: 'hasReserve',
-  components: {navTitle},
+  components: {navTitle, nonePage},
   data () {
     return {}
   }

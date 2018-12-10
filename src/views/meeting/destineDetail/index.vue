@@ -142,28 +142,12 @@ export default {
       this.$router.push(`/reserve/213`)
     },
     openPicker () {
-      this.pickerValue = this.dateTime
+      this.pickerValue = this.com_setDate(this.dateTime)
       this.$refs.picker.open()
     },
     handleConfirm (date) {
       console.log(date)
       this.dateTime = date
-    },
-    com_date (time) {
-      let date = new Date(time)
-      let year = date.getFullYear()
-      let month = date.getMonth() + 1
-      let date1 = date.getDate()
-      let arr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
-      let day = arr[date.getDay()]
-      return year + '年' + this.add0(month) + '月' + this.add0(date1) + '日 ' + ' ' + day
-    },
-    add0 (num) {
-      if (num > 9) {
-        return num
-      } else {
-        return '0' + num
-      }
     }
   },
   created () {
