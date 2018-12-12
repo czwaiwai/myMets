@@ -1,40 +1,50 @@
 <template>
-  <div class="page hasReserve">
-    <nav-title title="已预订"></nav-title>
-    <div class="header">
-      <div class="icon-items clearfix">
-        <i class="iconfont icon-dizhi icon"></i>
-        <span class="name">高效厅</span>
+  <div class="page_modal">
+    <div class="page hasReserve">
+      <nav-title title="已预订"></nav-title>
+      <div class="header">
+        <div class="icon-items clearfix">
+          <i class="iconfont icon-dizhi icon"></i>
+          <span class="name">{{$parent.title}}</span>
+        </div>
+        <div class="icon-items clearfix noneBb">
+          <i class="iconfont icon-shijian icon"></i>
+          <span class="name">{{com_date($parent.dateTime)}}</span>
+        </div>
       </div>
-      <div class="icon-items clearfix noneBb">
-        <i class="iconfont icon-shijian icon"></i>
-        <span class="name">2018年10月18日 星期四</span>
+      <div class="page_bd _content">
+        <ul class="list" v-if="false">
+          <li class="items" v-for="(item,index) in 20" :key="index">
+            <p class="times">09:30 — 11:00</p>
+            <p class="title">会议室预订系统APP产品预上线动员大会</p>
+            <div class="msg">
+              <i class="iconfont icon-yonghu icon"></i>
+              <span class="name">五彩缤纷</span>
+              <span class="phone">15012345678</span>
+            </div>
+          </li>
+        </ul>
+        <none-page title="还没有人预订我！" v-else></none-page>
       </div>
-    </div>
-    <div class="page_bd _content">
-      <ul class="list" v-if="false">
-        <li class="items" v-for="(item,index) in 20" :key="index">
-          <p class="times">09:30 — 11:00</p>
-          <p class="title">会议室预订系统APP产品预上线动员大会</p>
-          <div class="msg">
-            <i class="iconfont icon-yonghu icon"></i>
-            <span class="name">五彩缤纷</span>
-            <span class="phone">15012345678</span>
-          </div>
-        </li>
-      </ul>
-      <none-page title="还没有人预订我！" v-else></none-page>
     </div>
   </div>
 </template>
 <script>
 import navTitle from '@/components/navTitle'
 import nonePage from '../components/nonePage/index.vue'
+import dateChange from '@/mixins/dateChange'
 export default {
   name: 'hasReserve',
   components: {navTitle, nonePage},
+  mixins: [dateChange],
   data () {
-    return {}
+    return {
+      dateTime: ''
+    }
+  },
+  created () {
+    console.log(this.$parent.dateTime)
+    this.dateTime = this.com_date(this.$parent.dateTime)
   }
 }
 </script>

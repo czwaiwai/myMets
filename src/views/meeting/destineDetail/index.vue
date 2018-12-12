@@ -19,7 +19,7 @@
           <div class="people clearfix">
             <i class="iconfont icon-duorenyonghu icon"></i>
             <span class="num">20人</span>
-            <span class="tip" @click.stop="toPicDetail">平面位置图</span>
+            <span class="tip" @click.stop="routeTo('picDetail')">平面位置图</span>
           </div>
         </div>
         <div class="articles">
@@ -29,7 +29,7 @@
           <span class="name">责任人</span>
           <span class="value textLeft">李中华  18923898333</span>
         </div>
-        <div class="selectItem noneBb" @click.stop="toOtherDetail">
+        <div class="selectItem noneBb" @click.stop="routeTo('otherDetail')">
           <span class="name">其他详情</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
@@ -42,7 +42,7 @@
         </div>
         <div class="tips">
           <p class="name">请选择预订时间</p>
-          <span class="showTip" @click.stop="toHasReserve">已预定情况</span>
+          <span class="showTip" @click.stop="routeTo('hasReserve')">已预定情况</span>
         </div>
         <div class="status clearfix">
           <div class="items clearfix">
@@ -76,6 +76,11 @@
     <div class="_footer">
       <div class="btn" @click.stop="clickBtn">立即预订</div>
     </div>
+    <transition name="page">
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </transition>
     <datetime-picker
       ref="picker"
       type="date"
@@ -118,11 +123,14 @@ export default {
     }
   },
   methods: {
+    routeTo (name) {
+      this.$router.push({name})
+    },
     toPicDetail () {
       this.$router.push('/picDetail/132')
     },
     toOtherDetail () {
-      this.$router.push('/otherDetail/132')
+      this.$router.push('otherDetail')
     },
     toHasReserve () {
       this.$router.push('/hasReserve/123')

@@ -93,7 +93,7 @@ export default {
         response.data = response.data.Table[0].data
       }
       if (syswin && syswin[0].status === 1) {
-        response.data = syswin[0].data
+        response.data = syswin[0].data || syswin[0].Data
       }
       return response
     }, function (error) {

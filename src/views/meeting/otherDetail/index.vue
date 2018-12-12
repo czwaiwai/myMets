@@ -1,40 +1,42 @@
 <template>
-  <div class="otherDetail page">
-    <nav-title title="其他详情"></nav-title>
-    <div class="page_bd _content">
-      <div class="top">
-        <div class="selectItem">
-          <span class="name">会议室编号</span>
-          <span class="value textLeft">NO.000012</span>
+  <div class="page_modal">
+    <div class="otherDetail page">
+      <nav-title title="其他详情"></nav-title>
+      <div class="page_bd _content">
+        <div class="top">
+          <div class="selectItem">
+            <span class="name">会议室编号</span>
+            <span class="value textLeft">NO.000012</span>
+          </div>
+          <div class="selectItem">
+            <span class="name">参与座位数</span>
+            <span class="value textLeft">NO.000012</span>
+          </div>
+          <div class="selectItem">
+            <span class="name">主席台座位</span>
+            <span class="value textLeft">NO.000012</span>
+          </div>
+          <div class="selectItem">
+            <span class="name">需提前天数</span>
+            <span class="value textLeft">NO.000012</span>
+          </div>
+          <div class="selectItem">
+            <span class="name">所属部门</span>
+            <span class="value textLeft">NO.000012</span>
+          </div>
+          <div class="selectItem">
+            <span class="name">单价</span>
+            <span class="value textLeft">NO.000012</span>
+          </div>
+          <div class="selectItem noneBb">
+            <span class="name">计费方式</span>
+            <span class="value textLeft">NO.000012</span>
+          </div>
         </div>
-        <div class="selectItem">
-          <span class="name">参与座位数</span>
-          <span class="value textLeft">NO.000012</span>
+        <div class="bottom clearfix">
+          <span class="name">备注：</span>
+          <p class="value">飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家</p>
         </div>
-        <div class="selectItem">
-          <span class="name">主席台座位</span>
-          <span class="value textLeft">NO.000012</span>
-        </div>
-        <div class="selectItem">
-          <span class="name">需提前天数</span>
-          <span class="value textLeft">NO.000012</span>
-        </div>
-        <div class="selectItem">
-          <span class="name">所属部门</span>
-          <span class="value textLeft">NO.000012</span>
-        </div>
-        <div class="selectItem">
-          <span class="name">单价</span>
-          <span class="value textLeft">NO.000012</span>
-        </div>
-        <div class="selectItem noneBb">
-          <span class="name">计费方式</span>
-          <span class="value textLeft">NO.000012</span>
-        </div>
-      </div>
-      <div class="bottom clearfix">
-        <span class="name">备注：</span>
-        <p class="value">飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家</p>
       </div>
     </div>
   </div>
@@ -46,6 +48,9 @@ export default {
   components: {navTitle},
   data () {
     return {}
+  },
+  created () {
+    console.log('in....', this.$parent.dateTime)
   }
 }
 </script>

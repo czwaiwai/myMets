@@ -17,21 +17,21 @@
       <div class="list-wrap" v-if="true">
         <div class="title">以下是您{{com_setMD (dayTime)}} 已预订的会议：5次</div>
         <ul class="list">
-          <li class="items" :class="{'opcity':index % 5 === 3}" @click.stop="toReserveDetail(item)" v-for="(item,index) in 20" :key="index">
+          <li class="items" :class="{'opcity':item.BookStatus=='QR'}" @click.stop="toReserveDetail(item)" v-for="(item,index) in dataList" :key="index">
             <div class="times">
-              <span>09:30 — 11:00</span>
-              <span class="status">{{com_status(index)}}</span>
+              <span>{{item.STime}} — {{item.ETime}}</span>
+              <span class="status">{{item.BookStatusName}}</span>
             </div>
             <div class="room">
-              <span>高效厅</span>
-              <span class="people">20人</span>
+              <span>{{item.Meet}}</span>
+              <span class="people">{{item.MeetNumber}}人</span>
             </div>
             <div class="location">
-              <span>吾悦科技之光大厦</span>
+              <span>{{item.Location}}</span>
               <span class="steps">11楼</span>
             </div>
-            <p class="say">会议室预订系统APP产品预上线动员大会</p>
-            <div class="btns clearfix">
+            <p class="say">{{item.MeetName}}</p>
+            <div class="btns clearfix" v-show="item.BookStatus=='HB'">
               <div class="btn" @click.stop="cancel(item)">取消预订</div>
             </div>
           </li>
@@ -59,16 +59,18 @@ import navTitle from '@/components/navTitle'
 import dateChange from '@/mixins/dateChange'
 import Calendar from 'vue-calendar-component'
 import nonePage from '@/views/meeting/components/nonePage/index.vue'
+import { Indicator } from 'mint-ui'
 export default {
   name: 'myDestine',
-  components: {navTitle, Calendar, nonePage},
+  components: {navTitle, Calendar, nonePage, Indicator},
   mixins: [dateChange],
   data () {
     return {
       dialogShow: false,
       calendarList: ['一', '二', '三', '四', '五', '六', '日'],
       arr: [],
-      dayTime: ''
+      dayTime: '',
+      dataList: []
     }
   },
   methods: {
@@ -102,9 +104,22 @@ export default {
     },
     toReserveDetail (item) {
       this.$router.push(`/reserveDetail/123`)
+    },
+    async getDataList () {
+      Indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_MeetingMyBookedList', {
+        'EmployeeID': '20'
+      })
+      console.log('res:', res)
+      this.isLoading = false
+      if (res.data) {
+        this.dataList = res.data || []
+      }
+      Indicator.close()
     }
   },
   mounted () {
+    this.getDataList()
     this.dayTime = this.initToday()
     setTimeout(() => {
       this.$refs.Calendar.ChoseMonth(this.initToday())

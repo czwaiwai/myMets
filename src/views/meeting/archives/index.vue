@@ -19,7 +19,7 @@
           <div class="people clearfix">
             <i class="iconfont icon-duorenyonghu icon"></i>
             <span class="num">20人</span>
-            <span class="tip" @click.stop="toPicDetail">平面位置图</span>
+            <span class="tip" @click.stop="routeTo('photo')">平面位置图</span>
           </div>
         </div>
         <div class="list clearfix">
@@ -79,6 +79,11 @@
         </transition>
       </div>
     </div>
+    <transition name="page">
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 <script>
@@ -94,6 +99,9 @@ export default {
     }
   },
   methods: {
+    routeTo (name) {
+      this.$router.push({name})
+    },
     toPicDetail () {
       this.$router.push('/picDetail/132')
     }

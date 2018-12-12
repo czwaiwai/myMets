@@ -33,6 +33,8 @@ export default {
   },
   methods: {
     toDestine () {
+      this.$store.commit('setSearchKey', '')
+      this.$store.commit('setDate', {year: '', month: '', day: ''})
       this.$router.push(`/destine`)
     },
     async toMyDestine () {

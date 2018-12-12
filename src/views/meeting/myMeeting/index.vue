@@ -14,7 +14,7 @@
           :textTop="calendarList"
         ></Calendar>
       </div>
-      <div class="list-wrap" v-if="false">
+      <div class="list-wrap" v-if="true">
         <div class="title">以下是您{{com_setMD (dayTime)}} 要参加的会议：5次</div>
         <ul class="list">
           <li class="items" :class="{'opcity':index % 5 === 3}" v-for="(item,index) in 20" :key="index" @click.stop="toMeetingDetail(item)">

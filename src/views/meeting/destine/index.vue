@@ -21,35 +21,37 @@
       </div>
     </div>
     <div class="searchBox clearfix">
-      <div class="searchWrap clearfix">
-        <i class="iconfont icon icon-sousuo"></i>
-        <input class="search-input" placeholder="请输入会议室名称或所在位置">
-      </div>
+      <form class="searchWrap clearfix" action="" onsubmit="return false;">
+          <i class="iconfont icon-sousuo icon"></i>
+          <input class="search-input" placeholder="请输入会议室名称或所在位置" type="search" v-model="searchKey" @keydown.13="searchList">
+          <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
+      </form>
       <i class="iconfont icon-shaixuan" @click.stop="dialogShow=true"></i>
     </div>
     <div class="page_bd _content">
       <ul class="list"
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
-        infinite-scroll-distance="10">
+        infinite-scroll-distance="10"
+        v-if="list.length">
         <li class="items" :class="{'lastItem':index+1==list.length}" v-for="(item,index) in list" :key="index" @click.stop="toDesitineDetial(item)">
           <div class="top clearfix">
             <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543821465&di=e3ad1277bf7c91696edb3cd5bf3749e5&src=http://imgsrc.baidu.com/imgad/pic/item/0b55b319ebc4b745317003c2c5fc1e178b821579.jpg" class="pic">
             <div class="msg">
               <div class="name">
-                <p class="title">沟通厅</p>
+                <p class="title">{{item.MeetName}}</p>
                 <div class="people clearfix">
                   <i class="iconfont icon icon-duorenyonghu"></i>
-                  <span>20人</span>
+                  <span>{{item.Capacity}}人</span>
                 </div>
               </div>
               <div class="location clearfix">
                 <i class="iconfont icon icon-dizhi"></i>
-                <span class="build">吾悦科技之关大厦</span>
-                <span class="steps">11楼</span>
+                <span class="build">{{item.Location}}</span>
+                <span class="steps">{{item.Floor}}楼</span>
               </div>
               <div class="label">
-                <span v-for="(item,index) in 3" :key="index">投影</span>
+                <span v-for="(it,i) in item.Facilities" :key="i">{{it.MaterialsnName}}</span>
               </div>
             </div>
           </div>
@@ -59,6 +61,7 @@
         </li>
         <li class="load-tip" v-show="showLoadTip">加载中···</li>
       </ul>
+      <none-page title="暂无会议室~" v-else></none-page>
     </div>
     <transition name="dateLog">
       <div class="_datelog" v-show="showMonth">
@@ -70,22 +73,24 @@
     </transition>
     <transition name="_dialog">
       <div class="_dialog" v-if="dialogShow">
-        <div class="mark" @click.stop="dialogShow=false"></div>
+        <div class="mark" @click.stop="closeDialog"></div>
         <div class="_d-content">
           <ul class="_d-list">
-            <li class="_d-items" v-for="(item,index) in 6" :key="index">
+            <li class="_d-items" v-for="(item,index) in typeList" :key="index">
               <div class="title">
-                <span class="name">类型</span>
-                <span class="status">不限 <i class="iconfont icon-zhankai icon"></i></span>
+                <span class="name">{{item.name}}</span>
+                <span class="status" @click.stop="clickSelect(item)">{{item.selectType.showText}} <i class="iconfont icon" :class="item.isSelect?'icon-zhankai1':'icon-zhankai'"></i></span>
               </div>
-              <div class="_d-box clearfix">
-                <span class="_d-btns" v-for="(it,i) in 5" :key="i">会议室</span>
-              </div>
+              <transition name="_d-box">
+                <div class="_d-box clearfix" v-show="item.isSelect">
+                  <span class="_d-btns" :class="{'isSelect':it.isSelect}" @click.stop="selectType(item,it)" v-for="(it,i) in item.list" :key="i">{{it.showText}}</span>
+                </div>
+              </transition>
             </li>
           </ul>
           <div class="_d-footer clearfix">
-            <div class="btn">重置</div>
-            <div class="btn">确定</div>
+            <div class="btn" @click.stop="selectListRest">重置</div>
+            <div class="btn" @click.stop="selectListConfirm">确定</div>
           </div>
         </div>
       </div>
@@ -97,40 +102,158 @@ import navTitle from '@/components/navTitle'
 import { Indicator } from 'mint-ui'
 import { setTimeout } from 'timers'
 import dateChange from '@/mixins/dateChange'
+import nonePage from '../components/nonePage/index.vue'
+import { mapGetters } from 'vuex'
 export default {
   name: 'destine',
-  components: {navTitle, Indicator},
+  components: {navTitle, Indicator, nonePage},
   mixins: [dateChange],
   data () {
     return {
-      monthDate: {year: '', month: ''},
+      monthDate: {year: '', month: '', day: ''},
       monthList: [],
       dateList: [],
+      searchKey: '',
       showMonth: false,
       dialogShow: false,
       allLoaded: false,
       list: [],
       showLoadTip: false,
       page: 1,
-      pageSize: 10
+      pageSize: 10,
+      typeList: []
     }
   },
+  computed: {
+    ...mapGetters({
+      dateDate: 'getDate',
+      key: 'getSearchKey'
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$store.commit('setSearchKey', this.searchKey)
+    this.$store.commit('setDate', {year: this.monthDate.year, month: this.monthDate.month, day: this.monthDate.day})
+    next()
+  },
   methods: {
+    clearKey () {},
+    searchList () {},
     loadMore () {
-      if (this.page < 10) {
-        this.getList()
-      }
+      // this.getList()
     },
     toDesitineDetial (item) {
       this.$router.push({
         name: 'destineDetail',
         params: {
-          id: '123'
+          id: item.ID
         },
         query: {
-          title: '高效厅'
+          title: item.MeetName
         }
       })
+    },
+    // 关闭筛选
+    closeDialog () {
+      this.dialogShow = false
+      this.typeList.forEach(arr => {
+        arr.selectType = arr.initType
+        arr.isSelect = false
+        arr.list.forEach(a => {
+          if (a.id === arr.selectType.id) {
+            a.isSelect = true
+          } else {
+            a.isSelect = false
+          }
+        })
+      })
+    },
+    // 重置筛选
+    selectListRest () {
+      this.typeList.forEach(arr => {
+        arr.selectType = arr.list[0]
+        arr.list.forEach((a, index) => {
+          if (index === 0) {
+            a.isSelect = true
+          } else {
+            a.isSelect = false
+          }
+        })
+      })
+    },
+    // 确定筛选条件
+    selectListConfirm () {
+      this.typeList.forEach(arr => {
+        arr.initType = arr.selectType
+        arr.isSelect = false
+      })
+      this.dialogShow = false
+    },
+    // 点选筛选类型
+    selectType (item, it) {
+      this.typeList[item.type].selectType = it
+      this.typeList[item.type].list.forEach(arr => {
+        arr.isSelect = false
+      })
+      it.isSelect = true
+    },
+    // 点击筛选展开收起按钮
+    async clickSelect (item) {
+      if (item.isSelect) {
+        item.isSelect = false
+        return
+      }
+      if (item.type === 1 || item.type === 2) {
+        item.isSelect = true
+        return
+      }
+      if (item.list.length > 1) {
+        item.isSelect = true
+        return
+      }
+      this.getSelectList(item)
+    },
+    // 获取筛选下拉列表
+    async getSelectList (item) {
+      Indicator.open({spinnerType: 'fading-circle'})
+      let params = {}
+      let httpUrl = ''
+      switch (item.type) {
+        case 0: params = {'TypeName': 'MeetType'}; httpUrl = 'UserRent_GetOptionList'
+          break
+        case 3: params = {'OrgID': '11091315263400010000', 'MeetType': 'MR'}; httpUrl = 'UserCS_MeetingFloor'
+          break
+        case 4: params = {'OrgID': '11091315263400010000'}; httpUrl = 'UserCS_MeetingEquipMatching'
+          break
+      }
+      let res = await this.$xml(httpUrl, params)
+      let arr = []
+      let list = []
+      arr.push(this.typeList[item.type].list[0])
+      if (item.type === 0) {
+        res.data.Table.forEach(arr => {
+          let obj = {
+            showText: arr.showText, id: arr.id, value: arr.value, isSelect: false
+          }
+          list.push(obj)
+        })
+      } else if (item.type === 3) {
+        res.data.forEach((arr) => {
+          let obj = {
+            showText: arr.Floor + '楼', id: arr.Floor, value: arr.Floor, isSelect: false
+          }
+          list.push(obj)
+        })
+      } else if (item.type === 4) {
+        res.data.forEach(arr => {
+          let obj = {
+            showText: arr.MaterialsnName, id: arr.ID, value: arr.Specification, isSelect: false
+          }
+          list.push(obj)
+        })
+      }
+      this.typeList[item.type].list = arr.concat(list)
+      Indicator.close()
+      item.isSelect = true
     },
     // 点击月份选中
     clickMonth () {
@@ -145,11 +268,14 @@ export default {
         item.isSelect = true
         this.monthDate = {
           year: item.year,
-          month: item.month
+          month: item.month,
+          day: 1
         }
         let init = this.getDateNum()
         let month = init.month
-        if (month === item.month) {
+        if (month - 0 === item.month - 0) {
+          this.monthDate.day = init.day
+          console.log(this.monthDate)
           this.getDateList()
         } else {
           this.setDateList()
@@ -169,6 +295,7 @@ export default {
           }
         })
       }
+      this.monthDate.day = item.value
     },
     // 获取月份下拉列表
     getMonthList () {
@@ -184,7 +311,11 @@ export default {
           month: month,
           isSelect: false
         }
-        if (month === init.month) {
+        if (this.monthDate.month) {
+          if (month === this.monthDate.month) {
+            obj.isSelect = true
+          }
+        } else if (month === init.month) {
           obj.isSelect = true
         }
         monthList.push(obj)
@@ -214,8 +345,17 @@ export default {
           value: dayNum,
           isSelect: false
         }
-        if (dayNum === init.day) {
+        if (this.dateDate.day) {
+          if (dayNum - 0 === this.monthDate.day - 0) {
+            obj.isSelect = true
+            this.monthDate.day = dayNum
+            setTimeout(() => {
+              this.$el.querySelector('.days').scrollLeft = (this.monthDate.day - 1) * 32
+            }, 500)
+          }
+        } else if (dayNum === init.day) {
           obj.isSelect = true
+          this.monthDate.day = dayNum
         }
         dayNum++
         index++
@@ -231,7 +371,6 @@ export default {
       let dayNum = init.day
       let index = init.week
       let maxDay = this.getLastDay(init.year, init.month)
-      this.monthDate = {year: init.year, month: init.month}
       while (dayNum < maxDay + 1) {
         if (index > 6) {
           index = 0
@@ -243,7 +382,18 @@ export default {
         }
         if (dayNum === init.day) {
           obj.name = '今'
+        }
+        if (this.monthDate.day) {
+          if (dayNum - 0 === this.monthDate.day - 0) {
+            obj.isSelect = true
+            setTimeout(() => {
+              console.log(this.monthDate.day)
+              this.$el.querySelector('.days').scrollLeft = (this.monthDate.day - init.day) * 30
+            }, 500)
+          }
+        } else if (dayNum - 0 === init.day - 0) {
           obj.isSelect = true
+          this.monthDate = {year: init.year, month: init.month, day: dayNum}
         }
         dayNum++
         index++
@@ -251,25 +401,100 @@ export default {
       }
       this.dateList = dateList
     },
-    getList () {
-      Indicator.open({spinnerType: 'fading-circle'})
-      for (let i = 0; i < 10; i++) {
-        this.list.push(i)
-      }
-      this.page++
-      setTimeout(() => {
-        this.isLoading = false
-        Indicator.close()
-        if (this.page < 10) {
-          this.showLoadTip = true
-        } else {
-          this.showLoadTip = false
+    setInitType () {
+      this.typeList = [
+        {
+          type: 0,
+          name: '类型',
+          isSelect: false,
+          selectType: {showText: '不限', id: '', value: ''},
+          initType: {showText: '不限', id: '', value: ''},
+          list: [{showText: '不限', id: '', value: '', isSelect: true}]
+        },
+        {
+          type: 1,
+          name: '空闲',
+          isSelect: false,
+          selectType: {showText: '不限', id: '', value: ''},
+          initType: {showText: '不限', id: '', value: ''},
+          list: [
+            {showText: '不限', id: '', value: '', isSelect: true},
+            {showText: '1小时', id: '1', value: '1', isSelect: false},
+            {showText: '2小时', id: '2', value: '2', isSelect: false},
+            {showText: '3小时', id: '3', value: '3', isSelect: false},
+            {showText: '4小时以上', id: '4', value: '4', isSelect: false}
+          ]
+        },
+        {
+          type: 2,
+          name: '大小',
+          isSelect: false,
+          selectType: {showText: '不限', id: '', value: ''},
+          initType: {showText: '不限', id: '', value: ''},
+          list: [
+            {showText: '不限', id: '', value: '', isSelect: true},
+            {showText: '2-3人', id: '1', value: '1', isSelect: false},
+            {showText: '4-6人', id: '2', value: '2', isSelect: false},
+            {showText: '7-9人', id: '3', value: '3', isSelect: false},
+            {showText: '10人以上', id: '4', value: '4', isSelect: false}
+          ]
+        },
+        {
+          type: 3,
+          name: '楼层',
+          isSelect: false,
+          selectType: {showText: '不限', floor: ''},
+          initType: {showText: '不限', id: '', value: ''},
+          list: [
+            {showText: '不限', id: '', isSelect: true}
+          ]
+        },
+        {
+          type: 4,
+          name: '设备',
+          isSelect: false,
+          selectType: {showText: '不限', id: ''},
+          initType: {showText: '不限', id: '', value: ''},
+          list: [
+            {showText: '不限', id: '', isSelect: true}
+          ]
         }
-      }, 1000)
+      ]
+    },
+    async getList () {
+      Indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_MeetingList', {
+        'OrgID': '11091315263400010000', // '11091315263400010000',
+        'MeetType': '',
+        'CapacityMin': '',
+        'CapacityMax': '',
+        'Floor': '',
+        'MaterialName': ''
+      })
+      console.log('res:', res)
+      this.isLoading = false
+      if (res.data) {
+        this.list = res.data || []
+      }
+      Indicator.close()
+      // this.showLoadTip = true
     }
   },
   created () {
-    this.getDateList()
+    this.searchKey = this.key
+    this.setInitType()
+    console.log('dateDate', this.dateDate)
+    if (this.dateDate.day) {
+      this.monthDate = {year: this.dateDate.year, month: this.dateDate.month, day: this.dateDate.day}
+      let init = this.getDateNum()
+      if (init.month === this.dateDate.month) {
+        this.getDateList()
+      } else {
+        this.setDateList()
+      }
+    } else {
+      this.getDateList()
+    }
     this.getMonthList()
     this.getList()
   },
@@ -536,11 +761,14 @@ export default {
               .label{
                 position: relative;
                 height: .4rem;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
                 span{
                   float: left;
                   font-size: .28rem;
                   color: #999;
-                  margin-right: .44rem;
+                  margin-right: .3rem;
                   line-height: .4rem;
                 }
               }
@@ -629,6 +857,7 @@ export default {
         transform: translate(0px);
         ._d-items{
           padding-top: .2rem;
+          padding-bottom: .2rem;
           border-bottom: 1px solid #ededed;
           &:last-child{
             border-bottom: none;
@@ -665,6 +894,15 @@ export default {
               margin-right: .2rem;
               margin-top: .2rem;
               line-height: .56rem;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              &.isSelect{
+                color: #0DC88C;
+                border: 1px solid #0DC88C;
+                background: #F1FEFA;
+                box-sizing: border-box;
+              }
             }
           }
         }
@@ -688,6 +926,13 @@ export default {
         }
       }
     }
+  }
+  ._d-box-enter-active, ._d-box-leave-active {
+    transition: opacity .5s;
+    -webkit-transform: opacity .5s;
+  }
+  ._d-box-enter, ._d-box-leave-active {
+    opacity: 0
   }
   .dateLog-enter-active, .dateLog-leave-active {
     transition: opacity .5s;
