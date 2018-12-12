@@ -5,11 +5,13 @@ export default {
       month: '',
       day: ''
     },
-    searchKey: ''
+    searchKey: '',
+    statusColor: {}
   },
   getters: {
     getDate: state => state.dateData,
-    getSearchKey: state => state.searchKey
+    getSearchKey: state => state.searchKey,
+    getStatusColor: state => state.statusColor
   },
   mutations: {
     setDate (state, bool) {
@@ -17,6 +19,9 @@ export default {
     },
     setSearchKey (state, data) {
       state.searchKey = data
+    },
+    setStatusColor (state, data) {
+      state.statusColor = data
     }
   },
   actions: {

@@ -13,21 +13,21 @@
         <div class="build-wrap">
           <div class="build clearfix">
             <i class="iconfont icon-dizhi icon"></i>
-            <span class="name">吾悦科技之关大厦</span>
-            <span class="steps">11楼</span>
+            <span class="name">{{detailData.Location}}</span>
+            <span class="steps">{{detailData.Floor}}楼</span>
           </div>
           <div class="people clearfix">
             <i class="iconfont icon-duorenyonghu icon"></i>
-            <span class="num">20人</span>
+            <span class="num">{{detailData.Capacity}}人</span>
             <span class="tip" @click.stop="routeTo('photo')">平面位置图</span>
           </div>
         </div>
         <div class="list clearfix">
-          <span class="items" v-for="(item,index) in 10" :key="index">八爪鱼</span>
+          <span class="items" v-for="(item,index) in detailData.Facilities" :key="index">{{item.MaterialsnName}}</span>
         </div>
         <div class="selectItem clearfix noneBb">
           <span class="name">责任人</span>
-          <span class="value textLeft">321</span>
+          <span class="value textLeft">{{detailData.Responsible}}</span>
         </div>
       </div>
       <div class="more">
@@ -42,37 +42,37 @@
             <div class="msg1">
               <div class="selectItem clearfix">
                 <span class="name">会议室编号</span>
-                <span class="value textLeft">1651651</span>
+                <span class="value textLeft">{{detailData.MeetNumber}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">参与座位数</span>
-                <span class="value textLeft">3</span>
+                <span class="value textLeft">{{detailData.InvolvSeats}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">主席台座位</span>
-                <span class="value textLeft">21</span>
+                <span class="value textLeft">{{detailData.RostrumSeats}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">需提前天数</span>
-                <span class="value textLeft">21</span>
+                <span class="value textLeft">{{detailData.AdvanceDay}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">所属部门</span>
-                <span class="value textLeft">21</span>
+                <span class="value textLeft">{{detailData.Department}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">单价</span>
-                <span class="value textLeft">21</span>
+                <span class="value textLeft">{{detailData.UnitPrice}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
                 <span class="name">计费方式</span>
-                <span class="value textLeft">安场次</span>
+                <span class="value textLeft">{{detailData.BillingName}}</span>
               </div>
             </div>
             <div class="remark">
               <div class="textShowItem clearfix noneBb">
                 <span class="name">备注</span>
-                <span class="value">会议内容会议内容会议内容会议内容</span>
+                <span class="value">{{detailData.Memo}}</span>
               </div>
             </div>
           </div>
@@ -88,14 +88,15 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
-import { Swipe, SwipeItem } from 'mint-ui'
+import { Swipe, SwipeItem, Indicator } from 'mint-ui'
 export default {
   name: 'archives',
-  components: {navTitle, Swipe, SwipeItem},
+  components: {navTitle, Swipe, SwipeItem, Indicator},
   data () {
     return {
       title: '',
-      showMore: false
+      showMore: false,
+      detailData: {}
     }
   },
   methods: {
@@ -104,10 +105,21 @@ export default {
     },
     toPicDetail () {
       this.$router.push('/picDetail/132')
+    },
+    // 获取预定详情数据
+    async getData () {
+      Indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_MeetFileDetail', {
+        'MeetID': this.$route.params.id
+      })
+      console.log('res:', res)
+      this.detailData = res.data[0]
+      Indicator.close()
     }
   },
   created () {
     this.title = this.$route.query.title
+    this.getData()
   }
 }
 </script>
@@ -191,7 +203,7 @@ export default {
         }
       }
       .list{
-        padding: 0 .3rem .2rem 0;
+        padding-bottom: .2rem;
         border-bottom: 1px solid #ededed;
         .items{
           float: left;
@@ -201,6 +213,9 @@ export default {
           line-height: .44rem;
           font-size: .3rem;
           color: #333;
+          &:last-child{
+            margin-right: 0;
+          }
         }
       }
     }

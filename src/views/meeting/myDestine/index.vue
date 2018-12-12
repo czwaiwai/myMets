@@ -3,6 +3,8 @@
     <nav-title title="我的预订"></nav-title>
     <div class="page_bd _content">
       <div class="dates">
+        <div class="lastMonth" @click.stop="lastMonth"></div>
+        <div class="nextMonth" @click.stop="nextMonth"></div>
         <span class="today" @click.stop="toInitDay">今天</span>
         <Calendar
           ref="Calendar"
@@ -14,13 +16,15 @@
           :textTop="calendarList"
         ></Calendar>
       </div>
-      <div class="list-wrap" v-if="true">
-        <div class="title">以下是您{{com_setMD (dayTime)}} 已预订的会议：5次</div>
+      <div class="title" v-if="dataList.length">以下是您{{com_setMD (dayTime)}} 已预订的会议：{{dataList.length}}次</div>
+      <div class="title" v-else>您在{{com_setMD (dayTime)}} 没有预订会议</div>
+      <div class="list-wrap" v-if="dataList.length">
         <ul class="list">
           <li class="items" :class="{'opcity':item.BookStatus=='QR'}" @click.stop="toReserveDetail(item)" v-for="(item,index) in dataList" :key="index">
+            <div class="point" :style="'background:'+com_color(item.BookStatus)+';'"></div>
             <div class="times">
               <span>{{item.STime}} — {{item.ETime}}</span>
-              <span class="status">{{item.BookStatusName}}</span>
+              <span class="status" :style="'color:'+com_color(item.BookStatus)+';'">{{item.BookStatusName}}</span>
             </div>
             <div class="room">
               <span>{{item.Meet}}</span>
@@ -60,6 +64,7 @@ import dateChange from '@/mixins/dateChange'
 import Calendar from 'vue-calendar-component'
 import nonePage from '@/views/meeting/components/nonePage/index.vue'
 import { Indicator } from 'mint-ui'
+import { mapGetters } from 'vuex'
 export default {
   name: 'myDestine',
   components: {navTitle, Calendar, nonePage, Indicator},
@@ -73,10 +78,24 @@ export default {
       dataList: []
     }
   },
+  computed: {
+    ...mapGetters({
+      statusColor: 'getStatusColor'
+    })
+  },
   methods: {
+    // 上个月
+    lastMonth () {
+      this.$refs.Calendar.PreMonth('', false)
+    },
+    // 下个月
+    nextMonth () {
+      this.$refs.Calendar.NextMonth('', false)
+    },
     clickDay (date) {
-      this.dayTime = date
+      this.dayTime = this.com_setDate(date)
       console.log(date)
+      this.getDataList()
     },
     changeDate () {
     },
@@ -85,30 +104,31 @@ export default {
     toInitDay () {
       this.dayTime = this.initToday()
       this.$refs.Calendar.ChoseMonth(this.initToday())
-    },
-    com_status (index) {
-      if (index % 5 === 0) {
-        return '已结束'
-      } else if (index % 5 === 1) {
-        return '使用中'
-      } else if (index % 5 === 2) {
-        return '已预订'
-      } else if (index % 5 === 3) {
-        return '确认中'
-      } else if (index % 5 === 4) {
-        return '已取消'
-      }
+      this.getDataList()
     },
     cancel (item) {
       this.dialogShow = true
     },
-    toReserveDetail (item) {
-      this.$router.push(`/reserveDetail/123`)
+    // 上色
+    com_color (status) {
+      let color = ''
+      this.statusColor.forEach(arr => {
+        if (arr.StatusValue === status) {
+          color = arr.Color
+        }
+      })
+      return color
     },
+    // 到预定详情
+    toReserveDetail (item) {
+      this.$router.push(`/reserveDetail/${item.ID}`)
+    },
+    // 获取列表数据
     async getDataList () {
       Indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_MeetingMyBookedList', {
-        'EmployeeID': '20'
+        'EmployeeID': '20',
+        'MeetTime': this.dayTime
       })
       console.log('res:', res)
       this.isLoading = false
@@ -119,8 +139,8 @@ export default {
     }
   },
   mounted () {
-    this.getDataList()
     this.dayTime = this.initToday()
+    this.getDataList()
     setTimeout(() => {
       this.$refs.Calendar.ChoseMonth(this.initToday())
       this.arr = [{date: '2018/12/6', className: 'mark1'}, {date: '2018/12/10', className: 'mark1'}, {date: '2018/12/13', className: 'mark2'}]
@@ -159,6 +179,7 @@ export default {
         padding-left: .3rem;
         background: #fff;
         .items{
+          position: relative;
           padding: .2rem .3rem;
           border-bottom: 1px solid #ededed;
           &.opcity{
@@ -167,23 +188,22 @@ export default {
           &:last-child{
             border-bottom: none;
           }
+          .point{
+            position: absolute;
+            left: 0;
+            top: .34rem;
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: #CDCBCB;
+            border-radius: 50%;
+          }
           .times{
             position: relative;
             height: .44rem;
             color: #0DC88C;
             font-size: .3rem;
             line-height: .44rem;
-            &::before{
-              position: absolute;
-              left: -.3rem;
-              top: .14rem;
-              display: block;
-              width: 8px;
-              height: 8px;
-              background: #CDCBCB;
-              border-radius: 50%;
-              content: '';
-            }
             .status{
               position: absolute;
               right: 0;

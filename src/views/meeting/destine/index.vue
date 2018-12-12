@@ -131,8 +131,8 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
-    this.$store.commit('setSearchKey', this.searchKey)
-    this.$store.commit('setDate', {year: this.monthDate.year, month: this.monthDate.month, day: this.monthDate.day})
+    // this.$store.commit('setSearchKey', this.searchKey)
+    // this.$store.commit('setDate', {year: this.monthDate.year, month: this.monthDate.month, day: this.monthDate.day})
     next()
   },
   methods: {
@@ -190,11 +190,23 @@ export default {
     },
     // 点选筛选类型
     selectType (item, it) {
+      if (it.isSelect) {
+        return
+      }
       this.typeList[item.type].selectType = it
       this.typeList[item.type].list.forEach(arr => {
         arr.isSelect = false
       })
       it.isSelect = true
+      if (item.type === 0) {
+        this.typeList[3].isSelect = false
+        let list = []
+        console.log('in...')
+        this.typeList[3].list[0].isSelect = true
+        list.push(this.typeList[3].list[0])
+        this.typeList[3].list = list
+        this.typeList[3].selectType = this.typeList[4].list[0]
+      }
     },
     // 点击筛选展开收起按钮
     async clickSelect (item) {
@@ -214,13 +226,17 @@ export default {
     },
     // 获取筛选下拉列表
     async getSelectList (item) {
+      if (item.type === 3 && this.typeList[0].selectType.value === '') {
+        this.$toast('请先选择类型！')
+        return
+      }
       Indicator.open({spinnerType: 'fading-circle'})
       let params = {}
       let httpUrl = ''
       switch (item.type) {
         case 0: params = {'TypeName': 'MeetType'}; httpUrl = 'UserRent_GetOptionList'
           break
-        case 3: params = {'OrgID': '11091315263400010000', 'MeetType': 'MR'}; httpUrl = 'UserCS_MeetingFloor'
+        case 3: params = {'OrgID': '11091315263400010000', 'MeetType': this.typeList[0].selectType.value}; httpUrl = 'UserCS_MeetingFloor'
           break
         case 4: params = {'OrgID': '11091315263400010000'}; httpUrl = 'UserCS_MeetingEquipMatching'
           break
@@ -401,6 +417,7 @@ export default {
       }
       this.dateList = dateList
     },
+    // 设置筛选初始值
     setInitType () {
       this.typeList = [
         {

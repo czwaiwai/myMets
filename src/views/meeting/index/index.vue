@@ -42,9 +42,19 @@ export default {
     },
     async toMyMeeting () {
       this.$router.push(`/myMeeting`)
+    },
+    async getStatusColor () {
+      let res = await this.$xml('UserCS_MeetingUseStatusColor', {
+        'OrgID': '11091315263400010000'
+      })
+      console.log(res)
+      if (res.data) {
+        this.$store.commit('setStatusColor', res.data)
+      }
     }
   },
   created () {
+    this.getStatusColor()
   }
 }
 </script>
