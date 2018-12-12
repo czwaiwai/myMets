@@ -35,8 +35,8 @@ export default {
     instance.interceptors.response.use(function (response) {
       Indicator.close()
       let data = response.data
-      console.log(response.data, response)
-      if (data.status === 0 || data.code === '200') {
+      console.log('返回的结果', response.data, response)
+      if (data.status - 0 === 0 || data.code === '200' || data.isSuccess) {
         response.data = data.data
         return response
       } else {
@@ -58,6 +58,7 @@ export default {
       },
       transformRequest: [function (data) {
         console.log('http://' + options.ip)
+        console.log('xml请求参数:', data)
         return Qs.stringify(data)
       }],
       transformResponse: [function (data, config) {
@@ -91,6 +92,9 @@ export default {
       }
       if (response.data.Table && response.data.Table[0].status === 1) {
         response.data = response.data.Table[0].data
+      }
+      if (response.data.Table && response.data.Table instanceof Array) {
+        response.data = response.data.Table
       }
       if (syswin && syswin[0].status === 1) {
         response.data = syswin[0].data || syswin[0].Data

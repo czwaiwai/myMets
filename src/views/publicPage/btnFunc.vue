@@ -5,7 +5,7 @@
         </mt-header>
         <div class="page_bd">
           <div class="weui-cells" style="margin-top:0;">
-            <div class="weui-cell">
+            <div @click="$router.forward('/customerService?quick=true')" class="weui-cell">
               <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
                 <img src="../../assets/img/btnFunc/ic_customer.png" style="width: 50px;display: block">
               </div>
@@ -13,7 +13,7 @@
                 <p>客服报事</p>
               </div>
             </div>
-            <div class="weui-cell">
+            <div @click="$router.forward('/customerService?quick=true')" class="weui-cell">
               <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
                 <img src="../../assets/img/btnFunc/ic_maintain_pool.png"  style="width: 50px;display: block">
               </div>
@@ -32,8 +32,7 @@ export default {
   data () {
     return {}
   },
-  created () {
-  },
+  created () {},
   methods: {}
 }
 </script>

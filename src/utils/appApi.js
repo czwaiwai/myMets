@@ -138,7 +138,7 @@ export default (function () {
   function isJSON (str) {
     if (typeof str === 'string') {
       try {
-        let obj = JSON.parse(str)
+        let obj = JSON.parse(str.replace(/[\r\n]/g, ''))
         if (typeof obj === 'object' && obj) {
           return true
         } else {
@@ -157,7 +157,7 @@ export default (function () {
       return str
     }
     if (isJSON(str)) {
-      return JSON.parse(str)
+      return JSON.parse(str.replace(/[\r\n]/g, ''))
     } else {
       return str
     }

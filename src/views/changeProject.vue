@@ -46,7 +46,9 @@ export default {
   },
   created () {
     this.currPro = this.user.OrgID
-    this.getPageData()
+    this.currPositionID = this.user.PositionID
+    // this.getPageData()
+    this.getPageDataNet()
   },
   computed: {
     ...mapGetters({
@@ -67,6 +69,25 @@ export default {
       // this.$http.post(obj)
       console.log(res)
       this.list = res.data
+    },
+    async getPageDataNet () {
+      let p0 = 'UserCS_GetPositionIdInfo'
+      let res = await this.$xml(p0, {
+        EmployeeID: this.user.memberId
+      })
+      if (!res.data) return
+      let resData = this.$toLower(res.data)
+      let subList = []
+      resData.forEach(item => {
+        if (item.positionId === this.currPositionID) {
+          subList = item
+        }
+      })
+      this.list = subList.areaInfo.map(item => {
+        item.projectId = item.id
+        item.projectName = item.organizationName
+        return item
+      })
     },
     projectChange (item) {
       console.log(item, ' 设置项目')

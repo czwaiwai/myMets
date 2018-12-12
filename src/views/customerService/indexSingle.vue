@@ -41,8 +41,7 @@
               </div>
               <div style="width:60px;" class="weui-cell__ft padding-v" @click="routeTo('locationChoose')" >&nbsp;</div>
             </div>
-            <!-- v-if="type==='baoxiu'" -->
-            <a   @click="routeTo('deviceChoose')" class="weui-cell weui-cell_access" href="javascript:;">
+            <a v-if="type==='baoxiu'" @click="routeTo('deviceChoose')" class="weui-cell weui-cell_access" href="javascript:;">
               <div class="weui-cell__hd padding-right15"><i class="iconfont icon-shebei" ></i></div>
               <div class="weui-cell__bd">
                 <p :class="formObj.workPos?'':'dark_99'">{{formObj.workPos?formObj.workPos: '哪个设备'}}</p>

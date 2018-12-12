@@ -2,6 +2,7 @@
   <div class="page">
     <mt-header  title="我的收款">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+      <!-- <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button> -->
     </mt-header>
     <div class="page_bd">
       <div class="green_top">
@@ -57,8 +58,20 @@ export default {
     this.orgId = this.user.OrgID
     this.fillpro = this.user.memberId
     this.today = (new Date()).format('yyyy-MM-dd')
+    if (!this.$isPos) {
+      this.$app.paymentData().then(res => {
+        console.log('payMentData', res)
+        this.orgId = res.projectID
+        this.fillpro = res.memberID
+        this.getPageDataNet()
+      }).catch(err => {
+        console.log(err)
+        this.getPageDataNet()
+      })
+    } else { // pos机
+      this.getPageDataNet()
+    }
     // this.getPageData()
-    this.getPageDataNet()
   },
   computed: {
     ...mapGetters({
@@ -92,11 +105,13 @@ export default {
         FillDate: this.today
       })
       let data = this.$toLower(res.data)
-      this.list = data.customerData
-      this.cashObj = {
-        fillDate: data.fillDate,
-        totalMoney: data.totalMoney,
-        totalNumber: data.totalNumber
+      if (data) {
+        this.list = data.customerData
+        this.cashObj = {
+          fillDate: data.fillDate,
+          totalMoney: data.totalMoney,
+          totalNumber: data.totalNumber
+        }
       }
     },
     detailClick (item) {
@@ -112,7 +127,7 @@ export default {
 
 <style scoped>
   .green_top{
-    background:#0CC88D;
+    background:#3395ff;
     color:#FFF;
     text-align:center;
     padding:30px 15px;

@@ -15,12 +15,14 @@
       </div>
       <div class="weui-cells" style="margin-top:10px;">
         <a @click="$router.forward('/positionId')"  class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_icon_qhxm.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">
             <p>职位</p>
           </div>
           <div class="weui-cell__ft">{{user.PositionName}}</div>
         </a>
         <a @click="$router.forward('/cashInfo')"  class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_sk.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">
             <p>我的收款</p>
           </div>
@@ -28,6 +30,7 @@
           </div>
         </a>
         <a @click="$router.forward('/serverAddress')" class="weui-cell weui-cell_access" href="javascript:;">
+         <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_icon_fwqdz.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">
             <p>服务器地址</p>
           </div>
@@ -35,6 +38,7 @@
           </div>
         </a>
         <a @click="clearCache" class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_icon_qchc.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">
             <p>清除缓存</p>
           </div>

@@ -2,6 +2,7 @@
 <div class="page">
   <mt-header title="收款">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+      <!-- <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button> -->
   </mt-header>
   <div class="page_bd location">
     <h1 class="room-project_name">{{orgName}}</h1>
@@ -58,7 +59,7 @@ export default {
   data () {
     return {
       orgId: '',
-      orgName: '测试名称',
+      orgName: '',
       userId: '',
       memberId: '',
       roomName: '',
@@ -87,8 +88,23 @@ export default {
     this.orgName = this.user.OrgName
     this.userId = this.user.UserID
     this.memberId = this.user.memberId
-    this.roomName = ''
-    this.getPageData()
+    if (!this.$isPos) {
+      this.$app.paymentData().then(res => {
+        this.orgId = res.projectID
+        this.orgName = res.projectName
+        this.memberId = res.memberID
+        this.userId = res.userID
+        this.roomName = ''
+        this.getPageData()
+      }).catch(err => {
+        console.log(err)
+        this.roomName = ''
+        this.getPageData()
+      })
+    } else { // pos机
+      this.roomName = ''
+      this.getPageData()
+    }
   },
   methods: {
     async getPageData () {
@@ -199,7 +215,7 @@ export default {
     -webkit-line-clamp: 1;
   }
   .list_ul li.active {
-    border: 1px solid  #0DC88C;
+    border: 1px solid  #3395ff;
   }
   .list_ul li.small {
     word-break: break-all;

@@ -20,6 +20,7 @@
           </div>
         </div>
         <div v-if="noCash === true" class="text-center padding-top15">
+          <p class="main_color padding-bottom">没有欠款</p>
           <img style="width: 18vw;" src="../../assets/img/cash/clearCash.png">
           <div class="padding15">
             <button class="back_btn_plain" @click="$root.back()">返回</button>
@@ -99,12 +100,12 @@ export default {
 <style lang="scss" scoped>
 .back_btn_plain {
   background: transparent;
-  border: 1px solid #0dc88c;
+  border: 1px solid #3395FF;
   border-radius: 20px;
   height: 36px;
   width: 100px;
   font-size: 16px;
-  color: #0dc88c;
+  color: #3395FF;
   line-height: 34px;
   margin-top: 10px;
   outline: none;

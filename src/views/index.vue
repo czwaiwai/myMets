@@ -123,12 +123,14 @@ export default {
       this.$app.waterCamera().then(res => {
         this.quickOut()
         sess.set('mainImg', res)
+        sess.remove('mainVoice')
         this.$router.forward({path: '/btnFunc'})
       }).catch(err => {
         console.log(err)
         if (this.$dev) {
           this.quickOut()
           sess.set('mainImg', 'hahahah')
+          sess.remove('mainVoice')
           this.$router.forward({path: '/btnFunc'})
         }
       })
@@ -146,13 +148,15 @@ export default {
       this.$app.getRec().then((res) => {
         console.log('getRec_res:', res)
         sess.set('mainVoice', res)
+        sess.remove('mainImg')
         this.quickOut()
         this.$router.forward({path: '/btnFunc'})
       }).catch(err => {
         console.log(err)
         if (this.$dev) {
           this.quickOut()
-          sess.set('voice', '设置语音')
+          sess.set('mainVoice', '设置语音')
+          sess.remove('mainImg')
           this.$router.forward({path: '/btnFunc'})
         }
       })

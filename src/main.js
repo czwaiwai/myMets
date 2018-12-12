@@ -19,6 +19,9 @@ import bus from './utils/pushMsg'
 import '@/utils/rem'
 import preview from 'vue-photo-preview'
 console.log(bus)
+console.log(location.href, '------------------')
+console.log(location.hash, '----location.hash----')
+
 if (process.env.NODE_ENV === 'development') {
   Vue.prototype.$dev = true
   Vue.dev = true
@@ -115,31 +118,3 @@ store.dispatch('getUserAction').then(user => {
     appApi.logout()
   }
 })
-
-// var previous = null;
-// var atleast = 10;
-// document.querySelectorAll('.page').on('touchmove', function (e) {
-//   var now = +new Date();
-//   if(!previous){
-//     previous = now;
-//   }
-//   if (now - previous > atleast){
-//     method();//要执行的操作
-//     // 重置上一次开始时间为本次结束时间
-//     previous = now;
-//   }
-//   else{
-//     clearTimeout(timer);
-//     timer = setTimeout(function(){
-//       checkScroll(e);
-//     },200);
-//   }
-// }
-// document.addEventListener('touchmove', function (event) {
-//   if (event.cancelable) {
-//     // 判断默认行为是否已经被禁用
-//     if (!event.defaultPrevented) {
-//       event.preventDefault()
-//     }
-//   }
-// }, { passive: false })

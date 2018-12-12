@@ -5,8 +5,19 @@ export default function (Vue) {
     }
     return price
   })
+  Vue.filter('hourMin', function (time) {
+    if (time > 9) {
+      return time + ':00'
+    } else {
+      return '0' + time + ':00'
+    }
+  })
   Vue.filter('today', function (time) {
-    time = new Date(parseInt(time))
+    if (time.indexOf('/') > -1 || time.indexOf('-') > -1) {
+      time = new Date(time)
+    } else {
+      time = new Date(parseInt(time))
+    }
     let hour = time.getHours()
     let minute = time.getMinutes()
     hour = hour < 10 ? '0' + hour : hour
@@ -15,7 +26,11 @@ export default function (Vue) {
     return time
   })
   Vue.filter('formatDate', function (time) {
-    time = new Date(parseInt(time))
+    if (time.indexOf('/') > -1 || time.indexOf('-') > -1) {
+      time = new Date(time)
+    } else {
+      time = new Date(parseInt(time))
+    }
     var year = time.getFullYear()
     var month = time.getMonth() + 1
     var day = time.getDate()

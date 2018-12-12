@@ -63,16 +63,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .back_btn_plain {
-    background: transparent;
-    border: 1px solid #0dc88c;
-    border-radius: 20px;
-    height: 36px;
-    width: 100px;
-    font-size: 16px;
-    color: #0dc88c;
-    line-height: 34px;
-    margin-top: 10px;
-    outline: none;
-  }
+.weui-form-preview__btn_primary {
+  color: #3395ff;
+}
 </style>

@@ -16,7 +16,7 @@
             <li v-for="(item, index) in list" :key="index" >
               <div class="title_line weui-flex">
                 <div @click="selectClick(item)" class="weui-flex__item">
-                  <i class="iconfont" style="color: #0dc88c;" :class="item.isCheck?'icon-select':'icon-Ellipse'"></i>
+                  <i class="iconfont" style="color: #3395FF;" :class="item.isCheck?'icon-select':'icon-Ellipse'"></i>
                   {{item.repYears}}
                 </div>
                 <div @click="showSubClick(item)">
@@ -37,7 +37,7 @@
       </div>
       <div class="weui-flex padding15-h padding-v light_bg">
         <div @click="isAllClick" class="weui-flex__item">
-          <i class="iconfont padding-right5 " style="color: #0dc88c;" :class="allCheck?'icon-select':'icon-Ellipse'"></i>全选
+          <i class="iconfont padding-right5 " style="color: #3395FF;" :class="allCheck?'icon-select':'icon-Ellipse'"></i>全选
         </div>
         <div style="padding-right: 30px;">合计:<span style="color: #e40101;">￥{{totalMoney | formatMoney}}</span></div>
         <div class="pay_up_btn"  @click="payUp">收款</div>
@@ -128,13 +128,21 @@ export default {
       let res = await this.$xml(p0, {
         OrgID: this.orgId
       })
-      this.actions = res.data.map((item, index) => {
+      this.actions = res.data.reduce((before, item) => {
         let that = this
+        // [Pos机刷卡, Pos机扫码]
+        let arr = this.$dev ? [] : ['1812031513470001002K', '1812031514190001002K']
+        console.log(item.id, item.name)
         item.method = function () {
           that['payChoose'](item.id, item.name)
         }
-        return item
-      })
+        if (!this.$isPos && arr.indexOf(item.id) > -1) {
+          return before
+        }
+        before.push(item)
+        return before
+      }, [])
+      console.log(this.actions, '------')
       // console.log(data, '-data---||----')
     },
     isAllClick () {
@@ -175,17 +183,22 @@ export default {
     payChoose (id, name) {
       this.choosePayId = id
       this.choosePayType = name
+      this.btnTxt = '确定收款'
       console.log('支付通道:', id, name)
-      if (name.toLowerCase() === 'app银联扫码') {
+      // 银联pos机扫码
+      if (id === '1812031514190001002K') {
         return this.posScan(id, name)
       }
-      if (name.toLowerCase() === 'app刷卡') {
+      // 银联pos机刷卡
+      if (id === '1812031513470001002K') {
         return this.posCard(id, name)
       }
-      if (name.toLowerCase() === 'app扫码') {
+      // 银联app扫码
+      if (id === '1812031506500001002K') {
         return this.appScan(id, name)
       }
-      if (name === '扫码') {
+      // App威富通扫码
+      if (id === '17120409430400010034') {
         return this.appScan(id, name)
       }
       this.payConfirmVisible = true
@@ -319,6 +332,7 @@ export default {
         'PrePaidId': preId || '',
         'Syswin': this.getXmlParamList(id, name)
       }
+      console.log(params, 'payFormXml提交的参数')
       try {
         this.btnTxt = '写入实收...'
         let p0 = 'UserAppFn_Pay'
@@ -328,10 +342,6 @@ export default {
           this.$set(this.$parent.choosePersonCash, 'totalMoney', this.totalMoney)
           this.paying = false
           return data
-          // this.$router.replace({name: 'cashPaySucc', params: {
-          //     id: data.revID
-          //   }
-          // })
         } else {
           this.paying = false
           this.btnTxt = '写入实收失败，请重试'
@@ -383,8 +393,9 @@ export default {
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
         code: '',
+        appId: 'db6ca9faacd34873b2acd5b5633de2b4',
         extOrderNo: '', // 选填）商户流水号
-        extBillNo: '' // 选填）外部订单号
+        extBillNo: prePayId // 选填）外部订单号
       }
       try {
         console.log('发送pos机的参数', params)
@@ -413,6 +424,7 @@ export default {
       }
     },
     async payYLScan (prePayId) {
+      // appid db6ca9faacd34873b2acd5b5633de2b4
       let params = {
         AppName: 'POS 通',
         BizName: '扫一扫',
@@ -420,8 +432,9 @@ export default {
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
         code: '',
+        appId: 'db6ca9faacd34873b2acd5b5633de2b4',
         extOrderNo: '', // 选填）商户流水号
-        extBillNo: '' // 选填）外部订单号
+        extBillNo: prePayId // 选填）外部订单号
       }
       try {
         console.log('发送pos机的参数', params)
@@ -478,17 +491,18 @@ export default {
       let res = await this.payFormXml(id, name)
       if (!res) return
       console.log('普通支付 ----end', res)
-      this.jumpSucc(res.RevID)
+      this.jumpSucc(res.paidID)
       // this.payForm(this.choosePayId, this.choosePayType, '')
     },
     // app 扫码支付 //通过name区分是支付方式
     async appScan (id, name) {
-      // 锁定下单
-      if (this.paying) return
-      this.paying = true
       // 获取app扫码结果
       let scanRes = await this.scanPayByApp()
       if (!scanRes) return
+      console.log(scanRes, '扫描的值')
+      // 锁定下单
+      if (this.paying) return
+      this.paying = true
       // 预下单
       // let prePayId = await this.prePay(id, name)
       // if (!prePayId) return
@@ -496,7 +510,8 @@ export default {
       // let res = await this.payFormXml(id, name, scanRes, prePayId)
       let res = await this.payFormXml(id, name, scanRes)
       if (!res) return
-      this.jumpSucc(res.RevID)
+      console.log('app扫码 ----end', res)
+      this.jumpSucc(res.paidID)
     },
     // 银联刷卡流程
     async posCard (id, name) {
@@ -513,8 +528,8 @@ export default {
       // 获取刷卡陈工后的结果并通知后台 尝试3次
       let res = await this.updateBackendData(cardObj, prePayId)
       if (!res) return
-      console.log(res, '支付成功后的结果')
-      this.jumpSucc(res.RevID)
+      console.log('银联刷卡 ----end', res)
+      this.jumpSucc(res.paidID)
     },
     // 银联扫码流程
     async posScan (id, name) {
@@ -530,8 +545,8 @@ export default {
       // 获取支付成功后的结果通知后台并且尝试3次
       let res = await this.updateBackendData(posObj, prePayId)
       if (!res) return
-      console.log(res, '支付成功后的结果')
-      this.jumpSucc(res.RevID)
+      console.log('银联扫码 ----end', res)
+      this.jumpSucc(res.paidID)
     },
     jumpSucc (id) {
       this.$router.replace({name: 'cashPaySucc',
@@ -592,12 +607,12 @@ export default {
 }
 .back_btn_plain {
   background: transparent;
-  border: 1px solid #0dc88c;
+  border: 1px solid #3395FF;
   border-radius: 20px;
   height: 36px;
   width: 100px;
   font-size: 16px;
-  color: #0dc88c;
+  color: #3395ff;
   line-height: 34px;
   margin-top: 10px;
   outline: none;

@@ -6,15 +6,16 @@
     <div class="page_bd">
       <div class="green_top">
         <div class="green_bl text-center">
-          <div   ><button class="date_btn " @click="dateClick">
+          <div><button class="date_btn " @click="dateClick">
             <span class="padding-right5 ">{{yesterday}}</span>
             <span class="direct_bottom main_color"> > </span></button></div>
           <div v-show="!noData">
             <p class="big_num">{{cashObj.totalMoney | formatMoney}} <small>元</small></p>
             <p class="dark_99">共{{cashObj.totalNumber}}笔</p>
           </div>
-          <div v-if="noData" class="padding-top15" style="height:40vw;">
-            <img src="../../assets/img/publicPage/no-data.png" style="height: 100%;">
+          <div v-if="noData" class="padding-top15" style="height:30vw;">
+            <img src="../../assets/img/publicPage/no-data_1.png" style="height: 80%;">
+            <p>这一天无数据</p>
           </div>
         </div>
       </div>
@@ -64,7 +65,18 @@ export default {
     this.fillpro = this.user.memberId
     this.date = this.getYesterday()
     this.yesterday = this.getYesterday()
-    this.getPageDataNet()
+    if (!this.$isPos) {
+      this.$app.paymentData().then(res => {
+        this.orgId = res.projectID
+        this.fillpro = res.memberID
+        this.getPageDataNet()
+      }).catch(err => {
+        console.log(err)
+        this.getPageDataNet()
+      })
+    } else { // pos机
+      this.getPageDataNet()
+    }
   },
   components: {
     'DatetimePicker': DatetimePicker
@@ -130,7 +142,7 @@ export default {
     dateConfirm (date) {
       console.log(date)
       this.yesterday = this.formatDate(date.valueOf())
-      this.getPageData()
+      this.getPageDataNet()
     },
     getYesterday () {
       let date = new Date()
@@ -153,7 +165,7 @@ export default {
 
 <style lang="scss" scoped>
   .green_top{
-    background:#0CC88D;
+    background:#3395ff;
     text-align:center;
     padding: 20px 15px;
     height: 30vw;

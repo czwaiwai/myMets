@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import customerService from './customerService'
 // 会议室
 import meeting from './meeting'
+import report from './report'
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
 import TabWork from '@/views/tabWork'
@@ -47,6 +48,25 @@ export default new Router({
           return '/tab/work'
         }
       }
+    },
+    {
+      path: '/page=4',
+      redirect: to => {
+        if (to.path === '/page=4') {
+          return '/cashInfo'
+        }
+      }
+    },
+    {
+      path: '/page=0',
+      redirect: to => {
+        if (to.path === '/page=0') {
+          return '/getCash'
+        }
+      }
+      // beforeEnter: (to, from, next) => {
+      //   console.log(to, from)
+      // }
     },
     {
       path: '/home',
@@ -238,6 +258,14 @@ export default new Router({
       component: SubDetail
     },
     ...customerService,
-    ...meeting
+    ...meeting,
+    ...report,
+    {
+      path: '*',
+      redirect: to => {
+        console.log(location.hash, location.hash)
+        return '/'
+      }
+    }
   ]
 })

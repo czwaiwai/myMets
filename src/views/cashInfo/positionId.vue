@@ -31,7 +31,8 @@ export default {
   },
   created () {
     this.currPosi = this.user.PositionID
-    this.getPageData()
+    this.getPageDataNet()
+    // this.getPageData()
   },
   computed: {
     ...mapGetters({
@@ -45,12 +46,24 @@ export default {
       console.log(res)
       this.list = res.data
     },
+    async getPageDataNet () {
+      let p0 = 'UserCS_GetPositionIdInfo'
+      let res = await this.$xml(p0, {
+        EmployeeID: this.user.memberId
+      })
+      if (!res.data) return
+      this.list = res.data
+    },
     async posiChange (item) {
       try {
         await this.$app.changePosition({
           positionId: item.PositionId,
           positionName: item.PositionName,
           positionInfo: item.PositionInfo
+        })
+        await this.$app.changeProject({
+          projectId: item.OrgID,
+          projectName: item.OrgName
         })
         this.$store.dispatch('getUserAction')
         this.$store.commit('setRandNum', Date.now())

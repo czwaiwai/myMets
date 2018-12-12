@@ -86,7 +86,7 @@ export default {
   text-align:center;
 }
 .cash_wrap {
-  padding-top:40px;
+  padding-top:100px;
   text-align: center;
 }
 .page_bd {

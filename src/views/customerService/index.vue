@@ -132,6 +132,7 @@
 import { DatetimePicker } from 'mint-ui'
 import {mapGetters} from 'Vuex'
 // import Vue from 'vue'
+import sess from '../utils/sess'
 export default {
   name: 'customerService',
   data () {
@@ -208,6 +209,15 @@ export default {
     this.getPageData()
   },
   methods: {
+    // 获取报事保修快捷音频及图片
+    getQuickChannel () {
+      let img = this.sess.get('mainImg')
+      let voice = this.sess.get('mainVoice')
+      return {
+        img,
+        voice
+      }
+    },
     setUserInfo () {
       let that = this
       window.set_login_info = function (infos) {

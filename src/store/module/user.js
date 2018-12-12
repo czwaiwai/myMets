@@ -27,13 +27,15 @@ export default {
       }
       if (!state.user) {
         return {
-          UserID: 'test30',
-          PositionName: '系统管理员',
-          OrgName: '银河世纪花园',
-          OrgID: '11091315263400010000',
-          PositionID: '11109131631300010000',
-          memberId: '30',
-          memberName: 'test30'
+          UserID: 'LiaoJiangWei',
+          PositionName: '财务经理',
+          OrgName: '思源大厦',
+          OrgID: 10000,
+          // OrgName: '银河世纪花园',
+          // OrgID: '11091315263400010000',
+          PositionID: '11091316310300010000',
+          memberId: '18102416111400010024',
+          memberName: '廖江伟'
         }
       }
       return state.user
@@ -90,11 +92,6 @@ export default {
         commit('login', user)
         commit('setIp', ip)
         commit('setAuth', coverAuth(user['AreaInfo']))
-        // Toast({
-        //   message: '登录成功',
-        //   position: 'bottom',
-        //   duration: 1500
-        // })
         return user // 返回User对象
       } else {
         commit('setIp', '172.31.118.201')

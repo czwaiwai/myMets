@@ -79,6 +79,12 @@
           </div>
           <p class="weui-grid__label">会议室</p>
         </a>
+        <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'other', isTitle: item.appName})" href="javascript:;" class="weui-grid">
+          <div class="weui-grid__icon">
+            <img :src="item.h5Icon" alt="">
+          </div>
+          <p class="weui-grid__label">{{item.appName}}</p>
+        </a>
       </div>
     </div>
   </div>
@@ -104,6 +110,9 @@ export default {
     this.getPageData()
     this.shenliangTest()
     console.log(this.user, '--------user--------')
+    console.log(this.encryptByDES('test20', 'SE83232U'), '----')
+    console.log(this.encryptDES('test20', 'SE83232U'), '----')
+    // console.log(this.shenlinagUrl)
   },
   activated () {
     console.log('调用offlineBadge')
@@ -125,7 +134,14 @@ export default {
     }),
     shenlinagUrl () {
       // http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES
-      return 'http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES'
+      let key = 'SE83232U'
+      let sso = '' + key
+      console.log(this.encryptByDES('test20', key), '结果---')
+      let returnUrl = decodeURIComponent('/mobileapp/home.aspx')
+      let baseUrl = 'http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES'
+      let paramStr = `&sso=${sso}&returnUrl=${returnUrl}`
+      console.log(baseUrl)
+      return baseUrl + paramStr
     },
     chaoBiaoUrl () {
       let orgName = encodeURIComponent(this.user.OrgName)
@@ -146,47 +162,14 @@ export default {
     }
   },
   methods: {
-    stringToBytes (str) {
-      var ch
-      var st
-      var re = []
-      for (var i = 0; i < str.length; i++) {
-        ch = str.charCodeAt(i) // get char
-        st = [] // set up "stack"
-        do {
-          st.push(ch & 0xFF) // push byte to stack
-          ch = ch >> 8 // shift value down by 1 byte
-        }
-        while (ch)
-        // add stack contents to result
-        // done because chars have "wrong" endianness
-        re = re.concat(st.reverse())
-      }
-      // return an array of bytes
-      return re
-    },
-    byteToString (arr) {
-      if (typeof arr === 'string') {
-        return arr
-      }
-      var str = ''
-      var _arr = arr
-      for (var i = 0; i < _arr.length; i++) {
-        var one = _arr[i].toString(2)
-        var v = one.match(/^1+?(?=0)/)
-        if (v && one.length === 8) {
-          var bytesLength = v[0].length
-          var store = _arr[i].toString(2).slice(7 - bytesLength)
-          for (var st = 1; st < bytesLength; st++) {
-            store += _arr[st + i].toString(2).slice(2)
-          }
-          str += String.fromCharCode(parseInt(store, 2))
-          i += bytesLength - 1
-        } else {
-          str += String.fromCharCode(_arr[i])
-        }
-      }
-      return str
+    encryptByDES (message, key) {
+      const keyHex = CryptoJS.enc.Utf8.parse(key)
+      // var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
+      const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+      })
+      return encrypted.toString()
     },
     encryptDES (psw, key) {
       var iv = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -202,15 +185,15 @@ export default {
     },
     async getPageData () {
       window.md5 = this.md5
-      // /roc/workbench/member/app/getAppList?orgId=58
-      let url = '/open/app/admin/login?userName=test30&password=59adb24ef3cdbe0297f05b395827453f'
-      // let res = await this.$http.post(url, {userName: this.user.UserID, password: ''})
-      let test1 = this.md5(encodeURIComponent(''))
-      console.log(test1)
-      let pwd = this.md5(test1)
-      console.log(pwd)
-
-      let res = await this.$http.post(url, {password: '59adb24ef3cdbe0297f05b395827453f', userName: 'test30'}, {
+      let res = await this.authLogin()
+      let info = await this.authGetInfo()
+      console.log(res, info, 'res & info')
+      this.otherList = info.data
+      // res.data
+    },
+    async authLogin () {
+      let url = '/roc/open/app/admin/login?userName=test30&password=59adb24ef3cdbe0297f05b395827453f'
+      let res = await this.$http.post(url, {}, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'
         },
@@ -219,14 +202,19 @@ export default {
         }]
       })
       console.log(res, '------')
-      let url1 = '/roc/workbench/member/app/getAppList'
-      let res1 = this.$http.post(url1, {orgId: this.user.OrgID}, {
+      return res
+    },
+    async authGetInfo () {
+      // /roc/workbench/member/app/getAppList?orgId=58
+      let url = '/roc/workbench/member/app/getAppList?orgId=58'
+      let res = await this.$http.post(url, {}, {
         headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
           'X-User-Token': 'user_token_82cdae32-a240-424f-9a33-f824e7023e04'
         }
       })
-      console.log(res1)
-      // res.data
+      console.log(res)
+      return res
     },
     md5 (word) {
       return CryptoJS.MD5(word).toString()
@@ -240,6 +228,7 @@ export default {
       })
       // AZ+wtAtBLpk=
       // qahmXfF8euU=
+      // 0stzyYStVxs=
       console.log(encrypted.ciphertext.toString(), 'encrypted.ciphertext.toString-------------')
       console.log(CryptoJS.enc.Base64.stringify(encrypted.ciphertext))
       return CryptoJS.enc.Base64.stringify(encrypted.ciphertext)
