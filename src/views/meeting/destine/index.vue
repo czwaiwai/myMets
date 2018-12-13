@@ -55,7 +55,7 @@
               </div>
             </div>
           </div>
-          <subscribe-show></subscribe-show>
+          <subscribe-show :item="item" ></subscribe-show>
         </li>
         <li class="load-tip" v-show="showLoadTip">加载中···</li>
       </ul>
