@@ -25,9 +25,9 @@
           <span class="name">会议内容</span>
           <textarea class="areas" placeholder="请输入会议内容"></textarea>
         </div>
-        <div class="selectItem clearfix">
+        <div class="selectItem clearfix" @click.stop="getSelectType('type1')">
           <span class="name">预订人</span>
-          <span class="value textLeft" v-if="false"></span>
+          <span class="value textLeft" v-if="detailData.CognitiveWayName">{{detailData.CognitiveWayName}}</span>
           <span class="value" v-else >请选择</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
@@ -133,16 +133,51 @@
       <div class="btn1" @click.stop="$router.go(-1)">取消</div>
       <div class="btn2">确定</div>
     </div>
+    <select-list ref="selectList" :selectData="selectData" @selectItem="selectItem"></select-list>
   </div>
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import selectList from '@/components/selectList'
+import { Indicator } from 'mint-ui'
 export default {
   name: 'reserve',
-  components: {navTitle},
+  components: {navTitle, selectList, Indicator},
   data () {
     return {
-      showMore: false
+      showMore: false,
+      detailData: {
+        CognitiveWay: '',
+        CognitiveWayName: ''
+      },
+      selectData: {
+        title: '',
+        type: '',
+        list: []
+      }
+    }
+  },
+  methods: {
+    async getSelectType (type1) {
+      Indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserRent_GetOptionList', {
+        'TypeName': 'CognitiveWay'
+      })
+      console.log(res)
+      res.data.forEach(arr => {
+        if (this.detailData.CognitiveWay === arr.value) {
+          arr.isSelect = true
+        } else {
+          arr.isSelect = false
+        }
+      })
+      this.selectData.title = '预订人'
+      this.selectData.list = res.data
+      this.$refs.selectList.show()
+    },
+    selectItem (item) {
+      this.detailData.CognitiveWay = item.value
+      this.detailData.CognitiveWayName = item.showText
     }
   }
 }
