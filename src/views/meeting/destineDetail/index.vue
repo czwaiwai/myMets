@@ -62,19 +62,7 @@
             <p class="name">使用中</p>
           </div>
         </div>
-        <ul class="times">
-          <!-- <li class="items clearfix" v-for="(item, index) in 12" :key="index">
-            <span class="name">{{com_name(index)}}</span>
-            <div class="btns"></div>
-            <div class="btns"></div>
-            <div class="btns"></div>
-            <div class="btns"></div>
-          </li> -->
-          <li class="items clearfix" v-for="(item, index) in hourList" :key="index">
-            <span class="name">{{item.name | hourMin}}</span>
-            <div @click="subscribe(sub)" class="btns" :class="itemClass(sub)" :style='itemStyle(sub)' v-for="(sub) in item.value" :key="sub.index"></div>
-          </li>
-        </ul>
+        <subscribe @sendRes='setSubscribe'></subscribe>
       </div>
     </div>
     <div class="_footer">
@@ -100,7 +88,7 @@
         <div class="main">
           <p class="title">请确定您所选择的会议时间</p>
           <p class="date">2018年10月18日  星期四</p>
-          <p class="time">16:30 — 18:00</p>
+          <p class="time">{{subDate.start}} — {{subDate.end}}</p>
           <div class="btns clearfix">
             <div class="btn _left" @click.stop="dialogShow=false">取消</div>
             <div class="btn _right" @click.stop="toReserve">确定</div>
@@ -114,9 +102,10 @@
 import navTitle from '@/components/navTitle'
 import { Swipe, SwipeItem, DatetimePicker } from 'mint-ui'
 import dateChange from '@/mixins/dateChange'
+import Subscribe from '@/views/meeting/components/subscribe'
 export default {
   name: 'destineDetail',
-  components: {navTitle, Swipe, SwipeItem, DatetimePicker},
+  components: {navTitle, Swipe, SwipeItem, DatetimePicker, Subscribe},
   mixins: [dateChange],
   data () {
     return {
@@ -124,225 +113,18 @@ export default {
       dialogShow: false,
       pickerValue: '',
       dateTime: '',
-      blockList: [],
       subDate: { // 订阅的时间
         start: '',
         startVal: 0,
         end: '',
         endVal: 0
-      },
-      isSubscribe: false // 是否锁定订阅状态
-    }
-  },
-  computed: {
-    hourList () {
-      // let list = this.blockList
-      let tmp = null
-      return this.blockList.reduce((before, item) => {
-        if (item.index === 0) {
-          tmp = {
-            name: item.hour,
-            value: []
-          }
-        }
-        tmp.value.push(item)
-        if (item.index === 3) {
-          before.push(tmp)
-        }
-        return before
-      }, [])
+      }
     }
   },
   methods: {
-    // 设置背景颜色
-    itemStyle (item) {
-      let color = ''
-      if (!item.isValid) return '#FFF'
-      switch (item.type) {
-        case 'HB':color = '#ff80c0'; break
-        case 'CL':color = '#c2c2c2'; break
-        case 'US':color = '#80ff80'; break
-        case 'ED':color = '#8080ff'; break
-        case 'QR':color = '#ff80c0'; break
-        case 'RV':color = '#E8E8E8'; break
-      }
-      if (color) {
-        return {
-          background: color
-        }
-      } else {
-        return {}
-      }
-    },
-    itemClass (item) {
-      let str = ''
-      if (item.isValid) {
-        str = 'valid_item'
-      }
-      if (item.isValid && item.isSubscribe) {
-        str += ' choose'
-      }
-      return str
-    },
-    // 通过时间节点创建blockList
-    dateTimeToList (start, end) {
-      let startNum = this.getTimeWhole(start)
-      let endNum = this.getTimeWhole(end)
-      console.log(startNum, '---')
-      console.log(endNum, '---')
-      for (let i = startNum; i < endNum; i++) {
-        for (let j = 0, n = 0; n < 4; j += 15, n++) {
-          this.blockList.push({
-            id: parseInt(i + '' + n),
-            hour: i,
-            index: n,
-            isValid: false,
-            type: 'RV',
-            isSubscribe: false, // 是否被预定
-            start: parseInt(i + '' + (j === 0 ? '00' : j)),
-            end: parseInt(i + '' + (j + 15)),
-            startTime: this.coverHour(i, j),
-            endTime: this.coverHour(i, j + 15)
-          })
-        }
-      }
-      console.log(this.blockList, '---blockList------')
-    },
-    // 设置有效区域 可预定 RV
-    flashValidList (startTime, endTime, type = 'RV', isSubscribe) {
-      let startNum = this.time2Num(startTime)
-      let endNum = this.time2Num(endTime)
-      this.blockList.forEach(item => {
-        // console.log(item.start, startNum, item.end, endNum)
-        // 全命中的
-        if (startNum < item.start && item.end < endNum) {
-          item.isValid = true
-          if (isSubscribe) {
-            item.isSubscribe = isSubscribe
-          } else {
-            item.type = type
-          }
-        }
-        // 边界头
-        if (startNum >= item.start && startNum < item.end) {
-          item.isValid = true
-          if (isSubscribe) {
-            item.isSubscribe = isSubscribe
-          } else {
-            item.type = type
-          }
-        }
-        // 边界尾
-        if (endNum > item.start && endNum <= item.end) {
-          item.isValid = true
-          if (isSubscribe) {
-            item.isSubscribe = isSubscribe
-          } else {
-            item.type = type
-          }
-        }
-      })
-      console.log(this.blockList, '--flashValidList')
-    },
-    clearChoose () {
-      this.subDate.start = ''
-      this.subDate.end = ''
-      this.subDate.startVal = 0
-      this.subDate.endVal = 0
-      this.blockList.forEach(item => {
-        item.isSubscribe = false
-      })
-    },
-    setChooseOne (item) {
-      item.isSubscribe = true
-      this.subDate.start = item.startTime
-      this.subDate.startVal = item.start
-    },
-    setChooseTwo (item) {
-      console.log('进来了', item.start, this.subDate.startVal)
-      if (item.start < this.subDate.startVal) { // 第二次小于第一次
-        // console.log(item.end, this.subDate.startVal)
-        console.log('jin lai le')
-        this.clearChoose()
-        this.setChooseOne(item)
-        return
-      }
-      item.isSubscribe = true
-      this.subDate.end = item.endTime
-      this.subDate.endVal = item.end
-      this.flashValidList(this.subDate.start, this.subDate.end, null, true)
-    },
-    // 去预定
-    subscribe (item) {
-      // 清楚掉之前的设置
-      if (this.subDate.end) {
-        this.clearChoose()
-      }
-      // 第一次点击
-      console.log(!this.isSubscribe, this.subDate.start)
-      if (!this.isSubscribe && !this.subDate.start) {
-        console.log('第一次点击')
-        this.setChooseOne(item)
-        this.isSubscribe = true
-        return
-      }
-      // console.log(this.blockList, 'haha')
-      // 第二次点击
-      if (this.isSubscribe && this.subDate.start) {
-        console.log('第二次点击')
-        this.setChooseTwo(item)
-        this.isSubscribe = false
-      }
-    },
-    // 涂鸦已选择区域
-    setChoosedList () {
-      let bookList = [{
-        'ID': '1812111115090001000Y',
-        'StartTime': '2018-12-11 14:16:00',
-        'EndTime': '2018-12-11 17:01:00',
-        'BookStatus': 'HB'
-      }, {
-        'ID': '1812111115090001000Y',
-        'StartTime': '2018-12-11 11:16:00',
-        'EndTime': '2018-12-11 12:01:00',
-        'BookStatus': 'QR'
-      }, {
-        'ID': '1812111115090001000Y',
-        'StartTime': '2018-12-11 12:01:00',
-        'EndTime': '2018-12-11 12:18:00',
-        'BookStatus': 'US'
-      }]
-      bookList.forEach(item => {
-        this.flashValidList(this.date2Hour(item.StartTime), this.date2Hour(item.EndTime), item.BookStatus)
-      })
-    },
-    // 将日期转换成时间 例如'09:00' 的形式
-    date2Hour (dateStr = '2018-12-11 14:00:00') {
-      return dateStr.substring(11, 16)
-    },
-    // 将日期转换成数字
-    time2Num (time = '09:00') {
-      return parseInt(time.replace(':', ''))
-    },
-    // 获取整点
-    getTimeWhole (time = '09:00') {
-      let str = time.replace(':', '.')
-      return parseInt(parseInt(str))
-    },
-    coverHour (hour, minute) {
-      let tmpMinute = minute
-      if (minute === 0) {
-        tmpMinute = '00'
-      }
-      if (minute === 60) {
-        tmpMinute = '00'
-        hour++
-      }
-      let tmpHour = hour
-      if (hour < 10) {
-        tmpHour = '0' + hour
-      }
-      return tmpHour + ':' + tmpMinute
+    // 设置预订结果
+    setSubscribe (subDate) {
+      this.subDate = subDate
     },
     routeTo (name) {
       this.$router.push({name})
@@ -365,7 +147,11 @@ export default {
       }
     },
     clickBtn () {
-      this.dialogShow = true
+      if (this.subDate.start && this.subDate.end) {
+        this.dialogShow = true
+      } else {
+        this.$toast('请选择完整的时间段')
+      }
     },
     toReserve () {
       this.$router.push(`/reserve/213`)
@@ -383,12 +169,6 @@ export default {
     this.title = this.$route.query.title
     this.pickerValue = this.initToday()
     this.dateTime = this.initToday()
-    this.dateTimeToList('09:15', '12:00')
-    this.dateTimeToList('12:00', '18:00')
-    this.flashValidList('09:16', '12:00')
-    this.flashValidList('13:00', '17:29')
-    this.setChoosedList()
-    console.log(this.hourList)
   }
 }
 </script>
@@ -547,36 +327,8 @@ export default {
             }
           }
         }
-        .times{
-          padding-top: .2rem;
-          .items{
-            padding-bottom: .3rem;
-            .name{
-              float: left;
-              height: .6rem;
-              width: 1rem;
-              line-height: .6rem;
-              font-size: .3rem;
-              color: #333;
-              text-align: left;
-            }
-            .btns{
-              float: left;
-              margin-right: .36rem;
-              width: 1.15rem;
-              height: .6rem;
-            }
-           .valid_item {
-             background: #E8E8E8;
-           }
-           .valid_item.choose {
-             background: #3395FF !important;
-           }
-          }
-        }
       }
     }
-
     ._dialog-enter-active, ._dialog-leave-active {
       transition: opacity .5s;
       -webkit-transform: opacity .5s;
