@@ -63,16 +63,14 @@
           </div>
         </div>
         <ul class="times">
-          <!-- <li class="items clearfix" v-for="(item, index) in 12" :key="index">
-            <span class="name">{{com_name(index)}}</span>
-            <div class="btns"></div>
-            <div class="btns"></div>
-            <div class="btns"></div>
-            <div class="btns"></div>
-          </li> -->
           <li class="items clearfix" v-for="(item, index) in hourList" :key="index">
             <span class="name">{{item.name | hourMin}}</span>
-            <div @click="subscribe(sub)" class="btns" :class="itemClass(sub)" :style='itemStyle(sub)' v-for="(sub) in item.value" :key="sub.index"></div>
+            <div @click="subscribe(sub)" class="btns" :class="itemClass(sub)" :style='itemStyle(sub)' v-for="(sub) in item.value" :key="sub.index">
+              <p class="time_p" v-if="sub.isStartDot && !sub.isEndDot">起始<br/>{{sub.startTime}}</p>
+              <p class="time_p" v-if="sub.isEndDot && !sub.isStartDot">结束<br/>{{sub.endTime}}</p>
+              <!-- {{sub.type}} -->
+              <p class="time_p" v-if="sub.isStartDot && sub.isEndDot">开始-结束{{sub.startTime}}</p>
+            </div>
           </li>
         </ul>
       </div>
@@ -182,6 +180,15 @@ export default {
       if (item.isValid && item.isSubscribe) {
         str += ' choose'
       }
+      if (item.isStartDot && !item.isEndDot) {
+        str += ' start_choose'
+      }
+      if (item.isEndDot && !item.isStartDot) {
+        str += ' end_choose'
+      }
+      if (item.isStartDot && item.isEndDot) {
+        str += ' start_end_choose'
+      }
       return str
     },
     // 通过时间节点创建blockList
@@ -198,6 +205,8 @@ export default {
             index: n,
             isValid: false,
             type: 'RV',
+            isStartDot: false, // 起始位置
+            isEndDot: false, // 终止位置
             isSubscribe: false, // 是否被预定
             start: parseInt(i + '' + (j === 0 ? '00' : j)),
             end: parseInt(i + '' + (j + 15)),
@@ -206,43 +215,70 @@ export default {
           })
         }
       }
-      console.log(this.blockList, '---blockList------')
     },
     // 设置有效区域 可预定 RV
     flashValidList (startTime, endTime, type = 'RV', isSubscribe) {
       let startNum = this.time2Num(startTime)
       let endNum = this.time2Num(endTime)
+      let chooseList = []
       this.blockList.forEach(item => {
         // console.log(item.start, startNum, item.end, endNum)
         // 全命中的
         if (startNum < item.start && item.end < endNum) {
-          item.isValid = true
-          if (isSubscribe) {
-            item.isSubscribe = isSubscribe
-          } else {
-            item.type = type
-          }
+          this.setBlockType(item, type, isSubscribe)
+          chooseList.push(item)
         }
         // 边界头
         if (startNum >= item.start && startNum < item.end) {
-          item.isValid = true
-          if (isSubscribe) {
-            item.isSubscribe = isSubscribe
-          } else {
-            item.type = type
-          }
+          this.setBlockType(item, type, isSubscribe)
+          chooseList.push(item)
         }
         // 边界尾
         if (endNum > item.start && endNum <= item.end) {
-          item.isValid = true
-          if (isSubscribe) {
-            item.isSubscribe = isSubscribe
-          } else {
-            item.type = type
-          }
+          this.setBlockType(item, type, isSubscribe)
+          chooseList.push(item)
         }
       })
       console.log(this.blockList, '--flashValidList')
+      return chooseList
+    },
+    // 颜色属性设置
+    setBlockType (item, type, isSubscribe) {
+      item.isValid = true
+      if (isSubscribe) {
+        item.isSubscribe = isSubscribe
+      } else {
+        item.type = type
+      }
+    },
+    // 验证是否可选定义的区域
+    validatorList (startTime, endTime) {
+      let startNum = this.time2Num(startTime)
+      let endNum = this.time2Num(endTime)
+      let canChoose = true
+      this.blockList.forEach(item => {
+        // 全命中的
+        if (startNum < item.start && item.end < endNum) {
+          canChoose = this.validatorItem(item) && canChoose
+        }
+        // 边界头
+        if (startNum >= item.start && startNum < item.end) {
+          canChoose = this.validatorItem(item) && canChoose
+        }
+        // 边界尾
+        if (endNum > item.start && endNum <= item.end) {
+          canChoose = this.validatorItem(item) && canChoose
+        }
+      })
+      return canChoose
+    },
+    // 单个item验证
+    validatorItem (item) {
+      // console.log(item.isValid, item.type)
+      if (!item.isValid) return false
+      if (item.type !== 'RV') return false
+      console.log('我过来了~哈哈')
+      return true
     },
     clearChoose () {
       this.subDate.start = ''
@@ -251,47 +287,50 @@ export default {
       this.subDate.endVal = 0
       this.blockList.forEach(item => {
         item.isSubscribe = false
+        item.isStartDot = false
+        item.isEndDot = false
       })
     },
     setChooseOne (item) {
+      console.log('第一次点击')
       item.isSubscribe = true
+      item.isStartDot = true
       this.subDate.start = item.startTime
       this.subDate.startVal = item.start
+      this.isSubscribe = true
     },
     setChooseTwo (item) {
+      console.log('第二次点击')
       console.log('进来了', item.start, this.subDate.startVal)
-      if (item.start < this.subDate.startVal) { // 第二次小于第一次
-        // console.log(item.end, this.subDate.startVal)
-        console.log('jin lai le')
-        this.clearChoose()
-        this.setChooseOne(item)
-        return
-      }
       item.isSubscribe = true
+      item.isEndDot = true
       this.subDate.end = item.endTime
       this.subDate.endVal = item.end
+      this.isSubscribe = false
       this.flashValidList(this.subDate.start, this.subDate.end, null, true)
     },
     // 去预定
     subscribe (item) {
+      if (!item.isValid) return
+      if (item.type !== 'RV') return
       // 清楚掉之前的设置
       if (this.subDate.end) {
         this.clearChoose()
       }
       // 第一次点击
-      console.log(!this.isSubscribe, this.subDate.start)
       if (!this.isSubscribe && !this.subDate.start) {
-        console.log('第一次点击')
-        this.setChooseOne(item)
-        this.isSubscribe = true
-        return
+        return this.setChooseOne(item)
       }
-      // console.log(this.blockList, 'haha')
       // 第二次点击
       if (this.isSubscribe && this.subDate.start) {
-        console.log('第二次点击')
+        if (item.start < this.subDate.startVal) { // 第二次小于第一次
+          this.clearChoose()
+          return this.setChooseOne(item)
+        }
+        if (!this.validatorList(this.subDate.start, item.endTime)) {
+          return this.$toast('请不要跨越存在已预定的时间段', 3000)
+        }
         this.setChooseTwo(item)
-        this.isSubscribe = false
       }
     },
     // 涂鸦已选择区域
@@ -329,6 +368,7 @@ export default {
       let str = time.replace(':', '.')
       return parseInt(parseInt(str))
     },
+    // 数值转成 小时时间
     coverHour (hour, minute) {
       let tmpMinute = minute
       if (minute === 0) {
@@ -566,17 +606,86 @@ export default {
               width: 1.15rem;
               height: .6rem;
             }
-           .valid_item {
-             background: #E8E8E8;
-           }
-           .valid_item.choose {
-             background: #3395FF !important;
-           }
+
           }
         }
       }
     }
+    .valid_item {
+      background: #E8E8E8;
+    }
+    .valid_item.choose {
+      background: #3395FF !important;
+      position:relative;
+    }
+    .valid_item.choose:after {
+      content: "";
+      border-bottom: 1px solid #FFF;
+      position: absolute;
+      bottom: 3px;
+      width: 100%;
+    }
+    .choose.end_choose:before, .choose.start_choose:before {
+      content: "";
+      position:absolute;
+      width:5px;
+      height:5px;
+      background:#FFF;
+      border-radius:100%;
+      bottom:1px;
+      margin-left:-2px;
+      left:50%;
+    }
+    .choose.end_choose:after,.choose.start_choose:after {
+        content: "";
+        position: absolute;
+        width: 50%;
+        right: 0;
+        border-bottom: 1px solid #FFF;
+        bottom: 3px;
+    }
+    .choose.start_choose:after {
+      right:0;
+    }
+    .choose.end_choose:after {
+      left:0;
+    }
+    .choose.start_end_choose p:after {
+      content: "";
+      position: absolute;
+      border-bottom: 1px solid #FFF;
+      border-radius: 100%;
+      bottom: 3px;
+      width: 80%;
+      left: 10%;
+    }
+    .choose.start_end_choose:before {
+      content: "";
+      position:absolute;
+      width:5px;
+      height:5px;
+      background:#FFF;
+      border-radius:100%;
+      bottom:1px;
+      left:10%;
+    }
+    .choose.start_end_choose:after {
+      content: "";
+      position:absolute;
+      width:5px;
+      height:5px;
+      background:#FFF;
+      border-radius:100%;
+      bottom:1px;
+      right:10%;
+    }
 
+    .time_p {
+      color:#FFF;
+      line-height:1;
+      text-align: center;
+      font-size:12px;
+    }
     ._dialog-enter-active, ._dialog-leave-active {
       transition: opacity .5s;
       -webkit-transform: opacity .5s;
