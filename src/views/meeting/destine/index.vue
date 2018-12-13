@@ -26,7 +26,7 @@
           <input class="search-input" placeholder="请输入会议室名称或所在位置" type="search" v-model="searchKey" @keydown.13="searchList">
           <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
       </form>
-      <i class="iconfont icon-shaixuan" @click.stop="dialogShow=true"></i>
+      <i class="iconfont icon-shaixuan" @click.stop="setDialogShow"></i>
     </div>
     <div class="page_bd _content">
       <ul class="list"
@@ -79,7 +79,12 @@
             <li class="_d-items" v-for="(item,index) in typeList" :key="index">
               <div class="title">
                 <span class="name">{{item.name}}</span>
-                <span class="status" @click.stop="clickSelect(item)">{{item.selectType.showText}} <i class="iconfont icon" :class="item.isSelect?'icon-zhankai1':'icon-zhankai'"></i></span>
+                <span class="status clearfix" @click.stop="clickSelect(item)">
+                  <span class="status-title">
+                    <span v-for="(it,i) in item.selectType" :key="i">{{it.showText}}<span v-show="i!=item.selectType.length-1">、</span></span>
+                  </span>
+                  <i class="iconfont icon" :class="item.isSelect?'icon-zhankai1':'icon-zhankai'"></i>
+                </span>
               </div>
               <transition name="_d-box">
                 <div class="_d-box clearfix" v-show="item.isSelect">
@@ -152,25 +157,42 @@ export default {
         }
       })
     },
+    // 打开筛选器
+    setDialogShow () {
+      this.typeList.forEach(arr => {
+        if (arr.type < 3) {
+          arr.isSelect = true
+        } else {
+          arr.isSelect = false
+        }
+      })
+      // 获取类型下拉列表
+      this.getSelectList(this.typeList[0])
+      this.dialogShow = true
+    },
     // 关闭筛选
     closeDialog () {
       this.dialogShow = false
       this.typeList.forEach(arr => {
         arr.selectType = arr.initType
-        arr.isSelect = false
-        arr.list.forEach(a => {
-          if (a.id === arr.selectType.id) {
-            a.isSelect = true
-          } else {
-            a.isSelect = false
-          }
+        // arr.isSelect = false
+        arr.list.forEach(ar => {
+          arr.selectType.forEach(a => {
+            if (a.id === ar.id) {
+              a.isSelect = true
+            } else {
+              a.isSelect = false
+            }
+          })
         })
       })
     },
     // 重置筛选
     selectListRest () {
       this.typeList.forEach(arr => {
-        arr.selectType = arr.list[0]
+        let list = []
+        list.push(arr.list[0])
+        arr.selectType = list
         arr.list.forEach((a, index) => {
           if (index === 0) {
             a.isSelect = true
@@ -184,29 +206,65 @@ export default {
     selectListConfirm () {
       this.typeList.forEach(arr => {
         arr.initType = arr.selectType
-        arr.isSelect = false
+        // arr.isSelect = false
       })
       this.dialogShow = false
     },
     // 点选筛选类型
     selectType (item, it) {
+      if (item.type === 4) {
+        this.setType4Status(item, it)
+        return
+      }
       if (it.isSelect) {
         return
       }
-      this.typeList[item.type].selectType = it
+      let list = []
+      list.push(it)
+      this.typeList[item.type].selectType = list
       this.typeList[item.type].list.forEach(arr => {
         arr.isSelect = false
       })
       it.isSelect = true
-      if (item.type === 0) {
-        this.typeList[3].isSelect = false
-        let list = []
-        console.log('in...')
-        this.typeList[3].list[0].isSelect = true
-        list.push(this.typeList[3].list[0])
-        this.typeList[3].list = list
-        this.typeList[3].selectType = this.typeList[4].list[0]
+    },
+    // 第四种类型允许多选
+    setType4Status (item, it) {
+      if (it.isSelect && item.selectType.length === 1) {
+        return
       }
+      let list = []
+      // 点选不限项
+      if (it.id === '') {
+        item.list.forEach((arr, index) => {
+          if (index === 0) {
+            arr.isSelect = true
+            list.push(arr)
+          } else {
+            arr.isSelect = false
+          }
+        })
+        item.selectType = list
+        return
+      }
+      // 点选/反选其它
+      if (item.list[0].isSelect) {
+        item.list[0].isSelect = false
+        item.selectType.splice(0, 1)
+      }
+      if (it.isSelect) {
+        it.isSelect = false
+        let num = 0
+        item.selectType.forEach((arr, index) => {
+          if (arr.id === it.id) {
+            num = index
+          }
+        })
+        item.selectType.splice(num, 1)
+      } else {
+        it.isSelect = true
+        item.selectType.push(it)
+      }
+      console.log(item.selectType)
     },
     // 点击筛选展开收起按钮
     async clickSelect (item) {
@@ -214,20 +272,15 @@ export default {
         item.isSelect = false
         return
       }
+      item.isSelect = true
       if (item.type === 1 || item.type === 2) {
-        item.isSelect = true
-        return
-      }
-      if (item.list.length > 1) {
-        item.isSelect = true
         return
       }
       this.getSelectList(item)
     },
     // 获取筛选下拉列表
     async getSelectList (item) {
-      if (item.type === 3 && this.typeList[0].selectType.value === '') {
-        this.$toast('请先选择类型！')
+      if (item.list.length > 1) {
         return
       }
       Indicator.open({spinnerType: 'fading-circle'})
@@ -236,33 +289,34 @@ export default {
       switch (item.type) {
         case 0: params = {'TypeName': 'MeetType'}; httpUrl = 'UserRent_GetOptionList'
           break
-        case 3: params = {'OrgID': '11091315263400010000', 'MeetType': this.typeList[0].selectType.value}; httpUrl = 'UserCS_MeetingFloor'
+        case 3: params = {'OrgID': '11091315263400010000'}; httpUrl = 'UserCS_MeetingFloor'
           break
         case 4: params = {'OrgID': '11091315263400010000'}; httpUrl = 'UserCS_MeetingEquipMatching'
           break
       }
       let res = await this.$xml(httpUrl, params)
+      console.log(res)
       let arr = []
       let list = []
       arr.push(this.typeList[item.type].list[0])
       if (item.type === 0) {
-        res.data.Table.forEach(arr => {
+        res.data.forEach((arr, index) => {
           let obj = {
-            showText: arr.showText, id: arr.id, value: arr.value, isSelect: false
+            showText: arr.showText, id: index + 1, value: arr.value, isSelect: false
           }
           list.push(obj)
         })
       } else if (item.type === 3) {
-        res.data.forEach((arr) => {
+        res.data.forEach((arr, index) => {
           let obj = {
-            showText: arr.Floor + '楼', id: arr.Floor, value: arr.Floor, isSelect: false
+            showText: arr.Floor + '楼', id: index + 1, value: arr.Floor, isSelect: false
           }
           list.push(obj)
         })
       } else if (item.type === 4) {
-        res.data.forEach(arr => {
+        res.data.forEach((arr, index) => {
           let obj = {
-            showText: arr.MaterialsnName, id: arr.ID, value: arr.Specification, isSelect: false
+            showText: arr.MaterialsnName, id: index + 1, value: arr.Specification, isSelect: false
           }
           list.push(obj)
         })
@@ -424,44 +478,46 @@ export default {
           type: 0,
           name: '类型',
           isSelect: false,
-          selectType: {showText: '不限', id: '', value: ''},
-          initType: {showText: '不限', id: '', value: ''},
+          selectType: [{showText: '不限', id: '', value: ''}],
+          initType: [{showText: '不限', id: '', value: ''}],
           list: [{showText: '不限', id: '', value: '', isSelect: true}]
         },
         {
           type: 1,
           name: '空闲',
-          isSelect: false,
-          selectType: {showText: '不限', id: '', value: ''},
-          initType: {showText: '不限', id: '', value: ''},
+          isSelect: true,
+          selectType: [{showText: '不限', id: '', value: ''}],
+          initType: [{showText: '不限', id: '', value: ''}],
           list: [
             {showText: '不限', id: '', value: '', isSelect: true},
-            {showText: '1小时', id: '1', value: '1', isSelect: false},
-            {showText: '2小时', id: '2', value: '2', isSelect: false},
-            {showText: '3小时', id: '3', value: '3', isSelect: false},
-            {showText: '4小时以上', id: '4', value: '4', isSelect: false}
+            {showText: '半小时', id: '1', value: '1', isSelect: false},
+            {showText: '1小时', id: '2', value: '2', isSelect: false},
+            {showText: '2小时', id: '3', value: '3', isSelect: false},
+            {showText: '3-4小时', id: '4', value: '4', isSelect: false},
+            {showText: '全天', id: '5', value: '5', isSelect: false}
           ]
         },
         {
           type: 2,
           name: '大小',
-          isSelect: false,
-          selectType: {showText: '不限', id: '', value: ''},
-          initType: {showText: '不限', id: '', value: ''},
+          isSelect: true,
+          selectType: [{showText: '不限', id: '', value: ''}],
+          initType: [{showText: '不限', id: '', value: ''}],
           list: [
             {showText: '不限', id: '', value: '', isSelect: true},
-            {showText: '2-3人', id: '1', value: '1', isSelect: false},
-            {showText: '4-6人', id: '2', value: '2', isSelect: false},
-            {showText: '7-9人', id: '3', value: '3', isSelect: false},
-            {showText: '10人以上', id: '4', value: '4', isSelect: false}
+            {showText: '2-5人', id: '1', value: '1', isSelect: false},
+            {showText: '6-10人', id: '2', value: '2', isSelect: false},
+            {showText: '11-30人', id: '3', value: '3', isSelect: false},
+            {showText: '31-50人', id: '4', value: '4', isSelect: false},
+            {showText: '50人以上', id: '5', value: '5', isSelect: false}
           ]
         },
         {
           type: 3,
           name: '楼层',
           isSelect: false,
-          selectType: {showText: '不限', floor: ''},
-          initType: {showText: '不限', id: '', value: ''},
+          selectType: [{showText: '不限', floor: ''}],
+          initType: [{showText: '不限', id: '', value: ''}],
           list: [
             {showText: '不限', id: '', isSelect: true}
           ]
@@ -470,8 +526,8 @@ export default {
           type: 4,
           name: '设备',
           isSelect: false,
-          selectType: {showText: '不限', id: ''},
-          initType: {showText: '不限', id: '', value: ''},
+          selectType: [{showText: '不限', id: ''}],
+          initType: [{showText: '不限', id: '', value: ''}],
           list: [
             {showText: '不限', id: '', isSelect: true}
           ]
@@ -890,9 +946,23 @@ export default {
               right: .3rem;
               top: 0;
               display: block;
-              font-size: .28rem;
-              color: #0DC88C;
+              .status-title{
+                float: left;
+                max-width: 4rem;
+                height: .44rem;
+                line-height: .44rem;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                font-size: .28rem;
+                color: #0DC88C;
+              }
               .icon{
+                float: left;
+                width: .4rem;
+                height: .44rem;
+                line-height: .44rem;
+                font-size: .34rem;
                 color: #999;
               }
             }

@@ -72,6 +72,7 @@ export default {
     getDateNum (times) {
       let date = ''
       if (times) {
+        times = times.replace(/\-/g, '/')
         date = new Date(times)
       } else {
         date = new Date()

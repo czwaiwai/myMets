@@ -11,7 +11,7 @@
           v-on:choseDay="clickDay"
           v-on:changeMonth="changeDate"
           v-on:isToday="clickToday"
-          :markDateMore="arr"
+          :markDateMore="pointList"
           :sundayStart="false"
           :textTop="calendarList"
         ></Calendar>
@@ -73,8 +73,9 @@ export default {
     return {
       dialogShow: false,
       calendarList: ['一', '二', '三', '四', '五', '六', '日'],
-      arr: [],
+      pointList: [],
       dayTime: '',
+      calendarDate: {year: '', month: ''},
       dataList: []
     }
   },
@@ -92,15 +93,25 @@ export default {
     nextMonth () {
       this.$refs.Calendar.NextMonth('', false)
     },
+    // 点击日期
     clickDay (date) {
       this.dayTime = this.com_setDate(date)
       console.log(date)
       this.getDataList()
     },
-    changeDate () {
+    // 日期改变
+    changeDate (date) {
+      console.log('changeDate', date)
+      let dateNum = this.getDateNum(date)
+      if (dateNum.month !== this.calendarDate.month || dateNum.month - 0 !== this.calendarDate.month - 0) {
+        console.log('change:', dateNum.year + '-' + dateNum.month + '-' + dateNum.day)
+        this.calendarDate = {year: dateNum.year, month: dateNum.month}
+        this.getPointList()
+      }
     },
     clickToday (data) {
     },
+    // 回到今天
     toInitDay () {
       this.dayTime = this.initToday()
       this.$refs.Calendar.ChoseMonth(this.initToday())
@@ -109,7 +120,7 @@ export default {
     cancel (item) {
       this.dialogShow = true
     },
-    // 上色
+    // 状态上色
     com_color (status) {
       let color = ''
       this.statusColor.forEach(arr => {
@@ -136,15 +147,35 @@ export default {
         this.dataList = res.data || []
       }
       Indicator.close()
+    },
+    async getPointList () {
+      let res = await this.$xml('UserCS_MeetingMyBookedTime', {
+        'EmployeeID': '20',
+        'MeetTime': this.calendarDate.year + '-' + this.calendarDate.month
+      })
+      console.log('getPointList', res)
+      let pointList = []
+      res.data.forEach(arr => {
+        let obj = {
+          date: this.com_setDate(arr.MeetTime)
+        }
+        if (arr.GoBeyond) {
+          obj.className = 'mark1'
+        } else {
+          obj.className = 'mark2'
+        }
+        pointList.push(obj)
+      })
+      this.pointList = pointList
     }
   },
   mounted () {
     this.dayTime = this.initToday()
     this.getDataList()
-    setTimeout(() => {
-      this.$refs.Calendar.ChoseMonth(this.initToday())
-      this.arr = [{date: '2018/12/6', className: 'mark1'}, {date: '2018/12/10', className: 'mark1'}, {date: '2018/12/13', className: 'mark2'}]
-    }, 100)
+    let dateNum = this.getDateNum(this.dayTime)
+    this.calendarDate = {year: dateNum.year, month: dateNum.month}
+    this.$refs.Calendar.ChoseMonth(this.initToday())
+    this.getPointList()
   }
 }
 </script>
@@ -183,7 +214,7 @@ export default {
           padding: .2rem .3rem;
           border-bottom: 1px solid #ededed;
           &.opcity{
-            opacity: .4;
+            // opacity: .4;
           }
           &:last-child{
             border-bottom: none;
