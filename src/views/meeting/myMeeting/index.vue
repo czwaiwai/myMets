@@ -91,7 +91,7 @@ export default {
       this.$refs.Calendar.ChoseMonth(this.initToday())
     },
     toMeetingDetail (item) {
-      this.$router.push(`/meetingDetail/123`)
+      this.$router.push(`/meetingDetail/${item.ID}`)
     },
     // 上色
     com_color (status) {
