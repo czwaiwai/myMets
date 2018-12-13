@@ -55,9 +55,7 @@
               </div>
             </div>
           </div>
-          <div class="bottom">
-            <span v-for="(item, index) in 12" :key="index" :class="{'isSelect':index>6&&index<9}">{{item + 7}}</span>
-          </div>
+          <subscribe-show></subscribe-show>
         </li>
         <li class="load-tip" v-show="showLoadTip">加载中···</li>
       </ul>
@@ -104,9 +102,10 @@ import { setTimeout } from 'timers'
 import dateChange from '@/mixins/dateChange'
 import nonePage from '../components/nonePage/index.vue'
 import { mapGetters } from 'vuex'
+import SubscribeShow from '@/views/meeting/components/subscribeShow'
 export default {
   name: 'destine',
-  components: {navTitle, Indicator, nonePage},
+  components: {navTitle, Indicator, nonePage, SubscribeShow},
   mixins: [dateChange],
   data () {
     return {
