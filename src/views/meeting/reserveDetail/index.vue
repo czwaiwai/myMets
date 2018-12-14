@@ -72,7 +72,7 @@
       <div class="remark">
         <div class="textShowItem clearfix noneBb">
           <span class="name">预订备注</span>
-          <span class="value"></span>
+          <span class="value">{{detailData.Memo}}</span>
         </div>
       </div>
       <div class="more">

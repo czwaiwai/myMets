@@ -13,7 +13,7 @@ import routerDirect from './utils/routerDirect'
 import appApi from './utils/appApi' // app 的 调用api
 import filter from './utils/filter'
 import toLower from './utils/toLower'
-import { MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore } from 'mint-ui'
+import { MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore, Indicator } from 'mint-ui'
 import FastClick from 'fastclick'
 import bus from './utils/pushMsg'
 import '@/utils/rem'
@@ -62,6 +62,7 @@ Vue.prototype.$toast = toast
 Vue.prototype.$message = MessageBox
 Vue.prototype.$app = appApi
 Vue.prototype.$toLower = toLower
+Vue.prototype.$indicator = Indicator
 // document.addEventListener("deviceready", function () {
 //   console.log('设备初始化------------------', arguments)
 // }, false)

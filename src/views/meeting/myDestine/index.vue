@@ -41,7 +41,7 @@
           </li>
         </ul>
       </div>
-      <none-page title="暂无预订！" height="50" v-else></none-page>
+      <none-page title="暂无预订会议！" height="50" v-else></none-page>
     </div>
     <transition name="_dialog">
       <div class="_dialog" v-if="dialogShow">
@@ -132,7 +132,7 @@ export default {
     },
     // 到预定详情
     toReserveDetail (item) {
-      this.$router.push(`/reserveDetail/${item.ID}`)
+      this.$router.push(`/editDestine/${item.ID}`)
     },
     // 获取列表数据
     async getDataList () {

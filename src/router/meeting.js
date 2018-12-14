@@ -78,6 +78,14 @@ export default [
     component: () => import('@/views/meeting/reserve')
   },
   {
+    name: 'editDestine',
+    path: '/editDestine/:id',
+    meta: {
+      title: '预订详情'
+    },
+    component: () => import('@/views/meeting/editDestine')
+  },
+  {
     name: 'reserveDetail',
     path: '/reserveDetail/:id',
     meta: {

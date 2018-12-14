@@ -1,74 +1,78 @@
 <template>
-  <div class="page meetingDetail">
+  <div class="page reserveDetail">
     <nav-title title="会议详情"></nav-title>
     <div class="page_bd _content">
       <div class="date">
         <div class="selectItem clearfix" @click.stop="toArchives">
           <span class="name">会议室</span>
-          <span class="value textLeft textColor">高效厅</span>
+          <span class="value textLeft textColor">{{detailData.Meet}}</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
         <div class="selectItem clearfix">
           <span class="name">会议日期</span>
-          <span class="value textLeft">2018年10月18日  星期四</span>
+          <span class="value textLeft">{{com_date(detailData.MeetTime)}}</span>
         </div>
-        <div class="selectItem">
-          <span class="name">预订时段</span>
-          <span class="value textLeft">16:30 — 18:00</span>
-        </div>
-        <div class="selectItem">
-          <span class="name">会议状态</span>
-          <span class="value textLeft">已预订</span>
-        </div>
-        <div class="textShowItem clearfix noneBb">
-          <span class="name">取消原因</span>
-          <span class="value" style="min-height:.44rem;">电脑、投影仪、会议系统、耳麦、激光笔、白纸、白板笔</span>
+        <div class="selectItem noneBb">
+          <span class="name">会议时段</span>
+          <span class="value textLeft">{{detailData.STime}} — {{detailData.ETime}}</span>
         </div>
       </div>
       <div class="theme">
         <div class="selectItem clearfix">
           <span class="name">会议主题</span>
-          <span class="value textLeft">会议主题</span>
+          <span class="value textLeft">{{detailData.MeetName}}</span>
         </div>
         <div class="textShowItem clearfix">
           <span class="name">会议内容</span>
-          <span class="value">会议内容会议内容会议内容会议内容</span>
+          <span class="value"></span>
         </div>
         <div class="selectItem clearfix">
           <span class="name">预订人</span>
-          <span class="value textLeft">预订人</span>
+          <span class="value textLeft">{{detailData.BookName}}</span>
         </div>
         <div class="selectItem clearfix noneBb">
           <span class="name">预订人电话</span>
-          <span class="value textLeft">15012345678</span>
+          <span class="value textLeft">{{detailData.BookPhone}}</span>
         </div>
       </div>
       <div class="attendee">
         <div class="btnItem">
-          <p class="title">参会人（已选2人）</p>
-          <p class="peopleList">张小小、张大大、李秋平</p>
+          <p class="title">参会人（已选{{detailData.Participants.length}}人）</p>
+          <p class="peopleList">
+            <span v-for="(item,index) in detailData.Participants" :key="index">
+              {{item.Names}}<span v-show="index!=detailData.Participants.length-1">、</span>
+            </span>
+          </p>
         </div>
         <div class="selectItem clearfix noneBb">
           <span class="name">其他参会人</span>
-          <span class="value textLeft">15012345678</span>
+          <span class="value textLeft"></span>
         </div>
       </div>
       <div class="listBtn">
         <div class="textShowItem clearfix noneBb">
           <span class="name">配套设施</span>
-          <span class="value" style="min-height:.44rem;">电脑、投影仪、会议系统、耳麦、激光笔、白纸、白板笔</span>
+          <span class="value" style="min-height:.44rem;">
+            <span v-for="(item, index) in detailData.Facilities" :key="index">
+              {{item.MaterialsnName}}<span v-show="index!=detailData.Facilities.length-1">、</span>
+            </span>
+          </span>
         </div>
       </div>
       <div class="listBtn">
         <div class="textShowItem clearfix noneBb">
           <span class="name">服务清单</span>
-          <span class="value" style="min-height:.44rem;">会议内容、会议内容、会议内容、会议内容</span>
+          <span class="value" style="min-height:.44rem;">
+            <span v-for="(item,index) in detailData.Service" :key="index">
+              {{item.ServiceDesc}}<span v-show="index!=detailData.Service.length-1">、</span>
+            </span>
+          </span>
         </div>
       </div>
       <div class="remark">
         <div class="textShowItem clearfix noneBb">
           <span class="name">预订备注</span>
-          <span class="value">会议内容会议内容会议内容会议内容</span>
+          <span class="value"></span>
         </div>
       </div>
       <div class="more">
@@ -83,47 +87,47 @@
             <div class="msg1">
               <div class="selectItem clearfix">
                 <span class="name">会议形式</span>
-                <span class="value textLeft">会议形式</span>
+                <span class="value textLeft">{{detailData.MeetFormName}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">会议用途</span>
-                <span class="value textLeft">会议用途</span>
+                <span class="value textLeft">{{detailData.MeetUseName}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">参会人数</span>
-                <span class="value textLeft">21</span>
+                <span class="value textLeft">{{detailData.MeetNumber}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
                 <span class="name">使用部门</span>
-                <span class="value textLeft">小卖部</span>
+                <span class="value textLeft">{{detailData.UserDepartments}}</span>
               </div>
             </div>
             <div class="msg2">
               <div class="selectItem clearfix">
                 <span class="name">会议联系人</span>
-                <span class="value textLeft">小卖部</span>
+                <span class="value textLeft">{{detailData.MeetPerson}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">联系人电话</span>
-                <span class="value textLeft">15012345678</span>
+                <span class="value textLeft">{{detailData.Phone}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
                 <span class="name">联系人邮箱</span>
-                <span class="value textLeft">小卖部</span>
+                <span class="value textLeft">{{detailData.Email}}</span>
               </div>
             </div>
             <div class="msg3">
               <div class="selectItem clearfix">
                 <span class="name">单价</span>
-                <span class="value textLeft">213</span>
+                <span class="value textLeft">{{detailData.UnitPrice}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">预收金额</span>
-                <span class="value textLeft">321</span>
+                <span class="value textLeft">{{detailData.AdvanceMoney}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
                 <span class="name">会议套餐</span>
-                <span class="value textLeft">321</span>
+                <span class="value textLeft">{{detailData.MeetPackage}}</span>
               </div>
             </div>
             <div class="summary">
@@ -157,30 +161,50 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import { Indicator } from 'mint-ui'
+import dateChange from '@/mixins/dateChange'
 export default {
-  name: 'meetingDetail',
-  components: {navTitle},
+  name: 'reserveDetail',
+  components: {navTitle, Indicator},
+  mixins: [dateChange],
   data () {
     return {
       showMore: false,
-      showEnclosure: false
+      showEnclosure: false,
+      detailData: {
+        Participants: []
+      }
     }
   },
   methods: {
+    // 到会议室详情
     toArchives () {
       this.$router.push({
         name: 'archives',
         params: {
-          id: 123
+          id: this.detailData.MeetID
         },
         query: {
-          title: '高效厅'
+          title: this.detailData.Meet
         }
       })
+    },
+    // 获取预定详情数据
+    async getData () {
+      Indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_MeetingMyBookedDetail', {
+        'MeetID': this.$route.params.id
+      })
+      this.detailData = res.data[0]
+      console.log('res:', this.detailData)
+      Indicator.close()
     },
     toSummary () {
       this.$router.push('/meetingSummary/1231')
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>
