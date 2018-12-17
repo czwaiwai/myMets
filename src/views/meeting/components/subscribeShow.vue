@@ -72,27 +72,19 @@ export default {
     // 设置背景颜色
     itemStyle (item) {
       let color = ''
-      if (!item.isValid) return '#FFF'
-      switch (item.type) {
-        case 'HB':color = '#ff80c0'; break
-        case 'CL':color = '#c2c2c2'; break
-        case 'US':color = '#80ff80'; break
-        case 'ED':color = '#8080ff'; break
-        case 'QR':color = '#ff80c0'; break
-        case 'RV':color = '#E8E8E8'; break
-      }
+      if (!item.isValid) return ''
       if (color) {
         return {
           background: color
         }
-      } else {
-        return {}
       }
     },
     itemClass (item) {
       let str = ''
-      if (item.isValid) {
-        str = 'valid_item'
+      if (!item.isValid) return
+      str = 'valid_item'
+      if (item.type) {
+        str += ' meet_bg_' + item.type
       }
       if (item.isValid && item.isSubscribe) {
         str += ' choose'

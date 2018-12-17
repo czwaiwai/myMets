@@ -25,6 +25,7 @@
 <script>
 import navTitle from '@/components/navTitle'
 import { mapGetters } from 'vuex'
+import statusColor from '../components/statusColor'
 export default {
   name: 'meeting',
   components: {navTitle},
@@ -65,14 +66,9 @@ export default {
       this.$indicator.close()
       console.log(res)
       if (res.data) {
-        this.$store.commit('setStatusColor', res.data)
-        let style = document.createElement('style')
-        let cssStyle = ''
-        res.data.forEach(arr => {
-          cssStyle += `.color${arr.StatusValue}{color:${arr.Color}!important;}.bg${arr.StatusValue}{background:${arr.Color}!important;}`
-        })
-        style.innerHTML = cssStyle
-        document.head.append(style)
+        let resData = this.$toLower(res.data)
+        statusColor(resData)
+        this.$store.commit('setStatusColor', resData)
       }
     },
     // 获取项目信息

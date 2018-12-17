@@ -44,25 +44,13 @@
           <p class="name">请选择预订时间</p>
           <span class="showTip" @click.stop="routeTo('hasReserve')">已预定情况</span>
         </div>
-        <div class="status clearfix">
-          <div class="items clearfix">
-            <div class="bgColor1"></div>
-            <p class="name">可预订</p>
-          </div>
-          <div class="items clearfix">
-            <div class="bgColor2"></div>
-            <p class="name">确认中</p>
-          </div>
-          <div class="items clearfix">
-            <div class="bgColor3"></div>
-            <p class="name">已预订</p>
-          </div>
-          <div class="items clearfix">
-            <div class="bgColor4"></div>
-            <p class="name">使用中</p>
+        <div class="status clearfix" style="padding:.1rem 0 .1rem;">
+          <div v-for="item in colorStatus" :key="item.iD" class="items clearfix">
+            <div class="bgColor1" :style="'background:' + item.color.toLowerCase()"></div>
+            <p class="name">{{item.names}}</p>
           </div>
         </div>
-        <subscribe @sendRes='setSubscribe'></subscribe>
+        <subscribe  @sendRes='setSubscribe'></subscribe>
       </div>
     </div>
     <div class="_footer">
@@ -169,6 +157,12 @@ export default {
     this.title = this.$route.query.title
     this.pickerValue = this.initToday()
     this.dateTime = this.initToday()
+    this.colorStatus = [...this.$store.getters.getStatusColor, {
+      names: '选中',
+      color: '#3395FF',
+      iD: '99999999999'
+    }]
+    console.log(this.colorStatus)
   }
 }
 </script>
@@ -293,6 +287,7 @@ export default {
           .items{
             float: left;
             margin-right: .38rem;
+            margin-bottom: .1rem;
             .name{
               float: left;
               height: .4rem;

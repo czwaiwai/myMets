@@ -3,7 +3,7 @@
     <ul class="times">
         <li class="items clearfix" v-for="(item, index) in hourList" :key="index">
           <span class="name">{{item.name | hourMin}}</span>
-          <div @click="subscribe(sub)" class="btns" :class="itemClass(sub)" :style='itemStyle(sub)' v-for="(sub) in item.value" :key="sub.index">
+          <div @click="subscribe(sub)" class="btns " :class="itemClass(sub)" :style='itemStyle(sub)' v-for="(sub) in item.value" :key="sub.index">
             <p class="time_p" v-if="sub.isStartDot && !sub.isEndDot">起始<br/>{{sub.startTime}}</p>
             <p class="time_p" v-if="sub.isEndDot && !sub.isStartDot">结束<br/>{{sub.endTime}}</p>
             <p class="time_p" v-if="sub.isStartDot && sub.isEndDot">开始-结束{{sub.startTime}}</p>
@@ -38,7 +38,7 @@ export default {
   created () {
     this.dateTimeToList('00:00', '12:00')
     this.dateTimeToList('12:00', '24:00')
-    this.flashValidList('00:00', '12:00')
+    this.flashValidList('00:30', '12:00')
     this.flashValidList('12:00', '24:00')
     this.setChoosedList()
   },
@@ -65,27 +65,29 @@ export default {
     // 设置背景颜色
     itemStyle (item) {
       let color = ''
-      if (!item.isValid) return '#FFF'
-      switch (item.type) {
-        case 'HB':color = '#ff80c0'; break
-        case 'CL':color = '#c2c2c2'; break
-        case 'US':color = '#80ff80'; break
-        case 'ED':color = '#8080ff'; break
-        case 'QR':color = '#ff80c0'; break
-        case 'RV':color = '#E8E8E8'; break
-      }
+      if (!item.isValid) return
+      // switch (item.type) {
+      //   case 'HB':color = '#ff80c0'; break
+      //   case 'CL':color = '#c2c2c2'; break
+      //   case 'US':color = '#80ff80'; break
+      //   case 'ED':color = '#8080ff'; break
+      //   case 'QR':color = '#ff80c0'; break
+      //   case 'RV':color = '#E8E8E8'; break
+      // }
       if (color) {
         return {
           background: color
         }
       } else {
-        return {}
+        return ''
       }
     },
     itemClass (item) {
       let str = ''
-      if (item.isValid) {
-        str = 'valid_item'
+      if (!item.isValid) return
+      str = 'valid_item'
+      if (item.type) {
+        str += ' meet_bg_' + item.type
       }
       if (item.isValid && item.isSubscribe) {
         str += ' choose'
@@ -322,7 +324,7 @@ export default {
   }
 }
 .valid_item {
-  background: #E8E8E8;
+
 }
 .valid_item.choose {
   background: #3395FF !important;
