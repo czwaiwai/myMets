@@ -24,39 +24,39 @@
             </div>
             <div class="inputItem clearfix">
               <span class="name">参会人数</span>
-              <input class="inputs" type="text" :value="detailData.MeetNumber" @input="inputMeetNumber" placeholder="请输入参会人数">
+              <input class="inputs" type="text" name="MeetNumber" :value="detailData.MeetNumber" @input="inputInt" placeholder="请输入参会人数">
             </div>
             <div class="inputItem clearfix noneBb">
               <span class="name">使用部门</span>
-              <input class="inputs" type="text" :value="detailData.UserDepartments" @input="inputUserDepartments" placeholder="请输入使用部门">
+              <input class="inputs" type="text" name="UserDepartments" :value="detailData.UserDepartments" @input="inputText" placeholder="请输入使用部门">
             </div>
           </div>
           <div class="msg2">
             <div class="inputItem clearfix">
               <span class="name">会议联系人</span>
-              <input class="inputs" type="text" :value="detailData.MeetPerson" @input="inputMeetPerson" placeholder="请输入联系人">
+              <input class="inputs" type="text" name="MeetPerson" :value="detailData.MeetPerson" @input="inputText" placeholder="请输入联系人">
             </div>
             <div class="inputItem clearfix">
               <span class="name">联系人电话</span>
-              <input class="inputs" type="text" :value="detailData.Phone" @input="inputPhone" placeholder="请输入联系人电话">
+              <input class="inputs" type="text" name="Phone" :value="detailData.Phone" @input="inputInt" placeholder="请输入联系人电话">
             </div>
             <div class="inputItem clearfix noneBb">
               <span class="name">联系人邮箱</span>
-              <input class="inputs" type="text" :value="detailData.Email" @input="inputEmail" placeholder="请输入联系人邮箱">
+              <input class="inputs" type="text" name="Email" :value="detailData.Email" @input="inputInt" placeholder="请输入联系人邮箱">
             </div>
           </div>
           <div class="msg3">
             <div class="inputItem clearfix">
               <span class="name">单价</span>
-              <input class="inputs" type="text" :value="detailData.UnitPrice" @input="inputUnitPrice" placeholder="请输入单价">
+              <input class="inputs" type="text" name="UnitPrice" :value="detailData.UnitPrice" @input="inputFloat" placeholder="请输入单价">
             </div>
             <div class="inputItem clearfix">
               <span class="name">预收金额</span>
-              <input class="inputs" type="text" :value="detailData.AdvanceMoney" @input="inputAdvanceMoney" placeholder="请输入预收金额">
+              <input class="inputs" type="text" name="AdvanceMoney" :value="detailData.AdvanceMoney" @input="inputFloat" placeholder="请输入预收金额">
             </div>
             <div class="inputItem clearfix noneBb">
               <span class="name">会议套餐</span>
-              <input class="inputs" type="text" :value="detailData.MeetPackage" @input="inputMeetPackage" placeholder="请输入会议套餐">
+              <input class="inputs" type="text" name="MeetPackage" :value="detailData.MeetPackage" @input="inputText" placeholder="请输入会议套餐">
             </div>
           </div>
         </div>
@@ -157,52 +157,20 @@ export default {
     }
   },
   methods: {
-    inputMeetNumber (e) {
-      let num = e.target.value + ''
-      num = this.inputInt(num)
-      // num = num.replace(/[^\d]/g, '') - 0
-      this.upNewData('MeetNumber', num)
-    },
-    inputUserDepartments (e) {
-      this.upNewData('UserDepartments', e.target.value)
-    },
-    inputMeetPerson(e) {
-      this.upNewData('MeetPerson', e.target.value)
-    },
-    inputPhone (e) {
-      let num = e.target.value + ''
-      num = this.inputInt(num)
-      // num = num.replace(/[^\d]/g, '') - 0
-      this.upNewData('Phone', num)
-    },
-    inputEmail (e) {
-      let num = e.target.value + ''
-      num = this.inputInt(num)
-      // num = num.replace(/[^\d]/g, '') - 0
-      this.upNewData('Email', num)
-    },
-    inputUnitPrice (e) {
-      let num = e.target.value + ''
-      num = this.inputFloat(num)
-      this.upNewData('UnitPrice', num)
-    },
-    inputAdvanceMoney (e) {
-      let num = e.target.value + ''
-      num = this.inputFloat(num)
-      this.upNewData('AdvanceMoney', num)
-    },
-    inputMeetPackage (e) {
-      this.upNewData('MeetPackage', e.target.value)
-    },
     // 只允许输入数字
-    inputInt (value) {
-      let num = value + ''
+    inputInt (e) {
+      let num = e.target.value + ''
       num = num.replace(/[^\d]/g, '') - 0
-      return num
+      this.upData(e.target.name, num)
+    },
+    // 输入文本
+    inputText (e) {
+      let text = e.target.value + ''
+      this.upData(e.target.name, text)
     },
     // 允许输入小数点后两位
-    inputFloat (value) {
-      let num = value + ''
+    inputFloat (e) {
+      let num = e.target.value + ''
       if (num.substr(0, 1) === '.') {
         num = ''
       }
@@ -216,12 +184,12 @@ export default {
           num = num.substr(1, num.length)
         }
       }
-      return num
+      this.upData(e.target.name, num)
     },
     // 更新数据
-    upNewData (type, value) {
+    upData (name, value) {
       let obj = {}
-      obj[type] = value
+      obj[name] = value
       this.$emit('update:detailData', Object.assign({}, this.detailData, obj))
     },
     // 获取选择列表

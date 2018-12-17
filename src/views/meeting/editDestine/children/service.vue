@@ -40,11 +40,6 @@ export default {
       }
     }
   },
-  data () {
-    return {
-      list: []
-    }
-  },
   methods: {
     selectItem (item, index) {
       let list = JSON.parse(JSON.stringify(this.serviceList))

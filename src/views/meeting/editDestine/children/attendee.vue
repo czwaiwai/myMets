@@ -56,25 +56,17 @@ export default {
     }
   },
   methods: {
-    inputObject (e) {
-      // console.log(e.target.value)
-      // let obj = Object.assign({}, this.detailData, {
-      //   BookPhone: e.target.value
-      // })
-      // console.log('obj', obj)
-      // this.$emit('update:detailData', obj)
-    },
     // 删除参会人
     deletePerson (item, index) {
-      let list = []
+      let list = JSON.parse(JSON.stringify(this.detailData.Participants))
       this.detailData.Participants.forEach(arr => {
         list.push(arr)
       })
       list.splice(index, 1)
-      // let obj = Object.assign({}, this.detailData, {
-      //   Participants: list
-      // })
-      // this.$emit('update:detailData', obj)
+      let obj = {
+        Participants: list
+      }
+      this.$emit('update:this.detailData', Object.assign({}, this.detailData, obj))
     },
     // 获取参会人列表
     async getSelectType () {
