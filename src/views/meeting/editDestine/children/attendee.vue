@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'attendee',
   props: {
@@ -55,24 +56,26 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      locationData: 'getMeetingLocation'
+    })
+  },
   methods: {
     // 删除参会人
     deletePerson (item, index) {
       let list = JSON.parse(JSON.stringify(this.detailData.Participants))
-      this.detailData.Participants.forEach(arr => {
-        list.push(arr)
-      })
       list.splice(index, 1)
       let obj = {
         Participants: list
       }
-      this.$emit('update:this.detailData', Object.assign({}, this.detailData, obj))
+      this.$emit('update:detailData', Object.assign({}, this.detailData, obj))
     },
     // 获取参会人列表
     async getSelectType () {
       this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_GetEmployeeInfo', {
-        'OrgID': '11091315263400010000'
+        'OrgID': this.locationData.orgId
       })
       console.log(res)
       let list = []

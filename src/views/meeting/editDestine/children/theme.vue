@@ -41,6 +41,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'theme',
   props: {
@@ -65,6 +66,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      locationData: 'getMeetingLocation'
+    })
+  },
   methods: {
     // 输入文本
     inputText (e) {
@@ -84,20 +90,26 @@ export default {
     },
     // 获取下拉列表数据
     async getSelectType () {
+      if (this.selectData.list.length) {
+        this.$emit('setSelectList', this.selectData)
+        return
+      }
       this.$indicator.open({spinnerType: 'fading-circle'})
-      let res = await this.$xml('UserRent_GetOptionList', {
-        'TypeName': 'CognitiveWay'
+      let res = await this.$xml('UserCS_GetEmployeeInfo', {
+        'OrgID': this.locationData.orgId
       })
       console.log(res)
+      let list = []
       res.data.forEach(arr => {
-        if (this.detailData.CognitiveWay === arr.value) {
-          arr.isSelect = true
-        } else {
-          arr.isSelect = false
+        let obj = {
+          isSelect: false,
+          showText: arr.EmployeeName,
+          value: arr.EmployeeID
         }
+        list.push(obj)
       })
       this.selectData.title = '预订人'
-      this.selectData.list = res.data
+      this.selectData.list = list
       this.selectData.type = 'BookName'
       this.$emit('setSelectList', this.selectData)
     }

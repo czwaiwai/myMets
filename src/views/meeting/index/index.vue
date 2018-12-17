@@ -24,6 +24,7 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import { mapGetters } from 'vuex'
 export default {
   name: 'meeting',
   components: {navTitle},
@@ -31,29 +32,66 @@ export default {
     return {
     }
   },
+  computed: {
+    ...mapGetters({
+      locationData: 'getMeetingLocation',
+      statusColor: 'getStatusColor'
+    })
+  },
   methods: {
+    // 到会议预定
     toDestine () {
       this.$store.commit('setSearchKey', '')
       this.$store.commit('setDate', {year: '', month: '', day: ''})
       this.$router.push(`/destine`)
     },
+    // 我的预定
     async toMyDestine () {
       this.$router.push(`/myDestine`)
     },
+    // 我的会议
     async toMyMeeting () {
       this.$router.push(`/myMeeting`)
     },
+    // 获取颜色列表
     async getStatusColor () {
+      if (this.statusColor.length) {
+        return
+      }
+      this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_MeetingUseStatusColor', {
-        'OrgID': '11091315263400010000'
+        'OrgID': this.$route.query.orgId
       })
+      this.$indicator.close()
       console.log(res)
       if (res.data) {
         this.$store.commit('setStatusColor', res.data)
+        let style = document.createElement('style')
+        let cssStyle = ''
+        res.data.forEach(arr => {
+          cssStyle += `.color${arr.StatusValue}{color:${arr.Color}!important;}.bg${arr.StatusValue}{background:${arr.Color}!important;}`
+        })
+        style.innerHTML = cssStyle
+        document.head.append(style)
       }
+    },
+    // 获取项目信息
+    getLocationData () {
+      if (this.locationData.orgId) {
+        return
+      }
+      let location = {
+        orgId: this.$route.query.orgId,
+        orgName: this.$route.query.orgName,
+        employeeId: this.$route.query.employeeId,
+        employeeJobId: this.$route.query.employeeJobId
+      }
+      this.$store.commit('setMeetingLocation', location)
+      console.log('locationData', this.locationData)
     }
   },
   created () {
+    this.getLocationData()
     this.getStatusColor()
   }
 }

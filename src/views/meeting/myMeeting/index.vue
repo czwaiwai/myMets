@@ -21,10 +21,10 @@
       <div class="list-wrap" v-if="dataList.length">
         <ul class="list">
           <li class="items" :class="{'opcity':item.BookStatus=='QR'}" @click.stop="toMeetingDetail(item)" v-for="(item,index) in dataList" :key="index">
-            <div class="point" :style="'background:'+com_color(item.BookStatus)+';'"></div>
+            <div class="point" :class="'bg'+item.BookStatus"></div>
             <div class="times">
-              <span>{{item.STime}} — {{item.ETime}}</span>
-              <span class="status" :style="'color:'+com_color(item.BookStatus)+';'">{{item.BookStatusName}}</span>
+              <span class="time">{{item.STime}} — {{item.ETime}}</span>
+              <span class="status" :class="'color'+item.BookStatus">{{item.BookStatusName}}</span>
             </div>
             <div class="room">
               <span>{{item.Meet}}</span>
@@ -83,7 +83,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      statusColor: 'getStatusColor'
+      statusColor: 'getStatusColor',
+      locationData: 'getMeetingLocation'
     })
   },
   methods: {
@@ -137,7 +138,7 @@ export default {
     async getDataList () {
       Indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_MeetingBookedList', {
-        'EmployeeID': '20',
+        'EmployeeID': this.locationData.employeeId,
         'MeetTime': this.dayTime
       })
       console.log('res:', res)
@@ -147,10 +148,12 @@ export default {
       }
       Indicator.close()
     },
+    // 获取时间轴
     async getPointList () {
       let res = await this.$xml('UserCS_MeetingMyBookedTime', {
-        'EmployeeID': '20',
-        'MeetTime': this.calendarDate.year + '-' + this.calendarDate.month
+        'EmployeeID': this.locationData.employeeId,
+        'MeetTime': this.calendarDate.year + '-' + this.calendarDate.month,
+        'MeetType': '2'
       })
       console.log('getPointList', res)
       let pointList = []
@@ -225,15 +228,16 @@ export default {
             display: block;
             width: 8px;
             height: 8px;
-            background: #CDCBCB;
             border-radius: 50%;
           }
           .times{
             position: relative;
             height: .44rem;
-            color: #0DC88C;
             font-size: .3rem;
             line-height: .44rem;
+            .time{
+              color: #0DC88C;
+            }
             .status{
               position: absolute;
               right: 0;
@@ -242,7 +246,6 @@ export default {
               height: .44rem;
               line-height: .44rem;
               font-size: .28rem;
-              color: #999;
             }
           }
           .room,.location{

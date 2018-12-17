@@ -3,7 +3,7 @@
     <div class="listBtn" v-if="detailData.BookStatus==='HB'">
       <p class="title">配套设施</p>
       <div class="box-wrap clearfix">
-        <div class="btnBox" :class="{'isSelect':true}" v-for="(item,index) in detailData.Facilities" :key="index">
+        <div class="btnBox" :class="{'isSelect':item.isSelect}" @click.stop="selectItem(item,index)" v-for="(item,index) in equipMatchingList" :key="index">
           <span>{{item.MaterialsnName}}</span>
         </div>
       </div>
@@ -38,6 +38,18 @@ export default {
       default: () => {
         return []
       }
+    }
+  },
+  methods: {
+    selectItem (item, index) {
+      let list = JSON.parse(JSON.stringify(this.equipMatchingList))
+      list.forEach((arr, _index) => {
+        if (index === _index) {
+          arr.isSelect = !arr.isSelect
+        }
+      })
+      console.log(this.serviceList)
+      this.$emit('update:equipMatchingList', list)
     }
   }
 }

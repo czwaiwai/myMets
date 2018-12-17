@@ -18,7 +18,7 @@
             </div>
             <div class="selectItem clearfix" @click.stop="getSelectType('MeetUseName')">
               <span class="name">会议用途</span>
-              <span class="value textLeft" v-if="detailData.MeetUseName">{{detailData.MeetUseName}}</span>
+              <span class="value textLeft" v-if="detailData.MeetUseName||detailData.MeetUse">{{detailData.MeetUseName||detailData.MeetUse}}</span>
               <span class="value" v-else >请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
@@ -78,7 +78,7 @@
             </div>
             <div class="selectItem clearfix">
               <span class="name">会议用途</span>
-              <span class="value textLeft">{{detailData.MeetUseName}}</span>
+              <span class="value textLeft">{{detailData.MeetUseName||detailData.MeetUse}}</span>
             </div>
             <div class="selectItem clearfix">
               <span class="name">参会人数</span>
@@ -134,6 +134,7 @@ export default {
           BookStatus: '',
           MeetFormName: '',
           MeetUseName: '',
+          MeetUse: '',
           MeetNumber: '',
           UserDepartments: '',
           MeetPerson: '',

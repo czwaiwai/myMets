@@ -12,9 +12,17 @@
           <span class="name">会议日期</span>
           <span class="value textLeft">{{com_date(detailData.MeetTime)}}</span>
         </div>
-        <div class="selectItem noneBb">
+        <div class="selectItem clearfix">
           <span class="name">会议时段</span>
           <span class="value textLeft">{{detailData.STime}} — {{detailData.ETime}}</span>
+        </div>
+        <div class="selectItem clearfix" :class="{'noneBb': detailData.BookStatus=='CL'}">
+          <span class="name">会议状态</span>
+          <span class="value textLeft">{{detailData.BookStatusName}}</span>
+        </div>
+        <div class="textShowItem clearfix noneBb" v-show="detailData.BookStatus=='CL'">
+          <span class="name">取消原因</span>
+          <span class="value">取消原因取消原因取消原因取消原因取消原因取消原因</span>
         </div>
       </div>
       <div class="theme">
@@ -161,11 +169,10 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
-import { Indicator } from 'mint-ui'
 import dateChange from '@/mixins/dateChange'
 export default {
   name: 'reserveDetail',
-  components: {navTitle, Indicator},
+  components: {navTitle},
   mixins: [dateChange],
   data () {
     return {
@@ -191,16 +198,24 @@ export default {
     },
     // 获取预定详情数据
     async getData () {
-      Indicator.open({spinnerType: 'fading-circle'})
+      this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_MeetingMyBookedDetail', {
         'MeetID': this.$route.params.id
       })
       this.detailData = res.data[0]
+      this.com_num('UnitPrice')
+      this.com_num('AdvanceMoney')
       console.log('res:', this.detailData)
-      Indicator.close()
+      this.$indicator.close()
+    },
+    // 多位小数处理
+    com_num (name) {
+      if (this.detailData[name].length) {
+        this.detailData[name] = (this.detailData[name] - 0).toFixed(2)
+      }
     },
     toSummary () {
-      this.$router.push('/meetingSummary/1231')
+      this.$router.push(`/meetingSummary/${this.detailData.MeetID}`)
     }
   },
   created () {

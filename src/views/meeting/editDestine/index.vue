@@ -110,10 +110,19 @@ export default {
     // 获取会议室设备配套
     async getEquipMatching () {
       this.$indicator.open({spinnerType: 'fading-circle'})
-      let res = await this.$xml('UserCS_MeetingEquipMatching', {
+      let res = await this.$xml('UserCS_MeetFileEquip', {
         'MeetID': this.detailData.MeetID
       })
-      console.log(res)
+      console.log('Facilities', res)
+      res.data.forEach((arr, index) => {
+        let flag = false
+        this.detailData.Facilities.forEach(a => {
+          if (a.ID === arr.ID) {
+            flag = true
+          }
+        })
+        arr.isSelect = flag
+      })
       this.equipMatchingList = res.data
     },
     // 获取服务清单
