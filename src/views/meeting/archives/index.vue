@@ -4,8 +4,8 @@
     <div class="page_bd _content">
       <div class="_swipe-wrap">
         <swipe :auto="4000">
-          <swipe-item v-for="(item,index) in 5" :key="index">
-            <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543821465&di=e3ad1277bf7c91696edb3cd5bf3749e5&src=http://imgsrc.baidu.com/imgad/pic/item/0b55b319ebc4b745317003c2c5fc1e178b821579.jpg" class="pics">
+          <swipe-item v-for="(item,index) in imageList" :key="index">
+            <img preview :src="item.Path" class="pics">
           </swipe-item>
         </swipe>
       </div>
@@ -96,6 +96,7 @@ export default {
     return {
       title: '',
       showMore: false,
+      imageList: [],
       detailData: {
         Facilities: ''
       }
@@ -104,9 +105,6 @@ export default {
   methods: {
     routeTo (name) {
       this.$router.push({name})
-    },
-    toPicDetail () {
-      this.$router.push('/picDetail/132')
     },
     // 获取预定详情数据
     async getData () {
@@ -117,10 +115,24 @@ export default {
       console.log('res:', res)
       this.detailData = res.data[0]
       Indicator.close()
+    },
+    // 获取轮播图列表
+    async getPicList () {
+      Indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_GetMeettingRoomImageInfo', {
+        'MeettingRoomID': this.$route.params.id,
+        'TypeStr': 'Metting'
+      })
+      console.log('UserCS_GetMeettingRoomImageInfo:', res)
+      Indicator.close()
+      if (res.data.length && res.data[0].ImageList && res.data[0].ImageList.length) {
+        this.imageList = res.data[0].ImageList
+      }
     }
   },
   created () {
     this.title = this.$route.query.title
+    this.getPicList()
     this.getData()
   }
 }

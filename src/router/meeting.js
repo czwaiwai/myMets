@@ -45,30 +45,6 @@ export default [
       component: () => import('@/views/meeting/picDetail')
     }]
   },
-  // {
-  //   name: 'otherDetail',
-  //   path: '/otherDetail/:id',
-  //   meta: {
-  //     title: '其他详情'
-  //   },
-  //   component: () => import('@/views/meeting/otherDetail')
-  // },
-  // {
-  //   name: 'hasReserve',
-  //   path: '/hasReserve/:id',
-  //   meta: {
-  //     title: '已预订'
-  //   },
-  //   component: () => import('@/views/meeting/hasReserve')
-  // },
-  // {
-  //   name: 'picDetail',
-  //   path: '/picDetail/:id',
-  //   meta: {
-  //     title: '平面位置图'
-  //   },
-  //   component: () => import('@/views/meeting/picDetail')
-  // },
   {
     name: 'reserve',
     path: '/reserve/:id',
@@ -131,14 +107,22 @@ export default [
     meta: {
       title: '会议详情'
     },
-    component: () => import('@/views/meeting/meetingDetail')
-  },
-  {
-    name: 'meetingSummary',
-    path: '/meetingSummary/:id',
-    meta: {
-      title: '会议纪要'
-    },
-    component: () => import('@/views/meeting/meetingSummary')
+    component: () => import('@/views/meeting/meetingDetail'),
+    children: [{
+      name: 'meetingSummary',
+      path: 'meetingSummary',
+      meta: {
+        title: '会议纪要'
+      },
+      component: () => import('@/views/meeting/meetingSummary')
+    }]
   }
+  // {
+  //   name: 'meetingSummary',
+  //   path: '/meetingSummary/:id',
+  //   meta: {
+  //     title: '会议纪要'
+  //   },
+  //   component: () => import('@/views/meeting/meetingSummary')
+  // }
 ]

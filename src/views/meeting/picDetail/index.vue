@@ -3,7 +3,9 @@
     <div class="page picDetail">
       <nav-title title="平面位置图"></nav-title>
       <div class="page_bd _content">
-        <img v-if="true" src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543821465&di=e3ad1277bf7c91696edb3cd5bf3749e5&src=http://imgsrc.baidu.com/imgad/pic/item/0b55b319ebc4b745317003c2c5fc1e178b821579.jpg" class="pic">
+        <div  v-if="imageList.length">
+          <img :src="item.Path" v-for="(item,index) in imageList" :key="index" class="pic">
+        </div>
         <none-page title="暂无平面位置图~" v-else></none-page>
       </div>
     </div>
@@ -14,7 +16,30 @@ import navTitle from '@/components/navTitle'
 import nonePage from '../components/nonePage/index.vue'
 export default {
   name: 'picDetail',
-  components: {navTitle, nonePage}
+  components: {navTitle, nonePage},
+  data () {
+    return {
+      imageList: []
+    }
+  },
+  methods: {
+    // 获取轮播图列表
+    async getPicList () {
+      this.$indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_GetMeettingRoomImageInfo', {
+        'MeettingRoomID': this.$parent.$route.params.id,
+        'TypeStr': 'Plant'
+      })
+      console.log('UserCS_GetMeettingRoomImageInfo:', res)
+      this.$indicator.close()
+      if (res.data.length && res.data[0].ImageList && res.data[0].ImageList.length) {
+        this.imageList = res.data[0].ImageList
+      }
+    }
+  },
+  created () {
+    this.getPicList()
+  }
 }
 </script>
 <style lang="scss" scoped>

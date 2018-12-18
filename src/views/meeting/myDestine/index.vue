@@ -45,13 +45,13 @@
     </div>
     <transition name="_dialog">
       <div class="_dialog" v-if="dialogShow">
-        <div class="mark" @click.stop="dialogShow=false"></div>
+        <div class="mark" @click.stop="dialogShow=false;cancelReason=''"></div>
         <div class="main">
           <p class="title">你确定要取消本次预订？</p>
-          <textarea class="textContent" placeholder="请输入取消原因"></textarea>
+          <textarea class="textContent" v-model="cancelData.cancelReason" placeholder="请输入取消原因"></textarea>
           <div class="btns clearfix">
-            <div class="btn _left">取消预订</div>
-            <div class="btn _right" @click.stop="dialogShow=false">不取消</div>
+            <div class="btn _left" @click.stop="cancelOrder">取消预订</div>
+            <div class="btn _right" @click.stop="dialogShow=false;cancelReason=''">不取消</div>
           </div>
         </div>
       </div>
@@ -76,7 +76,11 @@ export default {
       pointList: [],
       dayTime: '',
       calendarDate: {year: '', month: ''},
-      dataList: []
+      dataList: [],
+      cancelData: {
+        itemData: {},
+        cancelReason: ''
+      }
     }
   },
   computed: {
@@ -118,18 +122,33 @@ export default {
       this.$refs.Calendar.ChoseMonth(this.initToday())
       this.getDataList()
     },
+    // 点击取消预订
     cancel (item) {
+      this.cancelData = {
+        itemData: item,
+        cancelReason: ''
+      }
       this.dialogShow = true
     },
-    // 状态上色
-    com_color (status) {
-      let color = ''
-      this.statusColor.forEach(arr => {
-        if (arr.StatusValue === status) {
-          color = arr.Color
-        }
+    // 取消预订
+    async cancelOrder () {
+      this.dialogShow = false
+      Indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_MeetingCancelOrder', {
+        'ID': this.cancelData.itemData.ID,
+        'CancelReason': this.cancelData.cancelReason,
+        'OrgID': this.locationData.orgId,
+        'EmployeeID': this.locationData.employeeId
       })
-      return color
+      console.log('res:', res)
+      Indicator.close()
+      if (res.status === 200 || res.status === '200') {
+        this.$toast('取消预订单成功！')
+        this.cancelData.itemData.BookStatus = 'CL'
+        this.cancelData.itemData.BookStatusName = '已取消'
+      } else {
+        this.$toast('取消预订单失败！')
+      }
     },
     // 到预定详情
     toReserveDetail (item) {

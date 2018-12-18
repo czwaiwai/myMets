@@ -13,7 +13,7 @@
       </div>
       <div class="inputItem clearfix noneBb">
         <span class="name">其他参会人</span>
-        <input class="inputs" type="text" placeholder="请输入其他参会人">
+        <input class="inputs" type="text" name="OtherMeettingPerson" @input="inputText" :value="detailData.OtherMeettingPerson" placeholder="请输入其他参会人">
       </div>
     </div>
     <div class="attendee" v-else>
@@ -27,7 +27,7 @@
       </div>
       <div class="selectItem clearfix noneBb">
         <span class="name">其他参会人</span>
-        <span class="value textLeft"></span>
+        <span class="value textLeft">{{detailData.OtherMeettingPerson}}</span>
       </div>
     </div>
   </div>
@@ -62,6 +62,17 @@ export default {
     })
   },
   methods: {
+    // 输入文本
+    inputText (e) {
+      let text = e.target.value + ''
+      this.upData(e.target.name, text)
+    },
+    // 更新数据
+    upData (name, value) {
+      let obj = {}
+      obj[name] = value
+      this.$emit('update:detailData', Object.assign({}, this.detailData, obj))
+    },
     // 删除参会人
     deletePerson (item, index) {
       let list = JSON.parse(JSON.stringify(this.detailData.Participants))

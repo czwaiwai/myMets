@@ -22,7 +22,7 @@
         </div>
         <div class="textShowItem clearfix noneBb" v-show="detailData.BookStatus=='CL'">
           <span class="name">取消原因</span>
-          <span class="value">取消原因取消原因取消原因取消原因取消原因取消原因</span>
+          <span class="value">{{detailData.CancelReason}}</span>
         </div>
       </div>
       <div class="theme">
@@ -32,7 +32,7 @@
         </div>
         <div class="textShowItem clearfix">
           <span class="name">会议内容</span>
-          <span class="value"></span>
+          <span class="value">{{detailData.MeettingContent}}</span>
         </div>
         <div class="selectItem clearfix">
           <span class="name">预订人</span>
@@ -54,7 +54,7 @@
         </div>
         <div class="selectItem clearfix noneBb">
           <span class="name">其他参会人</span>
-          <span class="value textLeft"></span>
+          <span class="value textLeft">{{detailData.OtherMeettingPerson}}</span>
         </div>
       </div>
       <div class="listBtn">
@@ -80,7 +80,7 @@
       <div class="remark">
         <div class="textShowItem clearfix noneBb">
           <span class="name">预订备注</span>
-          <span class="value"></span>
+          <span class="value">{{detailData.Memo}}</span>
         </div>
       </div>
       <div class="more">
@@ -99,7 +99,7 @@
               </div>
               <div class="selectItem clearfix">
                 <span class="name">会议用途</span>
-                <span class="value textLeft">{{detailData.MeetUseName}}</span>
+                <span class="value textLeft">{{detailData.MeetUseName||detailData.MeetUse}}</span>
               </div>
               <div class="selectItem clearfix">
                 <span class="name">参会人数</span>
@@ -139,13 +139,13 @@
               </div>
             </div>
             <div class="summary">
-              <div class="selectItem clearfix noneBb" @click.stop="toSummary">
+              <div class="selectItem clearfix noneBb" @click.stop="routeTo('meetingSummary')">
                 <span class="name">会议纪要</span>
-                <span class="value textLeft">321</span>
+                <span class="value textLeft"></span>
                 <i class="iconfont icon-tubiao- icon"></i>
               </div>
             </div>
-            <div class="enclosure">
+            <div class="enclosure" v-show="detailData.Enclosure.length">
               <div class="title" @click.stop="showEnclosure=!showEnclosure">
                 <p :class="{'noneBb':!showEnclosure}">
                   <span>附件</span>
@@ -154,9 +154,9 @@
               </div>
               <transition name="closure">
                 <div class="closure" v-show="showEnclosure">
-                  <div class="items" v-for="(item,index) in 5" :key="index">
-                    <i class="iconfont icon-zhankai1"></i>
-                    <span>会议室预订系统APP端产品线框图.zip</span>
+                  <div class="items" :href="item.Url" target="_blank" v-for="(item,index) in detailData.Enclosure" :key="index">
+                    <i class="iconfont" :class="com_icon(item.Extend)"></i>
+                    <span>{{item.FileName}}</span>
                   </div>
                 </div>
               </transition>
@@ -165,6 +165,11 @@
         </transition>
       </div>
     </div>
+    <transition name="page">
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 <script>
@@ -179,7 +184,8 @@ export default {
       showMore: false,
       showEnclosure: false,
       detailData: {
-        Participants: []
+        Participants: [],
+        Enclosure: []
       }
     }
   },
@@ -196,10 +202,41 @@ export default {
         }
       })
     },
-    // 获取预定详情数据
+    routeTo (name) {
+      this.$router.push({name})
+    },
+    // icon图标
+    com_icon (extend) {
+      if (extend === 'jpg' || extend === 'jpeg' || extend === 'png' || extend === 'gif' || extend === 'bmp' || extend === 'tiff' || extend === 'ai' || extend === 'cdr' || extend === 'eps') {
+        return 'icon-photo'
+      } else if (extend === 'txt') {
+        return 'icon-txt'
+      } else if (extend === 'xls' || extend === 'excel') {
+        return 'icon-fileexcel'
+      } else if (extend === 'docx' || extend === 'wps' || extend === 'doc') {
+        return 'icon-word'
+      } else if (extend === 'dll') {
+        return 'icon-DLL'
+      } else if (extend === 'ppt') {
+        return 'icon-iconfonticonfontexcel'
+      } else if (extend === 'zip' || extend === 'rar') {
+        return 'icon-zip'
+      } else if (extend === 'exe') {
+        return 'icon-exe'
+      } else if (extend === 'pdf') {
+        return 'icon-pdf'
+      } else if (extend === 'html' || extend === 'htm') {
+        return 'icon-html'
+      } else if (extend === 'mpg' || extend === 'mpeg' || extend === 'mp4' || extend === '3gp' || extend === 'mov' || extend === 'rmvb' || extend === 'wmv' || extend === 'avi') {
+        return 'icon-filevideo'
+      } else {
+        return 'icon-wenjian1'
+      }
+    },
+    // 获取会议详情数据
     async getData () {
       this.$indicator.open({spinnerType: 'fading-circle'})
-      let res = await this.$xml('UserCS_MeetingMyBookedDetail', {
+      let res = await this.$xml('UserCS_MeetingBookedDetail', {
         'MeetID': this.$route.params.id
       })
       this.detailData = res.data[0]
@@ -213,9 +250,6 @@ export default {
       if (this.detailData[name].length) {
         this.detailData[name] = (this.detailData[name] - 0).toFixed(2)
       }
-    },
-    toSummary () {
-      this.$router.push(`/meetingSummary/${this.detailData.MeetID}`)
     }
   },
   created () {
@@ -298,11 +332,15 @@ export default {
           .closure{
             padding: .3rem .3rem .1rem;
             .items{
+              display: block;
               height: .44rem;
               margin-bottom: .2rem;
               font-size: .3rem;
               color: #1B9BFE;
               line-height: .44rem;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
               span{
                 text-decoration: underline;
               }

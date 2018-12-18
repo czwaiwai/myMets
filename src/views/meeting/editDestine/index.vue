@@ -41,7 +41,6 @@ import service from './children/service.vue'
 import remark from './children/remark.vue'
 import more from './children/more.vue'
 import { mapGetters } from 'vuex'
-import { setTimeout } from 'timers'
 export default {
   name: 'reserve',
   components: {navTitle, selectList, theme, attendee, facilities, service, remark, more},

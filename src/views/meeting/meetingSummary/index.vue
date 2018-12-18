@@ -1,41 +1,43 @@
 <template>
-  <div class="page page_bg meetingSummary">
-    <nav-title title="会议纪要"></nav-title>
-    <div class="page_bd _content">
-      <div class="msg" v-if="hasData">
-        <div class="textCode clearfix">
-          <span class="name">会议名称：</span>
-          <span class="value">会议室预订系统APP产品预上线动员会</span>
+  <div class="page_modal">
+    <div class="page meetingSummary">
+      <nav-title title="会议纪要"></nav-title>
+      <div class="page_bd _content">
+        <div class="msg" v-if="sumaryList.length">
+          <div class="textCode clearfix">
+            <span class="name">会议名称：</span>
+            <span class="value">{{sumaryList[index].MinutesMeetName}}</span>
+          </div>
+          <div class="textCode clearfix">
+            <span class="name">会议日期：</span>
+            <span class="value">{{$parent.com_setDate(sumaryList[index].MinutesMeetTime)}}</span>
+          </div>
+          <div class="textCode clearfix">
+            <span class="name">记录人：</span>
+            <span class="value">{{sumaryList[index].MinutesMeetPeople}}</span>
+          </div>
+          <div class="textList _mgt-5">
+            <p class="name">会议要点：</p>
+            <p class="value">
+              {{sumaryList[index].MinutesMeetPoint}}
+            </p>
+          </div>
+          <div class="textList">
+            <p class="name">会议内容：</p>
+            <p class="value">
+              {{sumaryList[index].MinutesMeetContent}}
+            </p>
+          </div>
         </div>
-        <div class="textCode clearfix">
-          <span class="name">会议日期：</span>
-          <span class="value">2018-10-15</span>
-        </div>
-        <div class="textCode clearfix">
-          <span class="name">记录人：</span>
-          <span class="value">黎明</span>
-        </div>
-        <div class="textList _mgt-5">
-          <p class="name">会议要点：</p>
-          <p class="value" v-for="(item,index) in 3" :key="index">
-            会议室预订系统APP产品预上线动员会会议室预订系统APP产品预上线动员会
-          </p>
-        </div>
-        <div class="textList">
-          <p class="name">会议内容：</p>
-          <p class="value" v-for="(item,index) in 3" :key="index">
-            会议室预订系统APP产品预上线动员会
-          </p>
-        </div>
+        <none-page title="没有会议纪要哦！" v-else></none-page>
       </div>
-      <none-page title="没有会议纪要哦！" v-else></none-page>
-    </div>
-    <div class="_footer-btn clearfix" v-show="hasData">
-      <div class="last">
-        <span>前一页</span>
-      </div>
-      <div class="next">
-        <span>后一页</span>
+      <div class="_footer-btn clearfix" v-show="sumaryList.length && sumaryList.length>1">
+        <div class="last" @click.stop="last">
+          <span :class="{'grad':index==0}">前一页</span>
+        </div>
+        <div class="next" @click.stop="next">
+          <span :class="{'grad':index==sumaryList.length-1}">后一页</span>
+        </div>
       </div>
     </div>
   </div>
@@ -48,12 +50,28 @@ export default {
   components: {navTitle, nonePage},
   data () {
     return {
-      hasData: false
+      sumaryList: [],
+      index: 0
     }
   },
   methods: {
+    // 上一页
+    last () {
+      if (this.index === 0) {
+        return
+      }
+      this.index--
+    },
+    // 下一页
+    next () {
+      if (this.index === this.sumaryList.length - 1) {
+        return
+      }
+      this.index++
+    }
   },
   created () {
+    this.sumaryList = this.$parent.detailData.Minutes
   }
 }
 </script>
@@ -119,6 +137,9 @@ export default {
           text-align: center;
           font-size: .34rem;
           color: #0DC88C;
+          &.grad{
+            color: #999;
+          }
         }
       }
       .next {
