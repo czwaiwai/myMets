@@ -7,7 +7,7 @@
       </div>
       <div class="textItem clearfix">
         <span class="name">会议内容</span>
-        <textarea class="areas" placeholder="请输入会议内容"></textarea>
+        <textarea class="areas" placeholder="请输入会议内容" name="MeettingContent" :value="detailData.MeettingContent" @input="inputText"></textarea>
       </div>
       <div class="selectItem clearfix" @click.stop="getSelectType('type1')">
         <span class="name">预订人</span>
@@ -17,7 +17,7 @@
       </div>
       <div class="inputItem clearfix noneBb">
         <span class="name">预订人电话</span>
-        <input class="inputs" type="text" name="BookPhone" @input="inputInt" placeholder="请输入电话" :value="detailData.BookPhone">
+        <input class="inputs" type="text" maxlength="11" name="BookPhone" @input="inputNum" placeholder="请输入电话" :value="detailData.BookPhone">
       </div>
     </div>
     <div class="theme"  v-else>
@@ -77,9 +77,12 @@ export default {
       this.upData(e.target.name, e.target.value)
     },
     // 只允许输入数字
-    inputInt (e) {
+    inputNum (e) {
       let num = e.target.value + ''
-      num = num.replace(/[^\d]/g, '') - 0
+      num = num.replace(/[^\d]/g, '')
+      if (e.target.maxLength > 0) {
+        num = num.slice(0, e.target.maxLength)
+      }
       this.upData(e.target.name, num)
     },
     // 更新数据

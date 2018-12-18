@@ -5,11 +5,17 @@ function meetingColor (list) {
     let tmp = ''
     list.forEach(({statusValue, color}) => {
       let col = color.toLowerCase()
-      tmp = tmp +
-`.valid_item.meet_bg_${statusValue} {
-  background: ${col};
-}
-`
+      tmp +=
+      `.valid_item.meet_bg_${statusValue} {
+        background: ${col};
+      }
+      .color_${statusValue} {
+        color: ${col};
+      }
+      .bg_${statusValue} {
+        background: ${col};
+      }
+      `
     })
     style.setAttribute('id', 'meetingStyle')
     style.innerHTML = tmp

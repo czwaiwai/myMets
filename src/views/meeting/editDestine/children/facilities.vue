@@ -48,7 +48,7 @@ export default {
           arr.isSelect = !arr.isSelect
         }
       })
-      console.log(this.serviceList)
+      console.log('serviceList', list)
       this.$emit('update:equipMatchingList', list)
     }
   }

@@ -22,7 +22,7 @@
             <span class="tip" @click.stop="routeTo('photo')">平面位置图</span>
           </div>
         </div>
-        <div class="list clearfix">
+        <div class="list clearfix" v-show="detailData.Facilities.length">
           <span class="items" v-for="(item,index) in detailData.Facilities" :key="index">{{item.MaterialsnName}}</span>
         </div>
         <div class="selectItem clearfix noneBb">
@@ -96,7 +96,9 @@ export default {
     return {
       title: '',
       showMore: false,
-      detailData: {}
+      detailData: {
+        Facilities: ''
+      }
     }
   },
   methods: {

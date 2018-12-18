@@ -21,10 +21,10 @@
       <div class="list-wrap" v-if="dataList.length">
         <ul class="list">
           <li class="items" :class="{'opcity':item.BookStatus=='QR'}" @click.stop="toReserveDetail(item)" v-for="(item,index) in dataList" :key="index">
-            <div class="point" :class="'bg'+item.BookStatus"></div>
+            <div class="point" :class="'bg_'+item.BookStatus"></div>
             <div class="times">
               <span class="time">{{item.STime}} — {{item.ETime}}</span>
-              <span class="status" :class="'color'+item.BookStatus">{{item.BookStatusName}}</span>
+              <span class="status" :class="'color_'+item.BookStatus">{{item.BookStatusName}}</span>
             </div>
             <div class="room">
               <span>{{item.Meet}}</span>

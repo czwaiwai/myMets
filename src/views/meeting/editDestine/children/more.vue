@@ -38,11 +38,11 @@
             </div>
             <div class="inputItem clearfix">
               <span class="name">联系人电话</span>
-              <input class="inputs" type="text" name="Phone" :value="detailData.Phone" @input="inputInt" placeholder="请输入联系人电话">
+              <input class="inputs" type="text" name="Phone" :value="detailData.Phone" maxlength="11" @input="inputNum" placeholder="请输入联系人电话">
             </div>
             <div class="inputItem clearfix noneBb">
               <span class="name">联系人邮箱</span>
-              <input class="inputs" type="text" name="Email" :value="detailData.Email" @input="inputInt" placeholder="请输入联系人邮箱">
+              <input class="inputs" type="text" name="Email" :value="detailData.Email" @input="inputText" placeholder="请输入联系人邮箱">
             </div>
           </div>
           <div class="msg3">
@@ -161,7 +161,16 @@ export default {
     // 只允许输入数字
     inputInt (e) {
       let num = e.target.value + ''
-      num = num.replace(/[^\d]/g, '') - 0
+      num = num.replace(/[^\d]/g, '') - 0 || ''
+      this.upData(e.target.name, num)
+    },
+    // 只允许输入数字,允许首位为0
+    inputNum (e) {
+      let num = e.target.value + ''
+      num = num.replace(/[^\d]/g, '')
+      if (e.target.maxLength > 0) {
+        num = num.slice(0, e.target.maxLength)
+      }
       this.upData(e.target.name, num)
     },
     // 输入文本
