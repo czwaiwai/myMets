@@ -4,7 +4,7 @@
       <nav-title title="平面位置图"></nav-title>
       <div class="page_bd _content">
         <div  v-if="imageList.length">
-          <img :src="item.Path" v-for="(item,index) in imageList" :key="index" class="pic">
+          <img preview :src="item.Path" v-for="(item,index) in imageList" :key="index" class="pic">
         </div>
         <none-page title="暂无平面位置图~" v-else></none-page>
       </div>
@@ -34,6 +34,7 @@ export default {
       this.$indicator.close()
       if (res.data.length && res.data[0].ImageList && res.data[0].ImageList.length) {
         this.imageList = res.data[0].ImageList
+        this.$previewRefresh()
       }
     }
   },

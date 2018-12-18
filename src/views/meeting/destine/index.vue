@@ -1,7 +1,7 @@
 <template>
   <div class="destine page page_bg">
     <nav-title title="会议室"></nav-title>
-    <div class="org clearfix">
+    <div @click="$router.forward({name: 'destineChangeProject'})" class="org clearfix">
       <i class="iconfont icon-loudong"></i>
       <span class="orgName">银河世纪花园</span>
       <i class="iconfont icon-tubiao-"></i>
@@ -98,6 +98,11 @@
         </div>
       </div>
     </transition>
+    <transition name="page">
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 <script>
@@ -131,7 +136,8 @@ export default {
   computed: {
     ...mapGetters({
       dateDate: 'getDate',
-      key: 'getSearchKey'
+      key: 'getSearchKey',
+      meetingLocation: 'getMeetingLocation'
     })
   },
   beforeRouteLeave (to, from, next) {
@@ -207,6 +213,7 @@ export default {
         arr.initType = arr.selectType
         // arr.isSelect = false
       })
+      console.log(this.typeList, '---->???')
       this.dialogShow = false
     },
     // 点选筛选类型
@@ -476,6 +483,7 @@ export default {
         {
           type: 0,
           name: '类型',
+          nameEn: 'MeetType',
           isSelect: false,
           selectType: [{showText: '不限', id: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
@@ -484,6 +492,7 @@ export default {
         {
           type: 1,
           name: '空闲',
+          nameEn: '',
           isSelect: true,
           selectType: [{showText: '不限', id: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
@@ -499,6 +508,7 @@ export default {
         {
           type: 2,
           name: '大小',
+          nameEn: '',
           isSelect: true,
           selectType: [{showText: '不限', id: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
@@ -514,6 +524,7 @@ export default {
         {
           type: 3,
           name: '楼层',
+          nameEn: 'Floor',
           isSelect: false,
           selectType: [{showText: '不限', floor: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
@@ -524,6 +535,7 @@ export default {
         {
           type: 4,
           name: '设备',
+          nameEn: 'MaterialName',
           isSelect: false,
           selectType: [{showText: '不限', id: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
@@ -578,7 +590,6 @@ export default {
   .destine{
     .org{
       position: relative;
-      z-index: 10;
       width: 100vw;
       height: .88rem;
       padding: 0 .3rem;
@@ -614,7 +625,6 @@ export default {
     }
     .date {
       position: relative;
-      z-index: 11;
       width: 100vw;
       height: 1.06rem;
       border-bottom: 1px solid #ededed;
@@ -687,7 +697,6 @@ export default {
     }
     .searchBox{
       position: relative;
-      z-index: 10;
       width: 100vw;
       height: 1.06rem;
       padding: .2rem .3rem;

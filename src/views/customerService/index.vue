@@ -211,8 +211,8 @@ export default {
   methods: {
     // 获取报事保修快捷音频及图片
     getQuickChannel () {
-      let img = this.sess.get('mainImg')
-      let voice = this.sess.get('mainVoice')
+      let img = sess.get('mainImg')
+      let voice = sess.get('mainVoice')
       return {
         img,
         voice

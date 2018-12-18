@@ -16,12 +16,24 @@
 export default {
   name: 'subscribe',
   props: {
-    // bookList: {
-    //   type: Array,
-    //   default: function () {
-    //     return []
-    //   }
-    // }
+    item: {
+      type: Object,
+      default: function () {
+        return {
+          aMSTime: '',
+          aMETime: '',
+          pMSTime: '',
+          pMETime: '',
+          bookList: []
+        }
+      }
+    },
+    bookList: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    }
   },
   data () {
     return {
@@ -36,11 +48,8 @@ export default {
     }
   },
   created () {
-    this.dateTimeToList('00:00', '12:00')
-    this.dateTimeToList('12:00', '24:00')
-    this.flashValidList('00:30', '12:00')
-    this.flashValidList('12:00', '24:00')
-    this.setChoosedList()
+    console.log(this.bookList, this.item, 'hahah')
+    this.reflesh()
   },
   computed: {
     hourList () {
@@ -62,18 +71,23 @@ export default {
     }
   },
   methods: {
+    reflesh () {
+      console.log(this.item, this.bookList, '我靠')
+      let {aMSTime: amS, aMETime: amE, pMSTime: pmS, pMETime: pmE} = this.item
+      // this.bookList = this.item['BookList']
+      this.blockList = []
+      this.isSubscribe = false
+      this.dateTimeToList(amS, amE)
+      this.dateTimeToList(pmS, pmE)
+      this.flashValidList(amS, amE)
+      this.flashValidList(pmS, pmE)
+      this.setChoosedList()
+      this.clearChoose()
+    },
     // 设置背景颜色
     itemStyle (item) {
       let color = ''
       if (!item.isValid) return
-      // switch (item.type) {
-      //   case 'HB':color = '#ff80c0'; break
-      //   case 'CL':color = '#c2c2c2'; break
-      //   case 'US':color = '#80ff80'; break
-      //   case 'ED':color = '#8080ff'; break
-      //   case 'QR':color = '#ff80c0'; break
-      //   case 'RV':color = '#E8E8E8'; break
-      // }
       if (color) {
         return {
           background: color
@@ -107,8 +121,6 @@ export default {
     dateTimeToList (start, end) {
       let startNum = this.getTimeWhole(start)
       let endNum = this.getTimeWhole(end)
-      console.log(startNum, '---')
-      console.log(endNum, '---')
       for (let i = startNum; i < endNum; i++) {
         for (let j = 0, n = 0; n < 4; j += 15, n++) {
           this.blockList.push({
@@ -130,26 +142,26 @@ export default {
     },
     // 涂鸦已选择区域
     setChoosedList () {
-      let bookList = [
-        {
-          'ID': '1812111115090001000Y',
-          'StartTime': '2018-12-11 14:16:00',
-          'EndTime': '2018-12-11 17:01:00',
-          'BookStatus': 'HB'
-        }, {
-          'ID': '1812111115090001000Y',
-          'StartTime': '2018-12-11 11:16:00',
-          'EndTime': '2018-12-11 12:01:00',
-          'BookStatus': 'QR'
-        }, {
-          'ID': '1812111115090001000Y',
-          'StartTime': '2018-12-11 12:01:00',
-          'EndTime': '2018-12-11 12:18:00',
-          'BookStatus': 'US'
-        }
-      ]
-      bookList.forEach(item => {
-        this.flashValidList(this.date2Hour(item.StartTime), this.date2Hour(item.EndTime), item.BookStatus)
+      // this.bookList = [
+      //   {
+      //     'ID': '1812111115090001000Y',
+      //     'StartTime': '2018-12-11 14:16:00',
+      //     'EndTime': '2018-12-11 17:01:00',
+      //     'BookStatus': 'HB'
+      //   }, {
+      //     'ID': '1812111115090001000Y',
+      //     'StartTime': '2018-12-11 11:16:00',
+      //     'EndTime': '2018-12-11 12:01:00',
+      //     'BookStatus': 'QR'
+      //   }, {
+      //     'ID': '1812111115090001000Y',
+      //     'StartTime': '2018-12-11 12:01:00',
+      //     'EndTime': '2018-12-11 12:18:00',
+      //     'BookStatus': 'US'
+      //   }
+      // ]
+      this.bookList.forEach(item => {
+        this.flashValidList(this.date2Hour(item.startTime), this.date2Hour(item.endTime), item.bookStatus)
       })
     },
     // 设置有效区域 可预定 RV
@@ -246,6 +258,7 @@ export default {
     },
     // 去预定
     subscribe (item) {
+      console.log(item, '---sub', this.subDate)
       if (!item.isValid) return
       if (item.type !== 'RV') return
       // 清楚掉之前的设置

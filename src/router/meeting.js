@@ -13,7 +13,15 @@ export default [
     meta: {
       title: '会议室'
     },
-    component: () => import('@/views/meeting/destine')
+    component: () => import('@/views/meeting/destine'),
+    children: [{
+      name: 'destineChangeProject',
+      path: 'destineChangeProject',
+      meta: {
+        title: '切换项目'
+      },
+      component: () => import('@/views/meeting/destine/child/changeProject')
+    }]
   },
   {
     name: 'destineDetail',
@@ -43,6 +51,23 @@ export default [
         title: '平面位置图'
       },
       component: () => import('@/views/meeting/picDetail')
+    }, {
+      name: 'reserve',
+      path: 'reserve',
+      meta: {
+        title: '预订'
+      },
+      component: () => import('@/views/meeting/reserve'),
+      children: [
+        {
+          name: 'meetResponsibleChoose',
+          path: 'meetResponsibleChoose',
+          component: () => import('@/views/customerService/responsibleChoose'),
+          meta: {
+            title: '责任人'
+          }
+        }
+      ]
     }]
   },
   {

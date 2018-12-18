@@ -22,12 +22,6 @@ export default {
         }
       }
     }
-    // bookList: {
-    //   type: Array,
-    //   default: function () {
-    //     return []
-    //   }
-    // }
   },
   data () {
     return {
@@ -125,24 +119,6 @@ export default {
     },
     // 涂鸦已选择区域
     setChoosedList () {
-      // let bookList = [
-      //   {
-      //     'ID': '1812111115090001000Y',
-      //     'StartTime': '2018-12-11 14:16:00',
-      //     'EndTime': '2018-12-11 17:01:00',
-      //     'BookStatus': 'HB'
-      //   }, {
-      //     'ID': '1812111115090001000Y',
-      //     'StartTime': '2018-12-11 11:16:00',
-      //     'EndTime': '2018-12-11 12:01:00',
-      //     'BookStatus': 'QR'
-      //   }, {
-      //     'ID': '1812111115090001000Y',
-      //     'StartTime': '2018-12-11 12:01:00',
-      //     'EndTime': '2018-12-11 12:18:00',
-      //     'BookStatus': 'US'
-      //   }
-      // ]
       this.bookList.forEach(item => {
         this.flashValidList(this.date2Hour(item.StartTime), this.date2Hour(item.EndTime), item.BookStatus)
       })

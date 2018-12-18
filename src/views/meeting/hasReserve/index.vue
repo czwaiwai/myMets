@@ -5,22 +5,22 @@
       <div class="header">
         <div class="icon-items clearfix">
           <i class="iconfont icon-dizhi icon"></i>
-          <span class="name">{{$parent.title}}</span>
+          <span class="name">{{room.location}}</span>
         </div>
         <div class="icon-items clearfix noneBb">
           <i class="iconfont icon-shijian icon"></i>
-          <span class="name">{{com_date($parent.dateTime)}}</span>
+          <span class="name">{{dateTime}}</span>
         </div>
       </div>
       <div class="page_bd _content">
-        <ul class="list" v-if="false">
-          <li class="items" v-for="(item,index) in 20" :key="index">
-            <p class="times">09:30 — 11:00</p>
-            <p class="title">会议室预订系统APP产品预上线动员大会</p>
+        <ul class="list" v-if="room.bookList && room.bookList.length > 0">
+          <li class="items" v-for="(item) in room.bookList" :key="item.iD">
+            <p class="times">{{item.startTime}} — {{item.endTime}}</p>
+            <p class="title">{{item.meetName}}</p>
             <div class="msg">
               <i class="iconfont icon-yonghu icon"></i>
-              <span class="name">五彩缤纷</span>
-              <span class="phone">15012345678</span>
+              <span class="name">{{room.responsible}}</span>
+              <span class="phone">{{room.phone}}</span>
             </div>
           </li>
         </ul>
@@ -39,12 +39,19 @@ export default {
   mixins: [dateChange],
   data () {
     return {
-      dateTime: ''
+      dateTime: '',
+      room: {},
+      bookList: []
     }
   },
   created () {
-    console.log(this.$parent.dateTime)
+    this.room = this.$parent.room
     this.dateTime = this.com_date(this.$parent.dateTime)
+    this.bookList = this.room.bookList.map(item => {
+      item.startTime = item.startTime.substring(11, 16)
+      item.endTime = item.endTime.substring(11, 16)
+      return item
+    })
   }
 }
 </script>

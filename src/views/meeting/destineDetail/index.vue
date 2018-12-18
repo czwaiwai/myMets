@@ -1,11 +1,11 @@
 <template>
   <div class="page destineDetail">
-    <nav-title :title="title"></nav-title>
+    <nav-title :title="room.meetName"></nav-title>
     <div class="_content page_bd">
       <div class="_swipe-wrap">
         <swipe :auto="4000">
-          <swipe-item v-for="(item,index) in 5" :key="index">
-            <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1543821465&di=e3ad1277bf7c91696edb3cd5bf3749e5&src=http://imgsrc.baidu.com/imgad/pic/item/0b55b319ebc4b745317003c2c5fc1e178b821579.jpg" class="pics">
+          <swipe-item v-for="(item,index) in roomImgs" :key="index">
+            <img :src="item.path" class="pics">
           </swipe-item>
         </swipe>
       </div>
@@ -13,21 +13,21 @@
         <div class="build-wrap">
           <div class="build clearfix">
             <i class="iconfont icon-dizhi icon"></i>
-            <span class="name">吾悦科技之关大厦</span>
-            <span class="steps">11楼</span>
+            <span class="name">{{room.location}}</span>
+            <span class="steps">{{room.floor}}楼</span>
           </div>
           <div class="people clearfix">
             <i class="iconfont icon-duorenyonghu icon"></i>
-            <span class="num">20人</span>
+            <span class="num">{{room.capacity}}人</span>
             <span class="tip" @click.stop="routeTo('picDetail')">平面位置图</span>
           </div>
         </div>
         <div class="articles">
-          <span v-for="(item, index) in 10" :key="index">八爪鱼</span>
+          <span v-for="(item, index) in room.facilities" :key="index">{{item.materialsnName}}<small>({{item.quantity}})</small></span>
         </div>
         <div class="selectItem">
           <span class="name">责任人</span>
-          <span class="value textLeft">李中华  18923898333</span>
+          <span class="value textLeft">{{room.responsible}}  {{room.phone}}</span>
         </div>
         <div class="selectItem noneBb" @click.stop="routeTo('otherDetail')">
           <span class="name">其他详情</span>
@@ -50,14 +50,14 @@
             <p class="name">{{item.names}}</p>
           </div>
         </div>
-        <subscribe  @sendRes='setSubscribe'></subscribe>
+        <subscribe v-if="room.meetName" ref="subscribe" :item="room" :bookList="room.bookList"  @sendRes='setSubscribe'></subscribe>
       </div>
     </div>
     <div class="_footer">
       <div class="btn" @click.stop="clickBtn">立即预订</div>
     </div>
     <transition name="page">
-      <keep-alive>
+      <keep-alive exclude="reserve">
         <router-view/>
       </keep-alive>
     </transition>
@@ -67,6 +67,7 @@
       year-format="{value} 年"
       month-format="{value} 月"
       date-format="{value} 日"
+      :startDate="new Date()"
       @confirm="handleConfirm"
       v-model="pickerValue">
     </datetime-picker>
@@ -75,7 +76,7 @@
         <div class="mark" @click.stop="dialogShow=false"></div>
         <div class="main">
           <p class="title">请确定您所选择的会议时间</p>
-          <p class="date">2018年10月18日  星期四</p>
+          <p class="date">{{com_date(dateTime)}}</p>
           <p class="time">{{subDate.start}} — {{subDate.end}}</p>
           <div class="btns clearfix">
             <div class="btn _left" @click.stop="dialogShow=false">取消</div>
@@ -91,6 +92,7 @@ import navTitle from '@/components/navTitle'
 import { Swipe, SwipeItem, DatetimePicker } from 'mint-ui'
 import dateChange from '@/mixins/dateChange'
 import Subscribe from '@/views/meeting/components/subscribe'
+import { mapGetters } from 'vuex'
 export default {
   name: 'destineDetail',
   components: {navTitle, Swipe, SwipeItem, DatetimePicker, Subscribe},
@@ -101,6 +103,9 @@ export default {
       dialogShow: false,
       pickerValue: '',
       dateTime: '',
+      room: {},
+      today: new Date(),
+      roomImgs: [],
       subDate: { // 订阅的时间
         start: '',
         startVal: 0,
@@ -109,22 +114,43 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      dateDate: 'getDate',
+      key: 'getSearchKey',
+      navData: 'getMeetingLocation'
+    })
+  },
   methods: {
+    async getPageData (isFresh) {
+      let res = await this.$xml('UserCS_MeetingListDetail', {
+        MeetID: this.roomId,
+        MeetTime: this.dateTime
+      })
+      this.room = this.$toLower(res.data[0])
+      console.log(this.room.bookList, '怎么回事???')
+      if (isFresh) {
+        // conso
+        this.$nextTick(() => {
+          this.$refs.subscribe.reflesh()
+        })
+      }
+    },
+    async getImgs () {
+      let res = await this.$xml('UserCS_GetMeettingRoomImageInfo', {
+        MeettingRoomID: this.roomId,
+        TypeStr: 'Metting'
+      })
+      if (res.data) {
+        this.roomImgs = this.$toLower(res.data[0]).imageList
+      }
+    },
     // 设置预订结果
     setSubscribe (subDate) {
       this.subDate = subDate
     },
     routeTo (name) {
       this.$router.push({name})
-    },
-    toPicDetail () {
-      this.$router.push('/picDetail/132')
-    },
-    toOtherDetail () {
-      this.$router.push('otherDetail')
-    },
-    toHasReserve () {
-      this.$router.push('/hasReserve/123')
     },
     com_name (index) {
       let num = index - 0 + 8
@@ -142,26 +168,35 @@ export default {
       }
     },
     toReserve () {
-      this.$router.push(`/reserve/213`)
+      this.dialogShow = false
+      this.$router.push({name: 'reserve'})
     },
     openPicker () {
-      this.pickerValue = this.com_setDate(this.dateTime)
       this.$refs.picker.open()
     },
     handleConfirm (date) {
-      console.log(date)
-      this.dateTime = date
+      this.dateTime = date.format('yyyy-MM-dd')
+      this.getPageData(true)
     }
   },
   created () {
     this.title = this.$route.query.title
-    this.pickerValue = this.initToday()
+    // this.pickerValue = (new Date()).format('yyyy-MM-dd')
     this.dateTime = this.initToday()
-    this.colorStatus = [...this.$store.getters.getStatusColor, {
+    console.log(this.dateTime, 'dateTime')
+    this.roomId = this.$route.params.id
+    this.colorStatus = [...this.$store.getters.getStatusColor.map(item => {
+      if (item.names === '预定确认中') {
+        item.names = '确认中'
+      }
+      return item
+    }), {
       names: '选中',
       color: '#3395FF',
       iD: '99999999999'
     }]
+    this.getPageData()
+    this.getImgs()
     console.log(this.colorStatus)
   }
 }

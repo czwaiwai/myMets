@@ -1,50 +1,51 @@
 <template>
+<div class="page_modal">
   <div class="page reserve">
     <nav-title title="预订"></nav-title>
     <div class="page_bd _content">
       <div class="date">
         <div class="selectItem">
           <span class="name">会议室</span>
-          <span class="value textLeft">高效厅</span>
+          <span class="value textLeft">{{room.meetName}}</span>
         </div>
         <div class="selectItem">
           <span class="name">会议日期</span>
-          <span class="value textLeft">2018年10月18日  星期四</span>
+          <span class="value textLeft">{{com_date(dateTime)}}</span>
         </div>
         <div class="selectItem noneBb">
           <span class="name">预订时段</span>
-          <span class="value textLeft">16:30 — 18:00</span>
+          <span class="value textLeft">{{subDate.start}} — {{subDate.end}}</span>
         </div>
       </div>
       <div class="theme">
         <div class="inputItem clearfix">
           <span class="name">会议主题</span>
-          <input class="inputs" type="text" placeholder="请输入会议主题">
+          <input class="inputs" v-model="formObj.meetName" type="text" placeholder="请输入会议主题">
         </div>
         <div class="textItem clearfix">
           <span class="name">会议内容</span>
-          <textarea class="areas" placeholder="请输入会议内容"></textarea>
+          <textarea class="areas" v-model="formObj.meettingContent" placeholder="请输入会议内容"></textarea>
         </div>
-        <div class="selectItem clearfix" @click.stop="getSelectType('type1')">
+        <div class="selectItem clearfix" @click.stop="routeTo">
           <span class="name">预订人</span>
-          <span class="value textLeft" v-if="detailData.CognitiveWayName">{{detailData.CognitiveWayName}}</span>
+          <span class="value textLeft" v-if="formObj.meetPerson">{{formObj.meetPerson}}</span>
           <span class="value" v-else >请选择</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
         <div class="inputItem clearfix noneBb">
           <span class="name">预订人电话</span>
-          <input class="inputs" type="text" placeholder="请输入电话">
+          <input class="inputs" type="text" v-model="formObj.bookPhone" placeholder="请输入电话">
         </div>
       </div>
       <div class="attendee">
         <div class="btnItem">
-          <p class="title">参会人（已选2人）</p>
+          <p class="title">参会人（已选{{formObj.participants.length}}人）</p>
           <div class="box-wrap clearfix">
-            <div class="btnBox" v-for="(item,index) in 10" :key="index">
-              <span>詹小小</span>
-              <i class="iconfont icon-jianshanchu-yuankuang icon"></i>
+            <div class="btnBox" v-for="(item,index) in formObj.participants" :key="index">
+              <span>{{item.Names}}</span>
+              <i @click="delPart(item.ID)" class="iconfont icon-jianshanchu-yuankuang icon"></i>
             </div>
-            <div class="addBox">+</div>
+            <div class="addBox" @click="routeTo({type: 'parti'})">+</div>
           </div>
         </div>
         <div class="inputItem clearfix noneBb">
@@ -52,6 +53,8 @@
           <input class="inputs" type="text" placeholder="请输入其他参会人">
         </div>
       </div>
+
+      <!--
       <div class="listBtn">
         <p class="title">配套设施</p>
         <div class="box-wrap clearfix">
@@ -128,20 +131,29 @@
           </div>
         </transition>
       </div>
+      -->
     </div>
     <div class="_footer">
       <div class="btn1" @click.stop="$router.go(-1)">取消</div>
-      <div class="btn2">确定</div>
+      <div class="btn2" @click.stop="submitAdd">确定</div>
     </div>
     <select-list ref="selectList" :selectData="selectData" @selectItem="selectItem"></select-list>
+    <transition name="page">
+      <keep-alive >
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
+</div>
 </template>
 <script>
 import navTitle from '@/components/navTitle'
 import selectList from '@/components/selectList'
+import dateChange from '@/mixins/dateChange'
 import { Indicator } from 'mint-ui'
 export default {
   name: 'reserve',
+  mixins: [dateChange],
   components: {navTitle, selectList, Indicator},
   data () {
     return {
@@ -154,10 +166,53 @@ export default {
         title: '',
         type: '',
         list: []
-      }
+      },
+      formObj: {
+        meetName: '', // 会议主题
+        employeeID: '', // 预定责任人id
+        meetPerson: '', // 预定责任人
+        bookPhone: '', // 预定人电话
+        meettingContent: '', // 会议内容
+        participants: [], // 参会人合集
+        userDepartments: '', // 使用部门
+        otherMeettingPerson: '' // 其他参会人
+      },
+      subDate: {}
     }
   },
+  created () {
+    console.log(this.$parent.subDate, 'server')
+    console.log(this.$parent.navData, 'nav')
+    this.room = this.$parent.room
+    console.log(this.room, 'room ----')
+    this.dateTime = this.$parent.dateTime
+    this.nav = this.$parent.navData
+    this.subDate = this.$parent.subDate
+  },
   methods: {
+    routeTo (query) {
+      if (query.target) {
+        this.$router.push({name: 'meetResponsibleChoose'})
+      } else {
+        this.$router.push({name: 'meetResponsibleChoose', query})
+      }
+    },
+    delPart (id) {
+      let index = this.formObj.participants.findIndex(item => item.ID === id)
+      this.formObj.participants.splice(index, 1)
+    },
+    setPerson (item, query) {
+      if (query.type === 'parti') {
+        this.formObj.participants.push({
+          ID: item['EmployeeID'],
+          Names: item['EmployeeName']
+        })
+      } else {
+        this.formObj.employeeID = item['EmployeeID']
+        this.formObj.meetPerson = item['EmployeeName']
+        this.formObj.bookPhone = item['Mobile']
+      }
+    },
     async getSelectType (type1) {
       Indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserRent_GetOptionList', {
@@ -178,6 +233,41 @@ export default {
     selectItem (item) {
       this.detailData.CognitiveWay = item.value
       this.detailData.CognitiveWayName = item.showText
+    },
+    async submitAdd () {
+      let res = await this.$xml('UserCS_MeetingBookedAdd', {
+        'Meet': this.room.meetName, // 会议室
+        'MeetTime': this.dateTime, // 会议日期
+        'MeetUse': '', // 会议用途
+        'MeetNumber': this.formObj.participants.length, // 参会人数
+        'MeetName': this.formObj.meetName, // 会议主题
+        'BookPhone': this.formObj.bookPhone, // 预定人电话
+        'Memo': '', // 备注
+        'MeetForm': '', // 会议形式
+        'UserDepartments': '', // 使用部门
+        'MeetPerson': this.formObj.meetPerson, // 预定联系人
+        'Phone': this.room.phone, // 联系人电话
+        'Email': '', // 联系人邮箱
+        'UnitPrice': this.room.unitPrice, // 单价
+        'AdvanceMoney': '0', // 预收金额
+        'MeetPackage': '', // 会议套餐
+        'MeetPackageID': '', // 会议套餐外键
+        'MeettingContent': this.formObj.meettingContent, // 会议内容
+        'OtherMeettingPerson': this.formObj.otherMeettingPerson, // 相关参与人员
+        'EmployeeID': this.formObj.employeeID, // 员工ID
+        'OrgID': this.nav.orgId, // 项目ID
+        'ETime': this.subDate.end, // 结束时间
+        'MeetID': this.room.iD, // 会议室ID
+        'STime': this.subDate.start, // 开始时间
+        'BookEndDate': '', // 预定结束时间
+        'Participants': this.formObj.participants, // 参会人合集
+        'Facilities': [], // 配套清单合集
+        'Service': [] // 服务清单合集
+      })
+      console.log(res)
+      await this.$message.alert('预定会议成功')
+      this.$root.back()
+      this.$parent.getPageData(true)
     }
   }
 }

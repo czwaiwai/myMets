@@ -7,20 +7,7 @@
         <div class="pro_title">
           <i class="iconfont icon-building-automation padding-right"></i>{{orgName}}
         </div>
-        <div class="weui-search-bar " :class="isFocus?'weui-search-bar_focusing':''" id="searchBar">
-          <form class="weui-search-bar__form">
-            <div class="weui-search-bar__box">
-              <i class="weui-icon-search"></i>
-              <input ref="search" type="search" v-model="search" @focus="isFocus=true" @blur="inputBlur" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
-              <a @click="searchClear" href="javascript:" class="weui-icon-clear" id="searchClear"></a>
-            </div>
-            <label @click="$refs.search.focus()" class="weui-search-bar__label" id="searchText">
-              <i class="weui-icon-search"></i>
-              <span>搜索</span>
-            </label>
-          </form>
-          <a href="javascript:" @click="searchCancel" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
-        </div>
+        <search v-model="search"></search>
         <div class="page_bd">
           <index-list :proId="orgId" @setList="setList" @itemClick="indexListClick"></index-list>
           <div v-show="search && search.length > 0" class="search_list_wrap">
@@ -37,12 +24,12 @@
   </div>
 </template>
 <script>
+import Search from '@/components/search'
 import indexList from '@/components/indexList'
 export default {
   name: 'responsibleChoose',
   data () {
     return {
-      isFocus: false,
       search: '',
       orgId: '',
       list: []
@@ -53,6 +40,7 @@ export default {
     this.orgName = this.$parent.nav.orgName
   },
   components: {
+    Search,
     indexList
   },
   computed: {
@@ -74,21 +62,8 @@ export default {
     async indexListClick (item) {
       console.log(item)
       await this.$message.confirm(`确定选择＂${item.EmployeeName}＂吗？`)
-      this.$parent.setPerson(item)
+      this.$parent.setPerson(item, this.$route.query)
       this.$root.back()
-    },
-    searchClear () {
-      this.search = ''
-      this.$refs.search.focus()
-    },
-    searchCancel () {
-      this.search = ''
-      this.isFocus = false
-    },
-    inputBlur () {
-      if (!this.search) {
-        this.isFocus = false
-      }
     }
   }
 }

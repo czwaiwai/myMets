@@ -6,36 +6,36 @@
         <div class="top">
           <div class="selectItem">
             <span class="name">会议室编号</span>
-            <span class="value textLeft">NO.000012</span>
+            <span class="value textLeft">{{room.meetNumber}}</span>
           </div>
           <div class="selectItem">
             <span class="name">参与座位数</span>
-            <span class="value textLeft">NO.000012</span>
+            <span class="value textLeft">{{room.involvSeats}}</span>
           </div>
           <div class="selectItem">
             <span class="name">主席台座位</span>
-            <span class="value textLeft">NO.000012</span>
+            <span class="value textLeft">{{room.rostrumSeats}}</span>
           </div>
           <div class="selectItem">
             <span class="name">需提前天数</span>
-            <span class="value textLeft">NO.000012</span>
+            <span class="value textLeft">{{room.advanceDay}}天</span>
           </div>
           <div class="selectItem">
             <span class="name">所属部门</span>
-            <span class="value textLeft">NO.000012</span>
+            <span class="value textLeft">{{room.department}}</span>
           </div>
           <div class="selectItem">
             <span class="name">单价</span>
-            <span class="value textLeft">NO.000012</span>
+            <span class="value textLeft">{{room.unitPrice}}元</span>
           </div>
           <div class="selectItem noneBb">
             <span class="name">计费方式</span>
-            <span class="value textLeft">NO.000012</span>
+            <span class="value textLeft">{{room.billing}}</span>
           </div>
         </div>
         <div class="bottom clearfix">
           <span class="name">备注：</span>
-          <p class="value">飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家飞机哦埃及金佛寺待交飞机哦is大家</p>
+          <p class="value">{{room.memo}}</p>
         </div>
       </div>
     </div>
@@ -50,6 +50,7 @@ export default {
     return {}
   },
   created () {
+    this.room = this.$parent.room
     console.log('in....', this.$parent.dateTime)
   }
 }
