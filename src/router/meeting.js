@@ -70,21 +70,31 @@ export default [
       ]
     }]
   },
-  {
-    name: 'reserve',
-    path: '/reserve/:id',
-    meta: {
-      title: '预订'
-    },
-    component: () => import('@/views/meeting/reserve')
-  },
+  // {
+  //   name: 'reserve',
+  //   path: '/reserve/:id',
+  //   meta: {
+  //     title: '预订'
+  //   },
+  //   component: () => import('@/views/meeting/reserve')
+  // },
   {
     name: 'editDestine',
     path: '/editDestine/:id',
     meta: {
       title: '预订详情'
     },
-    component: () => import('@/views/meeting/editDestine')
+    component: () => import('@/views/meeting/editDestine'),
+    children: [
+      {
+        name: 'meetpeopleChoose',
+        path: 'meetpeopleChoose',
+        component: () => import('@/views/customerService/responsibleChoose'),
+        meta: {
+          title: '责任人'
+        }
+      }
+    ]
   },
   {
     name: 'reserveDetail',

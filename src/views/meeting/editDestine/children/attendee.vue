@@ -8,7 +8,7 @@
             <span class="name">{{item.Names}}</span>
             <i class="iconfont icon-jianshanchu-yuankuang icon" @click.stop="deletePerson(item,index)"></i>
           </div>
-          <div class="addBox" @click.stop="getSelectType">+</div>
+          <div class="addBox" @click.stop="routeTo">+</div>
         </div>
       </div>
       <div class="inputItem clearfix noneBb">
@@ -82,26 +82,14 @@ export default {
       }
       this.$emit('update:detailData', Object.assign({}, this.detailData, obj))
     },
-    // 获取参会人列表
-    async getSelectType () {
-      this.$indicator.open({spinnerType: 'fading-circle'})
-      let res = await this.$xml('UserCS_GetEmployeeInfo', {
-        'OrgID': this.locationData.orgId
-      })
-      console.log(res)
-      let list = []
-      res.data.forEach(arr => {
-        let obj = {
-          isSelect: false,
-          showText: arr.EmployeeName,
-          value: arr.EmployeeID
+    // 选择人员页面
+    routeTo () {
+      this.$router.push({
+        name: 'meetpeopleChoose',
+        query: {
+          name: 'Participants'
         }
-        list.push(obj)
       })
-      this.selectData.title = '参会人'
-      this.selectData.list = list
-      this.selectData.type = 'Participants'
-      this.$emit('setSelectList', this.selectData)
     }
   }
 }
@@ -112,7 +100,7 @@ export default {
     margin-top: .2rem;
     background: #fff;
     .btnItem{
-      padding: .2rem 0 .3rem;
+      padding: .2rem 0;
       border-bottom: 1px solid #ededed;
       .title{
         height: .44rem;

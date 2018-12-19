@@ -10,13 +10,13 @@
       <transition name="slide-bottom">
         <div class="more-msg" v-show="showMore">
           <div class="msg1">
-            <div class="selectItem clearfix" @click.stop="getSelectType('MeetFormName')">
+            <div class="selectItem clearfix" @click.stop="getSelectType('MeetForm')">
               <span class="name">会议形式</span>
               <span class="value textLeft" v-if="detailData.MeetFormName">{{detailData.MeetFormName}}</span>
               <span class="value" v-else >请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
-            <div class="selectItem clearfix" @click.stop="getSelectType('MeetUseName')">
+            <div class="selectItem clearfix" @click.stop="getSelectType('MeetUse')">
               <span class="name">会议用途</span>
               <span class="value textLeft" v-if="detailData.MeetUseName||detailData.MeetUse">{{detailData.MeetUseName||detailData.MeetUse}}</span>
               <span class="value" v-else >请选择</span>
@@ -206,21 +206,21 @@ export default {
     async getSelectType (type) {
       this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserRent_GetOptionList', {
-        'TypeName': 'CognitiveWay'
+        'TypeName': type
       })
       console.log(res)
       res.data.forEach(arr => {
-        if (this.detailData.CognitiveWay === arr.value) {
+        if (this.detailData[type + 'Name'] === arr.showText || this.detailData[type] === arr.showText) {
           arr.isSelect = true
         } else {
           arr.isSelect = false
         }
       })
       switch (type) {
-        case 'MeetFormName':
+        case 'MeetForm':
           this.selectData.title = '会议形式'
           break
-        case 'MeetUseName':
+        case 'MeetUse':
           this.selectData.title = '会议用途'
           break
       }

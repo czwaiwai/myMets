@@ -9,7 +9,7 @@
         <span class="name">会议内容</span>
         <textarea class="areas" placeholder="请输入会议内容" name="MeettingContent" :value="detailData.MeettingContent" @input="inputText"></textarea>
       </div>
-      <div class="selectItem clearfix" @click.stop="getSelectType('type1')">
+      <div class="selectItem clearfix" @click.stop="routeTo">
         <span class="name">预订人</span>
         <span class="value textLeft" v-if="detailData.BookName">{{detailData.BookName}}</span>
         <span class="value" v-else >请选择</span>
@@ -72,6 +72,15 @@ export default {
     })
   },
   methods: {
+    // 选择人员页面
+    routeTo () {
+      this.$router.push({
+        name: 'meetpeopleChoose',
+        query: {
+          name: 'BookName'
+        }
+      })
+    },
     // 输入文本
     inputText (e) {
       this.upData(e.target.name, e.target.value)
@@ -90,31 +99,6 @@ export default {
       let obj = {}
       obj[name] = value
       this.$emit('update:detailData', Object.assign({}, this.detailData, obj))
-    },
-    // 获取下拉列表数据
-    async getSelectType () {
-      if (this.selectData.list.length) {
-        this.$emit('setSelectList', this.selectData)
-        return
-      }
-      this.$indicator.open({spinnerType: 'fading-circle'})
-      let res = await this.$xml('UserCS_GetEmployeeInfo', {
-        'OrgID': this.locationData.orgId
-      })
-      console.log(res)
-      let list = []
-      res.data.forEach(arr => {
-        let obj = {
-          isSelect: false,
-          showText: arr.EmployeeName,
-          value: arr.EmployeeID
-        }
-        list.push(obj)
-      })
-      this.selectData.title = '预订人'
-      this.selectData.list = list
-      this.selectData.type = 'BookName'
-      this.$emit('setSelectList', this.selectData)
     }
   },
   created () {

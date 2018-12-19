@@ -27,6 +27,11 @@
     <div class="_footer" v-if="detailData.BookStatus==='HB'">
       <div class="btn" @click.stop="confirm">保存</div>
     </div>
+    <transition name="page">
+      <keep-alive exclude="reserve">
+        <router-view/>
+      </keep-alive>
+    </transition>
     <select-list ref="selectList" :selectData="selectData" @selectItem="selectItem"></select-list>
   </div>
 </template>
@@ -61,7 +66,8 @@ export default {
         type: '',
         list: []
       },
-      isHttping: false
+      isHttping: false,
+      nav: {}
     }
   },
   computed: {
@@ -131,7 +137,7 @@ export default {
         if (arr.isSelect) {
           let obj = {
             ID: arr.ID,
-            Service_Code: arr.ServiceDesc
+            Service_Code: arr.Service_Code
           }
           service.push(obj)
         }
@@ -162,18 +168,16 @@ export default {
       }
       return obj
     },
-    // 初始化选择列表
-    setSelectList (listData) {
-      this.selectData = listData
-      this.$refs.selectList.show()
-    },
-    // 在列表中选择某选项
-    selectItem (item) {
-      if (this.selectData.type === 'Participants') {
+    setPerson (item, query) {
+      console.log('item:', item, 'query:', query)
+      if (query.name === 'BookName') {
+        this.detailData.BookName = item.EmployeeName
+        this.detailData.BookID = item.EmployeeID
+      } else if (query.name === 'Participants') {
         let flag = false
         let _index = 0
         this.detailData.Participants.forEach((arr, index) => {
-          if (arr.Id === item.value) {
+          if (arr.ID === item.EmployeeID) {
             flag = true
             _index = index
           }
@@ -182,13 +186,21 @@ export default {
           this.detailData.Participants.splice(_index, 1)
         }
         let obj = {
-          Names: item.showText,
-          ID: item.value
+          Names: item.EmployeeName,
+          ID: item.EmployeeID
         }
         this.detailData.Participants.push(obj)
-      } else {
-        this.detailData[this.selectData.type] = item.showText
       }
+    },
+    // 初始化选择列表
+    setSelectList (listData) {
+      this.selectData = listData
+      this.$refs.selectList.show()
+    },
+    // 在列表中选择某选项
+    selectItem (item) {
+      this.detailData[this.selectData.type] = item.value
+      this.detailData[this.selectData.type + 'Name'] = item.showText
     },
     // 获取会议室设备配套
     async getEquipMatching () {
@@ -219,7 +231,7 @@ export default {
       res.data.forEach((arr, index) => {
         let flag = false
         this.detailData.Service.forEach(a => {
-          if (a.ID === arr.ID) {
+          if (a.Service_Code === arr.Service_Code) {
             flag = true
           }
         })
@@ -253,6 +265,10 @@ export default {
   },
   created () {
     this.getData()
+    this.nav = {
+      orgId: this.locationData.orgId,
+      orgName: this.locationData.orgName
+    }
   }
 }
 </script>
