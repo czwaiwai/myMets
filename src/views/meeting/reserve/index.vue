@@ -151,6 +151,7 @@ import navTitle from '@/components/navTitle'
 import selectList from '@/components/selectList'
 import dateChange from '@/mixins/dateChange'
 import { Indicator } from 'mint-ui'
+import { mapGetters } from 'vuex'
 export default {
   name: 'reserve',
   mixins: [dateChange],
@@ -181,13 +182,18 @@ export default {
     }
   },
   created () {
-    console.log(this.$parent.subDate, 'server')
-    console.log(this.$parent.navData, 'nav')
     this.room = this.$parent.room
-    console.log(this.room, 'room ----')
     this.dateTime = this.$parent.dateTime
-    this.nav = this.$parent.navData
+    this.nav = {
+      orgId: this.destineConfig.orgId,
+      orgName: this.destineConfig.orgName
+    }
     this.subDate = this.$parent.subDate
+  },
+  computed: {
+    ...mapGetters({
+      destineConfig: 'destineConfig'
+    })
   },
   methods: {
     routeTo (query) {

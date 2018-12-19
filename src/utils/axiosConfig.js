@@ -80,6 +80,7 @@ export default {
     })
     instanceXml.interceptors.response.use(function (response) {
       Indicator.close()
+      console.log('loading结束--')
       let res = response.data.Result
       if (res && res[0]['InfoKey'] === '_ERROR') {
         Vue.toast(res[0]['_Detail'])
@@ -122,6 +123,7 @@ export default {
       }
       Object.assign(obj, other)
       if (!hideLoad) {
+        console.log('开启loading')
         Indicator.open({spinnerType: 'fading-circle'})
       }
       return instanceXml.post(baseUrl, obj)

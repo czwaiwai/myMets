@@ -118,7 +118,7 @@ export default {
     ...mapGetters({
       dateDate: 'getDate',
       key: 'getSearchKey',
-      navData: 'getMeetingLocation'
+      destineConfig: 'destineConfig'
     })
   },
   methods: {
@@ -141,7 +141,7 @@ export default {
         MeettingRoomID: this.roomId,
         TypeStr: 'Metting'
       })
-      if (res.data) {
+      if (res.data && res.data.length > 0) {
         this.roomImgs = this.$toLower(res.data[0]).imageList
       }
     },
@@ -181,8 +181,7 @@ export default {
   },
   created () {
     this.title = this.$route.query.title
-    // this.pickerValue = (new Date()).format('yyyy-MM-dd')
-    this.dateTime = this.initToday()
+    this.dateTime = this.destineConfig.dateStr
     console.log(this.dateTime, 'dateTime')
     this.roomId = this.$route.params.id
     this.colorStatus = [...this.$store.getters.getStatusColor.map(item => {

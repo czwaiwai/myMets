@@ -62,6 +62,9 @@ export default {
 </script>
 
 <style lang="scss" >
+  [transition-direction=forward] .page:last-child{
+    z-index:10;
+  }
   .page-enter-active, .page-leave-active,.page-enter-active,.page-leave-active {
     -webkit-transition-duration: .3s;
     transition-duration: .3s;
@@ -101,7 +104,7 @@ export default {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     opacity: 1;
-    z-index: 2
+    z-index: 10
   }
    [transition-direction=forward] .page-leave {
     -webkit-transform: translateZ(0);

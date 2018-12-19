@@ -67,6 +67,7 @@ export default {
     },
     projectChange (item) {
       console.log(item, ' 设置项目')
+      this.$parent.setProject(item)
       this.$root.back()
       // this.$app.changeProject({
       //   projectId: item.projectId,

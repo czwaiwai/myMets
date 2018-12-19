@@ -21,6 +21,12 @@ export default {
           BookList: []
         }
       }
+    },
+    bookList: {
+      type: Array,
+      default: function () {
+        return []
+      }
     }
   },
   data () {
@@ -31,20 +37,21 @@ export default {
         end: '',
         endVal: 0
       },
-      blockList: [],
       isSubscribe: false // 是否锁定订阅状态
     }
   },
-  created () {
-    let {AMSTime: amS, AMETime: amE, PMSTime: pmS, PMETime: pmE} = this.item
-    this.bookList = this.item['BookList']
-    this.dateTimeToList(amS, amE)
-    this.dateTimeToList(pmS, pmE)
-    this.flashValidList(amS, amE)
-    this.flashValidList(pmS, pmE)
-    this.setChoosedList()
-  },
+  created () {},
   computed: {
+    blockList () {
+      let {AMSTime: amS, AMETime: amE, PMSTime: pmS, PMETime: pmE} = this.item
+      let list = []
+      this.dateTimeToList(list, amS, amE)
+      this.dateTimeToList(list, pmS, pmE)
+      this.flashValidList(list, amS, amE)
+      this.flashValidList(list, pmS, pmE)
+      this.setChoosedList(list)
+      return list
+    },
     hourList () {
       let tmp = null
       return this.blockList.reduce((before, item) => {
@@ -95,12 +102,12 @@ export default {
       return str
     },
     // 通过时间节点创建blockList
-    dateTimeToList (start, end) {
+    dateTimeToList (list, start, end) {
       let startNum = this.getTimeWhole(start)
       let endNum = this.getTimeWhole(end)
       for (let i = startNum; i < endNum; i++) {
         for (let j = 0, n = 0; n < 4; j += 15, n++) {
-          this.blockList.push({
+          list.push({
             id: parseInt(i + '' + n),
             hour: i,
             index: n,
@@ -118,17 +125,17 @@ export default {
       }
     },
     // 涂鸦已选择区域
-    setChoosedList () {
+    setChoosedList (list) {
       this.bookList.forEach(item => {
-        this.flashValidList(this.date2Hour(item.StartTime), this.date2Hour(item.EndTime), item.BookStatus)
+        this.flashValidList(list, this.date2Hour(item.StartTime), this.date2Hour(item.EndTime), item.BookStatus)
       })
     },
     // 设置有效区域 可预定 RV
-    flashValidList (startTime, endTime, type = 'RV', isSubscribe) {
+    flashValidList (list, startTime, endTime, type = 'RV', isSubscribe) {
       let startNum = this.time2Num(startTime)
       let endNum = this.time2Num(endTime)
       let chooseList = []
-      this.blockList.forEach(item => {
+      list.forEach(item => {
         // 全命中的
         if (startNum < item.start && item.end < endNum) {
           this.setBlockType(item, type, isSubscribe)

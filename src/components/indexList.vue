@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import sleep from '@/utils/sleep'
 export default {
   name: 'indexList',
   props: {
@@ -24,14 +25,12 @@ export default {
     }
   },
   created () {
-    setTimeout(() => {
-      this.getPageData()
-    }, 300)
+    this.getPageDateNet()
   },
   methods: {
-    async getPageData () {
-      let res = await this.$http.post('/ets/table/list/userCSGetEmployeeInfo', {projectId: this.proId})
-      console.log(res.data, '---')
+    async getPageDateNet () {
+      let res = await this.$xml('UserCS_GetEmployeeInfo', {OrgID: this.proId})
+      await sleep() // 优化大量元素构建导致转场动画卡顿
       let obj = {'#': []}
       this.$emit('setList', res.data)
       let charStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -60,6 +59,7 @@ export default {
         value: obj['#']
       })
       this.charList = resCharList
+      console.log(res.data, '-0---')
     },
     itemClick (item) {
       this.$emit('itemClick', item)
@@ -69,9 +69,9 @@ export default {
 </script>
 
 <style>
-  .mint-indexlist-nav {
-    border-left:none;
-  }
+.mint-indexlist-nav {
+  border-left:none;
+}
 .mint-indexlist-navlist .mint-indexlist-navitem {
   color:#27cb96;
 }
