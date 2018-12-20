@@ -7,7 +7,7 @@
       <i class="iconfont icon-tubiao-"></i>
     </div>
     <line-date :date="dateStr" @change="changeDate"></line-date>
-    <search-and-filter :orgId="orgId" :filterObj="filterObj" @filter="filterSearch"></search-and-filter>
+    <search-and-filter ref='filter' :orgId="orgId" :filterObj="filterObj" @filter="filterSearch"></search-and-filter>
     <div class="page_bd _content">
       <ul class="list"
         v-infinite-scroll="loadMore"
@@ -134,11 +134,17 @@ export default {
     setProject (item) {
       this.orgId = item.projectId
       this.orgName = item.projectName
+      this.filterObj = {
+        MeetType: '',
+        CapacityMin: '',
+        CapacityMax: '',
+        Floor: '',
+        MeetName: '',
+        MaterialName: ''
+      }
+      this.$refs.filter.reset() // 重置搜索工具
       this.updateConfig()
       this.getList()
-      // console.log(item, '---')
-      // this.orgId: this.orgId,
-      // orgName: this.orgName,
     },
     toDesitineDetial (item) {
       this.$router.push({
@@ -188,6 +194,9 @@ export default {
       this.filterObj = this.destineConfig.filterObj
       this.orgId = this.destineConfig.orgId
       this.orgName = this.destineConfig.orgName
+      this.$nextTick(() => {
+        this.$refs.filter.updateFilter()
+      })
     }
     this.getList(true)
   }

@@ -13,7 +13,7 @@
       <div class="mark" @click.stop="closeDialog"></div>
       <div class="_d-content">
         <ul class="_d-list">
-          <li class="_d-items" v-for="(item,index) in typeList"  :key="index">
+          <li class="_d-items" v-for="(item,index) in typeList" v-show="!item.isHide" :key="index">
             <template v-if="!item.isHide">
               <div class="title" >
                 <span class="name">{{item.name}}</span>
@@ -42,7 +42,6 @@
 </div>
 </template>
 <script>
-// import {mapGetters} from 'Vuex'
 import { Indicator } from 'mint-ui'
 export default {
   name: 'detail',
@@ -59,6 +58,7 @@ export default {
     return {
       dialogShow: false,
       typeList: [],
+      isFirst: true,
       searchKey: ''
     }
   },
@@ -68,6 +68,72 @@ export default {
   computed: {
   },
   methods: {
+    // 还原数据到默认状态
+    reset () {
+      this.setInitType()
+    },
+    // 更新filter
+    updateFilter () {
+      let obj = {...this.filterObj}
+      this.searchKey = obj.MeetName
+      if (obj.CapacityMin && obj.CapacityMax) {
+        obj.Capacity = obj.CapacityMin + '-' + obj.CapacityMax
+      } else {
+        obj.Capacity = ''
+      }
+      this.setAsyncSingle(obj)
+      this.setAsyncMutil()
+    },
+    setAsyncSingle (filterObj) {
+      this.typeList.forEach(item => {
+        let value = filterObj[item.nameEn]
+        if (value && item.isSingle) {
+          if (item.isAsync && item.list.length === 1) {
+            this.getSelectList(item).then(res => {
+              item.list.forEach(sub => {
+                sub.isSelect = sub.value === value
+              })
+              item.selectType = item.list.filter(item => item.isSelect)
+              item.initType = [...item.selectType]
+            })
+          } else {
+            item.list.forEach(sub => {
+              sub.isSelect = sub.value === value
+            })
+            item.selectType = item.list.filter(item => item.isSelect)
+            item.initType = [...item.selectType]
+          }
+        }
+      })
+    },
+    setAsyncMutil () {
+      let value = this.filterObj.MaterialName
+      let select = this.typeList.find(item => item.nameEn === 'MaterialName')
+      if (value && select.list.length === 1) {
+        this.getSelectList(select).then(res => {
+          select.list.forEach(item => {
+            if (value.split(',').indexOf(item.value) > -1) {
+              item.isSelect = true
+            } else {
+              item.isSelect = false
+            }
+          })
+          select.selectType = select.list.filter(item => item.isSelect)
+          select.initType = [...select.selectType]
+        })
+      } else {
+        select.list.forEach(item => {
+          if (value.split(',').indexOf(item.value) > -1) {
+            item.isSelect = true
+          } else {
+            item.isSelect = false
+          }
+        })
+        select.selectType = select.list.filter(item => item.isSelect)
+        select.initType = [...select.selectType]
+      }
+    },
+
     clearKey () {
       this.searchKey = ''
       this.selectListConfirm()
@@ -84,23 +150,34 @@ export default {
       // 获取类型下拉列表
       this.getSelectList(this.typeList[0])
       this.dialogShow = true
+      if (!this.isFirst) {
+        this.updateFilter()
+      }
+      this.isFirst = false
     },
     // 关闭筛选
     closeDialog () {
       this.dialogShow = false
-      this.typeList.forEach(arr => {
-        arr.selectType = arr.initType
-        // arr.isSelect = false
-        arr.list.forEach(ar => {
-          arr.selectType.forEach(a => {
-            if (a.id === ar.id) {
-              a.isSelect = true
-            } else {
-              a.isSelect = false
-            }
-          })
-        })
-      })
+      // this.typeList.forEach(arr => {
+      //   arr.selectType = arr.initType
+      //   // arr.isSelect = false
+      //   arr.list.forEach(ar => {
+      //     let index = arr.selectType.findIndex(item => {
+      //       return item.value === ar.value
+      //     })
+      //     if (index > -1) {
+      //       ar.isSelect = true
+      //     } else {}
+      //     // arr.selectType.forEach(a => {
+      //     //   if (a.id === ar.id) {
+      //     //     a.isSelect = true
+      //     //   } else {
+      //     //     a.isSelect = false
+      //     //   }
+      //     // })
+      //   })
+      // })
+      // console.log(this.typeList, 'closeDialog')
     },
     // 重置筛选
     selectListRest () {
@@ -142,8 +219,6 @@ export default {
           obj[arr.nameEn] = arr.selectType.map(item => item.value).join(',')
         }
       })
-      console.log(obj, 'searchParams----')
-      console.log(this.typeList, '---->???')
       this.$emit('filter', obj)
       this.dialogShow = false
     },
@@ -201,7 +276,6 @@ export default {
         it.isSelect = true
         item.selectType.push(it)
       }
-      console.log(item.selectType)
     },
     // 点击筛选展开收起按钮
     async clickSelect (item) {
@@ -232,7 +306,6 @@ export default {
           break
       }
       let res = await this.$xml(httpUrl, params)
-      console.log(res)
       let arr = []
       let list = []
       arr.push(this.typeList[item.type].list[0])
@@ -271,6 +344,7 @@ export default {
           nameEn: 'MeetType',
           isSingle: true, // 单选
           isSelect: false,
+          isAsync: true, // 是否是异步
           selectType: [{showText: '不限', id: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
           list: [{showText: '不限', id: '', value: '', isSelect: true}]
@@ -282,6 +356,7 @@ export default {
           isHide: true,
           isSingle: true, // 单选
           isSelect: true,
+          isAsync: false, // 是否是异步
           selectType: [{showText: '不限', id: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
           list: [
@@ -299,6 +374,7 @@ export default {
           nameEn: 'Capacity',
           isSingle: true, // 单选
           isSelect: true,
+          isAsync: false, // 是否是异步
           selectType: [{showText: '不限', id: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
           list: [
@@ -316,10 +392,11 @@ export default {
           nameEn: 'Floor',
           isSingle: true, // 单选
           isSelect: false,
+          isAsync: true, // 是否是异步
           selectType: [{showText: '不限', floor: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
           list: [
-            {showText: '不限', id: '', isSelect: true}
+            {showText: '不限', id: '', value: '', isSelect: true}
           ]
         },
         {
@@ -328,10 +405,11 @@ export default {
           nameEn: 'MaterialName',
           isSingle: false, // 单选
           isSelect: false,
+          isAsync: true, // 是否是异步
           selectType: [{showText: '不限', id: '', value: ''}],
           initType: [{showText: '不限', id: '', value: ''}],
           list: [
-            {showText: '不限', id: '', isSelect: true}
+            {showText: '不限', id: '', value: '', isSelect: true}
           ]
         }
       ]
