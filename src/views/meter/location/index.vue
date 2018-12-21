@@ -82,7 +82,7 @@ export default {
     getListData () {
       // this.$vux.loading.show()
       let data = {
-        orgId: this.$route.query.orgId
+        orgId: '11091315263400010000'// this.$route.query.orgId
       }
       this.$fetch.myPost(this.$api.getGrpInfo, data).then((res) => {
         // console.log(res)

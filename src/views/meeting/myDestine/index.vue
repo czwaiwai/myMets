@@ -26,13 +26,13 @@
               <span class="time">{{item.STime}} — {{item.ETime}}</span>
               <span class="status" :class="'color_'+item.BookStatus">{{item.BookStatusName}}</span>
             </div>
-            <div class="room">
-              <span>{{item.Meet}}</span>
-              <span class="people">{{item.MeetNumber}}人</span>
+            <div class="location">
+              <span class="locat">{{item.Meet}}</span>
+              <span class="people">{{item.Capacity}}人</span>
             </div>
             <div class="location">
-              <span>{{item.Location}}</span>
-              <span class="steps">11楼</span>
+              <span class="locat">{{item.Location}}</span>
+              <span class="steps">{{item.Floor}}楼</span>
             </div>
             <p class="say">{{item.MeetName}}</p>
             <div class="btns clearfix" v-show="item.BookStatus=='HB'">
@@ -275,6 +275,13 @@ export default {
             color: #7B7A7A;
             font-size: .3rem;
             line-height: .44rem;
+            .locat{
+              display: inline-block;
+              max-width: 5rem;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
             .people,.steps{
               position: absolute;
               right: 0;

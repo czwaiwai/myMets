@@ -16,7 +16,7 @@
           :textTop="calendarList"
         ></Calendar>
       </div>
-      <div class="title" v-if="dataList.length">以下是您{{com_setMD (dayTime)}} 已预订的会议：{{dataList.length}}次</div>
+      <div class="title" v-if="dataList.length">以下是您{{com_setMD (dayTime)}} 要参加的会议：{{dataList.length}}次</div>
       <div class="title" v-else>您在{{com_setMD (dayTime)}}  没有要参加的会议</div>
       <div class="list-wrap" v-if="dataList.length">
         <ul class="list">
@@ -27,18 +27,18 @@
               <span class="status" :class="'color_'+item.BookStatus">{{item.BookStatusName}}</span>
             </div>
             <div class="room">
-              <span>{{item.Meet}}</span>
-              <span class="people">{{item.MeetNumber}}人</span>
+              <span class="locat">{{item.Meet}}</span>
+              <span class="people">{{item.Capacity}}人</span>
             </div>
             <div class="location">
-              <span>{{item.Location}}</span>
-              <span class="steps">11楼</span>
+              <span class="locat">{{item.Location}}</span>
+              <span class="steps">{{item.Floor}}楼</span>
             </div>
             <p class="say">{{item.MeetName}}</p>
-            <div class="location">
+            <div class="location clearfix">
               <i class="iconfont icon-yonghu icon"></i>
-              <span>五彩缤纷</span>
-              <span class="steps">15012345678</span>
+              <span class="name">{{item.BookName}}</span>
+              <span class="steps">{{item.BookPhone}}</span>
             </div>
           </li>
         </ul>
@@ -255,6 +255,30 @@ export default {
             color: #7B7A7A;
             font-size: .3rem;
             line-height: .44rem;
+            .locat{
+              display: inline-block;
+              max-width: 5rem;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+            .name{
+              float: left;;
+              height: .44rem;
+              max-width: 4rem;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+            .icon{
+              float: left;
+              width: .4rem;
+              height: .44rem;
+              line-height: .44rem;
+              text-align: left;
+              font-size: .34rem;
+              color: #0DC88C;
+            }
             .people,.steps{
               position: absolute;
               right: 0;
