@@ -114,6 +114,7 @@ export default {
       today: new Date(),
       roomImgs: [],
       imgReay: false,
+      personName: '',
       subDate: { // 订阅的时间
         start: '',
         startVal: 0,
@@ -191,6 +192,7 @@ export default {
   },
   created () {
     this.title = this.$route.query.title
+    this.personName = this.destineConfig.strEmployeeName
     this.dateTime = this.destineConfig.dateStr
     console.log(this.dateTime, 'dateTime')
     this.roomId = this.$route.params.id

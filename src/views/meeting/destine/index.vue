@@ -271,6 +271,10 @@ export default {
                   font-size: .34rem;
                   color: #333;
                   line-height: .4rem;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                  padding-right: 0.9rem;
                 }
                 .people{
                   position: absolute;

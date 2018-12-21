@@ -103,7 +103,7 @@ export default {
     },
     // 通过时间节点创建blockList
     dateTimeToList (list, start, end) {
-      let startNum = this.getTimeWhole(start)
+      let startNum = this.getStartWhole(start)
       let endNum = this.getTimeWhole(end)
       for (let i = startNum; i < endNum; i++) {
         for (let j = 0, n = 0; n < 4; j += 15, n++) {
@@ -171,10 +171,25 @@ export default {
     time2Num (time = '09:00') {
       return parseInt(time.replace(':', ''))
     },
-    // 获取整点
-    getTimeWhole (time = '09:00') {
+    // 开始的整点
+    getStartWhole (time) {
       let str = time.replace(':', '.')
       return parseInt(parseInt(str))
+    },
+    // 获取结束的整点
+    getTimeWhole (time = '09:00') {
+      let num = this.time2Num(time)
+      let n = num % 100
+      if (n === 0) {
+        let str = time.replace(':', '.')
+        return parseInt(parseInt(str))
+      } else {
+        num = parseInt((num / 100) + 1)
+        console.log(num, '---')
+        num = num >= 24 ? 24 : num
+        console.log('结束时间: ', num)
+        return num
+      }
     },
     // 数值转成 小时时间
     coverHour (hour, minute) {

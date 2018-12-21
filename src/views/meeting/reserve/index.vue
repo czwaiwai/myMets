@@ -183,6 +183,8 @@ export default {
   },
   created () {
     this.room = this.$parent.room
+    this.formObj.meetPerson = this.room.strEmployeeName
+    this.formObj.employeeID = this.destineConfig.employeeId
     this.dateTime = this.$parent.dateTime
     this.nav = {
       orgId: this.destineConfig.orgId,

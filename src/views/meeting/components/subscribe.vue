@@ -77,6 +77,7 @@ export default {
       let {aMSTime: amS, aMETime: amE, pMSTime: pmS, pMETime: pmE} = this.item
       // this.bookList = this.item['BookList']
       this.blockList = []
+      this.headAndEndArr = []
       this.isSubscribe = false
       this.dateTimeToList(amS, amE)
       this.dateTimeToList(pmS, pmE)
@@ -120,7 +121,7 @@ export default {
     },
     // 通过时间节点创建blockList
     dateTimeToList (start, end) {
-      let startNum = this.getTimeWhole(start)
+      let startNum = this.getStartWhole(start)
       let endNum = this.getTimeWhole(end)
       for (let i = startNum; i < endNum; i++) {
         for (let j = 0, n = 0; n < 4; j += 15, n++) {
@@ -180,11 +181,19 @@ export default {
         if (startNum >= item.start && startNum < item.end) {
           this.setBlockType(item, type, isSubscribe)
           chooseList.push(item)
+          item.startTime = startTime
+          if (type === 'RV') {
+            this.headAndEndArr.push({...item, start: startNum, startTime: startTime, isHead: true}) // 保存边界 头边界
+          }
         }
         // 边界尾
         if (endNum > item.start && endNum <= item.end) {
           this.setBlockType(item, type, isSubscribe)
           chooseList.push(item)
+          item.endTime = endTime
+          if (type === 'RV') {
+            this.headAndEndArr.push({...item, end: endNum, endTime: endTime, isEnd: true}) // 保存边界 尾边界
+          }
         }
       })
       return chooseList
@@ -237,12 +246,17 @@ export default {
         item.isEndDot = false
       })
     },
+    getHeadAndEnd (bl) {
+      let item = this.headAndEndArr.find(item => item.id === bl.id)
+      return item || bl
+    },
     setChooseOne (item) {
       console.log('第一次点击')
       item.isSubscribe = true
       item.isStartDot = true
-      this.subDate.start = item.startTime
-      this.subDate.startVal = item.start
+      let realItem = this.getHeadAndEnd(item)
+      this.subDate.start = realItem.startTime
+      this.subDate.startVal = realItem.start
       this.isSubscribe = true
       this.$emit('sendRes', this.subDate)
     },
@@ -251,8 +265,9 @@ export default {
       console.log('进来了', item.start, this.subDate.startVal)
       item.isSubscribe = true
       item.isEndDot = true
-      this.subDate.end = item.endTime
-      this.subDate.endVal = item.end
+      let realItem = this.getHeadAndEnd(item)
+      this.subDate.end = realItem.endTime
+      this.subDate.endVal = realItem.end
       this.isSubscribe = false
       this.$emit('sendRes', this.subDate)
       this.flashValidList(this.subDate.start, this.subDate.end, null, true)
@@ -265,6 +280,7 @@ export default {
       if (timestamp < Date.now()) {
         return this.$toast('无法预定小于当前时间')
       }
+      console.log(this.headAndEndArr, 'tou he wei')
       console.log(this.dateStr)
       console.log(item, '---sub', this.subDate)
 
@@ -296,10 +312,25 @@ export default {
     time2Num (time = '09:00') {
       return parseInt(time.replace(':', ''))
     },
-    // 获取整点
-    getTimeWhole (time = '09:00') {
+    // 开始的整点
+    getStartWhole (time) {
       let str = time.replace(':', '.')
       return parseInt(parseInt(str))
+    },
+    // 获取结束的整点
+    getTimeWhole (time = '09:00') {
+      let num = this.time2Num(time)
+      let n = num % 100
+      if (n === 0) {
+        let str = time.replace(':', '.')
+        return parseInt(parseInt(str))
+      } else {
+        num = parseInt((num / 100) + 1)
+        console.log(num, '---')
+        num = num >= 24 ? 24 : num
+        console.log('结束时间: ', num)
+        return num
+      }
     },
     // 数值转成 小时时间
     coverHour (hour, minute) {
