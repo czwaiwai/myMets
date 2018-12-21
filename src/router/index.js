@@ -43,11 +43,11 @@ export default new Router({
     {
       path: '/',
       redirect: to => {
-        console.log(Vue.isPos, 'pos______')
         if (Vue.isPos) {
           return '/home'
         } else {
-          return '/tab/work'
+          // 会议室
+          return '/meeting'
         }
       }
     },

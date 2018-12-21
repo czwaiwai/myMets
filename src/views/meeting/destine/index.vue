@@ -16,7 +16,8 @@
         v-if="list.length">
         <li class="items" :class="{'lastItem':index+1==list.length}" v-for="(item,index) in list" :key="item.ID" @click.stop="toDesitineDetial(item)">
           <div class="top clearfix">
-            <img :src="item.Url || ''" class="pic">
+            <img v-if="item.Url" :src="item.Url" class="pic">
+            <img v-else src="../../../assets/img/meeting/banner_list.png" class="pic">
             <div class="msg">
               <div class="name">
                 <p class="title">{{item.MeetName}}</p>
@@ -185,6 +186,7 @@ export default {
       this.$store.commit('setDestineConfig', {
         orgId: this.orgId,
         orgName: this.orgName,
+        employeeId: this.navData.employeeId,
         dateStr: this.dateStr,
         filterObj: this.filterObj
       })
@@ -194,6 +196,7 @@ export default {
       this.filterObj = this.destineConfig.filterObj
       this.orgId = this.destineConfig.orgId
       this.orgName = this.destineConfig.orgName
+      this.employeeId = this.destineConfig.employeeId
       this.$nextTick(() => {
         this.$refs.filter.updateFilter()
       })

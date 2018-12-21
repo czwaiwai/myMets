@@ -28,6 +28,7 @@ export default {
         }
       }
     },
+    dateStr: String,
     bookList: {
       type: Array,
       default: function () {
@@ -258,9 +259,15 @@ export default {
     },
     // 去预定
     subscribe (item) {
-      console.log(item, '---sub', this.subDate)
       if (!item.isValid) return
       if (item.type !== 'RV') return
+      let timestamp = new Date(`${this.dateStr} ${item.startTime}:00`.replace(/-/g, '/')).valueOf()
+      if (timestamp < Date.now()) {
+        return this.$toast('无法预定小于当前时间')
+      }
+      console.log(this.dateStr)
+      console.log(item, '---sub', this.subDate)
+
       // 清楚掉之前的设置
       if (this.subDate.end) {
         this.clearChoose()

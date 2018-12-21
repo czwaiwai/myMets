@@ -240,7 +240,20 @@ export default {
       this.detailData.CognitiveWay = item.value
       this.detailData.CognitiveWayName = item.showText
     },
+    validateSubmit (formObj) {
+      if (!formObj.meetName) {
+        return '会议主题不能为空'
+      }
+      if (!formObj.meetPerson && !formObj.employeeID) {
+        return '预定人不能为空'
+      }
+      if (formObj.bookPhone && !/^[\d|-]+$/.test(formObj.bookPhone)) {
+        return '电话格式不正确'
+      }
+    },
     async submitAdd () {
+      let msg = this.validateSubmit(this.formObj)
+      if (msg) return this.$toast(msg)
       let res = await this.$xml('UserCS_MeetingBookedAdd', {
         'Meet': this.room.meetName, // 会议室
         'MeetTime': this.dateTime, // 会议日期

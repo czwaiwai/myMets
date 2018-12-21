@@ -5,7 +5,7 @@
       <div class="header">
         <div class="icon-items clearfix">
           <i class="iconfont icon-dizhi icon"></i>
-          <span class="name">{{room.location}}</span>
+          <span class="name">{{room.meetName}}</span>
         </div>
         <div class="icon-items clearfix noneBb">
           <i class="iconfont icon-shijian icon"></i>
@@ -19,8 +19,8 @@
             <p class="title">{{item.meetName}}</p>
             <div class="msg">
               <i class="iconfont icon-yonghu icon"></i>
-              <span class="name">{{room.responsible}}</span>
-              <span class="phone">{{room.phone}}</span>
+              <span class="name">{{item.bookName}}</span>
+              <span class="phone">{{item.bookPhone}}</span>
             </div>
           </li>
         </ul>

@@ -8,11 +8,11 @@
       <div class="content">
         <div class="destine items clearfix" @click.stop="toDestine">
           <i class="iconfont pics icon-m3-meeting-fill"></i>
-          <span>会议预定</span>
+          <span>会议预订</span>
         </div>
         <div class="myDestine items clearfix" @click.stop="toMyDestine">
           <i class="iconfont pics icon-yuding"></i>
-          <span>我的预定</span>
+          <span>我的预订</span>
         </div>
         <div class="myMeeting items clearfix" @click.stop="toMyMeeting">
           <i class="iconfont pics icon-meeting"></i>

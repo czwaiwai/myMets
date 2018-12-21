@@ -2,12 +2,19 @@
   <div class="page destineDetail">
     <nav-title :title="room.meetName"></nav-title>
     <div class="_content page_bd">
-      <div class="_swipe-wrap">
-        <swipe :auto="4000">
-          <swipe-item v-for="(item,index) in roomImgs" :key="index">
-            <img :src="item.path" class="pics">
-          </swipe-item>
-        </swipe>
+      <div  class="_swipe-wrap">
+        <template v-if="imgReay">
+          <swipe v-if="roomImgs.length > 0" :auto="4000">
+            <swipe-item  v-for="(item,index) in roomImgs" :key="index">
+              <img :src="item.path" class="pics">
+            </swipe-item>
+          </swipe>
+          <swipe v-else  :auto="4000">
+            <swipe-item >
+              <img src="../../../assets/img/meeting/banner_detail.png">
+            </swipe-item>
+          </swipe>
+        </template>
       </div>
       <div class="msg">
         <div class="build-wrap">
@@ -50,7 +57,7 @@
             <p class="name">{{item.names}}</p>
           </div>
         </div>
-        <subscribe v-if="room.meetName" ref="subscribe" :item="room" :bookList="room.bookList"  @sendRes='setSubscribe'></subscribe>
+        <subscribe v-if="room.meetName" ref="subscribe" :dateStr="dateTime" :item="room" :bookList="room.bookList"  @sendRes='setSubscribe'></subscribe>
       </div>
     </div>
     <div class="_footer">
@@ -106,6 +113,7 @@ export default {
       room: {},
       today: new Date(),
       roomImgs: [],
+      imgReay: false,
       subDate: { // 订阅的时间
         start: '',
         startVal: 0,
@@ -125,7 +133,8 @@ export default {
     async getPageData (isFresh) {
       let res = await this.$xml('UserCS_MeetingListDetail', {
         MeetID: this.roomId,
-        MeetTime: this.dateTime
+        MeetTime: this.dateTime,
+        EmployeeId: this.destineConfig.employeeId
       })
       this.room = this.$toLower(res.data[0])
       console.log(this.room.bookList, '怎么回事???')
@@ -141,6 +150,7 @@ export default {
         MeettingRoomID: this.roomId,
         TypeStr: 'Metting'
       })
+      this.imgReay = true
       if (res.data && res.data.length > 0) {
         this.roomImgs = this.$toLower(res.data[0]).imageList
       }
