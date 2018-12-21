@@ -79,6 +79,12 @@
           </div>
           <p class="weui-grid__label">会议室</p>
         </a>
+        <a @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_off_download.png" alt="">
+          </div>
+          <p class="weui-grid__label">抄表</p>
+        </a>
         <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'other', isTitle: item.appName})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img :src="item.h5Icon" alt="">

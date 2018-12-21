@@ -1,10 +1,10 @@
 <template>
 <div >
   <div class="searchBox clearfix">
-    <form @submit.prevent class="searchWrap clearfix" >
+    <form  action="" onsubmit="return false;" class="searchWrap clearfix" >
         <i class="iconfont icon-sousuo icon"></i>
         <input class="search-input" placeholder="请输入会议室名称或所在位置" type="search" v-model="searchKey" @keydown.13="selectListConfirm">
-        <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
+        <i class="iconfont icon-quxiao1 icon-input_clear" v-show="searchKey.length" @click.stop="clearKey"></i>
     </form>
     <i class="iconfont icon-shaixuan" @click.stop="setDialogShow"></i>
   </div>

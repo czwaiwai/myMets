@@ -4,6 +4,8 @@ import Router from 'vue-router'
 import customerService from './customerService'
 // 会议室
 import meeting from './meeting'
+// 抄表
+import meter from './meter'
 import report from './report'
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
@@ -260,6 +262,7 @@ export default new Router({
     ...customerService,
     ...meeting,
     ...report,
+    ...meter,
     {
       path: '*',
       redirect: to => {

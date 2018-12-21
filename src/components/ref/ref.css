@@ -1,0 +1,33 @@
+.ref-warp {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+.ref-warp .ref-move {
+    position: absolute;
+    height: 200%;
+    top: -100%;
+    left: 0;
+    /* background-color: #f2f2f2; */
+    width: 100%;
+    overflow: hidden;
+}
+.ref-warp .ref-data {
+    height: 50%;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    /* background-color: #f2f2f2f; */
+    width: 100%;
+    overflow-y: auto;
+}
+.ref-top {
+    position: absolute;
+    bottom: 50%;
+    width: 100%;
+}
+.top-tip {
+    padding-bottom: 0.2rem;
+    text-align: center;
+}
