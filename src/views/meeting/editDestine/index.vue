@@ -128,7 +128,7 @@ export default {
         if (arr.isSelect) {
           let obj = {
             ID: arr.ID,
-            MaterialsnName: arr.MaterialsnName
+            MaterialsnName: arr.Name
           }
           facilities.push(obj)
         }

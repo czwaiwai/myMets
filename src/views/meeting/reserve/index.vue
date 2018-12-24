@@ -42,7 +42,7 @@
           <p class="title">参会人（已选{{formObj.participants.length}}人）</p>
           <div class="box-wrap clearfix">
             <div class="btnBox" v-for="(item,index) in formObj.participants" :key="index">
-              <span>{{item.Names}}</span>
+              <span class="name">{{item.Names}}</span>
               <i @click="delPart(item.ID)" class="iconfont icon-jianshanchu-yuankuang icon"></i>
             </div>
             <div class="addBox" @click="routeTo({type: 'parti'})">+</div>
@@ -318,16 +318,25 @@ export default {
           .btnBox{
             position: relative;
             float: left;
-            width: 1.34rem;
             height: .6rem;
+            padding: 0 .05rem;
             border: 1px solid #0DC88C;
-            color: #0DC88C;
-            font-size: .3rem;
             border-radius: 3px;
             margin-right: .3rem;
             margin-top: .3rem;
-            text-align: center;
-            line-height: .6rem;
+            .name{
+              display: block;
+              min-width: 1.24rem;
+              height: .6rem;
+              max-width: 2rem;
+              color: #0DC88C;
+              font-size: .3rem;
+              text-align: center;
+              line-height: .6rem;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
             .icon{
               position: absolute;
               right: -.2rem;
