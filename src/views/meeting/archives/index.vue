@@ -3,16 +3,16 @@
     <nav-title :title="title"></nav-title>
     <div class="page_bd _content">
       <div class="_swipe-wrap">
-        <swipe :auto="4000" v-if="imageList.legnth">
+        <swipe :auto="4000" v-if="imageList.length > 0">
           <swipe-item v-for="(item,index) in imageList" :key="index">
             <img preview :src="item.Path" class="pics">
           </swipe-item>
         </swipe>
         <swipe v-else  :auto="4000">
-            <swipe-item >
-              <img src="../../../assets/img/meeting/banner_detail.png">
-            </swipe-item>
-          </swipe>
+          <swipe-item >
+            <img src="../../../assets/img/meeting/banner_detail.png">
+          </swipe-item>
+        </swipe>
       </div>
       <div class="msg">
         <div class="build-wrap">
