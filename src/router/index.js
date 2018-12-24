@@ -47,7 +47,8 @@ export default new Router({
           return '/home'
         } else {
           // 会议室
-          return '/meeting'
+          return '/tab/work'
+          // return '/meeting'
         }
       }
     },

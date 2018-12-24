@@ -1,7 +1,7 @@
-const Customer = () => import(/* webpackChunkName:'report' */ '@/views/report/customer')
-const Device = () => import(/* webpackChunkName:'report' */ '@/views/report/device')
-const Cash = () => import(/* webpackChunkName:'report' */ '@/views/report/cash')
-const Lease = () => import(/* webpackChunkName:'report' */ '@/views/report/lease')
+const Customer = () => import(/* webpackChunkName:'report' */ '@/views/report/customer') // 客服服务
+const Device = () => import(/* webpackChunkName:'report' */ '@/views/report/device') // 设备管理
+const Cash = () => import(/* webpackChunkName:'report' */ '@/views/report/cash') //  项目收款
+const Lease = () => import(/* webpackChunkName:'report' */ '@/views/report/lease') // 项目出租
 const Building = () => import(/* webpackChunkName:'report' */ '@/views/report/building') // 建筑
 const Income = () => import(/* webpackChunkName:'report' */ '@/views/report/income') // 收入
 const Rent = () => import(/* webpackChunkName:'report' */ '@/views/report/rent') // 租赁

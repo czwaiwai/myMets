@@ -67,55 +67,55 @@ Vue.prototype.$indicator = Indicator
 //   console.log('设备初始化------------------', arguments)
 // }, false)
 
-Vue.use(axiosHelper, {
-  ip: ''
-})
-let vue = new Vue({
-  store,
-  router,
-  components: { App },
-  template: '<App/>'
-})
-vue.$mount('#app')
-
-// store.dispatch('getUserAction').then(user => {
-//   store.commit('setRandNum', Date.now())
-//   /* eslint-disable no-new */
-//   console.log(user)
-//   if (store.getters.isPos) {
-//     Vue.isPos = true
-//     Vue.prototype.$isPos = true
-//   }
-//   Vue.use(axiosHelper, {
-//     ip: store.getters.ip
-//   })
-//   let vue = new Vue({
-//     store,
-//     router,
-//     components: { App },
-//     template: '<App/>'
-//   })
-//   vue.$mount('#app')
-// }).catch(err => {
-//   console.log(err)
-//   // 开发环境虚假登录
-//   if (Vue.dev) {
-//     if (store.getters.isPos) {
-//       Vue.isPos = true
-//       Vue.prototype.$isPos = true
-//     }
-//     Vue.use(axiosHelper, {
-//       ip: ''
-//     })
-//     let vue = new Vue({
-//       store,
-//       router,
-//       components: { App },
-//       template: '<App/>'
-//     })
-//     vue.$mount('#app')
-//   } else {
-//     // 如果没有获取到登录对象应该立即退出
-//     appApi.logout()
-//   }
+// Vue.use(axiosHelper, {
+//   ip: ''
 // })
+// let vue = new Vue({
+//   store,
+//   router,
+//   components: { App },
+//   template: '<App/>'
+// })
+// vue.$mount('#app')
+
+store.dispatch('getUserAction').then(user => {
+  store.commit('setRandNum', Date.now())
+  /* eslint-disable no-new */
+  console.log(user)
+  if (store.getters.isPos) {
+    Vue.isPos = true
+    Vue.prototype.$isPos = true
+  }
+  Vue.use(axiosHelper, {
+    ip: store.getters.ip
+  })
+  let vue = new Vue({
+    store,
+    router,
+    components: { App },
+    template: '<App/>'
+  })
+  vue.$mount('#app')
+}).catch(err => {
+  console.log(err)
+  // 开发环境虚假登录
+  if (Vue.dev) {
+    if (store.getters.isPos) {
+      Vue.isPos = true
+      Vue.prototype.$isPos = true
+    }
+    Vue.use(axiosHelper, {
+      ip: ''
+    })
+    let vue = new Vue({
+      store,
+      router,
+      components: { App },
+      template: '<App/>'
+    })
+    vue.$mount('#app')
+  } else {
+    // 如果没有获取到登录对象应该立即退出
+    appApi.logout()
+  }
+})
