@@ -3,11 +3,16 @@
     <nav-title :title="title"></nav-title>
     <div class="page_bd _content">
       <div class="_swipe-wrap">
-        <swipe :auto="4000">
+        <swipe :auto="4000" v-if="imageList.legnth">
           <swipe-item v-for="(item,index) in imageList" :key="index">
             <img preview :src="item.Path" class="pics">
           </swipe-item>
         </swipe>
+        <swipe v-else  :auto="4000">
+            <swipe-item >
+              <img src="../../../assets/img/meeting/banner_detail.png">
+            </swipe-item>
+          </swipe>
       </div>
       <div class="msg">
         <div class="build-wrap">
@@ -113,7 +118,9 @@ export default {
         'MeetID': this.$route.params.id
       })
       console.log('res:', res)
-      this.detailData = res.data[0]
+      if (res.data.length) {
+        this.detailData = res.data[0]
+      }
       Indicator.close()
     },
     // 获取轮播图列表
