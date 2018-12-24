@@ -4,7 +4,7 @@
       <p class="title">配套设施</p>
       <div class="box-wrap clearfix">
         <div class="btnBox" :class="{'isSelect':item.isSelect}" @click.stop="selectItem(item,index)" v-for="(item,index) in equipMatchingList" :key="index">
-          <span>{{item.MaterialsnName}}</span>
+          <span>{{item.Name}}</span>
         </div>
       </div>
     </div>
