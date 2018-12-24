@@ -27,7 +27,7 @@
         </div>
         <div class="selectItem clearfix noneBb">
           <span class="name">责任人</span>
-          <span class="value textLeft">{{detailData.Responsible}}</span>
+          <span class="value textLeft">{{detailData.Responsible}} {{detailData.Phone}}</span>
         </div>
       </div>
       <div class="more">
