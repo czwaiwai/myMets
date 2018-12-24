@@ -9,11 +9,12 @@
     <line-date :date="dateStr" @change="changeDate"></line-date>
     <search-and-filter ref='filter' :orgId="orgId" :filterObj="filterObj" @filter="filterSearch"></search-and-filter>
     <div class="page_bd _content">
-      <ul class="list"
+      <!-- <ul class="list"
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
         infinite-scroll-distance="10"
-        v-if="list.length">
+        v-if="list.length"> -->
+      <ul class="list" v-if="list.length">
         <li class="items" :class="{'lastItem':index+1==list.length}" v-for="(item,index) in list" :key="item.ID" @click.stop="toDesitineDetial(item)">
           <div class="top clearfix">
             <img v-if="item.Url" :src="item.Url" class="pic">
@@ -317,6 +318,7 @@ export default {
                   line-height: .4rem;
                   color: #999;
                   font-size: .3rem;
+                  padding-right: .2rem;
                   overflow: hidden;
                   white-space: nowrap;
                   text-overflow: ellipsis;

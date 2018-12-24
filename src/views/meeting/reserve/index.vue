@@ -50,7 +50,7 @@
         </div>
         <div class="inputItem clearfix noneBb">
           <span class="name">其他参会人</span>
-          <input class="inputs" type="text" placeholder="请输入其他参会人">
+          <input class="inputs" type="text" v-model="formObj.otherMeettingPerson" placeholder="请输入其他参会人">
         </div>
       </div>
 
