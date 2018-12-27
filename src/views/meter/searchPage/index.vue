@@ -1,5 +1,6 @@
 <template>
-  <div class="searchPage">
+  <div class="page">
+    <nav-title title="选择范围"></nav-title>
     <div class="searchBox clearfix">
       <form class="searchWrap clearfix" action="" onsubmit="return false;">
           <i class="iconfont icon-saoyisao" @click.stop="callCamera"></i>
@@ -9,44 +10,46 @@
       <span class="searachBtn" v-if="searchKey.length" @click.stop="search">搜索</span>
       <span class="searachBtn" v-else @click.stop="$router.go(-1)">取消</span>
     </div>
-    <div class="list-wrap">
-      <Myref ref="searchList">
-        <ul class="list" v-show="dataList.length&&hasFetch">
-          <li class="item" v-for="(item,index) in dataList" :key="index">
-            <div class="item1 clearfix">
-              <span class="left">{{item.ImaCode}}</span>
-              <span class="right" v-show="item.contentType==1">{{item.TMRD}}</span>
-            </div>
-            <div class="item2 clearfix">
-              <span class="left">资源：{{item.ResCode}}</span>
-              <span class="right">{{item.contentType==0?'请输入本次读数':'本次读数'}}</span>
-            </div>
-            <div class="item3 clearfix">
-              <span class="left">上次读数：{{item.LMR}}</span>
-              <input
-                type="text"
-                class="right"
-                v-model="item.TMR"
-                :placeholder="item.LMR"
-                :class="{'grade':item.Lock==='True'}"
-                @input="inputSetVal(item,index)"
-                @blur="inputBlur(item,index)"
-                @focus="inputFocus(item, index)"
-                :disabled="item.Lock==='True'?'disabled':false"
-                :readonly="item.Lock==='True'?'disabled':false"
-              />
-            </div>
-            <div class="item4 clearfix">
-              <span class="left">上次用量：{{item.LCIAmount}}</span>
-              <span class="right" :class="pointColorClass(item, index)">本次用量：{{item.CIAmount||''}}</span>
-            </div>
-          </li>
-        </ul>
-        <p class="loadTip" v-show="showLoadTip">加载中···</p>
-      </Myref>
-    </div>
-    <div class="list-none" v-if="!dataList.length&&hasFetch">
-      <p class="tip">暂无满足条件的仪表~</p>
+    <div class="page_bd searchPage">
+      <div class="list-wrap">
+        <Myref ref="searchList">
+          <ul class="list" v-show="dataList.length&&hasFetch">
+            <li class="item" v-for="(item,index) in dataList" :key="index">
+              <div class="item1 clearfix">
+                <span class="left">{{item.ImaCode}}</span>
+                <span class="right" v-show="item.contentType==1">{{item.TMRD}}</span>
+              </div>
+              <div class="item2 clearfix">
+                <span class="left">资源：{{item.ResCode}}</span>
+                <span class="right">{{item.contentType==0?'请输入本次读数':'本次读数'}}</span>
+              </div>
+              <div class="item3 clearfix">
+                <span class="left">上次读数：{{item.LMR}}</span>
+                <input
+                  type="text"
+                  class="right"
+                  v-model="item.TMR"
+                  :placeholder="item.LMR"
+                  :class="{'grade':item.Lock==='True'}"
+                  @input="inputSetVal(item,index)"
+                  @blur="inputBlur(item,index)"
+                  @focus="inputFocus(item, index)"
+                  :disabled="item.Lock==='True'?'disabled':false"
+                  :readonly="item.Lock==='True'?'disabled':false"
+                />
+              </div>
+              <div class="item4 clearfix">
+                <span class="left">上次用量：{{item.LCIAmount}}</span>
+                <span class="right" :class="pointColorClass(item, index)">本次用量：{{item.CIAmount||''}}</span>
+              </div>
+            </li>
+          </ul>
+          <p class="loadTip" v-show="showLoadTip">加载中···</p>
+        </Myref>
+      </div>
+      <div class="list-none" v-if="!dataList.length&&hasFetch">
+        <p class="tip">暂无满足条件的仪表~</p>
+      </div>
     </div>
     <div class="submit" @click.stop="submitList" :class="{'hasCheck':hasCheck}" v-if="dataList.length">提交</div>
     <dialog-confire
@@ -65,11 +68,12 @@
 <script>
 /* eslint-disable */
 import Myref from '@/components/ref/ref.vue'
+import navTitle from '@/components/navTitle'
 import dialogConfire from '@/components/dialogConfire.vue'
 import { mapGetters } from 'vuex'
 export default {
   name: 'serachPage',
-  components: {Myref, dialogConfire},
+  components: {Myref, dialogConfire, navTitle},
   data () {
     return {
       dataList: [],
@@ -91,28 +95,51 @@ export default {
   },
   computed: {
     ...mapGetters({
-      locationData: 'getLocationData',
-      dateTimes: 'getDateTime'
+      locationData: 'getMeterLocation',
+      dateTimes: 'getMeterDateTime'
     })
   },
   methods: {
+    initData () {
+      this.dataList = []
+      this.dialogData = {
+        type: 0,
+        title: '',
+        leftName: '',
+        rightName: ''
+      }
+      this.searchKey = ''
+      this.listType = 1
+      this.hasFetch = false
+      this.showLoadTip = false
+      this.isLoading = false
+      this.hasCheck = false
+      this.page = 1
+    },
     // 调用相机扫码
     callCamera () {
-      if (window.callData) {
-        window.callData.Native_Js_ScanPayment('scanResult')
-      } else if (window.webkit) {
-        window.webkit.messageHandlers.Native_Js_ScanPayment.postMessage('scanResult')
-      }
-      this.callBackCamera()
+      this.$app.scan().then((res) => {
+        console.log(res)
+        this.searchKey = res
+        this.search()
+      }).catch(err => {
+        console.log(err)
+      })
+      // if (window.callData) {
+      //   window.callData.Native_Js_ScanPayment('scanResult')
+      // } else if (window.webkit) {
+      //   window.webkit.messageHandlers.Native_Js_ScanPayment.postMessage('scanResult')
+      // }
+      // this.callBackCamera()
     },
 
     // 扫码返回结果
-    callBackCamera () {
-      window.scanResult = (scanResult) => {
-        this.searchKey = scanResult
-        this.search()
-      }
-    },
+    // callBackCamera () {
+    //   window.scanResult = (scanResult) => {
+    //     this.searchKey = scanResult
+    //     this.search()
+    //   }
+    // },
     search () {
       this.hasCheck = false
       this.showLoadTip = false
@@ -123,51 +150,43 @@ export default {
       this.getSearchData()
       this.$el.querySelector('.search-input').blur()
     },
-    getSearchData () {
+    async getSearchData () {
       let data = {
-        projectId: this.locationData.orgData.orgId,
-        imaCode: this.searchKey,
-        dataOfRead: this.dateTimes.thisTime,
-        budId: this.locationData.budItem.Id,
-        page: this.page,
-        pageSize: this.pageSize
+        'ProjectId': this.locationData.orgData.orgId,
+        'ImaCode': this.searchKey,
+        'DataOfRead': this.dateTimes.thisTime,
+        'BudID': this.locationData.budItem.Id,
+        'Page': this.page,
+        'PageSize': this.pageSize
       }
-      this.$vux.loading.show()
-      this.$fetch.myPost(this.$api.getImaReadSearch, data).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          if (res.data.List.length) {
-            res.data.List.forEach(arr => {
-              if ((arr.TMR - 0) === 0) {
-                arr.TMR = ''
-                arr.contentType = 0
-              } else {
-                arr.contentType = 1
-              }
-              arr.TMRD = arr.TMRD.replace(/\//g, '-')
-              arr.isCheck = false
-            })
-          }
-          if (this.page === 1) {
-            this.dataList = res.data.List
+      let res = await this.$xml('UserApp_GetImaReadSearch', data)
+      console.log('UserCS_GetGrpInfo:', res)
+      if (res.data.List.length) {
+        res.data.List.forEach(arr => {
+          if ((arr.TMR - 0) === 0) {
+            arr.TMR = ''
+            arr.contentType = 0
           } else {
-            if (res.data.List.length) {
-              this.dataList = this.dataList.concat(res.data.List)
-            }
+            arr.contentType = 1
           }
-          if (res.data.List.length === this.pageSize) {
-            this.showLoadTip = true
-          } else {
-            this.showLoadTip = false
-          }
-          this.isLoading = false
-          this.hasFetch = true
-          this.$vux.loading.hide()
-        } else {
-          this.$vux.loading.hide()
-          this.$vux.toast.text(res.desc)
+          arr.TMRD = arr.TMRD.replace(/\//g, '-')
+          arr.isCheck = false
+        })
+      }
+      if (this.page === 1) {
+        this.dataList = res.data.List
+      } else {
+        if (res.data.List.length) {
+          this.dataList = this.dataList.concat(res.data.List)
         }
-      })
+      }
+      if (res.data.List.length === this.pageSize) {
+        this.showLoadTip = true
+      } else {
+        this.showLoadTip = false
+      }
+      this.isLoading = false
+      this.hasFetch = true
     },
     clearKey () {
       this.searchKey = ''
@@ -176,6 +195,9 @@ export default {
     submitList () {
       if (!this.hasCheck) {
         return
+      }
+      let objList = {
+        ImaReadList: []
       }
       let list = []
       this.dataList.forEach(arr => {
@@ -186,12 +208,13 @@ export default {
             LMR: arr.LMR
           }
           list.push(obj)
+          objList.ImaReadList.push(obj)
         }
       })
       let params = {
         projectId: this.locationData.orgData.orgId,
         accountDate: this.dateTimes.thisTime,
-        imaReadList: JSON.stringify(list)
+        imaReadList: objList
       }
       this.dialogData = {
         type: 1,
@@ -202,30 +225,23 @@ export default {
       }
       this.$refs.dialog.show()
     },
-    submit (params) {
-      this.$vux.loading.show()
-      this.$fetch.myPost(this.$api.imaSumbitImaReadInfo, params).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          this.dialogData = {
-            type: 2,
-            title: res.data[0].info
-          }
-          this.$refs.dialog.show()
-          this.$vux.loading.hide()
-        } else {
-          this.$vux.toast.text(res.desc)
-          this.$vux.loading.hide()
-        }
-      })
+    async submit (params) {
+      console.log(params)
+      let res = await this.$xml('Ima_SumbitImaReadInfo', {}, {p1: params.projectId, p2: params.accountDate, p7: JSON.stringify(params.imaReadList)})
+      console.log(res)
+      this.dialogData = {
+        type: 2,
+        title: res.data[0].info
+      }
+      this.$refs.dialog.show()
     },
     pointColorClass (item, index) {
       if ((item.CIAmount - 0) === 0 && item.TMR === '') {
         return ''
       }
-      if ((item.CIAmount - 0) < (item.LMR - 0)) {
-        return ''
-      }
+      // if ((item.CIAmount - 0) < (item.LMR - 0)) {
+      //   return ''
+      // }
       if (item.dtMethods - 0 !== 0) {
         if (item.dtMin - 0 !== 0 || item.dtMax - 0 !== 0) {
           if (item.dtMethods - 0 === 1) {
@@ -382,77 +398,73 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .searchPage{
+  .searchBox {
     position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    .searchBox {
-      position: relative;
-      top: 0;
-      left: 0;
-      z-index: 9;
-      // height: 1.05rem;
-      padding: 0.2rem 0.3rem;
-      background: #fff;
-      border-bottom: 1px solid #e9e9e9;
-      .searchWrap {
-        float: left;
-        width: 6.08rem;
-        height: 0.68rem;
-        background: #EFEFEF;
-        border-radius: 0.1rem;
-        line-height: 0.68rem;
-        .icon-saoyisao {
-          float: left;
-          width: 0.68rem;
-          height: 0.68rem;
-          padding: 0 .1rem;
-          line-height: 0.68rem;
-          font-size: 0.5rem;
-          text-align: right;
-          color: #999;
-        }
-        input {
-          float: left;
-          width: 4.4rem;
-          height: 0.68rem;
-          // line-height: 0.68rem;
-          color: #333;
-          font-size: 0.28rem;
-          &::-webkit-input-placeholder {
-            color: #999;
-          }
-          &::-webkit-search-cancel-button {
-            display: none;
-          }
-        }
-        .icon-input_clear {
-          float: right;
-          width: 0.48rem;
-          height: 0.68rem;
-          margin-right: 0.2rem;
-          line-height: 0.68rem;
-          font-size: 0.4rem;
-          text-align: right;
-          color: #999;
-        }
-      }
-      .searachBtn {
+    top: 0;
+    left: 0;
+    z-index: 9;
+    // height: 1.05rem;
+    padding: 0.2rem 0.3rem;
+    background: #fff;
+    border-bottom: 1px solid #e9e9e9;
+    .searchWrap {
+      float: left;
+      width: 6.08rem;
+      height: 0.68rem;
+      background: #EFEFEF;
+      border-radius: 0.1rem;
+      line-height: 0.68rem;
+      .icon-saoyisao {
         float: left;
         width: 0.68rem;
         height: 0.68rem;
-        margin-left: 0.14rem;
-        font-size: 0.3rem;
+        padding: 0 .1rem;
         line-height: 0.68rem;
+        font-size: 0.5rem;
         text-align: right;
-        color: #0dc88c;
+        color: #999;
+      }
+      input {
+        float: left;
+        width: 4.4rem;
+        height: 0.68rem;
+        // line-height: 0.68rem;
+        color: #333;
+        font-size: 0.28rem;
+        &::-webkit-input-placeholder {
+          color: #999;
+        }
+        &::-webkit-search-cancel-button {
+          display: none;
+        }
+      }
+      .icon-input_clear {
+        float: right;
+        width: 0.48rem;
+        height: 0.68rem;
+        margin-right: 0.2rem;
+        line-height: 0.68rem;
+        font-size: 0.4rem;
+        text-align: right;
+        color: #999;
       }
     }
+    .searachBtn {
+      float: left;
+      width: 0.68rem;
+      height: 0.68rem;
+      margin-left: 0.14rem;
+      font-size: 0.3rem;
+      line-height: 0.68rem;
+      text-align: right;
+      color: #3395FF;
+    }
+  }
+  .searchPage{
     .list-wrap{
       position: absolute;
-      top: 1.08rem;
-      bottom: .8rem;
+      top: 0;
+      bottom: 0;
       left: 0;
       right: 0;
       -webkit-overflow-scrolling: touch;
@@ -576,7 +588,7 @@ export default {
                   height: 8px;
                   border-radius: 4px;
                   content: '';
-                  background: #0DC88C;
+                  background: #3395FF;
                 }
               }
             }
@@ -591,20 +603,18 @@ export default {
       color: #999;
       line-height: 1.5;
     }
-    .submit{
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100vw;
-      height: .8rem;
-      background: #86E3C5;
-      font-size: .3rem;
-      line-height: .8rem;
-      text-align: center;
-      color: #fff;
-      &.hasCheck{
-        background: #0DC88C;
-      }
+    
+  }
+  .submit{
+    width: 100vw;
+    height: .8rem;
+    background: #99caff;
+    font-size: .3rem;
+    line-height: .8rem;
+    text-align: center;
+    color: #fff;
+    &.hasCheck{
+      background: #3395FF;
     }
   }
 </style>

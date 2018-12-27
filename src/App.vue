@@ -163,4 +163,7 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
+  .mint-indicator-wrapper {
+    z-index: 99999 !important;
+  }
 </style>

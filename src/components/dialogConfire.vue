@@ -91,9 +91,9 @@ export default {
     }
     ._content{
       position: absolute;
-      left: 1.1rem;
-      // top: 50vw;
-      top: calc(50vh - 2rem);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
       z-index: 11;
       width: 5.28rem;
       background: #fff;
@@ -108,7 +108,7 @@ export default {
         border-top: 1px solid #D2D2D2;
         height: .86rem;
         font-size: .34rem;
-        color: #0DC88C;
+        color: #3395ff;
         line-height: .86rem;
         text-align: center;
       }
@@ -130,7 +130,7 @@ export default {
           width: 2.64rem;
           height: .86rem;
           font-size: .34rem;
-          color: #0DC88C;
+          color: #3395ff;
           line-height: .86rem;
           text-align: center;
         }

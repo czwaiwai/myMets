@@ -93,10 +93,10 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
-import { Swipe, SwipeItem, Indicator } from 'mint-ui'
+import { Swipe, SwipeItem } from 'mint-ui'
 export default {
   name: 'archives',
-  components: {navTitle, Swipe, SwipeItem, Indicator},
+  components: {navTitle, Swipe, SwipeItem},
   data () {
     return {
       title: '',
@@ -113,7 +113,7 @@ export default {
     },
     // 获取预定详情数据
     async getData () {
-      Indicator.open({spinnerType: 'fading-circle'})
+      this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_MeetFileDetail', {
         'MeetID': this.$route.params.id
       })
@@ -121,17 +121,17 @@ export default {
       if (res.data.length) {
         this.detailData = res.data[0]
       }
-      Indicator.close()
+      this.$indicator.close()
     },
     // 获取轮播图列表
     async getPicList () {
-      Indicator.open({spinnerType: 'fading-circle'})
+      this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_GetMeettingRoomImageInfo', {
         'MeettingRoomID': this.$route.params.id,
         'TypeStr': 'Metting'
       })
       console.log('UserCS_GetMeettingRoomImageInfo:', res)
-      Indicator.close()
+      this.$indicator.close()
       if (res.data.length && res.data[0].ImageList && res.data[0].ImageList.length) {
         this.imageList = res.data[0].ImageList
       }

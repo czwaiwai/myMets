@@ -31,6 +31,21 @@ export default {
       let day = date.getDate()
       return year + '-' + this.add0(month) + '-' + this.add0(day)
     },
+    // 时间转换 yyyy-MM
+    com_setYM (time) {
+      if (!time) {
+        return
+      }
+      time += ''
+      if (time.indexOf('-') > -1) {
+        time = time.replace(/\-/g, '/')
+      }
+      let date = new Date(time)
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let day = date.getDate()
+      return year + '-' + this.add0(month)
+    },
     // 时间转换 yyyy-MM-DD 星期X
     com_date (time) {
       if (!time) {
