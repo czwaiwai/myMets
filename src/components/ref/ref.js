@@ -63,7 +63,7 @@ export default {bou,
       scroll(function (direction) {
         setTimeout(function () {
           fuc = fuc || function () {}
-          if (direction === 'down' && (d.scrollHeight - d.scrollTop < domH + h)) {
+          if (direction === 'down' && (d.scrollHeight - d.scrollTop < dom.offsetHeight + h)) {
             if (fuc) {
               fuc(direction, d.scrollTop, true)
             }

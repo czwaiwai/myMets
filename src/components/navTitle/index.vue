@@ -19,11 +19,12 @@ export default {
   },
   methods: {
     goBack () {
-      if (this.$route.name === 'meeting') {
-        this.$app.back()
-      } else {
-        this.$router.go(-1)
-      }
+      this.$router.go(-1)
+      // if (this.$route.name === 'meeting') {
+      //   this.$app.back()
+      // } else {
+      //   this.$router.go(-1)
+      // }
     }
   }
 }

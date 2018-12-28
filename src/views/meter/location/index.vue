@@ -1,10 +1,10 @@
 <template>
-  <div class="location">
-    <div class="header clearfix">
-      <!-- <div class="icon"></div> -->
-      <span class="orgName">{{title}}</span>
-    </div>
-    <div class="content">
+<div class="page location">
+    <nav-title title="搜索仪表"></nav-title>
+    <div class="page_bd _content">
+      <div class="header clearfix">
+        <span class="orgName">{{title}}</span>
+      </div>
       <div class="list-wrap">
         <h4 class="listTitle">分期</h4>
         <div class="list clearfix">
@@ -21,8 +21,10 @@
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'meterLocation',
+  components: {navTitle},
   data () {
     return {
       title: '',
@@ -43,115 +45,78 @@ export default {
       this.getBudInfo(item.Id)
       this.loactionData.grpItem = item
     },
-    getBudInfo (id) {
-      // this.$vux.loading.show()
-      let data = {
-        grpId: id
-      }
-      this.$fetch.myPost(this.$api.getBudInfo, data).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          if (res.data.length) {
-            res.data.forEach(arr => {
-              arr.isSelect = false
-            })
-          }
-          this.items = res.data
-          // this.$vux.loading.hide()
-          // if (res.)
-        } else {
-          // this.$vux.loading.hide()
-          // this.$vux.toast.text(res.desc)
-        }
+    async getBudInfo (id) {
+      this.$indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_GetBudInfo', {
+        GrpID: id
       })
-    },
-    toWorkList (item, index) {
-      this.$store.commit('updateDateTime', {initTime: item.strCurrFnPer, thisTime: item.strCurrFnPer})
-      if (item.isSelect) {
-        this.$router.push(`/workList`)
-      } else {
-        this.items.forEach(arr => {
+      console.log('UserCS_GetGrpInfo:', res)
+      if (res.data.length) {
+        res.data.forEach(arr => {
           arr.isSelect = false
         })
-        item.isSelect = true
-        this.loactionData.budItem = item
-        this.$store.commit('updateLocationData', this.loactionData)
-        this.$router.push(`/workList`)
       }
+      this.items = res.data
+      this.$indicator.close()
     },
-    getListData () {
-      // this.$vux.loading.show()
-      let data = {
-        orgId: '11091315263400010000'// this.$route.query.orgId
-      }
-      this.$fetch.myPost(this.$api.getGrpInfo, data).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          if (res.data.length) {
-            res.data.forEach(arr => {
-              arr.isSelect = false
-            })
-          }
-          this.listData = res.data
-          // this.$vux.loading.hide()
-          // if (res.)
-        } else {
-          // this.$vux.loading.hide()
-          // this.$vux.toast.text(res.desc)
-        }
+    toWorkList (item, index) {
+      this.$store.commit('setMeterDateTime', {initTime: item.strCurrFnPer, thisTime: item.strCurrFnPer})
+      this.items.forEach(arr => {
+        arr.isSelect = false
       })
+      console.log('item:', item)
+      item.isSelect = true
+      this.loactionData.budItem = item
+      this.$store.commit('setMeterLocation', this.loactionData)
+      this.$router.push(`/meterWorkList`)
+      console.log(this.loactionData)
     },
-    initDate () {
-      let date = new Date()
-      let month = date.getMonth() + 1
-      if (month >= 1 && month <= 9) {
-        month = '0' + month
+    async getListData () {
+      let res = await this.$xml('UserCS_GetGrpInfo', {
+        orgId: this.loactionData.orgData.orgId
+      })
+      console.log('UserCS_GetGrpInfo:', res)
+      if (res.data.length) {
+        res.data.forEach(arr => {
+          arr.isSelect = false
+        })
       }
-      return date.getFullYear() + '-' + month
+      this.listData = res.data
     }
   },
   created () {
-    this.getListData()
     this.title = this.$route.query.orgName
     this.loactionData.orgData = {orgName: this.$route.query.orgName, orgId: this.$route.query.orgId}
-    this.$root.$emit('keepAlive', {isKeep: true, name: 'location'})
+    this.getListData()
   }
 }
 </script>
 <style lang="scss" scoped>
   .location{
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background: #fff;
-    -webkit-overflow-scrolling: touch;
-    .header{
-      padding: .2rem .3rem;
-      background: #fff;
-      .icon{
-        float: left;
-        width: .44rem;
-        height: .44rem;
-        background: #333;
-      }
-      .orgName{
-        float: left;
-        width: 6rem;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        font-size: .32rem;
-        color: #333;
-        line-height: 1.5;
-        font-weight: bold;
-      }
-    }
-    .content{
+    ._content{
       padding: .3rem;
+      background: #fff;
+      .header{
+        padding: .2rem 0;
+        background: #fff;
+        .icon{
+          float: left;
+          width: .44rem;
+          height: .44rem;
+          background: #333;
+        }
+        .orgName{
+          float: left;
+          width: 6rem;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: .32rem;
+          color: #333;
+          line-height: 1.5;
+          font-weight: bold;
+        }
+      }
       .list-wrap{
         padding-bottom: .5rem;
         .listTitle{
@@ -180,7 +145,7 @@ export default {
             text-overflow: ellipsis;
             &.isSelect{
               // color: #0dc88c;
-              border: 1px solid #0dc88c;
+              border: 1px solid #3395ff;
             }
             &:nth-child(3n){
               margin-right: 0;
@@ -212,8 +177,8 @@ export default {
             border-radius: .1rem;
             box-sizing: border-box;
             &.isSelect{
-              color: #0dc88c;
-              border: 1px solid #0dc88c;
+              color: #3395ff;
+              border: 1px solid #3395ff;
             }
             span{
               font-size: .28rem;

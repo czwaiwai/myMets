@@ -1,5 +1,6 @@
 <template>
-  <div class="workList">
+  <div class="page workList">
+    <nav-title title="抄表工单"></nav-title>
     <div class="header clearfix">
       <i class="iconfont icon-building-automation"></i>
       <p class="title" @click.stop="showDetail=true"><span>{{locationData.orgData.orgName}}>{{locationData.grpItem.GrpName}}>{{locationData.budItem.BudName}}</span>(表数：{{count.TotalRead||0}})</p>
@@ -22,42 +23,44 @@
         <span :class="{'isSelect':listType===item.type}">{{item.name}}({{item.type==1?(count.Tobecopied||0):(item.type==2?(count.Transcribe||0):(count.Locked||0))}})</span>
       </div>
     </div>
-    <div class="list-wrap" :class="listType<3?'hasBottom':'noneBottom'">
-      <Myref ref="list">
-        <ul class="list" v-show="checkList.length">
-          <li class="item" v-for="(item,index) in checkList" :key="index">
-            <div class="item1 clearfix">
-              <span class="left">{{filterType.contentType?(item.ExternalCode||item.ImaCode):item.ImaCode}}</span>
-              <span class="right" v-show="listType>1">{{item.TMRD}}</span>
-            </div>
-            <div class="item2 clearfix">
-              <span class="left">资源：{{item.ResCode}}</span>
-              <span class="right">{{listType>1?'本次读数':'请输入本次读数'}}</span>
-            </div>
-            <div class="item3 clearfix">
-              <span class="left">上次读数：{{item.LMR}}</span>
-              <input
-                type="text"
-                class="right valInput"
-                :placeholder="item.LMR"
-                @input="inputSetVal(item,index)"
-                v-model="item.TMR"
-                @blur="inputBlur(item,index)"
-                @focus="inputFocus(item, index)"
-                :class="{'grade':listType===3}"
-                :disabled="listType===3?'disabled':false"
-                :readonly="listType===3?'disabled':false"
-              />
-            </div>
-            <div class="item4 clearfix">
-              <span class="left">上次用量：{{item.LCIAmount}}</span>
-              <span class="right" :class="pointColorClass(item, index)">本次用量：<span>{{item.CIAmount||''}}</span></span>
-            </div>
-          </li>
-        </ul>
-        <div class="noneList" v-show="!checkList.length">暂无数据~</div>
-        <p class="loadTip" v-show="showLoadTip">加载中···</p>
-      </Myref>
+    <div class="page_bd _content">
+      <div class="list-wrap" :class="listType<3?'hasBottom':'noneBottom'">
+        <Myref ref="list">
+          <ul class="list" v-show="checkList.length">
+            <li class="item" v-for="(item,index) in checkList" :key="index">
+              <div class="item1 clearfix">
+                <span class="left">{{filterType.contentType?(item.ExternalCode||item.ImaCode):item.ImaCode}}</span>
+                <span class="right" v-show="listType>1">{{item.TMRD}}</span>
+              </div>
+              <div class="item2 clearfix">
+                <span class="left">资源：{{item.ResCode}}</span>
+                <span class="right">{{listType>1?'本次读数':'请输入本次读数'}}</span>
+              </div>
+              <div class="item3 clearfix">
+                <span class="left">上次读数：{{item.LMR}}</span>
+                <input
+                  type="text"
+                  class="right valInput"
+                  :placeholder="item.LMR"
+                  @input="inputSetVal(item,index)"
+                  v-model="item.TMR"
+                  @blur="inputBlur(item,index)"
+                  @focus="inputFocus(item, index)"
+                  :class="{'grade':listType===3}"
+                  :disabled="listType===3?'disabled':false"
+                  :readonly="listType===3?'disabled':false"
+                />
+              </div>
+              <div class="item4 clearfix">
+                <span class="left">上次用量：{{item.LCIAmount}}</span>
+                <span class="right" :class="pointColorClass(item, index)">本次用量：<span>{{item.CIAmount||''}}</span></span>
+              </div>
+            </li>
+          </ul>
+          <div class="noneList" v-show="!checkList.length">暂无数据~</div>
+          <p class="loadTip" v-show="showLoadTip">加载中···</p>
+        </Myref>
+      </div>
     </div>
     <div class="footer-wrap">
       <div class="footer1 clearfix" v-if="listType === 1">
@@ -90,6 +93,16 @@
           <div class="filterSort">
             <div class="setDate" v-show="filterType.type===0">
               <p class="tip">请选择</p>
+              <div class="date-wrap" @click.stop="openPicker"><span class="date">{{filterType.list[0].data}}</span><i class="iconfont icon-rili"></i></div>
+              <datetime-picker
+                ref="picker"
+                type="date"
+                year-format="{value} 年"
+                month-format="{value} 月"
+                date-format="{value} 日"
+                @confirm="filterDateChange"
+                v-model="pickerValue">
+              </datetime-picker>
               <!-- <datetime v-model="filterType.list[0].data" @on-change="filterDateChange" format="YYYY-MM" :max-year=3000 :min-year=1900>
                 <div class="date-wrap"><span class="date">{{filterType.list[0].data}}</span><i class="iconfont icon-rili"></i></div>
               </datetime> -->
@@ -116,18 +129,28 @@
       @clickOneBtn="clickOneBtn"
       :oneBtn="dialogData.type===5"
     ></dialog-confire>
+    <transition name="page">
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 import dialogConfire from '@/components/dialogConfire.vue'
 import { mapGetters } from 'vuex'
 import Myref from '@/components/ref/ref.vue'
+import { DatetimePicker, Indicator } from 'mint-ui'
+import dateChange from '@/mixins/dateChange'
 // import { Toast, Datetime } from 'vux'
 export default {
   name: 'workList',
-  components: {dialogConfire, Myref},
+  components: {DatetimePicker, dialogConfire, navTitle, Myref},
+  mixins: [dateChange],
   data () {
     return {
+      pickerValue: '',
       showDetail: false,
       ctrJump: false,
       allData: {},
@@ -172,14 +195,15 @@ export default {
   },
   computed: {
     ...mapGetters({
-      locationData: 'getLocationData',
-      dateTimes: 'getDateTime'
+      locationData: 'getMeterLocation',
+      dateTimes: 'getMeterDateTime'
     })
   },
   // 路由离开前弹窗提示
   beforeRouteLeave (to, from, next) {
     if (this.ctrJump) {
       next()
+      return
     }
     let arr = []
     for (let item in this.allData[this.filterType.date]) {
@@ -207,6 +231,7 @@ export default {
     // },
     // 点击离线
     downLoadBtn () {
+      console.log('dateTimes', this.dateTimes)
       let date = this.dateTimes.thisTime.replace('-', '年') + '月'
       this.dialogData = {
         type: 6,
@@ -217,69 +242,55 @@ export default {
       this.$refs.dialog.show()
     },
     // 离线下载
-    downLoad () {
-      this.$vux.loading.show({
-        text: '离线中···'
+    async downLoad () {
+      Indicator.open({
+        text: '离线中···',
+        spinnerType: 'fading-circle'
       })
       let meterTypeIdList = []
       this.classify.forEach(arr => {
         meterTypeIdList.push({imaTypeID: arr.meterId})
       })
       let data = {
-        projectId: this.locationData.orgData.orgId,
-        searchType: 4,
-        grpId: this.locationData.grpItem.Id,
-        budId: this.locationData.budItem.Id,
-        accountDate: this.filterType.date,
-        meterTypeIdList: JSON.stringify(meterTypeIdList)
+        ProjectId: this.locationData.orgData.orgId,
+        SearchType: 4,
+        GrpId: this.locationData.grpItem.Id,
+        BudID: this.locationData.budItem.Id,
+        DataOfRead: this.filterType.date,
+        ImaTypeIDs: meterTypeIdList
       }
-      this.$fetch.myPost(this.$api.getImaReadInfo, data).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          let params = {
-            orgId: this.locationData.orgData.orgId,
-            budId: this.locationData.budItem.Id,
-            imaTypeId: '',
-            dataOfRead: this.filterType.date
-          }
-          this.$fetch.myPost(this.$api.getImaReadCountInfo, params).then((r) => {
-            // console.log(r)
-            if (r.code === '200') {
-              if (r.data) {
-                res.data.count = r.data
-                res.data.locationData = this.locationData
-                let message = {
-                  key: this.filterType.date + this.locationData.budItem.Id,
-                  data: res.data
-                }
-                // console.log(message)
-                if (window.webkit) {
-                  window.webkit.messageHandlers.Native_Js_addData.postMessage(message)
-                } else if (window.callData) {
-                  let json = JSON.stringify(message)
-                  window.callData.Native_Js_addData(json)
-                }
-                setTimeout(() => {
-                  this.$vux.loading.hide()
-                  // this.$vux.toast.show({
-                  //   text: '离线成功，可在离线中心查看',
-                  //   type: 'success'
-                  // })
-                }, 2000)
-              } else {
-                this.$vux.loading.hide()
-                // this.$vux.toast.text('无离线内容！')
-              }
-            } else {
-              this.$vux.loading.hide()
-              // this.$vux.toast.text(res.desc)
-            }
-          })
-        } else {
-          this.$vux.loading.hide()
-          // this.$vux.toast.text(res.desc)
-        }
+      console.log('data:', data)
+      let res = await this.$xml('UserApp_GetImaReadInfoNew', data, {}, true)
+      console.log(res)
+      let params = {
+        OrgID: this.locationData.orgData.orgId,
+        BudID: this.locationData.budItem.Id,
+        ImaTypeID: '',
+        DataOfRead: this.filterType.date
+      }
+      let count = await this.$xml('UserApp_GetImaReadCountInfo', params, {}, true)
+      console.log(count)
+      res.data.count = count.data
+      res.data.locationData = this.locationData
+      let message = {
+        key: this.filterType.date + this.locationData.budItem.Id,
+        data: res.data
+      }
+      // console.log(message)
+      this.$app.addData(message)
+      // if (window.webkit) {
+      //   window.webkit.messageHandlers.Native_Js_addData.postMessage(message)
+      // } else if (window.callData) {
+      //   let json = JSON.stringify(message)
+      //   window.callData.Native_Js_addData(json)
+      // }
+      Indicator.open({
+        text: '离线成功，可在离线中心查看',
+        spinnerType: 'fading-circle'
       })
+      setTimeout(() => {
+        this.$indicator.close()
+      }, 1000)
     },
     toSearch () {
       let arr = []
@@ -289,7 +300,7 @@ export default {
         }
       }
       if (!arr.length) {
-        this.$router.push(`/searchPage`)
+        this.$router.push(`/meterSearch`)
       } else {
         this.dialogData = {
           type: 3,
@@ -347,9 +358,9 @@ export default {
       if ((item.CIAmount - 0) === 0 && item.TMR === '') {
         return ''
       }
-      if ((item.CIAmount - 0) < (item.LMR - 0)) {
-        return ''
-      }
+      // if ((item.CIAmount - 0) < (item.LMR - 0)) {
+      //   return ''
+      // }
       if (item.dtMethods - 0 !== 0) {
         if (item.dtMin - 0 !== 0 || item.dtMax - 0 !== 0) {
           if (item.dtMethods - 0 === 1) {
@@ -458,6 +469,9 @@ export default {
     // 全部提交
     allSubmit () {
       let list = []
+      let objList = {
+        ImaReadList: []
+      }
       this.allData[this.filterType.date][this.meterData.meterId]['list1'].list.forEach(arr => {
         let obj = {
           ImaReadId: arr.ImaReadId,
@@ -465,6 +479,7 @@ export default {
           LMR: arr.LMR
         }
         list.push(obj)
+        objList.ImaReadList.push(obj)
       })
       if (!list.length) {
         return
@@ -472,7 +487,7 @@ export default {
       let params = {
         projectId: this.locationData.orgData.orgId,
         accountDate: this.filterType.date,
-        imaReadList: JSON.stringify(list)
+        imaReadList: objList
       }
       this.dialogData = {
         type: 4,
@@ -489,6 +504,9 @@ export default {
         return
       }
       let list = []
+      let objList = {
+        ImaReadList: []
+      }
       this.allData[this.filterType.date][this.meterData.meterId]['list2'].list.forEach(arr => {
         if (arr.isCheck) {
           let obj = {
@@ -497,12 +515,14 @@ export default {
             LMR: arr.LMR
           }
           list.push(obj)
+          objList.ImaReadList.push(obj)
         }
       })
+      console.log('objList:', objList)
       let params = {
         projectId: this.locationData.orgData.orgId,
         accountDate: this.filterType.date,
-        imaReadList: JSON.stringify(list)
+        imaReadList: objList
       }
       this.dialogData = {
         type: 4,
@@ -514,27 +534,20 @@ export default {
       this.$refs.dialog.show()
     },
     // 数据提交
-    submit (params) {
-      this.$vux.loading.show()
-      this.$fetch.myPost(this.$api.imaSumbitImaReadInfo, params).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          this.dialogData = {
-            type: 5,
-            title: res.data[0].info
-          }
-          this.$refs.dialog.show()
-          this.$vux.loading.hide()
-        } else {
-          this.$vux.loading.hide()
-          // this.$vux.toast.text(res.desc)
-        }
-      })
+    async submit (params) {
+      // this.$vux.loading.show()
+      let res = await this.$xml('Ima_SumbitImaReadInfo', {}, {p1: params.projectId, p2: params.accountDate, p7: JSON.stringify(params.imaReadList)})
+      this.dialogData = {
+        type: 5,
+        title: res.data[0].info
+      }
+      this.$refs.dialog.show()
     },
     // 隐藏筛选
     hideFilterList () {
       this.filterType.type = 0
       this.filterType.list[0].data = this.filterType.date
+      this.pickerValue = this.filterType.date + '-01'
       this.filterType.list[0].isSelect = true
       this.filterType.list[1].isSelect = false
       this.filterType.list[1].data.forEach(arr => {
@@ -568,10 +581,15 @@ export default {
       // this.filterType.contentType = item.type
       item.isSelect = true
     },
+    // 打开时间选择器
+    openPicker () {
+      this.$refs.picker.open()
+    },
     // 筛选时间改变
-    filterDateChange () {
-      // this.filterType.date = this.filterType.list[0].data
-      // console.log(this.filterType)
+    filterDateChange (date) {
+      console.log(date.format('yyyy-MM-dd'))
+      this.filterType.list[0].data = this.com_setYM(date.format('yyyy-MM-dd'))
+      this.pickerValue = date.format('yyyy-MM-dd')
     },
     // 筛选重置
     filterReset () {
@@ -588,7 +606,7 @@ export default {
     // 筛选确定
     getOtherList () {
       this.filterType.date = this.filterType.list[0].data
-      this.$store.commit('updateDateTime', {initTime: this.dateTimes.initTime, thisTime: this.filterType.list[0].data})
+      this.$store.commit('setMeterDateTime', {initTime: this.dateTimes.initTime, thisTime: this.filterType.list[0].data})
       this.filterType.list[1].data.forEach(arr => {
         if (arr.isSelect) {
           this.filterType.contentType = arr.type
@@ -659,7 +677,7 @@ export default {
       } else if (this.dialogData.type === 3) {
         this.ctrJump = true
         this.$refs.dialog.hide()
-        this.$router.push(`/searchPage`)
+        this.$router.push(`/meterSearch`)
       } else if (this.dialogData.type === 4) {
         this.$refs.dialog.hide()
       } else if (this.dialogData.type === 6) {
@@ -707,34 +725,25 @@ export default {
         this.$refs.dialog.hide()
       }
     },
-    // initDate () {
-    //   let date = new Date()
-    //   let month = date.getMonth() + 1
-    //   if (month >= 1 && month <= 9) {
-    //     month = '0' + month
-    //   }
-    //   return date.getFullYear() + '-' + month
-    // },
     // 获取仪表检查列表
-    getImaReadInfo () {
-      this.$vux.loading.show()
+    async getImaReadInfo () {
       let meterTypeIdList = []
       meterTypeIdList.push({imaTypeID: this.meterData.meterId})
-      let data = {
-        projectId: this.locationData.orgData.orgId,
-        searchType: this.listType,
-        grpId: this.locationData.grpItem.Id,
-        budId: this.locationData.budItem.Id,
-        accountDate: this.filterType.date,
-        page: this.page,
-        pageSize: this.pageSize,
-        meterTypeIdList: JSON.stringify(meterTypeIdList)
+      let params = {
+        'ProjectId': this.locationData.orgData.orgId,
+        'SearchType': this.listType,
+        'GrpId': this.locationData.grpItem.Id,
+        'BudID': this.locationData.budItem.Id,
+        'DataOfRead': this.filterType.date,
+        'Page': this.page,
+        'PageSize': this.pageSize,
+        'ImaTypeIDs': meterTypeIdList
       }
-      // console.log(JSON.stringify(meterTypeIdList))
-      this.$fetch.myPost(this.$api.getImaReadInfo, data).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          if (res.data.List.length) {
+      this.$indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserApp_GetImaReadInfoNew', params)
+      console.log('UserApp_GetImaReadInfoNew:', res)
+      if (res.data) {
+        if (res.data.List.length) {
             res.data.List[0].ImaTypeList.forEach(arr => {
               if (arr.TMR - 0 === 0 && this.listType === 1) {
                 arr.TMR = ''
@@ -752,7 +761,6 @@ export default {
               this.showLoadTip = false
               this.allData[this.filterType.date][this.meterData.meterId]['list' + this.listType].allLoad = true
             }
-            this.$vux.loading.hide()
             // console.log(this.allData)
           } else {
             this.checkList = this.allData[this.filterType.date][this.meterData.meterId]['list' + this.listType].list
@@ -762,86 +770,68 @@ export default {
           if (this.page === 1) {
             setTimeout(() => {
               this.$refs.list.setTop(1)
-              this.$vux.loading.hide()
             }, 200)
-          }else {
-            this.$vux.loading.hide()
           }
           this.isLoading = false
-        } else {
-          this.checkList = this.allData[this.filterType.date][this.meterData.meterId]['list' + this.listType].list
-          this.isLoading = false
-          this.$vux.loading.hide()
-          // this.$vux.toast.text(res.desc)
-          if (this.page > 1) {
-            this.page--
-          }
-        }
-      })
+      }
+      this.$indicator.close()
     },
     // 获取仪表类型抄表状态的数量
-    getImaReadCountInfo () {
+    async getImaReadCountInfo () {
       if (this.allData[this.filterType.date][this.meterData.meterId].count) {
         return
       }
       let params = {
-        orgId: this.locationData.orgData.orgId,
-        imaTypeId: this.meterData.meterId,
-        budId: this.locationData.budItem.Id,
-        dataOfRead: this.filterType.date
+        'OrgID': this.locationData.orgData.orgId,
+        'ImaTypeID': this.meterData.meterId,
+        'BudID': this.locationData.budItem.Id,
+        'DataOfRead': this.filterType.date
       }
-      this.$fetch.myPost(this.$api.getImaReadCountInfo, params).then((res) => {
-        console.log(res)
-        if (res.code === '200') {
-          if (res.data) {
-            this.allData[this.filterType.date][this.meterData.meterId].count = res.data
-            this.count = res.data
-          }
-        } else {
-          // this.$vux.toast.text(res.desc)
-        }
-      })
+      this.$indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserApp_GetImaReadCountInfo', params)
+      if (res.data) {
+        this.allData[this.filterType.date][this.meterData.meterId].count = res.data
+        this.count = res.data
+      }
+      this.$indicator.close()
     },
     // 获取仪表列表
-    getMeterList () {
+    async getMeterList () {
       if (this.allData[this.filterType.date]) {
         this.loadStoreData()
         return
       }
-      let data = {
-        orgId: this.locationData.orgData.orgId
-      }
-      this.$fetch.myPost(this.$api.getImaTypeByOrgID, data).then((res) => {
-        // console.log(res)
-        if (res.code === '200') {
-          res.data.forEach((arr, index) => {
-            arr.isSelect = false
-            if (index === 0) {
-              arr.isSelect = true
-              this.meterData = arr
-            }
-          })
-          if (!this.allData[this.filterType.date]) {
-            this.allData[this.filterType.date] = {}
-            res.data.forEach((arr, index) => {
-              this.allData[this.filterType.date][arr.meterId] = {
-                meterName: arr.meterName,
-                hasList1Check: false,
-                hasList2Check: false,
-                list1: {page: 1, list: [], allLoad: false},
-                list2: {page: 1, list: [], allLoad: false},
-                list3: {page: 1, list: [], allLoad: false}
-              }
-            })
-          }
-          this.classify = res.data
-          this.listType = 1
-          this.getImaReadInfo()
-          this.getImaReadCountInfo()
-        } else {
-          // this.$vux.toast.text(res.desc)
+      this.$indicator.open({spinnerType: 'fading-circle'})
+      let res = await this.$xml('UserCS_GetImaTypeByOrgID', {
+        'OrgID': this.locationData.orgData.orgId
+      })
+      console.log('UserCS_GetImaTypeByOrgID:', res)
+      res.data.forEach((arr, index) => {
+        arr.isSelect = false
+        if (index === 0) {
+          arr.isSelect = true
+          this.meterData = arr
         }
       })
+      if (!this.allData[this.filterType.date]) {
+        this.allData[this.filterType.date] = {}
+        res.data.forEach((arr, index) => {
+          this.allData[this.filterType.date][arr.meterId] = {
+            meterName: arr.meterName,
+            hasList1Check: false,
+            hasList2Check: false,
+            list1: {page: 1, list: [], allLoad: false},
+            list2: {page: 1, list: [], allLoad: false},
+            list3: {page: 1, list: [], allLoad: false}
+          }
+        })
+      }
+      this.classify = res.data
+      this.listType = 1
+      this.getImaReadInfo()
+      this.getImaReadCountInfo()
+      // console.log('allData:', this.allData)
+      this.$indicator.close()
     }
   },
   created () {
@@ -849,6 +839,7 @@ export default {
     // console.log('dataTime', this.dateTimes)
     this.filterType.date = this.dateTimes.thisTime
     this.filterType.list[0].data = this.dateTimes.thisTime
+    this.pickerValue = this.dateTimes.thisTime + '-01'
     this.getMeterList()
   },
   mounted () {
@@ -874,10 +865,6 @@ export default {
 </script>
 <style lang="scss" scoped>
   .workList{
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
     .header{
       position: relative;
       height: .84rem;
@@ -913,7 +900,7 @@ export default {
         float: right;
         height: .44rem;
         line-height: .44rem;
-        color: #0DC88C;
+        color: #3395ff;
         font-size: .28rem;
       }
     }
@@ -983,7 +970,7 @@ export default {
         font-size: 0.6rem;
         line-height: 0.68rem;
         text-align: right;
-        color: #0dc88c;
+        color: #3395ff;
       }
     }
     .filterList-enter,
@@ -1036,7 +1023,7 @@ export default {
             color: #333;
             line-height: .9rem;
             &.isSelect{
-              color: #0dc88c;
+              color: #3395ff;
             }
             .icon-gengduo1{
               position: absolute;
@@ -1086,7 +1073,7 @@ export default {
                 height: .4rem;
                 font-size: .4rem;
                 line-height: .4rem;
-                color: #0DC88C;
+                color: #3395ff;
               }
             }
           }
@@ -1102,7 +1089,7 @@ export default {
               color: #333;
               line-height: .9rem;
               &.isSelect{
-                color: #0dc88c;
+                color: #3395ff;
               }
             }
           }
@@ -1119,7 +1106,7 @@ export default {
             text-align: center;
             color: #fff;
             font-size: .32rem;
-            background: #86E3C5;
+            background: #99caff;
           }
           .sure{
             float: left;
@@ -1129,7 +1116,7 @@ export default {
             text-align: center;
             color: #fff;
             font-size: .32rem;
-            background: #0DC88C;
+            background: #3395ff;
           }
         }
         .fitem {
@@ -1140,7 +1127,7 @@ export default {
           color: #333;
           border-bottom: 1px solid #e9e9e9;
           &.green {
-            color: #0dc88c;
+            color: #3395ff;
           }
         }
       }
@@ -1176,8 +1163,8 @@ export default {
           border: 1px solid #e9e9e9;
           border-radius: 3px;
           &.isSelect{
-            color: #0dc88c;
-            border: 1px solid #0dc88c;
+            color: #3395ff;
+            border: 1px solid #3395ff;
           }
           &:last-child{
             margin-right: 0;
@@ -1214,15 +1201,15 @@ export default {
           line-height: .88rem;
           color: #999;
           &.isSelect{
-            color: #0dc88c;
-            border-bottom: 3px solid #0dc88c;
+            color: #3395ff;
+            border-bottom: 3px solid #3395ff;
           }
         }
       }
     }
     .list-wrap{
       position: absolute;
-      top: 3.92rem;
+      top: 0;
       left: 0;
       right: 0;
       -webkit-overflow-scrolling: touch;
@@ -1366,7 +1353,7 @@ export default {
                   height: 8px;
                   border-radius: 4px;
                   content: '';
-                  background: #0DC88C;
+                  background: #3395ff;
                 }
               }
             }
@@ -1388,7 +1375,7 @@ export default {
           font-size: .3rem;
           text-align: center;
           color: #fff;
-          background: #86E3C5;
+          background: #99caff;
         }
         .submit{
           float: left;
@@ -1398,7 +1385,7 @@ export default {
           font-size: .3rem;
           text-align: center;
           color: #fff;
-          background: #0dc88c;
+          background: #3395ff;
         }
       }
       .footer2{
@@ -1408,9 +1395,9 @@ export default {
         font-size: .3rem;
         text-align: center;
         color: #fff;
-        background: #86E3C5;
+        background: #99caff;
         &.hasCheck{
-          background: #0DC88C;
+          background: #3395ff;
         }
       }
     }
@@ -1547,7 +1534,7 @@ export default {
             height: 5px;
             content: '';
             border-radius: 3px;
-            background: #0DC88C;
+            background: #3395ff;
           }
         }
       }

@@ -1,0 +1,7 @@
+.workList {
+  .picker-slot-center {
+    &:nth-child(3) {
+      display: none;
+    }
+  }
+}
