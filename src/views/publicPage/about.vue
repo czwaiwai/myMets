@@ -4,7 +4,7 @@
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
         </mt-header>
         <div class="page_bd about_wrap">
-          <div class="text-center" style="padding:20px 0 25px;">
+          <div @click="covertDeveloper" class="text-center" style="padding:20px 0 25px;">
             <img  class="small_logo" src="../../assets/img/publicPage/ic_about_logo.png" >
           </div>
           <div class="weui-form-preview">
@@ -35,14 +35,38 @@
     </div>
 </template>
 <script>
+import toDebug from '@/utils/toDebug'
+let showConsole = 0
+let isConsole = false
 export default {
   name: 'about',
   data () {
-    return {}
+    return {
+      showConsole: 0,
+      timer: 0
+    }
   },
   created () {
   },
-  methods: {}
+  methods: {
+    covertDeveloper () {
+      if (isConsole) {
+        return this.$toast('调试工具已经打开')
+      }
+      clearTimeout(this.timer)
+      if (showConsole === 6) {
+        this.$toast('调试工具已经打开')
+        isConsole = true
+        return toDebug()
+      } else if (showConsole > 2) {
+        this.$toast(`还要${6 - showConsole}歩开启调试工具`)
+      }
+      showConsole++
+      this.timer = setTimeout(() => {
+        showConsole = 0
+      }, 1500)
+    }
+  }
 }
 </script>
 
