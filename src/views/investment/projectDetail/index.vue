@@ -1,0 +1,253 @@
+<template>
+  <div class="page page_bg">
+    <nav-title title="项目详情"></nav-title>
+    <div class="page_bd projectDetail">
+      <div class="_swipe-wrap">
+        <swipe :auto="4000" v-if="imageList.length > 0">
+          <swipe-item v-for="(item,index) in imageList" :key="index">
+            <img preview :src="item.Path" class="pics">
+          </swipe-item>
+        </swipe>
+        <swipe v-else  :auto="4000">
+          <swipe-item >
+            <img src="../../../assets/img/meeting/banner_detail.png">
+          </swipe-item>
+        </swipe>
+      </div>
+      <div class="headerData">
+        <div class="title clearfix">
+          <span class="name">保利叶之林</span>
+          <span class="type">普通住宅</span>
+          <span class="floor">小高层</span>
+        </div>
+        <div class="areaPrice">
+          <span class="area">16565㎡</span>
+          <span class="price">12321元/㎡</span>
+        </div>
+        <p class="location">地址：宝山区华秋路349号</p>
+      </div>
+      <div class="baseMsg msgBox">
+        <h3 class="boxTitle">基本信息</h3>
+        <div class="msg">
+          <div class="showItem clearfix noneBb">
+            <span class="name">所在县区：</span>
+            <span class="value textLeft">宝山区</span>
+          </div>
+          <div class="showItem clearfix noneBb">
+            <span class="name">业态类型：</span>
+            <span class="value textLeft">宝山区宝山区宝山区宝山区</span>
+          </div>
+          <div class="showItem clearfix noneBb">
+            <span class="name">建筑面积：</span>
+            <span class="value textLeft">971㎡</span>
+          </div>
+          <div class="showItem clearfix noneBb">
+            <span class="name">楼层面积：</span>
+            <span class="value textLeft">971㎡</span>
+          </div>
+          <div class="showItem clearfix noneBb">
+            <span class="name">物业公司：</span>
+            <span class="value textLeft">暴力物业</span>
+          </div>
+          <div class="showItem clearfix noneBb">
+            <span class="name">建筑高度：</span>
+            <span class="value textLeft">971㎡</span>
+          </div>
+        </div>
+      </div>
+      <div class="locations msgBox">
+        <h3 class="boxTitle">基本信息</h3>
+        <img class="pics" src="http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg">
+      </div>
+      <div class="followMsg msgBox">
+        <h3 class="boxTitle">最新跟进情况</h3>
+        <div class="msg">
+          <div class="showItem clearfix noneBb">
+            <span class="name">跟进人：</span>
+            <span class="value textLeft">宝山区</span>
+          </div>
+          <div class="showItem clearfix noneBb">
+            <span class="name">跟进时间：</span>
+            <span class="value textLeft">2018-12-13 12:30</span>
+          </div>
+          <div class="showItem clearfix noneBb">
+            <span class="name">说明：</span>
+            <span class="value textLeft">客户意向不明</span>
+          </div>
+        </div>
+      </div>
+      <div class="moreBtn" @click.stop="toInvestmentMoreMsg">查看更多</div>
+      <div class="connet">
+        <span class="name">王大陆</span>
+        <a class="phone clearfix" :href="'tel:15012345678'">
+          <span class="tel">15012345678</span>
+          <i class="iconfont icon-dizhi icon"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import navTitle from '@/components/navTitle'
+import { Swipe, SwipeItem } from 'mint-ui'
+export default {
+  name: 'projectDetail',
+  components: {navTitle, Swipe, SwipeItem},
+  data () {
+    return {
+      imageList: [
+        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
+        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
+        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
+        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
+        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'}
+      ]
+    }
+  },
+  methods: {
+    toInvestmentMoreMsg () {
+      this.$router.push(`/investmentMoreMsg/${this.$route.params.id}`)
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+  .projectDetail {
+    ._swipe-wrap{
+      position: relative;
+      width: 100vw;
+      height: 3.12rem;
+      overflow: hidden;
+      .pics{
+        display: block;
+        width: 100vw;
+        height: 3.12rem;
+      }
+    }
+    .headerData{
+      padding: .2rem .3rem;
+      background: #fff;
+      .title{
+        .name{
+          float: left;
+          max-width: 4rem;
+          height: .44rem;
+          font-size: .34rem;
+          color: #333;
+          line-height: .44rem;
+        }
+        .type{
+          float: left;
+          padding: 0 .1rem;
+          height: .44rem;
+          margin-left: .2rem;
+          line-height: .44rem;
+          background: #EDFAFF;
+          color: #05A3FD;
+          font-size: .28rem;
+        }
+        .floor{
+          float: left;
+          padding: 0 .1rem;
+          height: .44rem;
+          margin-left: .2rem;
+          line-height: .44rem;
+          background: #FFF2ED;
+          color: #FC6805;
+          font-size: .28rem;
+        }
+      }
+      .areaPrice{
+        height: .4rem;
+        margin-top: .1rem;
+        line-height: .4rem;
+        font-size: .28rem;
+        .area{
+          display: inline-block;
+          color: #333;
+        }
+        .price{
+          display: inline-block;
+          margin-left: .4rem;
+          color: #FC6805;
+        }
+      }
+      .location{
+        height: .4rem;
+        margin-top: .1rem;
+        font-size: .3rem;
+        color: #333;
+        line-height: .4rem;
+      }
+    }
+    .msgBox{
+      margin-top: .2rem;
+      background: #fff;
+      .boxTitle{
+        height: .82rem;
+        padding: 0 .3rem;
+        line-height: .82rem;
+        font-size: .34rem;
+        color: #333;
+        border-bottom: 1px solid #ededed;
+      }
+      .msg{
+        padding: .1rem .3rem;
+      }
+    }
+    .locations{
+      .pics{
+        display: block;
+        width: 100vw;
+        height: 2.88rem;
+      }
+    }
+    .moreBtn{
+      height: .8rem;
+      width: 100vw;
+      margin-top: .2rem;
+      background: #fff;
+      font-size: .34rem;
+      color: #0DC88C;
+      line-height: .8rem;
+      text-align: center;
+    }
+    .connet{
+      position: relative;
+      height: .8rem;
+      width: 100vw;
+      padding: 0 .3rem;
+      margin-top: .2rem;
+      background: #fff;
+      line-height: .8rem;
+      font-size: .34rem;
+      color: #333;
+      .phone{
+        position: absolute;
+        right: .3rem;
+        top: 0;
+        display: block;
+        height: .8rem;
+        line-height: .8rem;
+        font-size: .34rem;
+        color: #333;
+        .tel{
+          float: left;
+        }
+        .icon{
+          float: left;
+          width: .5rem;
+          height: .5rem;
+          margin-top: .15rem;
+          background: #0DC88C;
+          color: #fff;
+          font-size: .4rem;
+          text-align: center;
+          line-height: .5rem;
+          border-radius: 50%;
+          margin-left: .2rem;
+        }
+      }
+    }
+  }
+</style>

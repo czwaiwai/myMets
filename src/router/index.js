@@ -6,6 +6,8 @@ import customerService from './customerService'
 import meeting from './meeting'
 // 抄表
 import meter from './meter'
+// 投资物业
+import investment from './investment'
 import report from './report'
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
@@ -263,6 +265,7 @@ export default new Router({
     ...meeting,
     ...report,
     ...meter,
+    ...investment,
     {
       path: '*',
       redirect: to => {
