@@ -236,6 +236,7 @@ export default {
     bottom: 16px;
     position: absolute;
     width: 100%;
+    z-index:11;
   }
   .tool_show_btn {
     border: none;

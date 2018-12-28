@@ -1,4 +1,10 @@
 export default function (Vue) {
+  Vue.filter('int', function (value) {
+    return parseInt(value)
+  })
+  Vue.filter('float2', function (value) {
+    return parseFloat(value).toFixed(2)
+  })
   Vue.filter('setPrice', function (price) {
     if (price > 0) {
       return '+' + price

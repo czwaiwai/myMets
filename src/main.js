@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import './assets/css/main.scss'
 import './assets/font/meeting/iconfont.css'
+import './assets/font/report/iconfont.css'
 import 'vue-photo-preview/dist/skin.css'
 import Vue from 'vue'
 import App from './App'
@@ -13,7 +14,7 @@ import routerDirect from './utils/routerDirect'
 import appApi from './utils/appApi' // app 的 调用api
 import filter from './utils/filter'
 import toLower from './utils/toLower'
-import { MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore, Indicator } from 'mint-ui'
+import { DatetimePicker, MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore, Indicator } from 'mint-ui'
 import FastClick from 'fastclick'
 import bus from './utils/pushMsg'
 import '@/utils/rem'
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV === 'development') {
 FastClick.attach(document.body)
 dateForm()
 Vue.config.productionTip = false
+Vue.component(DatetimePicker.name, DatetimePicker)
 Vue.component(IndexList.name, IndexList)
 Vue.component(IndexSection.name, IndexSection)
 Vue.component(Button.name, Button)

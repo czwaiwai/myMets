@@ -26,6 +26,12 @@
 .dark_99 {
   color: #999;
 }
+.dark_33 {
+  color: #333;
+}
 .picker-items{
   width:100%
+}
+.year_month .picker-items .picker-slot:nth-last-child(2) {
+  display: none;
 }

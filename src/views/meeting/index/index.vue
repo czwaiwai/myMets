@@ -56,9 +56,6 @@ export default {
     },
     // 获取颜色列表
     async getStatusColor () {
-      if (this.statusColor.length) {
-        return
-      }
       this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_MeetingUseStatusColor', {
         'OrgID': this.$route.query.orgId
@@ -67,7 +64,7 @@ export default {
       console.log(res)
       if (res.data) {
         let resData = this.$toLower(res.data)
-        statusColor(resData)
+        statusColor(resData, true)
         this.$store.commit('setStatusColor', resData)
       }
     },
