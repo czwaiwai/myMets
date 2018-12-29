@@ -26,7 +26,7 @@
         </div>
         <p class="location">地址：宝山区华秋路349号</p>
       </div>
-      <div class="baseMsg msgBox">
+      <div class="baseMsg msgBox mt10">
         <h3 class="boxTitle">基本信息</h3>
         <div class="msg">
           <div class="showItem clearfix noneBb">
@@ -55,11 +55,11 @@
           </div>
         </div>
       </div>
-      <div class="locations msgBox">
-        <h3 class="boxTitle">基本信息</h3>
+      <div class="locations msgBox mt10">
+        <h3 class="boxTitle">位置及周边</h3>
         <img class="pics" src="http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg">
       </div>
-      <div class="followMsg msgBox">
+      <div class="followMsg msgBox mt10">
         <h3 class="boxTitle">最新跟进情况</h3>
         <div class="msg">
           <div class="showItem clearfix noneBb">
@@ -76,14 +76,14 @@
           </div>
         </div>
       </div>
-      <div class="moreBtn" @click.stop="toInvestmentMoreMsg">查看更多</div>
-      <div class="connet">
-        <span class="name">王大陆</span>
-        <a class="phone clearfix" :href="'tel:15012345678'">
-          <span class="tel">15012345678</span>
-          <i class="iconfont icon-dizhi icon"></i>
-        </a>
-      </div>
+      <div class="moreBtn mt10" @click.stop="toInvestmentMoreMsg">查看更多</div>
+    </div>
+    <div class="connet">
+      <span class="name">王大陆</span>
+      <a class="phone clearfix" :href="'tel:15012345678'">
+        <span class="tel">15012345678</span>
+        <i class="iconfont icon-dizhi icon"></i>
+      </a>
     </div>
   </div>
 </template>
@@ -181,7 +181,6 @@ export default {
       }
     }
     .msgBox{
-      margin-top: .2rem;
       background: #fff;
       .boxTitle{
         height: .82rem;
@@ -205,48 +204,49 @@ export default {
     .moreBtn{
       height: .8rem;
       width: 100vw;
-      margin-top: .2rem;
+      margin-bottom: .2rem;
       background: #fff;
       font-size: .34rem;
       color: #0DC88C;
       line-height: .8rem;
       text-align: center;
     }
-    .connet{
-      position: relative;
+  }
+  .connet{
+    position: relative;
+    height: .8rem;
+    width: 100vw;
+    padding: 0 .3rem;
+    background: #fff;
+    line-height: .8rem;
+    font-size: .34rem;
+    color: #333;
+    border-top: 1px solid #ededed;
+    overflow: hidden;
+    .phone{
+      position: absolute;
+      right: .3rem;
+      top: 0;
+      display: block;
       height: .8rem;
-      width: 100vw;
-      padding: 0 .3rem;
-      margin-top: .2rem;
-      background: #fff;
       line-height: .8rem;
       font-size: .34rem;
       color: #333;
-      .phone{
-        position: absolute;
-        right: .3rem;
-        top: 0;
-        display: block;
-        height: .8rem;
-        line-height: .8rem;
-        font-size: .34rem;
-        color: #333;
-        .tel{
-          float: left;
-        }
-        .icon{
-          float: left;
-          width: .5rem;
-          height: .5rem;
-          margin-top: .15rem;
-          background: #0DC88C;
-          color: #fff;
-          font-size: .4rem;
-          text-align: center;
-          line-height: .5rem;
-          border-radius: 50%;
-          margin-left: .2rem;
-        }
+      .tel{
+        float: left;
+      }
+      .icon{
+        float: left;
+        width: .5rem;
+        height: .5rem;
+        margin-top: .15rem;
+        background: #0DC88C;
+        color: #fff;
+        font-size: .4rem;
+        text-align: center;
+        line-height: .5rem;
+        border-radius: 50%;
+        margin-left: .2rem;
       }
     }
   }

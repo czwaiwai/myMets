@@ -26,13 +26,13 @@ export default {
     setTitle (type) {
       switch (type) {
         case 0:
-          this.title = '已投'
+          this.title = '已投项目'
           break
         case 1:
-          this.title = '可投'
+          this.title = '未来可投'
           break
         case 2:
-          this.title = '不考虑'
+          this.title = '暂不考虑'
           break
       }
     }

@@ -7,10 +7,24 @@
       </li>
     </ul>
     <div class="page_bd investmentMoreMsg">
-      <modul-survey v-if="type===0"></modul-survey>
+      <!-- <modul-survey v-if="type===0"></modul-survey>
       <modul-match v-else-if="type===1"></modul-match>
       <modul-progress v-else-if="type===2"></modul-progress>
-      <modul-result v-else-if="type===3"></modul-result>
+      <modul-result v-else-if="type===3"></modul-result> -->
+      <mt-tab-container v-model="active" :swipeable="true">
+        <mt-tab-container-item id="tab-container0">
+          <modul-survey></modul-survey>
+        </mt-tab-container-item>
+        <mt-tab-container-item id="tab-container1">
+          <modul-match></modul-match>
+        </mt-tab-container-item>
+        <mt-tab-container-item id="tab-container2">
+          <modul-progress></modul-progress>
+        </mt-tab-container-item>
+        <mt-tab-container-item id="tab-container3">
+          <modul-result></modul-result>
+        </mt-tab-container-item>
+      </mt-tab-container>
     </div>
   </div>
 </template>
@@ -20,9 +34,10 @@ import modulSurvey from './children/modulSurvey'
 import modulMatch from './children/modulMatch'
 import modulProgress from './children/modulProgress'
 import modulResult from './children/modulResult'
+import { TabContainer, TabContainerItem } from 'mint-ui'
 export default {
   name: 'investmentMoreMsg',
-  components: {navTitle, modulSurvey, modulMatch, modulProgress, modulResult},
+  components: {navTitle, TabContainer, TabContainerItem, modulSurvey, modulMatch, modulProgress, modulResult},
   data () {
     return {
       typeList: [
@@ -31,7 +46,7 @@ export default {
         {name: '项目进展', isSelect: false, type: 2},
         {name: '交易结果', isSelect: false, type: 3}
       ],
-      type: 0
+      active: 'tab-container0'
     }
   },
   methods: {
@@ -47,6 +62,7 @@ export default {
           arr.isSelect = false
         }
       })
+      this.active = 'tab-container' + item.type
       this.$el.querySelector('.investmentMoreMsg').scrollTop = 1
     }
   }

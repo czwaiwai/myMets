@@ -44,7 +44,18 @@
     <div class="arcMsg msgBox mt20">
       <h3 class="boxTitle">交通配套</h3>
       <div class="msg">
-
+        <p class="iline">
+          <span class="name">连社区卫生服务中心:&nbsp;&nbsp;</span>
+          <span class="value">华山医院</span>
+        </p>
+        <p class="iline">
+          <span class="name">周边学校:&nbsp;&nbsp;</span>
+          <span class="value">华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中</span>
+        </p>
+        <p class="iline">
+          <span class="name">轨道交通:&nbsp;&nbsp;</span>
+          <span class="value">华山医院、上海大学站</span>
+        </p>
       </div>
     </div>
   </div>
@@ -71,7 +82,18 @@ export default {
         border-bottom: 1px solid #ededed;
       }
       .msg{
-        padding: .1rem .3rem;
+        padding: .2rem .3rem;
+        .iline{
+          font-size: .3rem;
+          line-height: 1.5;
+          .name{
+            color: #999;
+          }
+          .value{
+            color: #333;
+            text-indent: .3rem;
+          }
+        }
       }
     }
   }

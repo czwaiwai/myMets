@@ -72,12 +72,14 @@
     </div>
     <div class="goodMsg msgBox mt20">
       <h3 class="boxTitle">项目亮点</h3>
-      <div class="msg">暂无
+      <div class="msg">
+        <p class="value">业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算</p>
       </div>
     </div>
     <div class="badMsg msgBox mt20">
       <h3 class="boxTitle">项目缺点</h3>
-      <div class="msg">暂无
+      <div class="msg">
+        <p class="value">业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算</p>
       </div>
     </div>
   </div>
@@ -104,7 +106,12 @@ export default {
         border-bottom: 1px solid #ededed;
       }
       .msg{
-        padding: .1rem .3rem;
+        padding: .2rem .3rem;
+        .value{
+          font-size: .3rem;
+          color: #333;
+          line-height: 1.5;
+        }
       }
     }
   }
