@@ -20,8 +20,6 @@ import bus from './utils/pushMsg'
 import '@/utils/rem'
 import preview from 'vue-photo-preview'
 console.log(bus)
-console.log(location.href, '------------------')
-console.log(location.hash, '----location.hash----')
 
 if (process.env.NODE_ENV === 'development') {
   Vue.prototype.$dev = true

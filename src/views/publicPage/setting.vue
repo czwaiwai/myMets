@@ -34,6 +34,16 @@
               </div>
             </a>
           </div>
+          <div v-if="$dev" class="weui-cells">
+            <a @click="$router.forward('/test')"  class="weui-cell weui-cell_access" href="javascript:;">
+              <div class="weui-cell__bd">
+                <p>测试页面</p>
+              </div>
+              <div class="weui-cell__ft">
+                {{user && user.PositionName}}
+              </div>
+            </a>
+          </div>
         </div>
     </div>
 </template>
@@ -49,8 +59,7 @@ export default {
       'user': 'user'
     })
   },
-  created () {
-  },
+  created () {},
   methods: {}
 }
 </script>

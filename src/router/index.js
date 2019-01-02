@@ -23,6 +23,7 @@ import CustomerList from '@/views/cashInfo/customerList'
 import ExpenseList from '@/views/cashInfo/expenseList'
 import CashPaySucc from '@/views/cashInfo/cashPaySucc'
 import CashPayDetail from '@/views/cashInfo/cashPayDetail'
+import Test from '@/views/test'
 
 /* webpackChunkName:'baseIndex' */
 const Home = () => import(/* webpackChunkName:'baseIndex' */ '@/views/home')
@@ -32,7 +33,7 @@ const ChangeProject = () => import('@/views/changeProject')
 const Detail = () => import('@/views/detail')
 const SubDetail = () => import('@/views/subDetail')
 const CashInfo = () => import('@/views/cashInfo/index')
-const Cash = () => import('@/views/cashInfo/cash')
+const CashTest = () => import('@/views/cashInfo/cash')
 
 const CashHistory = () => import('@/views/cashInfo/cashHistory')
 const ServerAddress = () => import('@/views/serverAddress')
@@ -90,6 +91,11 @@ export default new Router({
       component: Home
     },
     {
+      path: '/test',
+      name: 'test',
+      component: Test
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login
@@ -131,10 +137,11 @@ export default new Router({
         }
       ]
     },
+    // 测试使用
     {
       path: '/cash',
       name: 'cash',
-      component: Cash
+      component: CashTest
     },
     {
       path: '/cashInfo',
