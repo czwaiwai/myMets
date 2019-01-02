@@ -1,30 +1,28 @@
 <template>
-  <div class="page page_bg">
-    <nav-title title="更多信息"></nav-title>
-    <ul class="typeList">
-      <li class="items" v-for="(item,index) in typeList" :key="index" @click.stop="selectType(item)">
-        <span class="name" :class="{'isSelect':item.isSelect}">{{item.name}}</span>
-      </li>
-    </ul>
-    <div class="page_bd investmentMoreMsg">
-      <!-- <modul-survey v-if="type===0"></modul-survey>
-      <modul-match v-else-if="type===1"></modul-match>
-      <modul-progress v-else-if="type===2"></modul-progress>
-      <modul-result v-else-if="type===3"></modul-result> -->
-      <mt-tab-container v-model="active" :swipeable="true">
-        <mt-tab-container-item id="tab-container0">
-          <modul-survey></modul-survey>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="tab-container1">
-          <modul-match></modul-match>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="tab-container2">
-          <modul-progress></modul-progress>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="tab-container3">
-          <modul-result></modul-result>
-        </mt-tab-container-item>
-      </mt-tab-container>
+  <div class="page_modal">
+    <div class="page page_bg">
+      <nav-title title="更多信息"></nav-title>
+      <ul class="typeList">
+        <li class="items" v-for="(item,index) in typeList" :key="index" @click.stop="selectType(item)">
+          <span class="name" :class="{'isSelect':item.isSelect}">{{item.name}}</span>
+        </li>
+      </ul>
+      <div class="page_bd investmentMoreMsg">
+        <mt-tab-container v-model="active" :swipeable="false">
+          <mt-tab-container-item id="tab-container0">
+            <modul-survey></modul-survey>
+          </mt-tab-container-item>
+          <mt-tab-container-item id="tab-container1">
+            <modul-match></modul-match>
+          </mt-tab-container-item>
+          <mt-tab-container-item id="tab-container2">
+            <modul-progress></modul-progress>
+          </mt-tab-container-item>
+          <mt-tab-container-item id="tab-container3">
+            <modul-result></modul-result>
+          </mt-tab-container-item>
+        </mt-tab-container>
+      </div>
     </div>
   </div>
 </template>
@@ -65,6 +63,11 @@ export default {
       this.active = 'tab-container' + item.type
       this.$el.querySelector('.investmentMoreMsg').scrollTop = 1
     }
+  },
+  activated () {
+    console.log('in...moreMsg')
+  },
+  created () {
   }
 }
 </script>

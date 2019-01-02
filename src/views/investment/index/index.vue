@@ -7,15 +7,15 @@
       </div>
       <div class="content">
         <div class="destine items clearfix" @click.stop="toInvestmentList(0)">
-          <i class="iconfont pics icon-m3-meeting-fill"></i>
+          <i class="iconfont pics icon-fangyuan1"></i>
           <span>已投项目</span>
         </div>
         <div class="myDestine items clearfix" @click.stop="toInvestmentList(1)">
-          <i class="iconfont pics icon-yuding"></i>
+          <i class="iconfont pics icon-weilai"></i>
           <span>未来可投</span>
         </div>
         <div class="myMeeting items clearfix" @click.stop="toInvestmentList(2)">
-          <i class="iconfont pics icon-meeting"></i>
+          <i class="iconfont pics icon-prohibit"></i>
           <span>暂不考虑</span>
         </div>
       </div>
@@ -72,7 +72,6 @@ export default {
           width: 1rem;
           height: 1rem;
           margin: .34rem .3rem;
-          font-size: .5rem;
           color: #fff;
           line-height: 1rem;
           text-align: center;
@@ -81,15 +80,16 @@ export default {
       }
     }
     .destine .pics{
+      font-size: .5rem;
       background: #0DC88C;
     }
     .myDestine .pics{
+      font-size: .6rem;
       background: #FA8A2C;
     }
     .myMeeting .pics{
+      font-size: .8rem;
       background: #2CB4FA;
-      line-height: 1.1rem !important;
-      font-size: .46rem !important;
     }
   }
 </style>

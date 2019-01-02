@@ -1,51 +1,54 @@
 <template>
-  <div class="page page_bg">
-    <nav-title title="搜索"></nav-title>
-    <div class="searchBox">
-      <form class="searchWrap clearfix" action="" onsubmit="return false;">
-          <i class="iconfont icon-sousuo"></i>
-          <input class="search-input" placeholder="请输入项目名称" type="search" v-model="searchKey" @keydown.13="searchList">
-          <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
-      </form>
-      <span class="searachBtn" v-if="searchKey.length" @click.stop="searchList">搜索</span>
-      <span class="searachBtn" v-else @click.stop="$router.go(-1)">取消</span>
-    </div>
-    <div class="page_bd investmentSearch">
-      <div class="history" v-if="!dataList.length && historyList.length && !hasHttp">
-        <div class="header">
-          <span>历史搜索</span>
-          <p class="clear" @click.stop="clearHistoryList">全部清除</p>
-        </div>
-        <ul class="list clearfix">
-          <li class="item" v-for="(item,index) in historyList" :key="index" @click.stop="clickItem(item)">
-            <span>{{item}}</span>
-            <i class="iconfont icon-quxiao1" @click.stop="clearitem(item,index)"></i>
-          </li>
-        </ul>
+  <div class="page_modal">
+    <div class="page page_bg">
+      <nav-title title="搜索"></nav-title>
+      <div class="searchBox">
+        <form class="searchWrap clearfix" action="" onsubmit="return false;">
+            <i class="iconfont icon-sousuo"></i>
+            <input class="search-input" placeholder="请输入项目名称" type="search" v-model="searchKey" @keydown.13="searchList">
+            <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
+        </form>
+        <span class="searachBtn" v-if="searchKey.length" @click.stop="searchList">搜索</span>
+        <span class="searachBtn" v-else @click.stop="$router.go(-1)">取消</span>
       </div>
-      <ul class="content-list" v-else-if="dataList.length"
-        v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="loading"
-        infinite-scroll-distance="10">
-        <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toProjectDetail(item)">
-          <img class="pic" src="http://pic25.nipic.com/20121110/10839717_103723525199_2.jpg">
-          <div class="desc">
-            <div class="title _lines">保利叶之林</div>
-            <div class="name _lines">256171㎡/南山区/普通住宅</div>
-            <div class="price _lines">100.36元㎡/天</div>
-            <div class="time _lines">2018-12-12</div>
+      <div class="page_bd investmentSearch">
+        <div class="history" v-if="!dataList.length && historyList.length">
+          <div class="header">
+            <span>历史搜索</span>
+            <p class="clear" @click.stop="clearHistoryList">全部清除</p>
           </div>
-        </li>
-        <li class="tip">加载中···</li>
-      </ul>
-      <none-page title="暂无符合条件的数据~" height="70" v-if="!dataList.length&&hasHttp"></none-page>
+          <ul class="list clearfix">
+            <li class="item" v-for="(item,index) in historyList" :key="index" @click.stop="clickItem(item)">
+              <span>{{item}}</span>
+              <i class="iconfont icon-quxiao1" @click.stop="clearitem(item,index)"></i>
+            </li>
+          </ul>
+        </div>
+        <ul class="content-list" v-else-if="dataList.length"
+          v-infinite-scroll="loadMore"
+          infinite-scroll-disabled="loading"
+          infinite-scroll-distance="10">
+          <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toProjectDetail(item)">
+            <div class="status" :class="com_color(index)">{{com_status(index)}}</div>
+            <img class="pic" src="http://pic25.nipic.com/20121110/10839717_103723525199_2.jpg">
+            <div class="desc">
+              <div class="title _lines">保利叶之林</div>
+              <div class="name _lines">256171㎡/南山区/普通住宅</div>
+              <div class="price _lines">100.36元㎡/天</div>
+              <div class="time _lines">2018-12-12</div>
+            </div>
+          </li>
+          <li class="tip">加载中···</li>
+        </ul>
+        <none-page title="暂无符合条件的数据~" v-if="!dataList.length&&hasHttp" :height="historyList.length?'40':'100'"></none-page>
+      </div>
+      <dialog-confire
+        :title="dialogData.title"
+        ref="dialog"
+        @clickLeftBtn="clickLeftBtn"
+        @clickRightBtn="clickRightBtn"
+      ></dialog-confire>
     </div>
-    <dialog-confire
-      :title="dialogData.title"
-      ref="dialog"
-      @clickLeftBtn="clickLeftBtn"
-      @clickRightBtn="clickRightBtn"
-    ></dialog-confire>
   </div>
 </template>
 <script>
@@ -72,9 +75,36 @@ export default {
     }
   },
   methods: {
+    // 状态便签颜色
+    com_color (index) {
+      let temp = index % 3
+      return 'statusColor' + temp
+    },
+    // 状态名称
+    com_status (index) {
+      let temp = index % 3
+      let status = ''
+      switch (temp) {
+        case 0:
+          status = '已投'
+          break
+        case 1:
+          status = '未来可投'
+          break
+        case 2:
+          status = '不考虑'
+          break
+      }
+      return status
+    },
     // 到项目详情
     toProjectDetail (item) {
-      this.$router.push(`/projectDetail/123`)
+      this.$router.push({
+        name: `investmentDetail`,
+        params: {
+          id: 1234
+        }
+      })
     },
     // 清除搜索条件
     clearKey () {
@@ -141,8 +171,20 @@ export default {
       this.list += 20
     }
   },
-  created () {
+  beforeRouteLeave (to, from, next) {
+    if (to.name === 'investmentList') {
+      this.historyList = []
+      this.page = 1
+      this.hasHttp = false
+      console.log('toinvestmentList')
+    }
+    next()
+  },
+  activated () {
     this.historyList = localStorage.historyinvestmentList ? localStorage.historyinvestmentList.split(',') : []
+    console.log('in...search')
+  },
+  created () {
   }
 }
 </script>
@@ -187,7 +229,7 @@ export default {
         height: 0.56rem;
         margin-right: 0.2rem;
         line-height: 0.56rem;
-        font-size: 0.4rem;
+        font-size: 0.34rem;
         text-align: right;
         color: #999;
       }
@@ -206,6 +248,7 @@ export default {
       position: relative;
       z-index: 10;
       padding: 0 0 .3rem .3rem;
+      height: 3.76rem;
       .header{
         position: relative;
         height: .88rem;
@@ -267,11 +310,31 @@ export default {
     .content-list{
       background: #fff;
       .item{
+        position: relative;
         padding: .3rem;
         background: #fff;
         border-bottom: 1px solid #ededed;
         &:last-child{
           border-bottom: none;
+        }
+        .status{
+          position: absolute;
+          padding: 0 .1rem;
+          height: .34rem;
+          color: #fff;
+          font-size: .24rem;
+          line-height: .34rem;
+          text-align: center;
+          border-bottom-right-radius: 3px;
+          &.statusColor0 {
+            background: #FA8A2C;
+          }
+          &.statusColor1 {
+            background: #0DC88C;
+          }
+          &.statusColor2 {
+            background: #2CB4FA;
+          }
         }
         .pic{
           float: left;

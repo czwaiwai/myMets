@@ -53,7 +53,10 @@
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">中介联系方式：</span>
-          <span class="value textLeft">15012345678</span>
+          <a class="value phone clearfix" :href="'tel:15012345678'">
+            <span class="tel">15012345678</span>
+            <i class="iconfont icon-dianhua pic"></i>
+          </a>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">付款方式：</span>
@@ -92,11 +95,36 @@ export default {
         padding: .1rem .3rem;
       }
     }
-    .showItem .name {
-      width: 2.3rem;
+    .showItem {
+      .name {
+        width: 2.3rem;
+      }
+      .value {
+        width: 4.5rem;
+      }
     }
   }
   .mt20{
     margin-top: .2rem;
+  }
+  .showItem{
+    .phone{
+      .people, .tel {
+        float: left;
+        height: .56rem;
+        line-height: .56rem;
+        margin-right: .1rem;
+        color: #333;
+      }
+      .pic{
+        float: left;
+        width: .56rem;
+        height: .56rem;
+        font-size: .4rem;
+        color: #0DC88C;
+        text-align: center;
+        line-height: .56rem;
+      }
+    }
   }
 </style>

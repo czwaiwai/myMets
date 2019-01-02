@@ -25,7 +25,11 @@
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">项目负责人：</span>
-          <span class="value textLeft">南山区</span>
+          <a class="value phone clearfix" :href="'tel:15012345678'">
+            <span class="people">南山区</span>
+            <span class="tel">15012345678</span>
+            <i class="iconfont icon-dianhua pic"></i>
+          </a>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">国内/ 国外：</span>
@@ -107,6 +111,9 @@ export default {
       }
       .msg{
         padding: .2rem .3rem;
+      }
+      .goodMsg,.badMsg{
+        padding: .2rem .3rem;
         .value{
           font-size: .3rem;
           color: #333;
@@ -117,5 +124,25 @@ export default {
   }
   .mt20{
     margin-top: .2rem;
+  }
+  .showItem{
+    .phone{
+      .people, .tel {
+        float: left;
+        height: .56rem;
+        line-height: .56rem;
+        margin-right: .1rem;
+        color: #333;
+      }
+      .pic{
+        float: left;
+        width: .56rem;
+        height: .56rem;
+        font-size: .4rem;
+        color: #0DC88C;
+        text-align: center;
+        line-height: .56rem;
+      }
+    }
   }
 </style>

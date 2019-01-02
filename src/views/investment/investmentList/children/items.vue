@@ -4,7 +4,8 @@
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10">
-      <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toProjectDetail(item)">
+      <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toInvestmentDetail(item)">
+        <div class="status" :class="com_color(index)">{{com_status(index)}}</div>
         <img class="pic" src="http://pic25.nipic.com/20121110/10839717_103723525199_2.jpg">
         <div class="desc">
           <div class="title _lines">保利叶之林</div>
@@ -26,9 +27,36 @@ export default {
     }
   },
   methods: {
+    // 状态便签颜色
+    com_color (index) {
+      let temp = index % 3
+      return 'statusColor' + temp
+    },
+    // 状态名称
+    com_status (index) {
+      let temp = index % 3
+      let status = ''
+      switch (temp) {
+        case 0:
+          status = '已投'
+          break
+        case 1:
+          status = '未来可投'
+          break
+        case 2:
+          status = '不考虑'
+          break
+      }
+      return status
+    },
     // 到项目详情
-    toProjectDetail (item) {
-      this.$router.push(`/projectDetail/123`)
+    toInvestmentDetail (item) {
+      this.$router.push({
+        name: `investmentDetail`,
+        params: {
+          id: 1234
+        }
+      })
     },
     // 加载更多
     loadMore () {
@@ -44,11 +72,31 @@ export default {
     .list{
       background: #fff;
       .item{
+        position: relative;
         padding: .3rem;
         background: #fff;
         border-bottom: 1px solid #ededed;
         &:last-child{
           border-bottom: none;
+        }
+        .status{
+          position: absolute;
+          padding: 0 .1rem;
+          height: .34rem;
+          color: #fff;
+          font-size: .24rem;
+          line-height: .34rem;
+          text-align: center;
+          border-bottom-right-radius: 3px;
+          &.statusColor0 {
+            background: #FA8A2C;
+          }
+          &.statusColor1 {
+            background: #0DC88C;
+          }
+          &.statusColor2 {
+            background: #2CB4FA;
+          }
         }
         .pic{
           float: left;

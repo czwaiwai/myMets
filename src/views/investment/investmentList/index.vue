@@ -6,6 +6,11 @@
     <div class="page_bd investmentList">
       <items></items>
     </div>
+    <transition name="page">
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 <script>

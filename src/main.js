@@ -3,6 +3,7 @@
 import './assets/css/main.scss'
 import './assets/font/meeting/iconfont.css'
 import './assets/font/meter/iconfont.css'
+import './assets/font/investment/iconfont.css'
 import 'vue-photo-preview/dist/skin.css'
 import Vue from 'vue'
 import App from './App'
