@@ -11,26 +11,28 @@
           <div class="weui-cell__ft"></div>
       </a>
     </div>
-    <!-- <div>
-      <popup  class="search-date-popup" v-model="popupVisible"  style="margin-top:0.88rem;" position="top" >
+    <mt-popup class="search-date-popup" v-model="popupVisible"  position="top">
         <div style="font-size:0.32rem;padding-top:0.3rem;padding-bottom:0.3rem;">
           日期范围筛选
         </div>
-        <datetime class="form_item" :end-date="currDate" v-model="searchForm.startDate" format="YYYY-MM-DD" :max-year=3000 :min-year=1900>
-          <label>开始时间: </label>
-          <div><input  v-model="searchForm.startDate"><i class="iconfont icon-calendar icon-gengduo1" ></i></div>
-        </datetime>
-        <datetime class="form_item" :start-date="searchForm.startDate" :end-date="currDate"  v-model="searchForm.endDate"  format="YYYY-MM-DD" :max-year=3000 :min-year=1900>
-          <label>结束时间:</label>
-          <div><input v-model="searchForm.endDate" ><i class="iconfont icon-calendar icon-gengduo1" ></i></div>
-        </datetime>
+        <!-- <datetime class="form_item" :end-date="currDate" v-model="searchForm.startDate" format="YYYY-MM-DD" :max-year=3000 :min-year=1900> </datetime> -->
+
+          <div @click="$refs.startPicker.open()" class="form_item">
+            <label>开始时间: </label>
+            <div><input  v-model="searchForm.startDate"><i class="iconfont icon-calendar icon-gengduo1" ></i></div>
+          </div>
+
+        <!-- <datetime class="form_item" :start-date="searchForm.startDate" :end-date="currDate"  v-model="searchForm.endDate"  format="YYYY-MM-DD" :max-year=3000 :min-year=1900></datetime> -->
+          <div @click="$refs.endPicker.open()"  class="form_item">
+            <label>结束时间:</label>
+            <div><input v-model="searchForm.endDate" ><i class="iconfont icon-calendar icon-gengduo1" ></i></div>
+          </div>
+
         <div class="btn_wrap">
           <button class="btn_reset" @click="resetSearch">重置</button>
           <button class="btn_sure" @click="submitSearch">确定</button>
         </div>
-      </popup>
-      <div class="vux-popup-mask" style="margin-top:0.88rem;" ></div>
-    </div> -->
+    </mt-popup>
     <div  @click="showDate" class="page_sub_hd padding-h">
       <span>{{searchForm.startDate}} 至 {{searchForm.endDate}}</span>
       <a class="float_right inline-block dark_99" ><i class="iconfont icon-calendar icon-gengduo1" ></i></a>
@@ -84,7 +86,12 @@
             </div>
           </div>
           <div  class="re_section">
-            <div class="re_title">已租分区统计<span class="float_right">套</span></div>
+            <div class="re_title">已租分区统计
+              <span class="float_right">
+                <a @click="rentToggle=true" class="re_btn_link" :class="{'active':rentToggle}">分区</a><a
+                @click="rentToggle=false" class="re_btn_link" :class="{'active': !rentToggle}">业态</a>
+              </span>
+            </div>
             <div class="re_content" style="padding-bottom:0.3rem;">
               <div ref="noRent" class="" style="height:3.4rem;"></div>
             </div>
@@ -128,17 +135,18 @@
                       </div>
                       <transition name="slide-bottom" mode="out-in">
                         <div v-show="detailShow===index" class="re_item_info">
+                          <p class="text-left padding-left15">{{item.GrpName}}</p>
                           <div class="flex">
                             <dl class="flex_item">
-                              <dt class="fs15">{{item.KZMJ}}</dt>
+                              <dt class="fs15">{{item.KZMJ | float2}}</dt>
                               <dd class="dark_99 fs15">可租面积</dd>
                             </dl>
                             <dl class="flex_item">
-                              <dt class="fs15">{{item.YZMJ}}</dt>
+                              <dt class="fs15">{{item.YZMJ | float2}}</dt>
                               <dd class="dark_99 fs15">已租面积</dd>
                             </dl>
                             <dl class="flex_item">
-                              <dt class="fs15">{{item.WZMJ}}</dt>
+                              <dt class="fs15">{{item.WZMJ | float2}}</dt>
                               <dd class="dark_99 fs15">未租面积</dd>
                             </dl>
                           </div>
@@ -158,10 +166,30 @@
         <router-view/>
       </keep-alive>
     </transition>
+    <mt-datetime-picker
+      v-model="startDate"
+      type="date"
+      ref="startPicker"
+      :endDate = "new Date()"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      @confirm="startHandleConfirm" >
+    </mt-datetime-picker>
+    <mt-datetime-picker
+      v-model="endDate"
+      type="date"
+      ref="endPicker"
+      :startDate = "startDate"
+      :endDate = "new Date()"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      @confirm="endHandleConfirm" >
+    </mt-datetime-picker>
   </div>
 </template>
 <script>
 import {mapGetters} from 'Vuex'
+import {Popup} from 'mint-ui'
 import ready from '@/utils/getEchars'
 
 export default {
@@ -170,6 +198,8 @@ export default {
     return {
       orgName: '',
       href: '',
+      startDate: '',
+      endDate: '',
       searchForm: {
         startDate: '',
         endDate: ''
@@ -180,13 +210,18 @@ export default {
       detailShow: -1,
       all: {},
       list: [],
+      rentToggle: true, // 分区或业态
       sortMain: 'rent',
       sortByRent: false,
       sortByEmpty: true
     }
   },
+  components: {
+    MtPopup: Popup
+  },
   created () {
     console.log(this.user, 'user--')
+    this.endDate = this.startDate = new Date()
     this.orgId = this.user.OrgID
     this.orgName = this.user.OrgName
     if (this.srcollRmove) {
@@ -202,6 +237,14 @@ export default {
         this.getPageData()
       })
     })
+  },
+  watch: {
+    rentToggle (val, oldVal) {
+      if (typeof val === 'boolean') {
+        console.log(val, '切换了')
+        this.setBigPie(this.noRentChart)
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -229,7 +272,17 @@ export default {
     },
     sortList () {
       let list = this.list.concat()
-      let sortMain = this.sortMain
+      console.log(list, '??????')
+      if (this.rentToggle) {
+        return this.sort01List(list, this.sortMain) // 分区
+      } else {
+        return this.sort02List(list, this.sortMain) // 业态
+      }
+    }
+  },
+  methods: {
+    // 分区
+    sort01List (list, sortMain) {
       if (list.length === 0) {
         return list
       }
@@ -254,9 +307,69 @@ export default {
       }
       list.push(allItem)
       return list
-    }
-  },
-  methods: {
+    },
+    // 业态
+    sort02List (list, sortMain) {
+      let arr = []
+      if (list.length === 0) {
+        return list
+      }
+      let all = list.pop()
+      arr = list.reduce((before, item) => {
+        let obj = before.find(sub => sub.ResType === item.ResType)
+        if (obj) {
+          obj.YZSL = parseInt(obj.YZSL) + parseInt(item.YZSL)
+          obj.KZSL = parseInt(obj.KZSL) + parseInt(item.KZSL)
+          obj.KZMJ = parseFloat(obj.KZMJ || 0) + parseFloat(item.KZMJ || 0)
+          obj.YZMJ = parseFloat(obj.YZMJ || 0) + parseFloat(item.YZMJ || 0)
+          obj.WZMJ = parseFloat(obj.WZMJ || 0) + parseFloat(item.WZMJ || 0)
+        } else {
+          before.push({
+            ...item,
+            GrpName: item.ResType + ' '
+          })
+        }
+        return before
+      }, [])
+      arr.forEach(item => {
+        item.CZL = (item.KZSL - 0) ? ((item.YZSL / item.KZSL) * 100).toFixed(2) : 0
+        item.KZL = (item.KZSL - 0) ? (((item.KZSL - item.YZSL) / item.KZSL) * 100).toFixed(2) : 0
+      })
+      if (sortMain === 'rent') {
+        arr.sort((a, b) => {
+          if (this.sortByRent) {
+            return a.CZL - b.CZL
+          } else {
+            return b.CZL - a.CZL
+          }
+        })
+      }
+      if (sortMain === 'empty') {
+        arr.sort((a, b) => {
+          if (this.sortByEmpty) {
+            return a.KZL - b.KZL
+          } else {
+            return b.KZL - a.KZL
+          }
+        })
+      }
+      arr.push({
+        GrpName: '总计',
+        ...all
+      })
+      return arr
+    },
+    startHandleConfirm (date) {
+      this.searchForm.startDate = date.format('yyyy-MM-dd')
+    },
+    endHandleConfirm (date) {
+      this.searchForm.endDate = date.format('yyyy-MM-dd')
+    },
+    projectChange (item) {
+      this.orgId = item.projectId
+      this.orgName = item.projectName
+      this.getPageData()
+    },
     // 按出租率排序
     sortByRentHandler () {
       this.sortMain = 'rent'
@@ -338,12 +451,12 @@ export default {
         ele.removeEventListener('touchend', end)
       }
     },
-    goBack () {
-      if (window.webkit) {
-        window.webkit.messageHandlers.Native_Js_tabbar.postMessage('true')
-      }
-      window.location.href = 'javascript:window.history.back()'
-    },
+    // goBack () {
+    //   if (window.webkit) {
+    //     window.webkit.messageHandlers.Native_Js_tabbar.postMessage('true')
+    //   }
+    //   window.location.href = 'javascript:window.history.back()'
+    // },
     // 重置日期选择
     resetSearch () {
       this.searchForm = {
@@ -359,17 +472,8 @@ export default {
       this.popupVisible = !this.popupVisible
     },
     async getPageData () {
-      // let obj = {
-      //   p0: 'UserCS_ReportLeaseRentals',
-      //   p7: {
-      //     'OrgID': this.$route.query.orgId, // '11091315263400010000',
-      //     'Stime': this.searchForm.startDate,
-      //     'Etime': this.searchForm.endDate
-      //   }
-      // }
-      // let res = await this.$http.post(obj)
       let res = await this.$xml('UserCS_ReportLeaseRentals', {
-        'OrgID': this.$route.query.orgId || '11091315263400010000', // '11091315263400010000',
+        'OrgID': this.orgId, // '11091315263400010000',
         'Stime': this.searchForm.startDate,
         'Etime': this.searchForm.endDate
       })
@@ -449,6 +553,7 @@ export default {
       }
       rentChart.setOption(option)
     },
+    // 分区
     getBigPieData () {
       let arr = []
       let other = {
@@ -474,9 +579,9 @@ export default {
         if (index < 5) {
           arr.push({
             name: item.GrpName,
-            value: item.YZSL,
-            kzsl: item.KZSL,
-            czl: item.CZL
+            value: item.YZSL, // 已租
+            kzsl: item.KZSL, // 可租
+            czl: item.CZL // CZL 出租率 KZL空置率
           })
         } else {
           other.kzsl += parseInt(item.KZSL)
@@ -492,8 +597,82 @@ export default {
         arr
       }
     },
+    // 业态
+    getBigPieData02 () {
+      let arr = []
+      let tmp = []
+      let other = {
+        name: '其他',
+        value: 0,
+        kzsl: 0,
+        czl: 0
+      }
+      let list = this.list.concat()
+      if (list.length === 0) {
+        return {
+          all: {
+            YZSL: 0
+          },
+          arr: [other]
+        }
+      }
+      let all = list.pop()
+      console.log(list, 'wo cao')
+      tmp = list.reduce((before, item) => {
+        let obj = before.find(sub => sub.ResType === item.ResType)
+        if (obj) {
+          obj.value += parseInt(item.YZSL)
+          obj.kzsl += parseInt(item.KZSL)
+        } else {
+          before.push({
+            name: item.ResType + ' ',
+            value: parseInt(item.YZSL),
+            kzsl: parseInt(item.KZSL),
+            // czl: item.CZL, // CZL出租率
+            // kzl: item.KZL, //  KZL空置率
+            ...item
+          })
+        }
+        return before
+      }, [])
+      tmp.sort((a, b) => {
+        return b.value - a.value
+      })
+      tmp.forEach((item, index) => {
+        if (index < 5) {
+          arr.push({
+            name: item.name,
+            value: item.value, // 已租
+            kzsl: item.kzsl // 可租
+            // czl: item.CZL // CZL 出租率 KZL空置率
+          })
+        } else {
+          other.kzsl += parseInt(item.kzsl)
+          other.value += parseInt(item.value)
+        }
+      })
+      arr.push(other)
+      arr.forEach(item => {
+        item.czl = item.kzsl ? ((item.value / item.kzsl) * 100).toFixed(2) : 0
+        item.kzl = (((item.value - item.kzsl) / item.value) * 100).toFixed(2)
+      })
+      return {
+        all,
+        arr
+      }
+    },
     setBigPie (noRentChart) {
-      let {all, arr: data} = this.getBigPieData()
+      let all = ''
+      let data = []
+      if (this.rentToggle) {
+        let res = this.getBigPieData()
+        all = res.all
+        data = res.arr
+      } else {
+        let res = this.getBigPieData02()
+        all = res.all
+        data = res.arr
+      }
       let nameArr = data.map(item => item.name)
       let option = {
         title: {
@@ -511,8 +690,8 @@ export default {
             fontSize: 14,
             align: 'center'
           },
-          bottom: '35%',
-          right: '26%'
+          bottom: '32%',
+          right: '22%'
         },
         legend: {
           orient: 'vertical',
@@ -544,7 +723,7 @@ export default {
             color: ['#F2637B', '#EAA674', '#FBD437', '#ACDF82', '#5ED982', '#82DFBE', '#36CBCB', '#5CD5FE', '#60ACF2', '#FB9365', '#9C8CFD', '#DC81D2', '#96BFFF'],
             type: 'pie',
             radius: ['40%', '60%'],
-            center: ['64%', '50%'],
+            center: ['68%', '55%'],
             avoidLabelOverlap: true,
             label: {
               normal: {
@@ -656,7 +835,7 @@ export default {
   }
   .modal {
     position: absolute;
-    top: 1.70rem;
+    top: 85px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -823,8 +1002,11 @@ export default {
 
       }
     }
-    .search-date-popup {
+
+  }
+  .search-date-popup {
       background:#FFF;
+      width: 100%;
       padding:0.2rem 0.3rem;
       .form_item {
         height:0.8rem;
@@ -874,14 +1056,17 @@ export default {
         }
       }
     }
-  }
-  /*.all{*/
-    /*position: absolute;*/
-    /*top: .88rem;*/
-    /*bottom: 0;*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*overflow-y: auto;*/
-    /*-webkit-overflow-scrolling: touch;*/
-  /*}*/
+.re_btn_link {
+  border:1px solid #3395FF;
+  font-size:14px;
+  padding:3px 5px;
+  color:#3395FF;
+}
+.re_btn_link.active {
+  background:#3395FF;
+  color:#FFF;
+}
+.re_btn_link + .re_btn_link{
+  margin-left:-1px;
+}
 </style>

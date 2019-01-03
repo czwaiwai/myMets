@@ -82,7 +82,8 @@ export default {
       })
     },
     projectChange (item) {
-      console.log(item, ' 设置项目')
+      this.$parent.projectChange(item)
+      this.$root.back()
     }
   }
 }

@@ -94,8 +94,6 @@ export default {
         item.value = arr[0][index]
       })
       let leftValues = arr[1].concat(arr[2])
-      console.log(leftValues, 'arr111111111')
-      console.log(this.leftList, '-----')
       this.leftList.forEach((item, index) => {
         item.value = leftValues[index]
       })
@@ -108,7 +106,6 @@ export default {
     },
     // 获取报表权限
     async getReportAuth () {
-      console.log(this.user, '///-222222222222222222223--')
       let p7 = {
         UserId: this.user.UserID,
         PositionId: this.user.PositionID

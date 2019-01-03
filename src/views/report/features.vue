@@ -5,7 +5,7 @@
     </mt-header>
     <div class="page_bd report_wrap">
       <div @click="openPicker" class="date_choose">
-        <span>{{chooseDate}}<i class="iconfont icon-xiala" ></i></span>
+        <span>{{chooseDate | dateChina}}<i class="iconfont icon-xiala" ></i></span>
       </div>
      <div class="outter">
       <div class="total-top">
@@ -36,18 +36,24 @@
 
                 </div>
               </div>
-              <div class="noData" v-if="!rentBody">
-                <!-- <img src="../../../assets/noData.png"/> -->
+              <!-- <div class="noData" v-if="!rentBody">
+                <img src="../../../assets/noData.png"/>
+                <p>暂无数据</p>
+              </div> -->
+              <div v-if="!rentBody" class="text-center padding-top">
+                <img style="max-width: 140px;" src="../../assets/img/report/noData.png" >
                 <p>暂无数据</p>
               </div>
             </div>
         <div class="month-rent">
           <div class="current-rent">当月平均租金</div>
-          <div class="statistical-table"  ref="bars" v-if="statistical">
-
-          </div>
-          <div class="noData" v-if="!statistical">
-            <!-- <img src="../../../assets/noData.png"/> -->
+          <div class="statistical-table"  ref="bars" v-if="statistical"></div>
+          <!-- <div class="noData" v-if="!statistical">
+            <img src="../../../assets/noData.png"/>
+            <p>暂无数据</p>
+          </div> -->
+          <div v-if="!statistical" class="text-center padding-top" style="margin-top:-35px">
+            <img style="max-width: 140px;" src="../../assets/img/report/noData.png" >
             <p>暂无数据</p>
           </div>
           <div class="current-summary">

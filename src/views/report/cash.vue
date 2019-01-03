@@ -14,14 +14,32 @@
     <div class="page_bd">
       <div class="weui-form-preview margin-bottom" style="margin-top:-1px;">
         <div class="weui-form-preview__hd text-center">
-          <a>2018-06-12</a>
+            <div>
+              <a @click="dateShow=true" class="text-center" href="javascript:;">
+                  <div class="weui-cell__bd dark_99">
+                      <p>{{currentMonth | dateChina}}<i class="iconfont icon-xiala"></i></p>
+                  </div>
+              </a>
+            <div v-show="dateShow">
+              <div class="date_mask" @click="dateShow=!dateShow"></div>
+              <div class="date_list_choose">
+                <ul >
+                  <li @click="dateClick(item, index)" v-for="(item,index) in dateList" :key="index" >{{item  | dateChina}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="weui-form-preview__bd" style="background: #3395FF;">
-          <div class="map_bl" ref="map1"></div>
+        <div ref="mapWrap" class="weui-form-preview__bd" style="background: #3395FF;">
+          <div v-show="isData1" class="map_bl" ref="map1"></div>
+          <div v-show="!isData1" class="text-center">
+              <img style="max-width: 140px;" src="../../assets/img/report/noData.png" >
+              <p>暂无数据</p>
+            </div>
         </div>
-        <div class="weui-form-preview__ft">
-            <div class="weui-form-preview__btn weui-form-preview__btn_default" >应收: 283089.61</div>
-            <div class="weui-form-preview__btn weui-form-preview__btn_default" >收缴率: 0</div>
+        <div v-show="isData1" class="weui-form-preview__ft">
+            <div class="weui-form-preview__btn weui-form-preview__btn_default" >应收: {{rateData.PriRevMoney | float2}}</div>
+            <div class="weui-form-preview__btn weui-form-preview__btn_default" >实收: {{rateData.PaidMoney | float2}}</div>
         </div>
       </div>
 
@@ -33,7 +51,11 @@
             </div>
           </div>
           <div class="weui-form-preview__bd">
-            <div class="map_bl"  ref="map2"></div>
+            <div v-show="isData2" class="map_bl"  ref="map2"></div>
+            <div v-show="!isData2" class="text-center">
+              <img style="max-width: 140px;" src="../../assets/img/report/noData.png" >
+              <p>暂无数据</p>
+            </div>
           </div>
       </div>
       <div class="weui-form-preview  margin-bottom">
@@ -44,17 +66,21 @@
           </div>
           <div class="weui-form-preview__bd">
             <div v-if="dataReady" class="fs14">
-              <div class="weui-flex">
+              <div v-show="isData3" class="weui-flex">
                 <div class="bold weui-flex__item text-center">费项</div>
                 <div class="bold weui-flex__item text-center">应收</div>
                 <div class="bold weui-flex__item text-center">实收</div>
                 <div class="bold weui-flex__item text-center">收缴率</div>
               </div>
-              <div class="weui-flex" v-for="(item,index) in list3" :key="index">
+              <div v-show="isData3" class="weui-flex" v-for="(item,index) in list3" :key="index">
                 <div class="weui-flex__item text-center dark_33 overhidden">{{item.IPItemName}}</div>
                 <div class="weui-flex__item text-center dark_33">{{item.PriRevMoney | float2}}</div>
                 <div class="weui-flex__item text-center dark_33">{{item.PaidMoney | float2}}</div>
                 <div class="weui-flex__item text-center dark_33">{{item.TradingRate | float2 }}%</div>
+              </div>
+              <div v-show="!isData3" class="text-center">
+                <img style="max-width: 140px;" src="../../assets/img/report/noData.png" >
+                <p>暂无数据</p>
               </div>
             </div>
           </div>
@@ -78,13 +104,23 @@ export default {
     return {
       orgName: '',
       list3: [],
-      dataReady: false
+      currentMonth: '',
+      dateShow: false,
+      rateData: {},
+      dateList: [],
+      isInit: false,
+      dataReady: false,
+      isData1: true,
+      isData2: true,
+      isData3: true
     }
   },
   created () {
     console.log(this.user, 'user--')
     this.orgId = this.user.OrgID
     this.orgName = this.user.OrgName
+    this.currentMonth = (new Date()).format('yyyy-MM')
+    this.dateList = this.lastMonth(this.currentMonth)
     this.getPageData()
   },
   computed: {
@@ -93,25 +129,78 @@ export default {
     })
   },
   methods: {
+    projectChange (item) {
+      this.orgId = item.projectId
+      this.orgName = item.projectName
+      this.getPageData()
+    },
+    dateClick (item, index) {
+      console.log(item)
+      // let indexNew = this.dateList.length - 1 - index
+      // this.map1Init(this.list[0], indexNew)
+      // this.map2Init(this.list[0], indexNew)
+      this.currentMonth = item
+      this.getPageData()
+      this.dateShow = false
+    },
+    // 计算前6个月的月份
+    lastMonth: function (now) {
+      var d = new Date(now.replace(/[^\d]/g, '/') + '/1')
+      var result = [now]
+      for (var i = 0; i < 5; i++) {
+        d.setMonth(d.getMonth() - 1)
+        var m = d.getMonth() + 1
+        m = m < 10 ? '0' + m : m
+        result.push(d.getFullYear() + '-' + m)
+      }
+      return result
+    },
     async getPageData () {
       let arr = await Promise.all([this.getData1(), this.getData2(), this.getData3(), mapReady()])
-      console.log(arr, '结果')
       let echarts = arr[3]
-      this.map1 = echarts.init(this.$refs.map1)
-      this.map2 = echarts.init(this.$refs.map2)
-      this.list3 = arr[2].sort((a, b) => {
-        return (b.PriRevMoney - 0) - (a.PriRevMoney - 0)
-      })
-      this.dataMap1(arr[0])
-      this.dataMap2(arr[1])
+      if (!this.isInit) {
+        let width = (parseInt(window.getComputedStyle(this.$refs.mapWrap).width) - 30) + 'px'
+        this.$refs.map1.style.width = width
+        this.$refs.map2.style.width = width
+        this.map1 = echarts.init(this.$refs.map1)
+        this.map2 = echarts.init(this.$refs.map2)
+        this.isInit = true
+      }
+      if (this.isDataExist(arr[2])) {
+        this.list3 = arr[2].sort((a, b) => {
+          return (b.PriRevMoney - 0) - (a.PriRevMoney - 0)
+        })
+        this.isData3 = true
+      } else {
+        this.isData3 = false
+      }
+      if (this.isDataExist(arr[0])) {
+        this.dataMap1(arr[0])
+        this.isData1 = true
+      } else {
+        this.isData1 = false
+      }
+      if (this.isDataExist(arr[1])) {
+        this.dataMap2(arr[1])
+        this.isData2 = true
+      } else {
+        this.isData2 = false
+      }
       this.dataReady = true
+    },
+    isDataExist (data) {
+      if (!data) return false
+      if (data.Syswin && data.Syswin[0].status === '0') {
+        return false
+      }
+      return true
     },
     // 财务收缴率报表
     async getData1 () {
       let p0 = 'UserCS_ReportConfiscateRate'
       let res = await this.$xml(p0, {
         orgID: this.orgId,
-        financeDate: '2018-08'
+        financeDate: this.currentMonth
       })
       return res.data
     },
@@ -120,7 +209,7 @@ export default {
       let p0 = 'UserCS_ReportFnPaidTrading'
       let res = await this.$xml(p0, {
         orgID: this.orgId,
-        financeDate: '2018-08'
+        financeDate: this.currentMonth
       })
       return res.data
     },
@@ -129,11 +218,12 @@ export default {
       let p0 = 'UserCS_ReportFnPaidSituation'
       let res = await this.$xml(p0, {
         orgID: this.orgId,
-        financeDate: '2018-08'
+        financeDate: this.currentMonth
       })
       return res.data
     },
     dataMap1 (data) {
+      this.rateData = data[0]
       let white = '#FFF'
       let num = data[0].TradingRate
       option1.series[0].axisLine.lineStyle.color = [[0, white], [(num / 100), white], [1, 'rgba(251, 212, 55, 0.3)']]
@@ -171,6 +261,38 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.date_mask{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8;
+}
+.date_list_choose {
+    position: absolute;
+    width: 100px;
+    top: 36px;
+    left: 50%;
+    margin-left: -50px;
+    z-index:9;
+    background: #FFF;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+    padding:5px 10px;
+    color:#333;
+    box-shadow: 0px 0px 2px rgba(51, 51, 51, 0.3);
+    & li {
+      height:36px;
+      line-height:36px;
+    }
+    & li + li {
+      border-top:1px solid #e5e5e5;
+    }
+}
 .page_bd {
   .map_bl {
     height:170px;

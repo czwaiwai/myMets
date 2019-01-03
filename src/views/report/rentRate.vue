@@ -3,43 +3,12 @@
     <mt-header title="出租率">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header>
+    <div class="weui-flex fs16 padding5-v padding-h light_bg">
+      <div class="weui-flex__item">截止：{{chooseDate | dateChina}}</div>
+      <div class="padding5-h" @click="$refs.picker.open()"><i class="iconfont icon-calendar fs18"  style="font-size:18px;" ></i></div>
+      <div class="padding5-h"><i class="iconfont icon-shaixuan fs18" style="font-size:18px;" @click="slideShow=true"></i></div>
+    </div>
     <div class="page_bd report_wrap">
-      <!-- <div class="time-selector">
-        <div class="limit-time">
-           <span>截止:</span>
-          <span v-text="searchForm.endDate"></span>
-        </div>
-
-          <div class="icon-container">
-            <datetime class="form_item"  v-model="searchForm.endDate" format="YYYY-MM-DD" :max-year=3000 :min-year=1900 @on-change="change">
-              <div class="calendar"><i class="iconfont icon-calendar" ></i></div>
-            </datetime>
-            <div class="filters">
-              <i class="iconfont icon-shaixuan" @click="slide"></i>
-            </div>
-          </div>
-        <div class="vux-popup-mask" style="margin-top:0.88rem;" ></div>
-      </div> -->
-
-      <!-- <div class="slide-panel" :class="{'slide-mode':slideActive,'no-slide':!slideActive}">
-        <ul>
-          <li>
-            <span>请选择项目（多选）</span>
-            <i class="iconfont" :class="{'icon-Ellipse':!iconIsactive,'icon-select-copy':iconIsactive}" @click="allSelect"></i>
-          </li>
-          <li v-for="(item,index) in listData " :key="index">
-            <span>{{item.projectName}}</span>
-            <i class="iconfont" :class="[selectIndex[index].isSelect?'icon-select-copy':'icon-Ellipse']" @click="singleSelect(index,item.projectId)" ></i>
-          </li>
-
-        </ul>
-        <div class="btn-container">
-            <div @click="reset">重置</div>
-            <div @click="slideOut">确定</div>
-        </div>
-      </div>
-      <div @click="slideActive =!slideActive" class="shade" v-show="slideActive"></div> -->
-
       <div class="total-top margin-bottom">
         <div class="total-area">
           <p>{{isRate?'': '￥'}}{{targetRent}} {{isRate?'%': '元'}}</p>
@@ -84,18 +53,66 @@
         </template>
       </div>
     </div>
+    <mt-datetime-picker
+      v-model="pickerVisible"
+      type="date"
+      ref="picker"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      date-format="{value} 日"
+      @confirm="handleConfirm" >
+     </mt-datetime-picker>
+     <div v-show="slideShow">
+      <div class="slide_mask" @click="slideShow=false">
+        <div class="slide_panel" @click.stop>
+          <div class="page">
+            <div class="page_bd">
+              <div class="weui-cells weui-cells_checkbox" style="margin-top:0;">
+                <label class="weui-cell weui-check__label" for="sall">
+                    <div class="weui-cell__bd">
+                        <p>请选择项目（多选）</p>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <input type="checkbox" class="weui-check" @change="selectAllChange" v-model="selectAll" value="true" name="checkbox1" id="sall">
+                        <i class="iconfont weui-icon-checked"></i>
+                    </div>
+                </label>
+                <label v-for="(item,index) in listData " :key="index" class="weui-cell weui-check__label" :for="'s'+index">
+                    <div class="weui-cell__bd">
+                        <p>{{item.projectName}}</p>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <input v-model="projectIds" type="checkbox" :value="item.projectId" name="checkbox" class="weui-check" :id="'s'+index">
+                        <i class="iconfont weui-icon-checked"></i>
+                    </div>
+                </label>
+              </div>
+            </div>
+            <div class="page_ft text-center" style="padding-top:5px;">
+              <button class="reset_btn" @click="resetClick">重置</button>
+              <button class="main_btn" @click="projectConfirm">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+     </div>
   </div>
 </template>
 <script>
 import ready from '@/utils/getEchars'
+import {mapGetters} from 'Vuex'
 export default {
   name: 'rentCash',
   // components: {Toast, Datetime, Popup},
   data () {
     return {
+      slideShow: false,
+      chooseDate: '',
+      pickerVisible: '',
       searchForm: {
         endDate: ''
       },
+      selectAll: false,
       slideActive: false,
       iconIsactive: false,
       selectIndex: [],
@@ -103,7 +120,7 @@ export default {
       actualRent: '0.0',
       tableList: [],
       listData: [],
-      projectId: [],
+      projectIds: [],
       resource: '',
       Resource: '',
       isRate: false,
@@ -113,11 +130,17 @@ export default {
   created () {
     // this.resource = this.$route.query.resource === 'zujin' ? '租金统计' : '出租率统计'
     // this.Resource = this.$route.query.resource
+    this.orgId = this.user.OrgID
+    this.orgName = this.user.OrgName
+    this.positionId = this.user.PositionID
+    this.projectIds = [this.orgId]
     this.resource = '出租率统计'
     this.Resource = 'chuzulv'
     this.isRate = true // 出租率
 
     let dates = new Date()
+    this.pickerVisible = new Date()
+    this.chooseDate = (new Date()).format('yyyy-MM-dd')
     this.searchForm.endDate = dates.getFullYear() + '-' + (dates.getMonth() + 1 < 10 ? '0' + (dates.getMonth() + 1) : (dates.getMonth() + 1)) + '-' + (dates.getDate() < 10 ? '0' + dates.getDate() : dates.getDate())
     ready().then(echarts => {
       this.$nextTick(() => {
@@ -125,157 +148,48 @@ export default {
         this.getPageData()
       })
     })
+    this.getSlideData()
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      'user': 'user'
+    }),
+    projectIdsStr () {
+      return this.projectIds.join(',')
+    }
+  },
   methods: {
-    getUrlParams (name) {
-      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
-      var r = window.location.search.substr(1).match(reg)
-      if (r != null) {
-        return decodeURIComponent(r[2])
-      }
-      return null
+    projectConfirm () {
+      this.getPageData()
+      this.slideShow = false
     },
-    slide () {
-      this.slideActive = true
-      if (this.isFirst) {
-        this.projectSwitching()
-        this.isFirst = false
-      }
+    handleConfirm (date) {
+      this.chooseDate = date.format('yyyy-MM-dd')
+      this.getPageData()
     },
-    slideOut () {
-      this.slideActive = false
-      let orgID = ''
-      console.log(JSON.stringify(this.selectIndex), '?????---selectIndex')
-      for (let i = 0; i < this.selectIndex.length; i++) {
-        if (this.selectIndex[i].isSelect) {
-          orgID += this.selectIndex[i].projectId + ','
-        }
-      }
-      orgID = orgID.replace(/,$/gi, '')
-      if (orgID === '') {
-        this.projectSwitching()
-      }
-      this.getPageData(orgID)
+    resetClick () {
+      this.selectAll = false
+      this.projectIds = [this.orgId]
     },
-    singleSelect (index, projectId) {
-      this.selectIndex[index].isSelect = !this.selectIndex[index].isSelect
-      if (this.selectIndex[index].isSelect) {
-        this.selectIndex[index].projectId = projectId
-      }
-    },
-    goBack () {
-      if (window.webkit) {
-        window.webkit.messageHandlers.Native_Js_tabbar.postMessage('true')
-      }
-      window.history.back()
-    },
-    // isIos () {
-    //   let u = navigator.userAgent
-    //   let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // ios终端
-    //   if (isIOS && window.webkit) {
-    //     window.webkit.messageHandlers.Native_Js_tabbar.postMessage('true')
-    //   }
-    // },
-    changeTab (ev) {
-      if (ev.target.dataset.type === '1') {
-        this.isActive = true
-      }
-      if (ev.target.dataset.type === '2') {
-        this.isActive = false
-      }
-    },
-    change () {
-      let orgID = ''
-      for (let i = 0; i < this.selectIndex.length; i++) {
-        if (this.selectIndex[i].isSelect) {
-          orgID += this.selectIndex[i].projectId + ','
-        }
-      }
-      orgID = orgID.replace(/,$/gi, '')
-      if (orgID === '') {
-        this.projectSwitching()
-      }
-      this.getPageData(orgID)
-    },
-    reset () {
-      for (let i = 0; i < this.selectIndex.length; i++) {
-        this.selectIndex[i].isSelect = false
-        this.selectIndex[i].projectId = ''
-      }
-    },
-    allSelect () {
-      this.iconIsactive = !this.iconIsactive
-      if (this.iconIsactive) {
-        for (let i = 0; i < this.selectIndex.length; i++) {
-          this.selectIndex[i].isSelect = true
-          console.log(this.listData[i].projectId)
-          this.selectIndex[i].projectId = this.listData[i].projectId
-        }
+    selectAllChange () {
+      if (this.selectAll) {
+        this.projectIds = this.listData.map(item => item.projectId)
       } else {
-        for (let i = 0; i < this.selectIndex.length; i++) {
-          this.selectIndex[i].isSelect = false
-          this.selectIndex[i].projectId = ''
-        }
+        this.projectIds = [this.orgId]
       }
     },
-    async projectSwitching () {
-      // let positionId = this.getUrlParams('PositionId')
-      // console.log(positionId, '-------------')
-      // let obj = {
-      //   p0: 'User_GetOrgIDListNew',
-      //   p1: this.$route.query.PositionId || positionId,
-      //   p7: {}
-      // }
-      // this.$vux.loading.show()
-      // let res = await this.$http.post(obj)
-
-      // this.listData = res.Syswin[0].data
-      // console.log(res)
-      // this.$vux.loading.hide()
-
+    async getSlideData () {
       let res = await this.$xml('User_GetOrgIDListNew', {}, {
-        p1: '11091315263400010000'
+        p1: this.positionId
       })
       this.listData = res.data
-
-      if (this.selectIndex.length === 0) {
-        for (let i = 0; i < res.Syswin[0].data.length; i++) {
-          this.selectIndex.push({'isSelect': false, projectId: ''})
-          this.$set(this.selectIndex, i, {'isSelect': false, projectId: ''})
-        }
-      }
-      let index = this.listData.findIndex(item => {
-        // console.log(item.projectId)
-        console.log(item.projectId === this.getUrlParams('projectID'))
-        if (item.projectId === this.getUrlParams('projectID')) {
-          console.log(item.projectId, '??')
-        }
-        return item.projectId === this.getUrlParams('projectID')
-      })
-      console.log(index, '----111------------')
-      this.selectIndex[index].isSelect = true
-      this.selectIndex[index].projectId = this.getUrlParams('projectID')
     },
-    async getPageData (orgID) {
-      // let obj = {
-      //   p0: 'UserCS_ReportLeaseSituation',
-      //   p7: {
-      //     OrgID: orgID || this.getUrlParams('projectID'),
-      //     Etime: this.searchForm.endDate
-      //   }
-      // }
-      // this.$vux.loading.show()
-      // let res = await this.$http.post(obj)
-      // this.$vux.loading.hide()
+    async getPageData () {
       let res = await this.$xml('UserCS_ReportLeaseSituation', {
-        OrgID: '11091315263400010000',
-        Etime: '2018-12-26'
+        OrgID: this.projectIdsStr,
+        Etime: this.chooseDate
       })
       let data = res.data
-      // res.Table
-      //  targetRent: '',
-      // actualRent: '',
       if (this.isRate) {
         this.targetRent = data[data.length - 1].MCZL || '0.00'
         this.actualRent = data[data.length - 1].CZL || '0.00'
@@ -284,10 +198,6 @@ export default {
         this.actualRent = data[data.length - 1].ZJmoney || '0.00'
       }
       this.tableList = data
-
-      console.log(res)
-      console.log(JSON.stringify(res))
-      // this.setResTypeData()
       if (this.isRate) {
         this.setBarRate(this.tableList)
       } else {
@@ -551,5 +461,45 @@ export default {
         }
       }
     }
+  }
+  .slide_mask {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:10;
+    background: rgba(51, 51, 51, 0.35);
+  }
+  .slide_panel {
+    position:relative;
+    width:60%;
+    height:100%;
+    float:right;
+    background:#fff;
+  }
+  .weui-cells_checkbox .weui-icon-checked:before {
+    content: '\E630';
+    color:#c9c9c9;
+  }
+  .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
+    content: '\E631';
+    color: #0DC88C;
+  }
+  .reset_btn {
+    width: 44%;
+    height: 36px;
+    color: #0DC88C;
+    background: #FFF;
+    border:1px solid  #0DC88C;
+    border-radius: 5px;
+  }
+  .main_btn{
+    width: 44%;
+    height: 36px;
+    color: #FFF;
+    background: #0DC88C;
+    border:1px solid#0DC88C;
+    border-radius: 5px;
   }
 </style>

@@ -8,7 +8,7 @@
       <div class="weui-cells margin-bottom" style="margin-top:0;">
           <div class="weui-cell">
             <div class="weui-cell__bd">
-                <p>2018-06</p>
+                <p>{{currMonth}}</p>
               </div>
               <div class="weui-cell__ft"></div>
           </div>
@@ -69,12 +69,14 @@ export default {
       search: '',
       currPro: '',
       list: [],
+      currMonth: '',
       dataReady: false
     }
   },
-  created () {
-    this.currPro = this.user.OrgID
-    this.currPositionID = this.user.PositionID
+  created () {},
+  activated () {
+    this.currPro = this.$parent.orgId
+    this.currMonth = this.$parent.currentMonth
     this.getPageData()
   },
   computed: {
@@ -94,7 +96,7 @@ export default {
       let p0 = 'UserCS_ReportEquipmentOperation'
       let res = await this.$xml(p0, {
         orgID: this.currPro,
-        financeDate: '2018-06'
+        financeDate: this.currMonth
       })
       return res.data
     },
@@ -103,7 +105,7 @@ export default {
       let p0 = 'UserCS_ReportEquipmentTechnology'
       let res = await this.$xml(p0, {
         orgID: this.currPro,
-        financeDate: '2018-06'
+        financeDate: this.currMonth
       })
       return res.data
     }

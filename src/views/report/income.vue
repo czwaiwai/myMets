@@ -5,7 +5,7 @@
     </mt-header>
     <div class="page_bd report_wrap">
       <div @click="openPicker" class="date_choose">
-        <span>{{chooseDate}}<i class="iconfont icon-xiala" ></i></span>
+        <span>{{chooseDate | dateChina}}<i class="iconfont icon-xiala" ></i></span>
       </div>
       <!-- <div class="time-selector">
         <datetime class="form_item"  v-model="searchForm.startDate" format="YYYY-MM" :max-year=3000 :min-year=1900 @on-change="change">

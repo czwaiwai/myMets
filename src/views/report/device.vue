@@ -12,16 +12,26 @@
       </a>
     </div>
     <div class="page_bd">
-     <div class="weui-cells" style="margin-top:-1px;" >
-        <a class="weui-cell " @click="$router.push({name: 'report_changeProject'})" href="javascript:;">
-            <div class="weui-cell__bd dark_99">
-                <p>2018-12</p>
-            </div>
-            <div class="weui-cell__ft">
-              <i class="iconfont icon-calendar"></i>
-            </div>
-        </a>
-     </div>
+     <div>
+        <div class="weui-cells margin-bottom" style="margin-top:-1px;" >
+          <a class="weui-cell"  href="javascript:;">
+              <div class="weui-cell__bd dark_99">
+                  <p>{{currentMonth | dateChina}}</p>
+              </div>
+              <div @click="dateShow = true" class="weui-cell__ft">
+                <i class="iconfont icon-calendar"></i>
+              </div>
+          </a>
+        </div>
+        <div v-show="dateShow">
+          <div class="date_mask" @click="dateShow=!dateShow"></div>
+          <div class="date_list_choose">
+            <ul >
+              <li @click="dateClick(item, index)" v-for="(item,index) in dateList" :key="index" >{{item | dateChina}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div class="weui-cells  margin-bottom" style="margin-top:10px;">
         <a class="weui-cell weui-cell_access" @click="$router.push({name: 'report_device_rate'})" href="javascript:;">
             <div class="weui-cell__bd">
@@ -178,13 +188,19 @@ export default {
     return {
       orgName: '',
       dataReady: false,
-      list: []
+      currentMonth: '',
+      dateShow: false,
+      dateList: [],
+      list: [],
+      isInit: false
     }
   },
   created () {
     console.log(this.user, 'user--')
     this.orgId = this.user.OrgID
     this.orgName = this.user.OrgName
+    this.currentMonth = (new Date()).format('yyyy-MM')
+    this.dateList = this.lastMonth(this.currentMonth)
     console.log(option1, option2, option3)
     this.getPageData()
   },
@@ -203,25 +219,57 @@ export default {
     //     console.log(this.map4, 'map4-------')
     //   })
     // },
+    projectChange (item) {
+      this.orgId = item.projectId
+      this.orgName = item.projectName
+      this.getPageData()
+    },
+    // 计算前6个月的月份
+    lastMonth: function (now) {
+      var d = new Date(now.replace(/[^\d]/g, '/') + '/1')
+      var result = [now]
+      for (var i = 0; i < 5; i++) {
+        d.setMonth(d.getMonth() - 1)
+        var m = d.getMonth() + 1
+        m = m < 10 ? '0' + m : m
+        result.push(d.getFullYear() + '-' + m)
+      }
+      return result
+    },
+    dateClick (item, index) {
+      console.log(item)
+      // let indexNew = this.dateList.length - 1 - index
+      // this.map1Init(this.list[0], indexNew)
+      // this.map2Init(this.list[0], indexNew)
+      this.currentMonth = item
+      this.getPageData()
+      this.dateShow = false
+    },
     async getPageData () {
       let res = await Promise.all([this.getData1(), this.getData2(), this.getData3(), mapReady()])
       let echarts = res.pop()
-      console.log(res)
-      this.$nextTick(() => {
+      if (!this.isInit) {
+        // this.$nextTick(() => {
         this.map1 = echarts.init(this.$refs.map1)
         this.map2 = echarts.init(this.$refs.map2)
         this.map3 = echarts.init(this.$refs.map3)
         this.list = res
         this.list.forEach((item, index) => this['setMap' + (index + 1)](item))
         this.dataReady = true
-      })
+        this.isInit = true
+        // })
+      } else {
+        this.list = res
+        this.list.forEach((item, index) => this['setMap' + (index + 1)](item))
+        this.dataReady = true
+      }
     },
     // 巡检工单检测统计报表
     async getData1 () {
       let p0 = 'UserCS_ReportEquipmentInspection'
       let res = await this.$xml(p0, {
         orgID: this.orgId,
-        financeDate: '2018-12'
+        financeDate: this.currentMonth
       })
       return res.data[0]
     },
@@ -230,7 +278,7 @@ export default {
       let p0 = 'UserCS_ReportEquipmentWorkOrd'
       let res = await this.$xml(p0, {
         orgID: this.orgId,
-        financeDate: '2018-12'
+        financeDate: this.currentMonth
       })
       return res.data[0]
     },
@@ -239,7 +287,7 @@ export default {
       let p0 = 'UserCS_ReportEquipmentKeepFit'
       let res = await this.$xml(p0, {
         orgID: this.orgId,
-        financeDate: '2018-12'
+        financeDate: this.currentMonth
       })
       return res.data[0]
     },
@@ -335,6 +383,37 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.date_mask{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8;
+}
+.date_list_choose {
+    position: absolute;
+    width: 100px;
+    top: 36px;
+    right: 10px;
+    z-index:9;
+    background: #FFF;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+    padding:5px 10px;
+    color:#333;
+    box-shadow: 0px 0px 2px rgba(51, 51, 51, 0.3);
+    & li {
+      height:36px;
+      line-height:36px;
+    }
+    & li + li {
+      border-top:1px solid #e5e5e5;
+    }
+}
   .weui-form-preview__hd {
     padding: 5px 15px;
   }
