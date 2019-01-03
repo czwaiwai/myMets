@@ -1,6 +1,7 @@
 <template>
   <div class="items-wrap">
     <ul class="list"
+      v-if="listData.length"
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10">
@@ -16,13 +17,16 @@
       </li>
       <li class="tip" v-show="showTip">加载中···</li>
     </ul>
+    <none-page title="暂无符合条件的数据~" v-else></none-page>
   </div>
 </template>
 <script>
 import dateChange from '@/mixins/dateChange'
+import nonePage from '@/components/nonePage/index.vue'
 export default {
   name: 'items',
   mixins: [dateChange],
+  components: {nonePage},
   data () {
     return {
       listData: [],

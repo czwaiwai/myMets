@@ -93,11 +93,9 @@ export default {
       }
     }
   },
-  activated () {
+  created () {
     this.getMoreData()
     console.log('in...moreMsg')
-  },
-  created () {
   }
 }
 </script>

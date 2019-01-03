@@ -54,8 +54,9 @@
 <script>
 import navTitle from '@/components/navTitle'
 import dialogConfire from '@/components/dialogConfire.vue'
-import nonePage from '@/views/meeting/components/nonePage/index.vue'
+import nonePage from '@/components/nonePage/index.vue'
 import dateChange from '@/mixins/dateChange'
+import { mapGetters } from 'vuex'
 export default {
   name: 'investmentSearch',
   components: {navTitle, dialogConfire, nonePage},
@@ -76,6 +77,11 @@ export default {
       page: 1,
       pageSize: 20
     }
+  },
+  computed: {
+    ...mapGetters({
+      key: 'getInvestmentSearchKey'
+    })
   },
   methods: {
     // 状态便签颜色
@@ -102,10 +108,11 @@ export default {
     },
     // 到项目详情
     toProjectDetail (item) {
+      this.$store.commit('setInvestmentSearchKey', this.searchKey)
       this.$router.push({
         name: `investmentDetail`,
         params: {
-          id: 1234
+          id: item.ID
         }
       })
     },
@@ -200,23 +207,17 @@ export default {
       }
     }
   },
-  beforeRouteLeave (to, from, next) {
-    if (to.name === 'investmentList') {
-      this.dataList = []
-      this.searchKey = ''
-      this.historyList = []
-      this.page = 1
-      this.hasHttp = false
-      this.showTip = false
-      console.log('toinvestmentList')
+  mounted () {
+    if (this.key) {
+      this.searchKey = this.key
+      this.search()
+    } else {
+      this.$el.querySelector('.search-input').focus()
     }
-    next()
-  },
-  activated () {
-    this.historyList = localStorage.historyinvestmentList ? localStorage.historyinvestmentList.split(',') : []
-    console.log('in...search')
   },
   created () {
+    this.historyList = localStorage.historyinvestmentList ? localStorage.historyinvestmentList.split(',') : []
+    console.log('in...search')
   }
 }
 </script>

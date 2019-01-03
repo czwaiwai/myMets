@@ -18,67 +18,82 @@
         <div class="headerData">
           <div class="title clearfix">
             <span class="name">{{detailData.ProjName}}</span>
-            <span class="type">普通住宅</span>
-            <span class="floor">小高层</span>
+            <span class="type" v-show="detailData.TradeType">{{detailData.TradeType}}</span>
+            <!-- <span class="floor">小高层</span> -->
           </div>
           <div class="areaPrice">
-            <span class="area">{{detailData.AreaFloor}}㎡</span>
-            <span class="price">{{detailData.RentAvg}}元/㎡</span>
+            <span class="area" v-if="detailData.AreaFloor">{{detailData.AreaFloor}}㎡</span>
+            <span class="area" v-else>暂无</span>
+            <span class="price" v-if="detailData.RentAvg">{{detailData.RentAvg}}元/㎡</span>
+            <span class="price" v-else>暂无</span>
           </div>
-          <p class="location">地址：{{detailData.ProjAddr}}</p>
+          <p class="location" v-if="detailData.ProjAddr">地址：{{detailData.ProjAddr}}</p>
+          <p class="location" v-else>暂无</p>
         </div>
         <div class="baseMsg msgBox mt10">
           <h3 class="boxTitle">基本信息</h3>
           <div class="msg">
             <div class="showItem clearfix noneBb">
               <span class="name">楼层面积：</span>
-              <span class="value">{{detailData.AreaFloor}}㎡</span>
+              <span class="value" v-if="detailData.AreaFloor">{{detailData.AreaFloor}}㎡</span>
+              <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">地面建筑面积：</span>
-              <span class="value">{{detailData.AreaGround}}㎡</span>
+              <span class="value" v-if="detailData.AreaGround">{{detailData.AreaGround}}㎡</span>
+              <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">物业公司：</span>
-              <span class="value">{{detailData.PropertyComp}}</span>
+              <span class="value" v-if="detailData.PropertyComp">{{detailData.PropertyComp}}</span>
+              <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">项目开发商：</span>
-              <span class="value">{{detailData.Developer}}</span>
+              <span class="value" v-if="detailData.Developer">{{detailData.Developer}}</span>
+              <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">竣工日期：</span>
-              <span class="value">{{com_setDate(detailData.FinishDate)}}</span>
+              <span class="value" v-if="detailData.FinishDate">{{com_setDate(detailData.FinishDate)}}</span>
+              <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">录入人：</span>
-              <span class="value">{{detailData.InPutUser}}</span>
+              <span class="value" v-if="detailData.InPutUser">{{detailData.InPutUser}}</span>
+              <span class="value" v-else>暂无</span>
             </div>
           </div>
         </div>
         <div class="locations msgBox mt10">
           <h3 class="boxTitle">位置及周边</h3>
-          <img class="pics" src="http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg">
+          <img class="pics" @click.stop="showMap=true" src="http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg">
         </div>
         <div class="followMsg msgBox mt10">
           <h3 class="boxTitle">最新跟进情况</h3>
           <div class="msg">
             <div class="showItem clearfix noneBb">
               <span class="name">跟进人：</span>
-              <span class="value">{{detailData.ProjPlan[0].CreateUser}}</span>
+              <span class="value" v-if="detailData.ProjPlan[0].CreateUser">{{detailData.ProjPlan[0].CreateUser}}</span>
+              <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">跟进时间：</span>
-              <span class="value">{{com_setAllDate(detailData.ProjPlan[0].CreateTime)}}</span>
+              <span class="value" v-if="detailData.ProjPlan[0].CreateTime">{{com_setAllDate(detailData.ProjPlan[0].CreateTime)}}</span>
+              <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">说明：</span>
-              <span class="value">{{detailData.ProjPlan[0].ProjPlan}}</span>
+              <span class="value" v-if="detailData.ProjPlan[0].ProjPlan">{{detailData.ProjPlan[0].ProjPlan}}</span>
+              <span class="value" v-else>暂无</span>
             </div>
           </div>
         </div>
         <div class="moreBtn mt10" @click.stop="toInvestmentMoreMsg">查看更多</div>
       </div>
+      <transition name="mapBox">
+        <div class="mapBox" v-show="showMap" @click.stop="showMap=false"></div>
+      </transition>
       <div class="connet">
         <span class="name">{{detailData.ProjLeader}}</span>
         <a class="phone clearfix" :href="'tel:'+detailData.Tel">
@@ -104,7 +119,8 @@ export default {
         ProjPlan: [
           {CreateTime: '', CreateUser: '', ProjPlan: ''}
         ]
-      }
+      },
+      showMap: false
     }
   },
   methods: {
@@ -128,11 +144,8 @@ export default {
       }
     }
   },
-  activated () {
-    this.getDetailData()
-    console.log('in...detail')
-  },
   created () {
+    this.getDetailData()
   }
 }
 </script>
@@ -278,5 +291,19 @@ export default {
         margin-left: .1rem;
       }
     }
+  }
+  .mapBox-enter,
+  .mapBox-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+  .mapBox{
+    position: absolute;
+    top: .88rem;
+    left: 0;
+    right: 0;
+    bottom: .8rem;
+    background: #05A3FD;
+    z-index: 999;
+    transition: all .5s ease;
   }
 </style>

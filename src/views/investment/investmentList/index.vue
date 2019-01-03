@@ -2,14 +2,12 @@
   <div class="page page_bg">
     <nav-title :title="title"></nav-title>
     <header-top></header-top>
-    <select-types></select-types>
+    <select-types @selectData="setSelectData"></select-types>
     <div class="page_bd investmentList">
       <items></items>
     </div>
     <transition name="page">
-      <keep-alive>
-        <router-view/>
-      </keep-alive>
+      <router-view/>
     </transition>
   </div>
 </template>
@@ -40,6 +38,10 @@ export default {
           this.title = '暂不考虑'
           break
       }
+    },
+    // 筛选条件
+    setSelectData (data) {
+      console.log(data)
     }
   },
   created () {

@@ -79,7 +79,7 @@
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">开发商：</span>
-          <span class="value" v-if="true">国内csd</span>
+          <span class="value" v-if="moreData.Developer">{{moreData.Developer}}</span>
           <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">

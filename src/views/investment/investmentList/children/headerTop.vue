@@ -27,6 +27,7 @@ export default {
     },
     // 去搜索
     toInvestmentSearch () {
+      this.$store.commit('setInvestmentSearchKey', '')
       this.$router.push({
         name: `investmentSearch`
       })
