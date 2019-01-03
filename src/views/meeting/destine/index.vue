@@ -129,6 +129,7 @@ export default {
         orgId: this.orgId,
         orgName: this.orgName,
         dateStr: this.dateStr,
+        employeeId: this.navData.employeeId,
         filterObj: this.filterObj
       })
     },

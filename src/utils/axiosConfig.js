@@ -79,8 +79,11 @@ export default {
       return Promise.reject(error)
     })
     instanceXml.interceptors.response.use(function (response) {
-      Indicator.close()
-      console.log('loading结束--')
+      setTimeout(() => {
+        console.log('loading结束--')
+        Indicator.close()
+      }, 50)
+
       let res = response.data.Result
       if (res && res[0]['InfoKey'] === '_ERROR') {
         Vue.toast(res[0]['_Detail'])

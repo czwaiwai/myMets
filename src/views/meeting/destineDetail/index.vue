@@ -132,6 +132,7 @@ export default {
   },
   methods: {
     async getPageData (isFresh) {
+      console.log(this.destineConfig, 'destineConfig')
       let res = await this.$xml('UserCS_MeetingListDetail', {
         MeetID: this.roomId,
         MeetTime: this.dateTime,
