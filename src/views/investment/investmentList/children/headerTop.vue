@@ -10,18 +10,27 @@
         <span class="placeholder">请输入城市或项目</span>
       </div>
     </div>
-    <i class="iconfont icon-dizhi changeBtn"></i>
+    <i class="iconfont changeBtn" :class="isList?'icon-ditu':'icon-fenlei'" @click.stop="changeContent"></i>
   </div>
 </template>
 <script>
 export default {
   name: 'headerTop',
   data () {
-    return {}
+    return {
+      isList: true
+    }
   },
   methods: {
+    changeContent () {
+      this.isList = !this.isList
+    },
+    // 去搜索
     toInvestmentSearch () {
-      this.$router.push(`/investmentSearch`)
+      this.$store.commit('setInvestmentSearchKey', '')
+      this.$router.push({
+        name: `investmentSearch`
+      })
     }
   }
 }
@@ -69,10 +78,13 @@ export default {
       display: block;
       width: 1rem;
       height: .98rem;
-      font-size: .34rem;
+      font-size: .56rem;
       color: #0DC88C;
       line-height: .98rem;
       text-align: center;
+      &.icon-ditu{
+        font-size: .46rem;
+      }
     }
   }
 </style>

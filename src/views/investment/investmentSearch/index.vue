@@ -1,65 +1,71 @@
 <template>
-  <div class="page page_bg">
-    <nav-title title="搜索"></nav-title>
-    <div class="searchBox">
-      <form class="searchWrap clearfix" action="" onsubmit="return false;">
-          <i class="iconfont icon-sousuo"></i>
-          <input class="search-input" placeholder="请输入项目名称" type="search" v-model="searchKey" @keydown.13="searchList">
-          <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
-      </form>
-      <span class="searachBtn" v-if="searchKey.length" @click.stop="searchList">搜索</span>
-      <span class="searachBtn" v-else @click.stop="$router.go(-1)">取消</span>
-    </div>
-    <div class="page_bd investmentSearch">
-      <div class="history" v-if="!dataList.length && historyList.length && !hasHttp">
-        <div class="header">
-          <span>历史搜索</span>
-          <p class="clear" @click.stop="clearHistoryList">全部清除</p>
-        </div>
-        <ul class="list clearfix">
-          <li class="item" v-for="(item,index) in historyList" :key="index" @click.stop="clickItem(item)">
-            <span>{{item}}</span>
-            <i class="iconfont icon-quxiao1" @click.stop="clearitem(item,index)"></i>
-          </li>
-        </ul>
+  <div class="page_modal">
+    <div class="page page_bg">
+      <nav-title title="搜索"></nav-title>
+      <div class="searchBox">
+        <form class="searchWrap clearfix" action="" onsubmit="return false;">
+            <i class="iconfont icon-sousuo"></i>
+            <input class="search-input" placeholder="请输入项目名称" type="search" v-model="searchKey" @keydown.13="searchList">
+            <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
+        </form>
+        <span class="searachBtn" v-if="searchKey.length" @click.stop="searchList">搜索</span>
+        <span class="searachBtn" v-else @click.stop="$router.go(-1)">取消</span>
       </div>
-      <ul class="content-list" v-else-if="dataList.length"
-        v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="loading"
-        infinite-scroll-distance="10">
-        <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toProjectDetail(item)">
-          <img class="pic" src="http://pic25.nipic.com/20121110/10839717_103723525199_2.jpg">
-          <div class="desc">
-            <div class="title _lines">保利叶之林</div>
-            <div class="name _lines">256171㎡/南山区/普通住宅</div>
-            <div class="price _lines">100.36元㎡/天</div>
-            <div class="time _lines">2018-12-12</div>
+      <div class="page_bd investmentSearch">
+        <div class="history" v-if="!dataList.length && historyList.length">
+          <div class="header">
+            <span>历史搜索</span>
+            <p class="clear" @click.stop="clearHistoryList">全部清除</p>
           </div>
-        </li>
-        <li class="tip">加载中···</li>
-      </ul>
-      <none-page title="暂无符合条件的数据~" height="70" v-if="!dataList.length&&hasHttp"></none-page>
+          <ul class="list clearfix">
+            <li class="item" v-for="(item,index) in historyList" :key="index" @click.stop="clickItem(item)">
+              <span>{{item}}</span>
+              <i class="iconfont icon-quxiao1" @click.stop="clearitem(item,index)"></i>
+            </li>
+          </ul>
+        </div>
+        <ul class="content-list" v-else-if="dataList.length"
+          v-infinite-scroll="loadMore"
+          infinite-scroll-disabled="loading"
+          infinite-scroll-distance="10">
+          <li class="item clearfix" v-for="(item,index) in dataList" :key="index" @click.stop="toProjectDetail(item)">
+            <div class="status" :class="com_color(index)">{{com_status(index)}}</div>
+            <img class="pic" :src="item.Url">
+            <div class="desc">
+              <div class="title _lines">{{item.ProjName}}</div>
+              <div class="name _lines">{{item.AreaTotal}}㎡/{{item.County}}/{{item.TradeType}}</div>
+              <div class="price _lines">{{item.RentAvg}}元㎡/天</div>
+              <div class="time _lines">{{com_setDate(item.RegDate)}}</div>
+            </div>
+          </li>
+          <li class="tip" v-show="showTip">加载中···</li>
+        </ul>
+        <none-page title="暂无符合条件的数据~" v-if="!dataList.length&&hasHttp" :height="historyList.length?'40':'100'"></none-page>
+      </div>
+      <dialog-confire
+        :title="dialogData.title"
+        ref="dialog"
+        @clickLeftBtn="clickLeftBtn"
+        @clickRightBtn="clickRightBtn"
+      ></dialog-confire>
     </div>
-    <dialog-confire
-      :title="dialogData.title"
-      ref="dialog"
-      @clickLeftBtn="clickLeftBtn"
-      @clickRightBtn="clickRightBtn"
-    ></dialog-confire>
   </div>
 </template>
 <script>
 import navTitle from '@/components/navTitle'
 import dialogConfire from '@/components/dialogConfire.vue'
-import nonePage from '@/views/meeting/components/nonePage/index.vue'
+import nonePage from '@/components/nonePage/index.vue'
+import dateChange from '@/mixins/dateChange'
+import { mapGetters } from 'vuex'
 export default {
   name: 'investmentSearch',
   components: {navTitle, dialogConfire, nonePage},
+  mixins: [dateChange],
   data () {
     return {
       searchKey: '',
       dataList: [],
-      historyList: ['111', '222', '333', '111', '222', '333'],
+      historyList: [],
       list: 20,
       dialogData: {
         type: 0,
@@ -67,14 +73,48 @@ export default {
         data: {}
       },
       hasHttp: false,
+      showTip: false,
       page: 1,
       pageSize: 20
     }
   },
+  computed: {
+    ...mapGetters({
+      key: 'getInvestmentSearchKey'
+    })
+  },
   methods: {
+    // 状态便签颜色
+    com_color (index) {
+      let temp = index % 3
+      return 'statusColor' + temp
+    },
+    // 状态名称
+    com_status (index) {
+      let temp = index % 3
+      let status = ''
+      switch (temp) {
+        case 0:
+          status = '已投'
+          break
+        case 1:
+          status = '未来可投'
+          break
+        case 2:
+          status = '不考虑'
+          break
+      }
+      return status
+    },
     // 到项目详情
     toProjectDetail (item) {
-      this.$router.push(`/projectDetail/123`)
+      this.$store.commit('setInvestmentSearchKey', this.searchKey)
+      this.$router.push({
+        name: `investmentDetail`,
+        params: {
+          id: item.ID
+        }
+      })
     },
     // 清除搜索条件
     clearKey () {
@@ -122,27 +162,62 @@ export default {
       }
     },
     // 获取搜索列表
-    search () {
+    async search () {
       if (this.searchKey === '') {
         this.dataList = []
         return
       }
-      this.hasHttp = true
-      this.dataList = ['1']
       if (this.historyList.indexOf(this.searchKey) > -1) {
         this.historyList.splice(this.historyList.indexOf(this.searchKey), 1)
       }
       this.historyList.unshift(this.searchKey)
       this.historyList = this.historyList.slice(0, 12)
       localStorage.historyinvestmentList = this.historyList.join(',')
+      let res = await this.$xml('UserCS_InvestmentPropertyList', {
+        'County': '',
+        'ProjStatus': '10',
+        'TradeType': '',
+        'RentAvgMin': '',
+        'RentAvgMax': '',
+        'AreaTotalMin': '',
+        'AreaTotalMax': '',
+        'Page': this.page,
+        'PageSize': this.pageSize
+      })
+      console.log(res)
+      if (res.data.length) {
+        if (this.page === 1) {
+          this.dataList = res.data
+        } else {
+          this.dataList = this.dataList.concat(res.data)
+        }
+      }
+      this.hasHttp = true
+      if (res.data.length < this.pageSize - 1) {
+        this.showTip = false
+      } else {
+        this.showTip = true
+      }
     },
     // 加载更多
     loadMore () {
-      this.list += 20
+      if (this.showTip) {
+        this.page++
+        this.search()
+      }
+    }
+  },
+  mounted () {
+    if (this.key) {
+      this.searchKey = this.key
+      this.search()
+    } else {
+      this.$el.querySelector('.search-input').focus()
     }
   },
   created () {
     this.historyList = localStorage.historyinvestmentList ? localStorage.historyinvestmentList.split(',') : []
+    console.log('in...search')
   }
 }
 </script>
@@ -187,7 +262,7 @@ export default {
         height: 0.56rem;
         margin-right: 0.2rem;
         line-height: 0.56rem;
-        font-size: 0.4rem;
+        font-size: 0.34rem;
         text-align: right;
         color: #999;
       }
@@ -206,6 +281,7 @@ export default {
       position: relative;
       z-index: 10;
       padding: 0 0 .3rem .3rem;
+      height: 3.76rem;
       .header{
         position: relative;
         height: .88rem;
@@ -267,11 +343,31 @@ export default {
     .content-list{
       background: #fff;
       .item{
+        position: relative;
         padding: .3rem;
         background: #fff;
         border-bottom: 1px solid #ededed;
         &:last-child{
           border-bottom: none;
+        }
+        .status{
+          position: absolute;
+          padding: 0 .1rem;
+          height: .34rem;
+          color: #fff;
+          font-size: .24rem;
+          line-height: .34rem;
+          text-align: center;
+          border-bottom-right-radius: 3px;
+          &.statusColor0 {
+            background: #FA8A2C;
+          }
+          &.statusColor1 {
+            background: #0DC88C;
+          }
+          &.statusColor2 {
+            background: #2CB4FA;
+          }
         }
         .pic{
           float: left;

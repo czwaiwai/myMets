@@ -31,6 +31,19 @@ export default {
       let day = date.getDate()
       return year + '-' + this.add0(month) + '-' + this.add0(day)
     },
+    // 时间转换 yyyy-MM-DD HH:mm:ss
+    com_setAllDate (time) {
+      if (!time) {
+        return
+      }
+      let date = this.com_setDate (time)
+      let dateArr = time.split(' ') || []
+      if (dateArr.length > 1) {
+        return date + ' ' + dateArr[1]
+      } else {
+        return date
+      }
+    },
     // 时间转换 yyyy-MM
     com_setYM (time) {
       if (!time) {

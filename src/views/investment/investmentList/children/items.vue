@@ -1,39 +1,109 @@
 <template>
   <div class="items-wrap">
     <ul class="list"
+      v-if="listData.length"
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10">
-      <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toProjectDetail(item)">
-        <img class="pic" src="http://pic25.nipic.com/20121110/10839717_103723525199_2.jpg">
+      <li class="item clearfix" v-for="(item,index) in listData" :key="index" @click.stop="toInvestmentDetail(item)">
+        <div class="status" :class="com_color(index)">{{com_status(index)}}</div>
+        <img class="pic" :src="item.Url">
         <div class="desc">
-          <div class="title _lines">保利叶之林</div>
-          <div class="name _lines">256171㎡/南山区/普通住宅</div>
-          <div class="price _lines">100.36元㎡/天</div>
-          <div class="time _lines">2018-12-12</div>
+          <div class="title _lines">{{item.ProjName}}</div>
+          <div class="name _lines">{{item.AreaTotal}}㎡/{{item.County}}/{{item.TradeType}}</div>
+          <div class="price _lines">{{item.RentAvg}}元㎡/天</div>
+          <div class="time _lines">{{com_setDate(item.RegDate)}}</div>
         </div>
       </li>
-      <li class="tip">加载中···</li>
+      <li class="tip" v-show="showTip">加载中···</li>
     </ul>
+    <none-page title="暂无符合条件的数据~" v-else></none-page>
   </div>
 </template>
 <script>
+import dateChange from '@/mixins/dateChange'
+import nonePage from '@/components/nonePage/index.vue'
 export default {
   name: 'items',
+  mixins: [dateChange],
+  components: {nonePage},
   data () {
     return {
-      list: 20
+      listData: [],
+      showTip: false,
+      page: 1,
+      pageSize: 20
     }
   },
   methods: {
+    // 状态便签颜色
+    com_color (index) {
+      let temp = index % 3
+      return 'statusColor' + temp
+    },
+    // 状态名称
+    com_status (index) {
+      let temp = index % 3
+      let status = ''
+      switch (temp) {
+        case 0:
+          status = '已投'
+          break
+        case 1:
+          status = '未来可投'
+          break
+        case 2:
+          status = '不考虑'
+          break
+      }
+      return status
+    },
     // 到项目详情
-    toProjectDetail (item) {
-      this.$router.push(`/projectDetail/123`)
+    toInvestmentDetail (item) {
+      this.$router.push({
+        name: `investmentDetail`,
+        params: {
+          id: item.ID
+        }
+      })
     },
     // 加载更多
     loadMore () {
-      this.list += 20
+      if (this.showTip) {
+        this.page++
+        this.getDataList()
+      }
+    },
+    // 获取列表数据
+    async getDataList () {
+      let res = await this.$xml('UserCS_InvestmentPropertyList', {
+        'County': '',
+        'ProjStatus': this.$route.query.type,
+        'TradeType': '',
+        'RentAvgMin': '',
+        'RentAvgMax': '',
+        'AreaTotalMin': '',
+        'AreaTotalMax': '',
+        'Page': this.page,
+        'PageSize': this.pageSize
+      })
+      console.log(res)
+      if (res.data) {
+        if (this.page === 1) {
+          this.listData = res.data
+        } else {
+          this.listData = this.listData.concat(res.data)
+        }
+      }
+      if (res.data.length < this.pageSize - 1) {
+        this.showTip = false
+      } else {
+        this.showTip = true
+      }
     }
+  },
+  created () {
+    this.getDataList()
   }
 }
 </script>
@@ -44,11 +114,31 @@ export default {
     .list{
       background: #fff;
       .item{
+        position: relative;
         padding: .3rem;
         background: #fff;
         border-bottom: 1px solid #ededed;
         &:last-child{
           border-bottom: none;
+        }
+        .status{
+          position: absolute;
+          padding: 0 .1rem;
+          height: .34rem;
+          color: #fff;
+          font-size: .24rem;
+          line-height: .34rem;
+          text-align: center;
+          border-bottom-right-radius: 3px;
+          &.statusColor0 {
+            background: #FA8A2C;
+          }
+          &.statusColor1 {
+            background: #0DC88C;
+          }
+          &.statusColor2 {
+            background: #2CB4FA;
+          }
         }
         .pic{
           float: left;

@@ -27,10 +27,10 @@
         </div>
         <div class="auto clearfix">
           <span class="name">自定义</span>
-          <input type="text" class="inputBox" placeholder="最小㎡">
+          <input type="text" class="inputBox" @input="setNum('rentAvgMin')" v-model="rentAvgMin" placeholder="最小㎡">
           <span class="aline">—</span>
-          <input type="text" class="inputBox" placeholder="最大㎡">
-          <div class="btn">确定</div>
+          <input type="text" class="inputBox" @input="setNum('rentAvgMax')" v-model="rentAvgMax" placeholder="最大㎡">
+          <div class="btn" @click.stop="confirm(2)">确定</div>
         </div>
       </div>
     </collapse-transition>
@@ -41,10 +41,10 @@
         </div>
         <div class="auto clearfix">
           <span class="name">自定义</span>
-          <input type="text" class="inputBox" placeholder="最低㎡">
+          <input type="text" class="inputBox" @input="setNum('areaTotalMin')" v-model="areaTotalMin" placeholder="最低㎡">
           <span class="aline">—</span>
-          <input type="text" class="inputBox" placeholder="最高㎡">
-          <div class="btn">确定</div>
+          <input type="text" class="inputBox" @input="setNum('areaTotalMax')" v-model="areaTotalMax" placeholder="最高㎡">
+          <div class="btn" @click.stop="confirm(3)">确定</div>
         </div>
       </div>
     </collapse-transition>
@@ -54,6 +54,7 @@
   </div>
 </template>
 <script>
+/*eslint-disable*/
 import CollapseTransition from '@/utils/collapseTransition.js'
 export default {
   name: 'selectTypes',
@@ -68,22 +69,22 @@ export default {
       ],
       selectListData: {
         type0: [
-          {name: '不限', start: '', end: '', isSelect: true},
-          {name: '宝安区', start: '1', end: '5', isSelect: false},
-          {name: '南山区', start: '6', end: '10', isSelect: false},
-          {name: '福田区', start: '11', end: '15', isSelect: false},
-          {name: '罗湖区', start: '15', end: '', isSelect: false},
-          {name: '盐田区', start: '11', end: '15', isSelect: false},
-          {name: '龙岗区', start: '15', end: '', isSelect: false},
-          {name: '龙华区', start: '11', end: '15', isSelect: false},
-          {name: '坪山区', start: '15', end: '', isSelect: false}
+          {name: '不限', id: '', isSelect: true},
+          {name: '宝安区', id: '1', isSelect: false},
+          {name: '南山区', id: '6', isSelect: false},
+          {name: '福田区', id: '11', isSelect: false},
+          {name: '罗湖区', id: '15', isSelect: false},
+          {name: '盐田区', id: '11', isSelect: false},
+          {name: '龙岗区', id: '15', isSelect: false},
+          {name: '龙华区', id: '11', isSelect: false},
+          {name: '坪山区', id: '15', isSelect: false}
         ],
         type1: [
-          {name: '不限', start: '', end: '', isSelect: true},
-          {name: '写字楼', start: '1', end: '5', isSelect: false},
-          {name: '商业', start: '6', end: '10', isSelect: false},
-          {name: '商业园区', start: '11', end: '15', isSelect: false},
-          {name: '商业综合体', start: '15', end: '', isSelect: false}
+          {name: '不限', id: '', isSelect: true},
+          {name: '写字楼', id: '1', isSelect: false},
+          {name: '商业', id: '6', isSelect: false},
+          {name: '商业园区', id: '11', isSelect: false},
+          {name: '商业综合体', id: '15', isSelect: false}
         ],
         type2: [
           {name: '不限', start: '', end: '', isSelect: true},
@@ -107,23 +108,74 @@ export default {
         showBox3: false
       },
       showMark: false,
-      height: 0
+      rentAvgMin: '',
+      rentAvgMax: '',
+      areaTotalMin: '',
+      areaTotalMax: '',
+      selectData: {
+        County: '', // 区域
+        TradeType: '', // 业态类型
+        RentAvgMin: '', // 最小租金
+        RentAvgMax: '', // 最大租金
+        AreaTotalMin: '', // 最小面积
+        AreaTotalMax: '' // 最大面积
+      }
     }
   },
   methods: {
     // 点击下拉列表项
     selectItem (item, type) {
       console.log('in....')
-      if (item.isSelect) {
-        return
+      if (!item.isSelect) {
+        this.selectListData['type' + type].forEach(arr => {
+          arr.isSelect = false
+        })
+        item.isSelect = true
       }
-      this.selectListData['type' + type].forEach(arr => {
-        arr.isSelect = false
-      })
-      item.isSelect = true
       this.showSelectList['showBox' + type] = false
       this.showMark = false
       this.typeList[type].isSelect = false
+      this.setSelectData(item, type)
+    },
+    // 整合搜索类型
+    setSelectData (item, type) {
+      switch (type) {
+        case 0:
+          this.selectData.County = item.id
+          break
+        case 1:
+          this.selectData.TradeType = item.id
+          break
+        case 2:
+          this.selectData.RentAvgMin = item.start
+          this.selectData.RentAvgMax = item.end
+          break
+        case 3:
+          this.selectData.AreaTotalMin = item.start
+          this.selectData.AreaTotalMax = item.end
+          break
+      }
+      this.$emit('selectData', this.selectData)
+    },
+    setNum (type) {
+      let num = this[type]
+      if (num.substr(0, 1) === '.') {
+        num = ''
+      }
+      num = num.replace(/^0*(0\.|[1-9])/, '$1')
+      num = num.replace(/[^\d.]/g, '')
+      num = num.replace(/\.{2,}/g, '.')
+      num = num.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+      num = num.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+      if (num.indexOf('.') < 0 && num !== '') {
+        if (num.substr(0, 1) === '0' && num.length === 2) {
+          num = num.substr(1, num.length)
+        }
+      }
+      if (num > 0 && num < 1) {
+        num = 1
+      }
+      this[type] = num
     },
     // 下拉筛选层级
     com_zIndex (status) {
@@ -169,6 +221,26 @@ export default {
         showBox2: false,
         showBox3: false
       }
+    },
+    // 点击确定
+    confirm (type) {
+      this.selectListData['type' + type].forEach(arr => {
+        arr.isSelect = false
+      })
+      this.showSelectList['showBox' + type] = false
+      this.showMark = false
+      this.typeList[type].isSelect = false
+      switch (type) {
+        case 2:
+          this.selectData.RentAvgMin = this.rentAvgMin
+          this.selectData.RentAvgMax = this.rentAvgMax
+          break
+        case 3:
+          this.selectData.AreaTotalMin = this.areaTotalMin
+          this.selectData.AreaTotalMax = this.areaTotalMax
+          break
+      }
+      this.$emit('selectData', this.selectData)
     }
   },
   created () {

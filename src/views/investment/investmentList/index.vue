@@ -2,10 +2,13 @@
   <div class="page page_bg">
     <nav-title :title="title"></nav-title>
     <header-top></header-top>
-    <select-types></select-types>
+    <select-types @selectData="setSelectData"></select-types>
     <div class="page_bd investmentList">
       <items></items>
     </div>
+    <transition name="page">
+      <router-view/>
+    </transition>
   </div>
 </template>
 <script>
@@ -25,16 +28,20 @@ export default {
     // 设置title
     setTitle (type) {
       switch (type) {
-        case 0:
+        case 15:
           this.title = '已投项目'
           break
-        case 1:
+        case 10:
           this.title = '未来可投'
           break
-        case 2:
+        case 20:
           this.title = '暂不考虑'
           break
       }
+    },
+    // 筛选条件
+    setSelectData (data) {
+      console.log(data)
     }
   },
   created () {
