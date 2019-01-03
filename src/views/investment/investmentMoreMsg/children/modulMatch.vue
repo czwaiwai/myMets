@@ -5,39 +5,48 @@
       <div class="msg">
         <div class="showItem clearfix noneBb">
           <span class="name">电梯数量：</span>
-          <span class="value textLeft">2台</span>
+          <span class="value" v-if="moreData.LiftNum">{{moreData.LiftNum}}台</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">电梯品牌：</span>
-          <span class="value textLeft">美的</span>
+          <span class="value" v-if="moreData.LiftBrand">{{moreData.LiftBrand}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">车位数量：</span>
-          <span class="value textLeft">1000</span>
+          <span class="value" v-if="moreData.ParkiLotNum">{{moreData.ParkiLotNum}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">空调系统：</span>
-          <span class="value textLeft">格力</span>
+          <span class="value" v-if="moreData.ACSys">{{moreData.ACSys}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">空调开放：</span>
-          <span class="value textLeft">8:00-10:00</span>
+          <span class="value" v-if="moreData.ACOpenTime">{{moreData.ACOpenTime}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">电信系统：</span>
-          <span class="value textLeft">南山区</span>
+          <span class="value" v-if="moreData.TeleSys">{{moreData.TeleSys}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">地板：</span>
-          <span class="value textLeft">国内</span>
+          <span class="value" v-if="moreData.Floor">{{moreData.Floor}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">其它材料：</span>
-          <span class="value textLeft">国内</span>
+          <span class="value" v-if="moreData.OtherMaterial">{{moreData.OtherMaterial}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">吊顶：</span>
-          <span class="value textLeft">国内</span>
+          <span class="value" v-if="moreData.Ceil">{{moreData.Ceil}}</span>
+          <span class="value" v-else>暂无</span>
         </div>
       </div>
     </div>
@@ -63,6 +72,14 @@
 <script>
 export default {
   name: 'modulMatch',
+  props: {
+    moreData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data () {
     return {}
   }

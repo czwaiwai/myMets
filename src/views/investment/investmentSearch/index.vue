@@ -28,17 +28,17 @@
           v-infinite-scroll="loadMore"
           infinite-scroll-disabled="loading"
           infinite-scroll-distance="10">
-          <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toProjectDetail(item)">
+          <li class="item clearfix" v-for="(item,index) in dataList" :key="index" @click.stop="toProjectDetail(item)">
             <div class="status" :class="com_color(index)">{{com_status(index)}}</div>
-            <img class="pic" src="http://pic25.nipic.com/20121110/10839717_103723525199_2.jpg">
+            <img class="pic" :src="item.Url">
             <div class="desc">
-              <div class="title _lines">保利叶之林</div>
-              <div class="name _lines">256171㎡/南山区/普通住宅</div>
-              <div class="price _lines">100.36元㎡/天</div>
-              <div class="time _lines">2018-12-12</div>
+              <div class="title _lines">{{item.ProjName}}</div>
+              <div class="name _lines">{{item.AreaTotal}}㎡/{{item.County}}/{{item.TradeType}}</div>
+              <div class="price _lines">{{item.RentAvg}}元㎡/天</div>
+              <div class="time _lines">{{com_setDate(item.RegDate)}}</div>
             </div>
           </li>
-          <li class="tip">加载中···</li>
+          <li class="tip" v-show="showTip">加载中···</li>
         </ul>
         <none-page title="暂无符合条件的数据~" v-if="!dataList.length&&hasHttp" :height="historyList.length?'40':'100'"></none-page>
       </div>
@@ -55,14 +55,16 @@
 import navTitle from '@/components/navTitle'
 import dialogConfire from '@/components/dialogConfire.vue'
 import nonePage from '@/views/meeting/components/nonePage/index.vue'
+import dateChange from '@/mixins/dateChange'
 export default {
   name: 'investmentSearch',
   components: {navTitle, dialogConfire, nonePage},
+  mixins: [dateChange],
   data () {
     return {
       searchKey: '',
       dataList: [],
-      historyList: ['111', '222', '333', '111', '222', '333'],
+      historyList: [],
       list: 20,
       dialogData: {
         type: 0,
@@ -70,6 +72,7 @@ export default {
         data: {}
       },
       hasHttp: false,
+      showTip: false,
       page: 1,
       pageSize: 20
     }
@@ -152,30 +155,59 @@ export default {
       }
     },
     // 获取搜索列表
-    search () {
+    async search () {
       if (this.searchKey === '') {
         this.dataList = []
         return
       }
-      this.hasHttp = true
-      this.dataList = ['1']
       if (this.historyList.indexOf(this.searchKey) > -1) {
         this.historyList.splice(this.historyList.indexOf(this.searchKey), 1)
       }
       this.historyList.unshift(this.searchKey)
       this.historyList = this.historyList.slice(0, 12)
       localStorage.historyinvestmentList = this.historyList.join(',')
+      let res = await this.$xml('UserCS_InvestmentPropertyList', {
+        'County': '',
+        'ProjStatus': '10',
+        'TradeType': '',
+        'RentAvgMin': '',
+        'RentAvgMax': '',
+        'AreaTotalMin': '',
+        'AreaTotalMax': '',
+        'Page': this.page,
+        'PageSize': this.pageSize
+      })
+      console.log(res)
+      if (res.data.length) {
+        if (this.page === 1) {
+          this.dataList = res.data
+        } else {
+          this.dataList = this.dataList.concat(res.data)
+        }
+      }
+      this.hasHttp = true
+      if (res.data.length < this.pageSize - 1) {
+        this.showTip = false
+      } else {
+        this.showTip = true
+      }
     },
     // 加载更多
     loadMore () {
-      this.list += 20
+      if (this.showTip) {
+        this.page++
+        this.search()
+      }
     }
   },
   beforeRouteLeave (to, from, next) {
     if (to.name === 'investmentList') {
+      this.dataList = []
+      this.searchKey = ''
       this.historyList = []
       this.page = 1
       this.hasHttp = false
+      this.showTip = false
       console.log('toinvestmentList')
     }
     next()

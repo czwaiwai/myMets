@@ -1,19 +1,30 @@
 <template>
   <div class="modulProgress">
-    <div class="progressBox mt20" v-for="(item,index) in 20" :key="index">
+    <div class="progressBox mt20" v-for="(item,index) in progressList" :key="index">
       <div class="title">
-        <span class="time">2018-10-11</span>
-        <span class="name">胡歌</span>
+        <span class="time">{{com_setAllDate(item.CreateTime)}}</span>
+        <span class="name">{{item.CreateUser}}</span>
       </div>
       <div class="msg">
-        <p class="value">业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算业主不想卖了，觉得现在不划算</p>
+        <p class="value" v-if="item.ProjPlan">{{item.ProjPlan}}</p>
+        <p class="value" v-else>暂无</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import dateChange from '@/mixins/dateChange'
 export default {
   name: 'modulProgress',
+  mixins: [dateChange],
+  props: {
+    progressList: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    }
+  },
   data () {
     return {}
   }

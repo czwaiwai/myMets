@@ -6,15 +6,15 @@
         <img src="../../../assets/img/investment/banner.png">
       </div>
       <div class="content">
-        <div class="destine items clearfix" @click.stop="toInvestmentList(0)">
+        <div class="destine items clearfix" @click.stop="toInvestmentList(15)">
           <i class="iconfont pics icon-fangyuan1"></i>
           <span>已投项目</span>
         </div>
-        <div class="myDestine items clearfix" @click.stop="toInvestmentList(1)">
+        <div class="myDestine items clearfix" @click.stop="toInvestmentList(10)">
           <i class="iconfont pics icon-weilai"></i>
           <span>未来可投</span>
         </div>
-        <div class="myMeeting items clearfix" @click.stop="toInvestmentList(2)">
+        <div class="myMeeting items clearfix" @click.stop="toInvestmentList(20)">
           <i class="iconfont pics icon-prohibit"></i>
           <span>暂不考虑</span>
         </div>

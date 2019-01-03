@@ -4,9 +4,9 @@
       <nav-title title="项目详情"></nav-title>
       <div class="page_bd investmentDetail">
         <div class="_swipe-wrap">
-          <swipe :auto="4000" v-if="imageList.length > 0">
-            <swipe-item v-for="(item,index) in imageList" :key="index">
-              <img preview :src="item.Path" class="pics">
+          <swipe :auto="4000" v-if="detailData.ImageList.length > 0">
+            <swipe-item v-for="(item,index) in detailData.ImageList" :key="index">
+              <img preview :src="item.Url" class="pics">
             </swipe-item>
           </swipe>
           <swipe v-else  :auto="4000">
@@ -17,42 +17,42 @@
         </div>
         <div class="headerData">
           <div class="title clearfix">
-            <span class="name">保利叶之林</span>
+            <span class="name">{{detailData.ProjName}}</span>
             <span class="type">普通住宅</span>
             <span class="floor">小高层</span>
           </div>
           <div class="areaPrice">
-            <span class="area">16565㎡</span>
-            <span class="price">12321元/㎡</span>
+            <span class="area">{{detailData.AreaFloor}}㎡</span>
+            <span class="price">{{detailData.RentAvg}}元/㎡</span>
           </div>
-          <p class="location">地址：宝山区华秋路349号</p>
+          <p class="location">地址：{{detailData.ProjAddr}}</p>
         </div>
         <div class="baseMsg msgBox mt10">
           <h3 class="boxTitle">基本信息</h3>
           <div class="msg">
             <div class="showItem clearfix noneBb">
-              <span class="name">所在县区：</span>
-              <span class="value textLeft">宝山区</span>
-            </div>
-            <div class="showItem clearfix noneBb">
-              <span class="name">业态类型：</span>
-              <span class="value textLeft">宝山区宝山区宝山区宝山区</span>
-            </div>
-            <div class="showItem clearfix noneBb">
-              <span class="name">建筑面积：</span>
-              <span class="value textLeft">971㎡</span>
-            </div>
-            <div class="showItem clearfix noneBb">
               <span class="name">楼层面积：</span>
-              <span class="value textLeft">971㎡</span>
+              <span class="value">{{detailData.AreaFloor}}㎡</span>
+            </div>
+            <div class="showItem clearfix noneBb">
+              <span class="name">地面建筑面积：</span>
+              <span class="value">{{detailData.AreaGround}}㎡</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">物业公司：</span>
-              <span class="value textLeft">暴力物业</span>
+              <span class="value">{{detailData.PropertyComp}}</span>
             </div>
             <div class="showItem clearfix noneBb">
-              <span class="name">建筑高度：</span>
-              <span class="value textLeft">971㎡</span>
+              <span class="name">项目开发商：</span>
+              <span class="value">{{detailData.Developer}}</span>
+            </div>
+            <div class="showItem clearfix noneBb">
+              <span class="name">竣工日期：</span>
+              <span class="value">{{com_setDate(detailData.FinishDate)}}</span>
+            </div>
+            <div class="showItem clearfix noneBb">
+              <span class="name">录入人：</span>
+              <span class="value">{{detailData.InPutUser}}</span>
             </div>
           </div>
         </div>
@@ -65,24 +65,24 @@
           <div class="msg">
             <div class="showItem clearfix noneBb">
               <span class="name">跟进人：</span>
-              <span class="value textLeft">宝山区</span>
+              <span class="value">{{detailData.ProjPlan[0].CreateUser}}</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">跟进时间：</span>
-              <span class="value textLeft">2018-12-13 12:30</span>
+              <span class="value">{{com_setAllDate(detailData.ProjPlan[0].CreateTime)}}</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">说明：</span>
-              <span class="value textLeft">客户意向不明</span>
+              <span class="value">{{detailData.ProjPlan[0].ProjPlan}}</span>
             </div>
           </div>
         </div>
         <div class="moreBtn mt10" @click.stop="toInvestmentMoreMsg">查看更多</div>
       </div>
       <div class="connet">
-        <span class="name">王大陆</span>
-        <a class="phone clearfix" :href="'tel:15012345678'">
-          <span class="tel">15012345678</span>
+        <span class="name">{{detailData.ProjLeader}}</span>
+        <a class="phone clearfix" :href="'tel:'+detailData.Tel">
+          <span class="tel">{{detailData.Tel}}</span>
           <i class="iconfont icon-dianhua icon"></i>
         </a>
       </div>
@@ -91,19 +91,20 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import dateChange from '@/mixins/dateChange'
 import { Swipe, SwipeItem } from 'mint-ui'
 export default {
   name: 'investmentDetail',
   components: {navTitle, Swipe, SwipeItem},
+  mixins: [dateChange],
   data () {
     return {
-      imageList: [
-        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
-        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
-        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
-        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'},
-        {Path: 'http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg'}
-      ]
+      detailData: {
+        ImageList: [],
+        ProjPlan: [
+          {CreateTime: '', CreateUser: '', ProjPlan: ''}
+        ]
+      }
     }
   },
   methods: {
@@ -114,9 +115,21 @@ export default {
           id: this.$route.params.id
         }
       })
+    },
+    // 获取详情数据
+    async getDetailData () {
+      console.log('route', this.$route)
+      let res = await this.$xml('UserCS_InvestmentPropertyDetail', {
+        'ID': this.$route.params.id
+      })
+      console.log(res.data)
+      if (res.data.length) {
+        this.detailData = res.data[0]
+      }
     }
   },
   activated () {
+    this.getDetailData()
     console.log('in...detail')
   },
   created () {
@@ -203,6 +216,14 @@ export default {
       }
       .msg{
         padding: .1rem .3rem;
+      }
+      .showItem {
+        .name {
+          width: 2.3rem;
+        }
+        .value {
+          width: 4.5rem;
+        }
       }
     }
     .locations{

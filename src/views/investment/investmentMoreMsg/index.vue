@@ -10,16 +10,16 @@
       <div class="page_bd investmentMoreMsg">
         <mt-tab-container v-model="active" :swipeable="false">
           <mt-tab-container-item id="tab-container0">
-            <modul-survey></modul-survey>
+            <modul-survey :moreData="moreData"></modul-survey>
           </mt-tab-container-item>
           <mt-tab-container-item id="tab-container1">
-            <modul-match></modul-match>
+            <modul-match :moreData="moreData"></modul-match>
           </mt-tab-container-item>
           <mt-tab-container-item id="tab-container2">
-            <modul-progress></modul-progress>
+            <modul-progress :progressList="progressList"></modul-progress>
           </mt-tab-container-item>
           <mt-tab-container-item id="tab-container3">
-            <modul-result></modul-result>
+            <modul-result :moreData="moreData"></modul-result>
           </mt-tab-container-item>
         </mt-tab-container>
       </div>
@@ -33,9 +33,11 @@ import modulMatch from './children/modulMatch'
 import modulProgress from './children/modulProgress'
 import modulResult from './children/modulResult'
 import { TabContainer, TabContainerItem } from 'mint-ui'
+import dateChange from '@/mixins/dateChange'
 export default {
   name: 'investmentMoreMsg',
   components: {navTitle, TabContainer, TabContainerItem, modulSurvey, modulMatch, modulProgress, modulResult},
+  mixins: [dateChange],
   data () {
     return {
       typeList: [
@@ -44,10 +46,13 @@ export default {
         {name: '项目进展', isSelect: false, type: 2},
         {name: '交易结果', isSelect: false, type: 3}
       ],
-      active: 'tab-container0'
+      active: 'tab-container0',
+      moreData: {},
+      progressList: []
     }
   },
   methods: {
+    // 选择展示类型
     selectType (item) {
       if (item.isSelect) {
         return
@@ -62,9 +67,34 @@ export default {
       })
       this.active = 'tab-container' + item.type
       this.$el.querySelector('.investmentMoreMsg').scrollTop = 1
+      if (item.type === 2) {
+        this.getProgressList()
+      }
+    },
+    async getProgressList () {
+      let res = await this.$xml('UserCS_InvestmentPropertyFollow', {
+        'ID': this.$route.params.id
+      })
+      console.log('getProgressList', res.data)
+      if (res.data.length) {
+        this.progressList = res.data
+      }
+    },
+    // 获取详情数据
+    async getMoreData () {
+      let res = await this.$xml('UserCS_InvestmentPropertyMore', {
+        'ID': this.$route.params.id
+      })
+      console.log(res.data)
+      if (res.data.length) {
+        let moreData = res.data[0]
+        moreData.FinishDate = this.com_setDate(moreData.FinishDate)
+        this.moreData = moreData
+      }
     }
   },
   activated () {
+    this.getMoreData()
     console.log('in...moreMsg')
   },
   created () {

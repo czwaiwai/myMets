@@ -4,26 +4,31 @@
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10">
-      <li class="item clearfix" v-for="(item,index) in list" :key="index" @click.stop="toInvestmentDetail(item)">
+      <li class="item clearfix" v-for="(item,index) in listData" :key="index" @click.stop="toInvestmentDetail(item)">
         <div class="status" :class="com_color(index)">{{com_status(index)}}</div>
-        <img class="pic" src="http://pic25.nipic.com/20121110/10839717_103723525199_2.jpg">
+        <img class="pic" :src="item.Url">
         <div class="desc">
-          <div class="title _lines">保利叶之林</div>
-          <div class="name _lines">256171㎡/南山区/普通住宅</div>
-          <div class="price _lines">100.36元㎡/天</div>
-          <div class="time _lines">2018-12-12</div>
+          <div class="title _lines">{{item.ProjName}}</div>
+          <div class="name _lines">{{item.AreaTotal}}㎡/{{item.County}}/{{item.TradeType}}</div>
+          <div class="price _lines">{{item.RentAvg}}元㎡/天</div>
+          <div class="time _lines">{{com_setDate(item.RegDate)}}</div>
         </div>
       </li>
-      <li class="tip">加载中···</li>
+      <li class="tip" v-show="showTip">加载中···</li>
     </ul>
   </div>
 </template>
 <script>
+import dateChange from '@/mixins/dateChange'
 export default {
   name: 'items',
+  mixins: [dateChange],
   data () {
     return {
-      list: 20
+      listData: [],
+      showTip: false,
+      page: 1,
+      pageSize: 20
     }
   },
   methods: {
@@ -54,14 +59,47 @@ export default {
       this.$router.push({
         name: `investmentDetail`,
         params: {
-          id: 1234
+          id: item.ID
         }
       })
     },
     // 加载更多
     loadMore () {
-      this.list += 20
+      if (this.showTip) {
+        this.page++
+        this.getDataList()
+      }
+    },
+    // 获取列表数据
+    async getDataList () {
+      let res = await this.$xml('UserCS_InvestmentPropertyList', {
+        'County': '',
+        'ProjStatus': this.$route.query.type,
+        'TradeType': '',
+        'RentAvgMin': '',
+        'RentAvgMax': '',
+        'AreaTotalMin': '',
+        'AreaTotalMax': '',
+        'Page': this.page,
+        'PageSize': this.pageSize
+      })
+      console.log(res)
+      if (res.data) {
+        if (this.page === 1) {
+          this.listData = res.data
+        } else {
+          this.listData = this.listData.concat(res.data)
+        }
+      }
+      if (res.data.length < this.pageSize - 1) {
+        this.showTip = false
+      } else {
+        this.showTip = true
+      }
     }
+  },
+  created () {
+    this.getDataList()
   }
 }
 </script>
