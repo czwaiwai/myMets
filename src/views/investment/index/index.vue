@@ -73,7 +73,6 @@ export default {
           height: 1rem;
           margin: .34rem .3rem;
           color: #fff;
-          line-height: 1rem;
           text-align: center;
           border-radius: .5rem;
         }
@@ -81,14 +80,17 @@ export default {
     }
     .destine .pics{
       font-size: .5rem;
+      line-height: 1rem;
       background: #0DC88C;
     }
     .myDestine .pics{
       font-size: .6rem;
+      line-height: 1rem;
       background: #FA8A2C;
     }
     .myMeeting .pics{
       font-size: .8rem;
+      line-height: 1.08rem;
       background: #2CB4FA;
     }
   }
