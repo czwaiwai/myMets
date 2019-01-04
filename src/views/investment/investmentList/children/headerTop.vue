@@ -16,6 +16,12 @@
 <script>
 export default {
   name: 'headerTop',
+  props: {
+    value: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       isList: true
@@ -24,6 +30,7 @@ export default {
   methods: {
     changeContent () {
       this.isList = !this.isList
+      this.$emit('input', !this.isList)
     },
     // 去搜索
     toInvestmentSearch () {
