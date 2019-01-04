@@ -1,4 +1,17 @@
 export default function (Vue) {
+  Vue.filter('int', function (value) {
+    if (!value) return '0'
+    return parseInt(value)
+  })
+  Vue.filter('float2', function (value) {
+    if (!value) return '0.00'
+    return parseFloat(value).toFixed(2)
+  })
+  Vue.filter('dateChina', function (value) {
+    if (!value) return ''
+    let arr = ['年', '月', '日']
+    return value.split('-').map((item, index) => item + arr[index]).join('')
+  })
   Vue.filter('setPrice', function (price) {
     if (price > 0) {
       return '+' + price

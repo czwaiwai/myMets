@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import './assets/css/main.scss'
 import './assets/font/iconfont.css'
+import './assets/font/report/iconfont.css'
 import 'vue-photo-preview/dist/skin.css'
 import Vue from 'vue'
 import App from './App'
@@ -13,14 +14,12 @@ import routerDirect from './utils/routerDirect'
 import appApi from './utils/appApi' // app 的 调用api
 import filter from './utils/filter'
 import toLower from './utils/toLower'
-import { MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore, Indicator } from 'mint-ui'
+import { DatetimePicker, MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore, Indicator } from 'mint-ui'
 import FastClick from 'fastclick'
 import bus from './utils/pushMsg'
 import '@/utils/rem'
 import preview from 'vue-photo-preview'
 console.log(bus)
-console.log(location.href, '------------------')
-console.log(location.hash, '----location.hash----')
 
 if (process.env.NODE_ENV === 'development') {
   Vue.prototype.$dev = true
@@ -32,6 +31,18 @@ if (process.env.NODE_ENV === 'development') {
 FastClick.attach(document.body)
 dateForm()
 Vue.config.productionTip = false
+
+if (process.env.NODE_ENV === 'development') {
+  Vue.prototype.$dev = true
+  Vue.dev = true
+} else {
+  Vue.prototype.$dev = false
+  Vue.dev = false
+}
+FastClick.attach(document.body)
+dateForm()
+Vue.config.productionTip = false
+Vue.component(DatetimePicker.name, DatetimePicker)
 Vue.component(IndexList.name, IndexList)
 Vue.component(IndexSection.name, IndexSection)
 Vue.component(Button.name, Button)
@@ -67,55 +78,55 @@ Vue.prototype.$indicator = Indicator
 //   console.log('设备初始化------------------', arguments)
 // }, false)
 
-Vue.use(axiosHelper, {
-  ip: ''
-})
-let vue = new Vue({
-  store,
-  router,
-  components: { App },
-  template: '<App/>'
-})
-vue.$mount('#app')
-
-// store.dispatch('getUserAction').then(user => {
-//   store.commit('setRandNum', Date.now())
-//   /* eslint-disable no-new */
-//   console.log(user)
-//   if (store.getters.isPos) {
-//     Vue.isPos = true
-//     Vue.prototype.$isPos = true
-//   }
-//   Vue.use(axiosHelper, {
-//     ip: store.getters.ip
-//   })
-//   let vue = new Vue({
-//     store,
-//     router,
-//     components: { App },
-//     template: '<App/>'
-//   })
-//   vue.$mount('#app')
-// }).catch(err => {
-//   console.log(err)
-//   // 开发环境虚假登录
-//   if (Vue.dev) {
-//     if (store.getters.isPos) {
-//       Vue.isPos = true
-//       Vue.prototype.$isPos = true
-//     }
-//     Vue.use(axiosHelper, {
-//       ip: ''
-//     })
-//     let vue = new Vue({
-//       store,
-//       router,
-//       components: { App },
-//       template: '<App/>'
-//     })
-//     vue.$mount('#app')
-//   } else {
-//     // 如果没有获取到登录对象应该立即退出
-//     appApi.logout()
-//   }
+// Vue.use(axiosHelper, {
+//   ip: ''
 // })
+// let vue = new Vue({
+//   store,
+//   router,
+//   components: { App },
+//   template: '<App/>'
+// })
+// vue.$mount('#app')
+
+store.dispatch('getUserAction').then(user => {
+  store.commit('setRandNum', Date.now())
+  /* eslint-disable no-new */
+  console.log(user)
+  if (store.getters.isPos) {
+    Vue.isPos = true
+    Vue.prototype.$isPos = true
+  }
+  Vue.use(axiosHelper, {
+    ip: store.getters.ip
+  })
+  let vue = new Vue({
+    store,
+    router,
+    components: { App },
+    template: '<App/>'
+  })
+  vue.$mount('#app')
+}).catch(err => {
+  console.log(err)
+  // 开发环境虚假登录
+  if (Vue.dev) {
+    if (store.getters.isPos) {
+      Vue.isPos = true
+      Vue.prototype.$isPos = true
+    }
+    Vue.use(axiosHelper, {
+      ip: ''
+    })
+    let vue = new Vue({
+      store,
+      router,
+      components: { App },
+      template: '<App/>'
+    })
+    vue.$mount('#app')
+  } else {
+    // 如果没有获取到登录对象应该立即退出
+    appApi.logout()
+  }
+})
