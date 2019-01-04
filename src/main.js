@@ -2,7 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import './assets/css/main.scss'
 import './assets/font/iconfont.css'
-import './assets/font/report/iconfont.css'
 import 'vue-photo-preview/dist/skin.css'
 import Vue from 'vue'
 import App from './App'

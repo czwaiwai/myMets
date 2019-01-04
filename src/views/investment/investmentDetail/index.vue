@@ -210,7 +210,7 @@ export default {
         }
       }
       .location{
-        height: .4rem;
+        min-height: .4rem;
         margin-top: .1rem;
         font-size: .3rem;
         color: #333;
