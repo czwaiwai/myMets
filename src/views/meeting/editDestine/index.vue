@@ -28,9 +28,9 @@
       <div class="btn" @click.stop="confirm">保存</div>
     </div>
     <transition name="page">
-      <keep-alive exclude="reserve">
+      <!-- <keep-alive exclude="reserve"> -->
         <router-view/>
-      </keep-alive>
+      <!-- </keep-alive> -->
     </transition>
     <select-list ref="selectList" :selectData="selectData" @selectItem="selectItem"></select-list>
   </div>

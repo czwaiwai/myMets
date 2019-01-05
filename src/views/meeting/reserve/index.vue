@@ -139,9 +139,9 @@
     </div>
     <select-list ref="selectList" :selectData="selectData" @selectItem="selectItem"></select-list>
     <transition name="page">
-      <keep-alive >
+      <!-- <keep-alive > -->
         <router-view/>
-      </keep-alive>
+      <!-- </keep-alive> -->
     </transition>
   </div>
 </div>
@@ -211,6 +211,10 @@ export default {
     },
     setPerson (item, query) {
       if (query.type === 'parti') {
+        let index = this.formObj.participants.findIndex(it => it.ID === item.EmployeeID)
+        if (index > -1) {
+          this.formObj.participants.splice(index, 1)
+        }
         this.formObj.participants.push({
           ID: item['EmployeeID'],
           Names: item['EmployeeName']

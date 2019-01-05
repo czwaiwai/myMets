@@ -67,7 +67,13 @@
         </div>
         <div class="locations msgBox mt10">
           <h3 class="boxTitle">位置及周边</h3>
-          <img class="pics" @click.stop="showMap=true" src="http://pic26.nipic.com/20121227/10193203_131357536000_2.jpg">
+          <div class="mapContent">
+            <div class="mapMark" @click.stop="showMap=true"></div>
+            <baidu-map  v-if="hasHttp" class="pics baidu_map" :center="center" :zoom="zoom" ak='D9b45bc6f98deafc489e9ac1bc7f7612'>
+              <bm-marker :position="center" :dragging="false">
+              </bm-marker>
+            </baidu-map>
+          </div>
         </div>
         <div class="followMsg msgBox mt10">
           <h3 class="boxTitle">最新跟进情况</h3>
@@ -92,11 +98,17 @@
         <div class="moreBtn mt10" @click.stop="toInvestmentMoreMsg">查看更多</div>
       </div>
       <transition name="mapBox">
-        <div class="mapBox" v-show="showMap" @click.stop="showMap=false"></div>
+        <div class="mapBox" v-if="showMap">
+          <baidu-map class="mapBig baidu_map" :center="center" :zoom="zoom" ak='D9b45bc6f98deafc489e9ac1bc7f7612'>
+            <bm-marker :position="center" :dragging="false">
+            </bm-marker>
+            <i class="iconfont icon-jujiao icon" @click.stop="showMap=false"></i>
+          </baidu-map>
+        </div>
       </transition>
       <div class="connet">
         <span class="name">{{detailData.ProjLeader}}</span>
-        <a class="phone clearfix" :href="'tel:'+detailData.Tel">
+        <a class="phone clearfix" v-show="detailData.Tel" :href="'tel:'+detailData.Tel">
           <span class="tel">{{detailData.Tel}}</span>
           <i class="iconfont icon-dianhua icon"></i>
         </a>
@@ -108,9 +120,12 @@
 import navTitle from '@/components/navTitle'
 import dateChange from '@/mixins/dateChange'
 import { Swipe, SwipeItem } from 'mint-ui'
+import BaiduMap from 'vue-baidu-map/components/Map/Map.vue'
+import BmGeolocation from 'vue-baidu-map/components/controls/Geolocation.vue'
+import BmMarker from 'vue-baidu-map/components/overlays/marker.vue'
 export default {
   name: 'investmentDetail',
-  components: {navTitle, Swipe, SwipeItem},
+  components: {navTitle, Swipe, SwipeItem, BaiduMap, BmGeolocation, BmMarker},
   mixins: [dateChange],
   data () {
     return {
@@ -120,10 +135,17 @@ export default {
           {CreateTime: '', CreateUser: '', ProjPlan: ''}
         ]
       },
-      showMap: false
+      showMap: false,
+      center: {
+        lng: 113.963633,
+        lat: 22.542932
+      },
+      zoom: 16,
+      hasHttp: false
     }
   },
   methods: {
+    // 到更多信息
     toInvestmentMoreMsg () {
       this.$router.push({
         name: `investmentMoreMsg`,
@@ -141,7 +163,13 @@ export default {
       console.log(res.data)
       if (res.data.length) {
         this.detailData = res.data[0]
+        this.center = {
+          lng: res.data[0].Longitude,
+          lat: res.data[0].Latitude
+        }
+        this.zoom = 16
       }
+      this.hasHttp = true
     }
   },
   created () {
@@ -240,10 +268,23 @@ export default {
       }
     }
     .locations{
-      .pics{
-        display: block;
+      .mapContent{
+        position: relative;
         width: 100vw;
         height: 2.88rem;
+        .mapMark{
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 2.88rem;
+          z-index: 9;
+        }
+        .pics{
+          display: block;
+          width: 100vw;
+          height: 2.88rem;
+        }
       }
     }
     .moreBtn{
@@ -305,5 +346,24 @@ export default {
     background: #05A3FD;
     z-index: 999;
     transition: all .5s ease;
+    .mapBig{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      .icon{
+        position: absolute;
+        bottom: .3rem;
+        left: .3rem;
+        z-index: 9;
+        display: block;
+        width: .8rem;
+        height: .8rem;
+        font-size: .68rem;
+        line-height: .8rem;
+        color: #333;
+        text-align: left;
+        border-radius: 50%;
+      }
+    }
   }
 </style>

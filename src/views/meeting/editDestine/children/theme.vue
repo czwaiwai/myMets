@@ -27,7 +27,7 @@
       </div>
       <div class="textShowItem clearfix">
         <span class="name">会议内容</span>
-        <span class="value"></span>
+        <span class="value">{{detailData.MeettingContent}}</span>
       </div>
       <div class="selectItem clearfix">
         <span class="name">预订人</span>
