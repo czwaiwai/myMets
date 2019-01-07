@@ -1,7 +1,13 @@
 <template>
   <div class="page_modal">
     <div class="page page_bg">
-      <nav-title title="项目详情"></nav-title>
+      <!-- <nav-title title="项目详情"></nav-title> -->
+      <div class="headerTitle">
+        <i class="iconfont icon-fanhui1 icon" @click.stop="goBack"></i>
+        <p class="title">
+          <span>项目详情</span>
+        </p>
+      </div>
       <div class="page_bd investmentDetail">
         <div class="_swipe-wrap">
           <swipe :auto="4000" v-if="detailData.ImageList.length > 0">
@@ -11,7 +17,6 @@
           </swipe>
           <swipe v-else  :auto="4000">
             <swipe-item >
-              <img src="../../../assets/img/meeting/banner_detail.png">
             </swipe-item>
           </swipe>
         </div>
@@ -102,7 +107,7 @@
           <baidu-map class="mapBig baidu_map" :center="center" :zoom="zoom" ak='D9b45bc6f98deafc489e9ac1bc7f7612'>
             <bm-marker :position="center" :dragging="false">
             </bm-marker>
-            <i class="iconfont icon-jujiao icon" @click.stop="showMap=false"></i>
+            <i class="iconfont icon-jujiao icon" @click.stop="reset"></i>
           </baidu-map>
         </div>
       </transition>
@@ -141,10 +146,29 @@ export default {
         lat: 22.542932
       },
       zoom: 16,
-      hasHttp: false
+      hasHttp: false,
+      isAdd: false
     }
   },
   methods: {
+    // 返回
+    goBack () {
+      if (this.showMap) {
+        this.showMap = false
+      } else {
+        this.$router.go(-1)
+      }
+    },
+    reset () {
+      console.log('reset')
+      if (this.isAdd) {
+        this.isAdd = false
+        this.center.lng -= 0.00000000001
+      } else {
+        this.isAdd = true
+        this.center.lng += 0.00000000001
+      }
+    },
     // 到更多信息
     toInvestmentMoreMsg () {
       this.$router.push({
@@ -164,10 +188,9 @@ export default {
       if (res.data.length) {
         this.detailData = res.data[0]
         this.center = {
-          lng: res.data[0].Longitude,
-          lat: res.data[0].Latitude
+          lng: (res.data[0].Longitude || 0) - 0,
+          lat: (res.data[0].Latitude || 0) - 0
         }
-        this.zoom = 16
       }
       this.hasHttp = true
     }
@@ -178,6 +201,41 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .headerTitle{
+    position: relative;
+    height: .88rem;
+    width: 100vw;
+    background: #303642;
+    .icon{
+      position: absolute;
+      left: .3rem;
+      top: 0;
+      display: block;
+      width: .4rem;
+      height: .88rem;
+      line-height: .88rem;
+      color: #fff;
+      text-align: left;
+      font-size: .34rem;
+    }
+    .title{
+      width: 100vw;
+      height: .88rem;
+      font-size: .34rem;
+      line-height: .88rem;
+      text-align: center;
+      color: #fff;
+      span{
+        display: inline-block;
+        height: .88rem;
+        line-height: .88rem;
+        max-width: 80vw;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
   .investmentDetail {
     ._swipe-wrap{
       position: relative;

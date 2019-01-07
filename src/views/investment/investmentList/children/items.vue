@@ -77,13 +77,13 @@ export default {
     // 获取列表数据
     async getDataList () {
       let res = await this.$xml('UserCS_InvestmentPropertyList', {
-        'County': '',
+        'County': this.$parent.selectData.County,
         'ProjStatus': this.$route.query.type,
-        'TradeType': '',
-        'RentAvgMin': '',
-        'RentAvgMax': '',
-        'AreaTotalMin': '',
-        'AreaTotalMax': '',
+        'TradeType': this.$parent.selectData.TradeType,
+        'RentAvgMin': this.$parent.selectData.RentAvgMin,
+        'RentAvgMax': this.$parent.selectData.RentAvgMax,
+        'AreaTotalMin': this.$parent.selectData.AreaTotalMin,
+        'AreaTotalMax': this.$parent.selectData.AreaTotalMax,
         'Page': this.page,
         'PageSize': this.pageSize
       })
@@ -100,10 +100,16 @@ export default {
       } else {
         this.showTip = true
       }
+    },
+    initGetData () {
+      this.page = 1
+      this.showTip = false
+      this.getDataList()
     }
   },
   created () {
     this.getDataList()
+    console.log('inItmes....')
   }
 }
 </script>

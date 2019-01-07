@@ -36,11 +36,8 @@ export default {
   components: {BaiduMap, BmLabel},
   data () {
     return {
-      center: {
-        lng: 113.963633,
-        lat: 22.542932
-      },
-      zoom: 10,
+      center: '',
+      zoom: 11,
       isAdd: false,
       showMapList: false,
       mapList: [
@@ -81,12 +78,15 @@ export default {
   },
   methods: {
     reset () {
+      // this.$refs.baiduMap.reset()
       if (this.isAdd) {
         this.isAdd = false
-        this.center.lng -= 0.00001
+        this.center = this.$parent.cityData.LevelCityName
+        // this.center.lng -= 0.00000000001
       } else {
         this.isAdd = true
-        this.center.lng += 0.00001
+        this.center = this.$parent.delectLastWord(this.$parent.cityData.LevelCityName)
+        // this.center.lng += 0.00000000001
       }
     },
     // 点击
@@ -101,15 +101,29 @@ export default {
         this.mapItem = item
         this.showMapList = true
       }
+    },
+    // 获取地图数据
+    getMapData () {
+
+    },
+    getCenter () {
+      this.center = this.$parent.cityData.LevelCityName
     }
+  },
+  created () {
+    this.getCenter()
   }
 }
 </script>
 <style lang="scss" scoped>
   .mapBox{
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 11;
     width: 100%;
     height: 100%;
+    background: #fff;
     .pics{
       display: block;
       width: 100%;

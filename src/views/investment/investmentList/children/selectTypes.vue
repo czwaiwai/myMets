@@ -9,7 +9,7 @@
     <collapse-transition>
       <div class="selectList areaList" v-show="showSelectList.showBox0" :style="com_zIndex(showSelectList.showBox0)">
         <div class="items" :class="{'isSelect':item.isSelect}" v-for="(item,index) in selectListData.type0" :key="index" @click.stop="selectItem(item, 0)">
-          <span class="name">{{item.name}}</span>
+          <span class="name">{{item.CountyName}}</span>
         </div>
       </div>
     </collapse-transition>
@@ -27,9 +27,9 @@
         </div>
         <div class="auto clearfix">
           <span class="name">自定义</span>
-          <input type="text" class="inputBox" @input="setNum('rentAvgMin')" v-model="rentAvgMin" placeholder="最小㎡">
+          <input type="text" class="inputBox rentAvgMin" @input="setNum('rentAvgMin')" v-model="rentAndArea.rentAvgMin" placeholder="最小㎡">
           <span class="aline">—</span>
-          <input type="text" class="inputBox" @input="setNum('rentAvgMax')" v-model="rentAvgMax" placeholder="最大㎡">
+          <input type="text" class="inputBox rentAvgMax" @input="setNum('rentAvgMax')" v-model="rentAndArea.rentAvgMax" placeholder="最大㎡">
           <div class="btn" @click.stop="confirm(2)">确定</div>
         </div>
       </div>
@@ -41,9 +41,9 @@
         </div>
         <div class="auto clearfix">
           <span class="name">自定义</span>
-          <input type="text" class="inputBox" @input="setNum('areaTotalMin')" v-model="areaTotalMin" placeholder="最低㎡">
+          <input type="text" class="inputBox areaTotalMin" @input="setNum('areaTotalMin')" v-model="rentAndArea.areaTotalMin" placeholder="最低㎡">
           <span class="aline">—</span>
-          <input type="text" class="inputBox" @input="setNum('areaTotalMax')" v-model="areaTotalMax" placeholder="最高㎡">
+          <input type="text" class="inputBox areaTotalMax" @input="setNum('areaTotalMax')" v-model="rentAndArea.areaTotalMax" placeholder="最高㎡">
           <div class="btn" @click.stop="confirm(3)">确定</div>
         </div>
       </div>
@@ -67,51 +67,19 @@ export default {
         {name: '租金', isSelect: false, type: 2},
         {name: '面积', isSelect: false, type: 3}
       ],
-      selectListData: {
-        type0: [
-          {name: '不限', id: '', isSelect: true},
-          {name: '宝安区', id: '1', isSelect: false},
-          {name: '南山区', id: '6', isSelect: false},
-          {name: '福田区', id: '11', isSelect: false},
-          {name: '罗湖区', id: '15', isSelect: false},
-          {name: '盐田区', id: '11', isSelect: false},
-          {name: '龙岗区', id: '15', isSelect: false},
-          {name: '龙华区', id: '11', isSelect: false},
-          {name: '坪山区', id: '15', isSelect: false}
-        ],
-        type1: [
-          {name: '不限', id: '', isSelect: true},
-          {name: '写字楼', id: '1', isSelect: false},
-          {name: '商业', id: '6', isSelect: false},
-          {name: '商业园区', id: '11', isSelect: false},
-          {name: '商业综合体', id: '15', isSelect: false}
-        ],
-        type2: [
-          {name: '不限', start: '', end: '', isSelect: true},
-          {name: '1-5元㎡/天', start: '1', end: '5', isSelect: false},
-          {name: '6-10元㎡/天', start: '6', end: '10', isSelect: false},
-          {name: '11-15元㎡/天', start: '11', end: '15', isSelect: false},
-          {name: '15元㎡/天以上', start: '15', end: '', isSelect: false}
-        ],
-        type3: [
-          {name: '不限', start: '', end: '', isSelect: true},
-          {name: '5000㎡以下', start: '', end: '5000', isSelect: false},
-          {name: '5000㎡-10000㎡', start: '5000', end: '10000', isSelect: false},
-          {name: '10000㎡-30000㎡', start: '10000', end: '30000', isSelect: false},
-          {name: '30000㎡-50000㎡', start: '30000', end: '50000', isSelect: false}
-        ]
-      },
-      showSelectList: {
-        showBox0: false,
-        showBox1: false,
-        showBox2: false,
-        showBox3: false
-      },
+      selectListData: {},
+      showSelectList: {},
       showMark: false,
-      rentAvgMin: '',
-      rentAvgMax: '',
-      areaTotalMin: '',
-      areaTotalMax: '',
+      rentAndArea: {
+        rentAvgMin: '',
+        rentAvgMax: '',
+        areaTotalMin: '',
+        areaTotalMax: '',
+      },
+      // rentAvgMin: '',
+      // rentAvgMax: '',
+      // areaTotalMin: '',
+      // areaTotalMax: '',
       selectData: {
         County: '', // 区域
         TradeType: '', // 业态类型
@@ -124,8 +92,7 @@ export default {
   },
   methods: {
     // 点击下拉列表项
-    selectItem (item, type) {
-      console.log('in....')
+    async selectItem (item, type) {
       if (!item.isSelect) {
         this.selectListData['type' + type].forEach(arr => {
           arr.isSelect = false
@@ -155,11 +122,12 @@ export default {
           this.selectData.AreaTotalMax = item.end
           break
       }
+      this.setInputInit()
       this.$emit('selectData', this.selectData)
     },
     setNum (type) {
-      let num = this[type]
-      if (num.substr(0, 1) === '.') {
+      let num = this.rentAndArea[type]
+      if (num.substr(0, 1) === '.' || num.substr(0, 1) === '0') {
         num = ''
       }
       num = num.replace(/^0*(0\.|[1-9])/, '$1')
@@ -172,10 +140,7 @@ export default {
           num = num.substr(1, num.length)
         }
       }
-      if (num > 0 && num < 1) {
-        num = 1
-      }
-      this[type] = num
+      this.rentAndArea[type] = num
     },
     // 下拉筛选层级
     com_zIndex (status) {
@@ -186,8 +151,11 @@ export default {
       }
     },
     // 选择下拉类型
-    selectType (item, index) {
+    async selectType (item, index) {
       console.log(item)
+      if (item.type === 0) {
+        await this.getCountryList()
+      }
       if (item.isSelect) {
         item.isSelect = false
         this.showMark = false
@@ -205,6 +173,25 @@ export default {
       this.showSelectList['showBox' + item.type] = true
       this.showMark = true
     },
+    // 获取区域列表
+    async getCountryList () {
+      if (this.selectListData.type0.length > 1) {
+        return
+      }
+      let res = await this.$xml('UserCS_InvestmentCountyName', {
+        'CityName': this.$parent.cityData.LevelCityName
+      })
+      console.log('getCountryList', res.data)
+      if (res.data.length) {
+        res.data.forEach(arr => {
+          arr.id = arr.CountyName
+          arr.isSelect = false
+        })
+        this.selectListData.type0 = this.selectListData.type0.concat(res.data)
+      }
+      return
+      console.log('type0', this.selectListData.type0)
+    },
     // 点击下拉背景
     clickMark () {
       this.showMark = false
@@ -212,6 +199,7 @@ export default {
       this.typeList.forEach(arr => {
         arr.isSelect = false
       })
+      this.setInputInit()
     },
     // 初始化下拉状态
     setSelectInit () {
@@ -221,9 +209,19 @@ export default {
         showBox2: false,
         showBox3: false
       }
+      console.log('showSelectList', this.showSelectList)
     },
     // 点击确定
     confirm (type) {
+      if (type === 2 && this.rentAndArea.rentAvgMax !== '' && this.rentAndArea.rentAvgMax - 0 < this.rentAndArea.rentAvgMin - 0) {
+        this.$toast('最大值不能小于最小值')
+        this.$el.querySelector('.rentAvgMax').focus()
+        return
+      } else if (type === 3 && this.rentAndArea.areaTotalMax !== '' && this.rentAndArea.areaTotalMax - 0 < this.rentAndArea.areaTotalMin - 0) {
+        this.$toast('最高值不能小于最低值')
+        this.$el.querySelector('.areaTotalMax').focus()
+        return
+      }
       this.selectListData['type' + type].forEach(arr => {
         arr.isSelect = false
       })
@@ -232,19 +230,58 @@ export default {
       this.typeList[type].isSelect = false
       switch (type) {
         case 2:
-          this.selectData.RentAvgMin = this.rentAvgMin
-          this.selectData.RentAvgMax = this.rentAvgMax
+          this.selectData.RentAvgMin = this.rentAndArea.rentAvgMin
+          this.selectData.RentAvgMax = this.rentAndArea.rentAvgMax
           break
         case 3:
-          this.selectData.AreaTotalMin = this.areaTotalMin
-          this.selectData.AreaTotalMax = this.areaTotalMax
+          this.selectData.AreaTotalMin = this.rentAndArea.areaTotalMin
+          this.selectData.AreaTotalMax = this.rentAndArea.areaTotalMax
           break
       }
       this.$emit('selectData', this.selectData)
+    },
+    setInputInit () {
+      this.rentAndArea = {
+        rentAvgMin: '',
+        rentAvgMax: '',
+        areaTotalMin: '',
+        areaTotalMax: '',
+      }
+    },
+    // 重置数据
+    setInitData () {
+      this.setInputInit()
+      this.setSelectInit()
+      this.showMark = false,
+      this.selectListData = {
+        type0: [
+          {CountyName: '不限', id: '', isSelect: true}
+        ],
+        type1: [
+          {name: '不限', id: '', isSelect: true}
+        ],
+        type2: [
+          {name: '不限', start: '', end: '', isSelect: true},
+          {name: '1-5元㎡/天', start: '1', end: '5', isSelect: false},
+          {name: '6-10元㎡/天', start: '6', end: '10', isSelect: false},
+          {name: '11-15元㎡/天', start: '11', end: '15', isSelect: false},
+          {name: '15元㎡/天以上', start: '15', end: '', isSelect: false}
+        ],
+        type3: [
+          {name: '不限', start: '', end: '', isSelect: true},
+          {name: '5000㎡以下', start: '', end: '5000', isSelect: false},
+          {name: '5000㎡-10000㎡', start: '5000', end: '10000', isSelect: false},
+          {name: '10000㎡-30000㎡', start: '10000', end: '30000', isSelect: false},
+          {name: '30000㎡-50000㎡', start: '30000', end: '50000', isSelect: false}
+        ]
+      }
+      this.typeList.forEach(arr => {
+        arr.isSelect = false
+      })
     }
   },
   created () {
-    this.setSelectInit()
+    this.setInitData()
   }
 }
 </script>
