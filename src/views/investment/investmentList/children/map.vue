@@ -85,17 +85,15 @@ export default {
         'County': this.$parent.selectData.County,
         'ProjStatus': this.$route.query.type,
         'TradeType': this.$parent.selectData.TradeType,
-        'RentAvgMin': this.$parent.selectData.RentAvgMin,
-        'RentAvgMax': this.$parent.selectData.RentAvgMax,
-        'AreaTotalMin': this.$parent.selectData.AreaTotalMin,
-        'AreaTotalMax': this.$parent.selectData.AreaTotalMax
+        'RentAvgMin': this.$parent.selectData.RentAvgMax ? (this.$parent.selectData.RentAvgMin || 1) : (this.$parent.selectData.RentAvgMin || ''),
+        'RentAvgMax': this.$parent.selectData.RentAvgMin ? (this.$parent.selectData.RentAvgMax || 99999999999) : (this.$parent.selectData.RentAvgMax || ''),
+        'AreaTotalMin': this.$parent.selectData.AreaTotalMax ? (this.$parent.selectData.AreaTotalMin || 1) : (this.$parent.selectData.AreaTotalMin || ''),
+        'AreaTotalMax': this.$parent.selectData.AreaTotalMin ? (this.$parent.selectData.AreaTotalMax || 99999999999) : (this.$parent.selectData.AreaTotalMax || '')
       })
       if (res.data.length) {
-        res.data.forEach(arr => {
-          arr.Latitude = arr.CountyData[0].Latitude - 0
-          arr.Longitude = arr.CountyData[0].Longitude - 0
-        })
         this.mapList = res.data
+      } else {
+        this.mapList = []
       }
       console.log('getMapData', this.mapList)
     },

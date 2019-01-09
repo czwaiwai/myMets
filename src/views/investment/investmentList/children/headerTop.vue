@@ -59,7 +59,10 @@ export default {
       })
     },
     // 城市下拉
-    selectCity () {
+    async selectCity () {
+      if (!this.citys.length) {
+        await this.getCityList()
+      }
       this.showCity = !this.showCity
     },
     // 选择城市
@@ -88,10 +91,10 @@ export default {
         }
       })
       this.citys = res.data
+      return true
     }
   },
   created () {
-    this.getCityList()
   }
 }
 </script>

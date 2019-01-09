@@ -33,11 +33,11 @@
           <span class="value" v-if="moreData.RoomRate">{{moreData.RoomRate}}</span>
           <span class="value" v-else>暂无</span>
         </div>
-        <div class="showItem clearfix noneBb">
+        <!-- <div class="showItem clearfix noneBb">
           <span class="name">车位率：</span>
           <span class="value" v-if="true">90omo%</span>
           <span class="value" v-else>暂无</span>
-        </div>
+        </div> -->
         <div class="showItem clearfix noneBb">
           <span class="name">收益率：</span>
           <span class="value" v-if="moreData.ProfitRate">{{moreData.ProfitRate}}%</span>

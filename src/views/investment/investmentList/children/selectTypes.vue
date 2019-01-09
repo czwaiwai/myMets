@@ -76,10 +76,6 @@ export default {
         areaTotalMin: '',
         areaTotalMax: '',
       },
-      // rentAvgMin: '',
-      // rentAvgMax: '',
-      // areaTotalMin: '',
-      // areaTotalMax: '',
       selectData: {
         County: '', // 区域
         TradeType: '', // 业态类型
@@ -194,8 +190,7 @@ export default {
         })
         this.selectListData.type0 = this.selectListData.type0.concat(res.data)
       }
-      return
-      console.log('type0', this.selectListData.type0)
+      return true
     },
     // 获取业态列表
     async getTradeType () {
@@ -209,9 +204,8 @@ export default {
           arr.isSelect = false
         })
         this.selectListData.type1 = this.selectListData.type1.concat(res.data)
-        console.log(this.selectListData.type1)
       }
-      return
+      return true
     },
     // 点击下拉背景
     clickMark () {
@@ -259,7 +253,6 @@ export default {
         showBox2: false,
         showBox3: false
       }
-      console.log('showSelectList', this.showSelectList)
     },
     // 点击确定
     confirm (type) {
@@ -300,7 +293,6 @@ export default {
     },
     // 重置数据
     setInitData () {
-      console.log('setInitData.....')
       this.setInputInit()
       this.setSelectInit()
       this.showMark = false,

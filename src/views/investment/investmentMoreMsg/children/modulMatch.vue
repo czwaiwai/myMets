@@ -52,8 +52,8 @@
     </div>
     <div class="arcMsg msgBox mt20">
       <h3 class="boxTitle">交通配套</h3>
-      <div class="msg">
-        <p class="iline">
+      <div class="msg" v-if="moreData.TrafficMat" v-html="com_change(moreData.TrafficMat)">
+        <!-- <p class="iline">
           <span class="name">连社区卫生服务中心:&nbsp;&nbsp;</span>
           <span class="value">华山医院</span>
         </p>
@@ -64,8 +64,9 @@
         <p class="iline">
           <span class="name">轨道交通:&nbsp;&nbsp;</span>
           <span class="value">华山医院、上海大学站</span>
-        </p>
+        </p> -->
       </div>
+      <div class="tip" v-else>暂无</div>
     </div>
   </div>
 </template>
@@ -78,6 +79,13 @@ export default {
       default: () => {
         return {}
       }
+    }
+  },
+  methods: {
+    com_change (str) {
+      let text = str.replace(/\n/g, '<br>')
+      console.log(text)
+      return text
     }
   },
   data () {
@@ -100,6 +108,9 @@ export default {
       }
       .msg{
         padding: .2rem .3rem;
+        font-size: .3rem;
+        line-height: 1.5;
+        color: #333;
         .iline{
           font-size: .3rem;
           line-height: 1.5;
@@ -116,5 +127,12 @@ export default {
   }
   .mt20{
     margin-top: .2rem;
+  }
+  .tip{
+    height: .88rem;
+    padding-left: .3rem;
+    line-height: .88rem;
+    font-size: .3rem;
+    color: #333;
   }
 </style>

@@ -39,7 +39,7 @@
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">国内/ 国外：</span>
-          <span class="value" v-if="true">国内1df65sd1f65</span>
+          <span class="value" v-if="moreData.DomesticOrAbroad">{{moreData.DomesticOrAbroad=='Domestic'?"国内":'国外'}}</span>
           <span class="value" v-else>暂无</span>
         </div>
       </div>

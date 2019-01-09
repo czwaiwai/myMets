@@ -10,12 +10,15 @@
         <p class="value" v-else>暂无</p>
       </div>
     </div>
+    <none-page title="暂无数据~" v-show="progressList.length==0"></none-page>
   </div>
 </template>
 <script>
+import nonePage from '@/components/nonePage/index.vue'
 import dateChange from '@/mixins/dateChange'
 export default {
   name: 'modulProgress',
+  components: {nonePage},
   mixins: [dateChange],
   props: {
     progressList: {
@@ -32,6 +35,10 @@ export default {
 </script>
 <style lang="scss" scoped>
   .modulProgress{
+    width: 100vw;
+    height: calc(100vh - 1.76rem);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     .progressBox{
       background: #fff;
       .title{
