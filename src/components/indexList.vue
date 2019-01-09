@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     async getPageDateNet () {
-      let res = await this.$xml('UserCS_GetEmployeeInfo', {OrgID: this.proId})
+      let res = await this.$xml('UserCS_MeetingEmployeeInfo', {OrgID: this.proId}) // UserCS_GetEmployeeInfo
       await sleep() // 优化大量元素构建导致转场动画卡顿
       let obj = {'#': []}
       this.$emit('setList', res.data)

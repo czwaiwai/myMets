@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     async getPageData () {
-      let p0 = 'User_GetOrgIDListMeet' // User_GetOrgIDListNew
+      let p0 = 'User_GetOrgIDListNew' // User_GetOrgIDListMeet
       let res = await this.$xml(p0, {}, {
         p1: this.currPositionID
       })

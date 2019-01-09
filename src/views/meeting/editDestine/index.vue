@@ -52,6 +52,7 @@ export default {
   mixins: [dateChange],
   data () {
     return {
+      isMeeting: true,
       showMore: false,
       detailData: {
         BookStatus: '',

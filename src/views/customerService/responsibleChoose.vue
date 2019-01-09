@@ -4,7 +4,7 @@
         <mt-header title="选择人员">
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
         </mt-header>
-        <div class="pro_title">
+        <div class="pro_title" v-show="!isMeeting">
           <i class="iconfont icon-building-automation padding-right"></i>{{orgName}}
         </div>
         <search v-model="search"></search>
@@ -32,12 +32,14 @@ export default {
     return {
       search: '',
       orgId: '',
-      list: []
+      list: [],
+      isMeeting: false
     }
   },
   created () {
     this.orgId = this.$parent.nav.orgId
     this.orgName = this.$parent.nav.orgName
+    this.isMeeting = this.$parent.isMeeting || false
   },
   components: {
     Search,

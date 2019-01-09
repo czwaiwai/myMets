@@ -158,6 +158,7 @@ export default {
   components: {navTitle, selectList, Indicator},
   data () {
     return {
+      isMeeting: true,
       showMore: false,
       detailData: {
         CognitiveWay: '',
