@@ -2,7 +2,9 @@
 @import 'weui';
 
 html,body {
+  width: 100vw;
   height:100%;
+  overflow-x: hidden;
   background-color: #F0F2F4;
 }
 #app,.page{

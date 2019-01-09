@@ -85,17 +85,17 @@
           <div class="msg">
             <div class="showItem clearfix noneBb">
               <span class="name">跟进人：</span>
-              <span class="value" v-if="detailData.ProjPlan[0].CreateUser">{{detailData.ProjPlan[0].CreateUser}}</span>
+              <span class="value" v-if="projPlan.CreateUser">{{projPlan.CreateUser}}</span>
               <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">跟进时间：</span>
-              <span class="value" v-if="detailData.ProjPlan[0].CreateTime">{{com_setAllDate(detailData.ProjPlan[0].CreateTime)}}</span>
+              <span class="value" v-if="projPlan.CreateTime">{{com_setAllDate(projPlan.CreateTime)}}</span>
               <span class="value" v-else>暂无</span>
             </div>
             <div class="showItem clearfix noneBb">
               <span class="name">说明：</span>
-              <span class="value" v-if="detailData.ProjPlan[0].ProjPlan">{{detailData.ProjPlan[0].ProjPlan}}</span>
+              <span class="value" v-if="projPlan.ProjPlan">{{projPlan.ProjPlan}}</span>
               <span class="value" v-else>暂无</span>
             </div>
           </div>
@@ -135,15 +135,13 @@ export default {
   data () {
     return {
       detailData: {
-        ImageList: [],
-        ProjPlan: [
-          {CreateTime: '', CreateUser: '', ProjPlan: ''}
-        ]
+        ImageList: []
       },
+      projPlan: {},
       showMap: false,
       center: {
-        lng: 113.963633,
-        lat: 22.542932
+        lng: 121.04,
+        lat: 31.11
       },
       zoom: 16,
       hasHttp: false,
@@ -190,6 +188,9 @@ export default {
         this.center = {
           lng: (res.data[0].Longitude || 0) - 0,
           lat: (res.data[0].Latitude || 0) - 0
+        }
+        if (res.data[0].ProjPlan.length) {
+          this.projPlan = res.data[0].ProjPlan[0]
         }
       }
       this.hasHttp = true

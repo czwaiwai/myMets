@@ -72,10 +72,10 @@ export default {
             arr.isSelect = false
           }
         })
-        this.showCity = false
         this.cityData = item
         this.$emit('changeCity', this.cityData)
       }
+      this.showCity = false
     },
     // 获取城市列表
     async getCityList () {

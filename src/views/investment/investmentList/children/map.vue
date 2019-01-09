@@ -4,8 +4,8 @@
       <bm-label
         @click="clickItem(item)"
         v-for="(item,index) in mapList" :key="index"
-        :position="{lng: item.lng, lat: item.lat}"
-        :content="item.name+'/'+item.num+'套'"
+        :position="{lng: item.Longitude, lat: item.Latitude}"
+        :content="item.CountyName+'/'+item.CountyNum+'套'"
       />
       <i class="iconfont icon-jujiao icon" @click.stop="reset"></i>
       <transition name="mapList">
@@ -13,13 +13,13 @@
           <div class="mark" @click.stop="showMapList=false"></div>
           <div class="_content">
             <h4 class="title">
-              <span>{{mapItem.name}}({{mapItem.num}}套)</span>
+              <span>{{mapItem.CountyName}}({{mapItem.CountyNum}}套)</span>
               <i class="iconfont icons" :class="showMapList?'icon-zhankai':'icon-zhankai1'" @click.stop="showMapList=false"></i>
             </h4>
             <div class="list">
-              <div class="items" v-for="(item,index) in mapItem.num" :key="index">
-                <div class="name">长虹科技大厦</div>
-                <div class="location">深圳市南山区深南大道1101</div>
+              <div class="items" v-for="(item,index) in mapItem.CountyData" :key="index" @click.stop="toInvestmentDetail(item)">
+                <div class="name">{{item.ProjName}}</div>
+                <div class="location">{{item.ProjAddr}}</div>
               </div>
             </div>
           </div>
@@ -40,53 +40,21 @@ export default {
       zoom: 11,
       isAdd: false,
       showMapList: false,
-      mapList: [
-        {
-          name: '龙岗区',
-          num: 1,
-          lng: '114.233002',
-          lat: '22.726713'
-        },
-        {
-          name: '龙华区',
-          num: 2,
-          lng: '114.051329',
-          lat: '22.756577'
-        },
-        {
-          name: '南山区',
-          num: 3,
-          lng: '113.939508',
-          lat: '22.537774'
-        },
-        {
-          name: '宝安区',
-          num: 4,
-          lng: '113.919098',
-          lat: '22.560205'
-        },
-        {
-          name: '罗湖区',
-          num: 5,
-          lng: '114.132967',
-          lat: '22.553796'
-        }
-      ],
+      mapList: [],
       mapItem: {
       }
     }
   },
   methods: {
+    // 地图复位
     reset () {
       // this.$refs.baiduMap.reset()
       if (this.isAdd) {
         this.isAdd = false
         this.center = this.$parent.cityData.LevelCityName
-        // this.center.lng -= 0.00000000001
       } else {
         this.isAdd = true
         this.center = this.$parent.delectLastWord(this.$parent.cityData.LevelCityName)
-        // this.center.lng += 0.00000000001
       }
     },
     // 点击
@@ -102,12 +70,42 @@ export default {
         this.showMapList = true
       }
     },
+    toInvestmentDetail (item) {
+      this.$router.push({
+        name: `investmentDetail`,
+        params: {
+          id: item.ID
+        }
+      })
+    },
     // 获取地图数据
-    getMapData () {
-
+    async getMapData () {
+      let res = await this.$xml('UserCS_InvestmentGlobalMap', {
+        'CityID': this.$parent.cityData.ID,
+        'County': this.$parent.selectData.County,
+        'ProjStatus': this.$route.query.type,
+        'TradeType': this.$parent.selectData.TradeType,
+        'RentAvgMin': this.$parent.selectData.RentAvgMin,
+        'RentAvgMax': this.$parent.selectData.RentAvgMax,
+        'AreaTotalMin': this.$parent.selectData.AreaTotalMin,
+        'AreaTotalMax': this.$parent.selectData.AreaTotalMax
+      })
+      if (res.data.length) {
+        res.data.forEach(arr => {
+          arr.Latitude = arr.CountyData[0].Latitude - 0
+          arr.Longitude = arr.CountyData[0].Longitude - 0
+        })
+        this.mapList = res.data
+      }
+      console.log('getMapData', this.mapList)
     },
     getCenter () {
+      this.mapList = []
       this.center = this.$parent.cityData.LevelCityName
+      this.isAdd = false
+      this.showMapList = false
+      this.mapItem = {}
+      this.getMapData()
     }
   },
   created () {

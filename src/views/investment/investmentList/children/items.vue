@@ -6,7 +6,7 @@
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10">
       <li class="item clearfix" v-for="(item,index) in listData" :key="index" @click.stop="toInvestmentDetail(item)">
-        <div class="status" :class="com_color(index)">{{com_status(index)}}</div>
+        <div class="status" :class="colorClass">{{status}}</div>
         <img class="pic" :src="item.Url">
         <div class="desc">
           <div class="title _lines">{{item.ProjName}}</div>
@@ -31,29 +31,27 @@ export default {
     return {
       listData: [],
       showTip: false,
+      status: '',
+      colorClass: '',
       page: 1,
       pageSize: 20
     }
   },
   methods: {
-    // 状态便签颜色
-    com_color (index) {
-      let temp = index % 3
-      return 'statusColor' + temp
-    },
     // 状态名称
-    com_status (index) {
-      let temp = index % 3
-      let status = ''
-      switch (temp) {
-        case 0:
-          status = '已投'
+    com_status_color () {
+      switch (this.$route.query.type - 0) {
+        case 10:
+          this.status = '未来可投'
+          this.colorClass = 'statusColor1'
           break
-        case 1:
-          status = '未来可投'
+        case 15:
+          this.status = '已投'
+          this.colorClass = 'statusColor0'
           break
-        case 2:
-          status = '不考虑'
+        case 20:
+          this.status = '不考虑'
+          this.colorClass = 'statusColor2'
           break
       }
       return status
@@ -77,6 +75,7 @@ export default {
     // 获取列表数据
     async getDataList () {
       let res = await this.$xml('UserCS_InvestmentPropertyList', {
+        'CityID': this.$parent.cityData.ID,
         'County': this.$parent.selectData.County,
         'ProjStatus': this.$route.query.type,
         'TradeType': this.$parent.selectData.TradeType,
@@ -108,6 +107,7 @@ export default {
     }
   },
   created () {
+    this.com_status_color()
     this.getDataList()
     console.log('inItmes....')
   }

@@ -152,7 +152,7 @@ export default {
     async getPointList () {
       let res = await this.$xml('UserCS_MeetingMyBookedTime', {
         'EmployeeID': this.locationData.employeeId,
-        'MeetTime': this.calendarDate.year + '-' + this.calendarDate.month,
+        'MeetTime': this.calendarDate.year + '-' + (this.calendarDate.month > 9 ? this.calendarDate.month : ('0' + this.calendarDate.month)),
         'MeetType': '2'
       })
       console.log('getPointList', res)

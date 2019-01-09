@@ -28,7 +28,8 @@ export default {
       title: '',
       isMap: false,
       cityData: {
-        LevelCityName: '上海市'
+        LevelCityName: '上海市',
+        ID: '17101615035200010026'
       },
       selectData: {
         'County': '',
@@ -38,7 +39,8 @@ export default {
         'AreaTotalMin': '',
         'AreaTotalMax': ''
       },
-      isChange: false
+      isChange: false,
+      type: 0
     }
   },
   watch: {
@@ -63,7 +65,7 @@ export default {
         this.isChange = false
         this.$refs.items.initGetData()
       }
-      localStorage.LevelCityName = cityData.LevelCityName
+      localStorage.cityData = JSON.stringify(cityData)
     },
     // 设置title
     setTitle (type) {
@@ -78,6 +80,7 @@ export default {
           this.title = '暂不考虑'
           break
       }
+      this.type = type - 0
     },
     // 筛选条件
     setSelectData (data) {
@@ -85,6 +88,7 @@ export default {
       this.selectData = data
       if (this.isMap) {
         this.isChange = true
+        this.$refs.mapPage.getCenter()
       } else {
         this.$refs.items.initGetData()
       }
@@ -108,7 +112,9 @@ export default {
   },
   created () {
     this.setTitle(this.$route.query.type - 0)
-    this.cityData.LevelCityName = localStorage.LevelCityName
+    if (localStorage.cityData) {
+      this.cityData = JSON.parse(localStorage.cityData)
+    }
   }
 }
 </script>

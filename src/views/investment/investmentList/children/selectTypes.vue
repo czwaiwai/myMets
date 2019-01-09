@@ -16,7 +16,7 @@
     <collapse-transition>
       <div class="selectList areaList" v-show="showSelectList.showBox1" :style="com_zIndex(showSelectList.showBox1)">
         <div class="items" :class="{'isSelect':item.isSelect}" v-for="(item,index) in selectListData.type1" :key="index" @click.stop="selectItem(item, 1)">
-          <span class="name">{{item.name}}</span>
+          <span class="name">{{item.TradeTypeName}}</span>
         </div>
       </div>
     </collapse-transition>
@@ -108,21 +108,25 @@ export default {
     setSelectData (item, type) {
       switch (type) {
         case 0:
-          this.selectData.County = item.id
+          this.selectData.County = item.ID
           break
         case 1:
-          this.selectData.TradeType = item.id
+          this.selectData.TradeType = item.TradeType
           break
         case 2:
           this.selectData.RentAvgMin = item.start
           this.selectData.RentAvgMax = item.end
+          this.rentAndArea.rentAvgMin = ''
+          this.rentAndArea.rentAvgMax = ''
           break
         case 3:
           this.selectData.AreaTotalMin = item.start
           this.selectData.AreaTotalMax = item.end
+          this.rentAndArea.areaTotalMin = ''
+          this.rentAndArea.areaTotalMax = ''
           break
       }
-      this.setInputInit()
+      // this.setInputInit()
       this.$emit('selectData', this.selectData)
     },
     setNum (type) {
@@ -155,6 +159,8 @@ export default {
       console.log(item)
       if (item.type === 0) {
         await this.getCountryList()
+      } else if (item.type === 1) {
+        await this.getTradeType()
       }
       if (item.isSelect) {
         item.isSelect = false
@@ -179,12 +185,11 @@ export default {
         return
       }
       let res = await this.$xml('UserCS_InvestmentCountyName', {
-        'CityName': this.$parent.cityData.LevelCityName
+        'CityID': this.$parent.cityData.ID
       })
       console.log('getCountryList', res.data)
       if (res.data.length) {
         res.data.forEach(arr => {
-          arr.id = arr.CountyName
           arr.isSelect = false
         })
         this.selectListData.type0 = this.selectListData.type0.concat(res.data)
@@ -192,14 +197,59 @@ export default {
       return
       console.log('type0', this.selectListData.type0)
     },
+    // 获取业态列表
+    async getTradeType () {
+      if (this.selectListData.type1.length > 1) {
+        return
+      }
+      let res = await this.$xml('UserCS_InvestmentTradeType', {})
+      console.log('getTradeType', res)
+      if (res.data.length) {
+        res.data.forEach(arr => {
+          arr.isSelect = false
+        })
+        this.selectListData.type1 = this.selectListData.type1.concat(res.data)
+        console.log(this.selectListData.type1)
+      }
+      return
+    },
     // 点击下拉背景
     clickMark () {
       this.showMark = false
       this.setSelectInit()
-      this.typeList.forEach(arr => {
+      let type = -1
+      this.typeList.forEach((arr, index) => {
+        if (arr.isSelect) {
+          type = index
+        }
         arr.isSelect = false
       })
-      this.setInputInit()
+      if (type > 1) {
+        let isSelct = false
+        this.selectListData['type' + type].forEach(arr => {
+          if (arr.isSelect) {
+            isSelct = true
+          }
+        })
+        if (type === 2) {
+          if (isSelct) {
+            this.rentAndArea.rentAvgMin = ''
+            this.rentAndArea.rentAvgMax = ''
+          } else {
+            this.rentAndArea.rentAvgMin = this.selectData.RentAvgMin
+            this.rentAndArea.rentAvgMax = this.selectData.RentAvgMax
+          }
+        } else if (type === 3) {
+          if (isSelct) {
+            this.rentAndArea.areaTotalMin = ''
+            this.rentAndArea.areaTotalMax = ''
+          } else {
+            this.rentAndArea.areaTotalMin = this.selectData.AreaTotalMin
+            this.rentAndArea.areaTotalMax = this.selectData.AreaTotalMax
+          }
+        }
+      }
+      // this.setInputInit()
     },
     // 初始化下拉状态
     setSelectInit () {
@@ -250,15 +300,16 @@ export default {
     },
     // 重置数据
     setInitData () {
+      console.log('setInitData.....')
       this.setInputInit()
       this.setSelectInit()
       this.showMark = false,
       this.selectListData = {
         type0: [
-          {CountyName: '不限', id: '', isSelect: true}
+          {CountyName: '不限', ID: '', isSelect: true}
         ],
         type1: [
-          {name: '不限', id: '', isSelect: true}
+          {TradeTypeName: '不限', TradeType: '', isSelect: true}
         ],
         type2: [
           {name: '不限', start: '', end: '', isSelect: true},
