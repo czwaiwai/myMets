@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="attendee" v-if="detailData.BookStatus==='HB'">
+    <div class="attendee" v-if="detailData.BookStatus==='HB' || detailData.BookStatus==='QR'">
       <div class="btnItem" >
         <p class="title">参会人（已选{{detailData.Participants.length}}人）</p>
         <div class="box-wrap clearfix">

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="listBtn" v-if="detailData.BookStatus==='HB'">
+    <div class="listBtn" v-if="detailData.BookStatus==='HB' || detailData.BookStatus==='QR'">
       <p class="title">服务清单</p>
       <div class="box-wrap clearfix">
         <div class="btnBox" :class="{'isSelect':item.isSelect}" @click.stop="selectItem(item,index)" v-for="(item,index) in serviceList" :key="index">

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="more" v-if="detailData.BookStatus==='HB'">
+    <div class="more" v-if="detailData.BookStatus==='HB' || detailData.BookStatus==='QR'">
       <div class="title" @click.stop="showMore=!showMore">
         <p :class="{'noneBb':!showMore}">
           <span>更多</span>

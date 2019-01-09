@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="theme" v-if="detailData.BookStatus==='HB'">
+    <div class="theme" v-if="detailData.BookStatus==='HB' || detailData.BookStatus==='QR'">
       <div class="inputItem clearfix">
         <span class="name">会议主题</span>
         <input class="inputs" type="text" name="MeetName" @input="inputText" :value="detailData.MeetName" placeholder="请输入会议主题">

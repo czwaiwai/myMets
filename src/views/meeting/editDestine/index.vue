@@ -24,7 +24,7 @@
       <remark :detailData.sync="detailData"></remark>
       <more :detailData.sync="detailData" @setSelectList="setSelectList"></more>
     </div>
-    <div class="_footer" v-if="detailData.BookStatus==='HB'">
+    <div class="_footer" v-if="detailData.BookStatus==='HB' || detailData.BookStatus==='QR'">
       <div class="btn" @click.stop="confirm">保存</div>
     </div>
     <transition name="page">
