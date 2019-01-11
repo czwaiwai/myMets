@@ -74,7 +74,7 @@
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">楼层高度：</span>
-          <span class="value" v-if="moreData.FloorHeight">{{moreData.FloorHeight}}㎡</span>
+          <span class="value" v-if="moreData.FloorHeight">{{moreData.FloorHeight}}m</span>
           <span class="value" v-else>暂无</span>
         </div>
         <div class="showItem clearfix noneBb">
@@ -136,11 +136,6 @@ export default {
       }
       .msg{
         padding: .2rem .3rem;
-        .value{
-          font-size: .3rem;
-          color: #333;
-          line-height: 1.5;
-        }
       }
       .goodMsg,.badMsg{
         padding: .2rem .3rem;

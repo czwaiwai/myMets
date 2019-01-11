@@ -29,7 +29,7 @@
           <span class="name">自定义</span>
           <input type="text" class="inputBox rentAvgMin" @input="setNum('rentAvgMin')" v-model="rentAndArea.rentAvgMin" placeholder="最小元/㎡/天">
           <span class="aline">—</span>
-          <input type="text" class="inputBox rentAvgMax" @input="setNum('rentAvgMax')" v-model="rentAndArea.rentAvgMax" placeholder="最大元㎡/天">
+          <input type="text" class="inputBox rentAvgMax" @input="setNum('rentAvgMax')" v-model="rentAndArea.rentAvgMax" placeholder="最大元/㎡/天">
           <div class="btn" @click.stop="confirm(2)">确定</div>
         </div>
       </div>
@@ -313,10 +313,10 @@ export default {
         ],
         type2: [
           {name: '不限', start: '', end: '', isSelect: true},
-          {name: '0-5元㎡/天', start: '0', end: '5', isSelect: false},
-          {name: '5-10元㎡/天', start: '5', end: '10', isSelect: false},
-          {name: '10-15元㎡/天', start: '10', end: '15', isSelect: false},
-          {name: '15元㎡/天以上', start: '15', end: '', isSelect: false}
+          {name: '0-5元/㎡/天', start: '0', end: '5', isSelect: false},
+          {name: '5-10元/㎡/天', start: '5', end: '10', isSelect: false},
+          {name: '10-15元/㎡/天', start: '10', end: '15', isSelect: false},
+          {name: '15元/㎡/天以上', start: '15', end: '', isSelect: false}
         ],
         type3: [
           {name: '不限', start: '', end: '', isSelect: true},
@@ -399,7 +399,7 @@ export default {
           border-radius: 3px;
           text-align: center;
           &::placeholder{
-            font-size: .28rem;
+            font-size: 12px;
             color: #999;
           }
         }

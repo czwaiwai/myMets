@@ -226,13 +226,11 @@ export default {
             border-bottom: none;
           }
           .name{
-            height: .4rem;
             line-height: .4rem;
             font-size: .28rem;
             color: #333;
           }
           .location{
-            height: .3rem;
             line-height: .3rem;
             font-size: .24rem;
             color: #7B7A7A;

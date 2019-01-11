@@ -3,10 +3,14 @@
     <nav-title :title="title"></nav-title>
     <header-top v-model="isMap" @changeCity="changeCity"></header-top>
     <select-types ref="selectTypes" @selectData="setSelectData"></select-types>
-    <div class="page_bd investmentList">
-      <items ref="items"></items>
+    <div class="page_bd map"  v-if="isMap">
       <transition name="slide-right">
-        <baidu-map ref="mapPage" v-if="isMap"></baidu-map>
+        <baidu-map ref="mapPage"></baidu-map>
+      </transition>
+    </div>
+    <div class="page_bd items" v-else>
+      <transition name="slide-right">
+        <items ref="items"></items>
       </transition>
     </div>
     <transition name="page">
@@ -49,6 +53,7 @@ export default {
         this.isChange = false
         this.$refs.items.initGetData()
       }
+      this.$el.querySelector('.page_bd').scrollTop = 0
     }
   },
   methods: {

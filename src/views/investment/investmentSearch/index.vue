@@ -79,7 +79,6 @@ export default {
       searchKey: '',
       dataList: [],
       historyList: [],
-      list: 20,
       dialogData: {
         type: 0,
         title: '',
