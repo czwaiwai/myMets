@@ -12,11 +12,12 @@
         <div class="_swipe-wrap">
           <swipe :auto="4000" v-if="detailData.ImageList.length > 0">
             <swipe-item v-for="(item,index) in detailData.ImageList" :key="index">
-              <img preview :src="item.Url" class="pics">
+              <img preview :src="item.Url" :onerror="defaultImg" class="pics">
             </swipe-item>
           </swipe>
           <swipe v-else  :auto="4000">
             <swipe-item >
+              <img preview src="../../../assets/img/investment/banner.png" class="pics">
             </swipe-item>
           </swipe>
         </div>
@@ -134,6 +135,7 @@ export default {
   mixins: [dateChange],
   data () {
     return {
+      defaultImg: 'this.src="' + require('../../../assets/img/investment/banner.png') + '"',
       detailData: {
         ImageList: []
       },

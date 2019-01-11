@@ -30,12 +30,24 @@
           infinite-scroll-distance="10">
           <li class="item clearfix" v-for="(item,index) in dataList" :key="index" @click.stop="toProjectDetail(item)">
             <div class="status" :class="colorClass">{{status}}</div>
-            <img class="pic" :src="item.Url">
+            <img class="pic" :src="item.Url" :onerror="defaultImg">
             <div class="desc">
-              <div class="title _lines">{{item.ProjName}}</div>
-              <div class="name _lines">{{item.AreaTotal}}㎡/{{item.County}}/{{item.TradeType}}</div>
-              <div class="price _lines">{{item.RentAvg}}元㎡/天</div>
-              <div class="time _lines">{{com_setDate(item.RegDate)}}</div>
+              <div class="title _lines">
+                <span v-if="item.ProjName">{{item.ProjName}}</span>
+                <span v-else>暂无</span>
+              </div>
+              <div class="name _lines">
+                <span v-if="item.AreaTotal">{{item.AreaTotal}}㎡</span>
+                <span v-else>暂无</span>
+                <span v-if="item.County">/{{item.County}}</span>
+                <span v-else>/暂无</span>
+                <span v-if="item.TradeType">/{{item.TradeType}}</span>
+                <span v-else>/暂无</span>
+              </div>
+              <div class="price _lines" v-if="item.RentAvg">{{item.RentAvg}}元㎡/天</div>
+              <div class="price _lines" v-else>暂无</div>
+              <div class="time _lines" v-if="item.RegDate">{{com_setDate(item.RegDate)}}</div>
+              <div class="time _lines" v-else>暂无</div>
             </div>
           </li>
           <li class="tip" v-show="showTip">加载中···</li>
@@ -63,6 +75,7 @@ export default {
   mixins: [dateChange],
   data () {
     return {
+      defaultImg: 'this.src="' + require('../../../assets/img/investment/banner.png') + '"',
       searchKey: '',
       dataList: [],
       historyList: [],

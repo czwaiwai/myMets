@@ -7,12 +7,25 @@
       infinite-scroll-distance="10">
       <li class="item clearfix" v-for="(item,index) in listData" :key="index" @click.stop="toInvestmentDetail(item)">
         <div class="status" :class="colorClass">{{status}}</div>
-        <img class="pic" :src="item.Url">
+        <img class="pic" :src="item.Url" :onerror="defaultImg">
+         <!-- :onerror="defaultImg" -->
         <div class="desc">
-          <div class="title _lines">{{item.ProjName}}</div>
-          <div class="name _lines">{{item.AreaTotal}}㎡/{{item.County}}/{{item.TradeType}}</div>
-          <div class="price _lines">{{item.RentAvg}}元㎡/天</div>
-          <div class="time _lines">{{com_setDate(item.RegDate)}}</div>
+          <div class="title _lines">
+            <span v-if="item.ProjName">{{item.ProjName}}</span>
+            <span v-else>暂无</span>
+          </div>
+          <div class="name _lines">
+            <span v-if="item.AreaTotal">{{item.AreaTotal}}㎡</span>
+            <span v-else>暂无</span>
+            <span v-if="item.County">/{{item.County}}</span>
+            <span v-else>/暂无</span>
+            <span v-if="item.TradeType">/{{item.TradeType}}</span>
+            <span v-else>/暂无</span>
+          </div>
+          <div class="price _lines" v-if="item.RentAvg">{{item.RentAvg}}元㎡/天</div>
+          <div class="price _lines" v-else>暂无</div>
+          <div class="time _lines" v-if="item.RegDate">{{com_setDate(item.RegDate)}}</div>
+          <div class="time _lines" v-else>暂无</div>
         </div>
       </li>
       <li class="tip" v-show="showTip">加载中···</li>
@@ -29,10 +42,12 @@ export default {
   components: {nonePage},
   data () {
     return {
+      defaultImg: 'this.src="' + require('../../../../assets/img/investment/banner.png') + '"',
       listData: [],
       showTip: false,
       status: '',
       colorClass: '',
+      imgUrl: '',
       page: 1,
       pageSize: 20
     }
@@ -79,10 +94,10 @@ export default {
         'County': this.$parent.selectData.County,
         'ProjStatus': this.$route.query.type,
         'TradeType': this.$parent.selectData.TradeType,
-        'RentAvgMin': this.$parent.selectData.RentAvgMax ? (this.$parent.selectData.RentAvgMin || 1) : (this.$parent.selectData.RentAvgMin || ''),
-        'RentAvgMax': this.$parent.selectData.RentAvgMin ? (this.$parent.selectData.RentAvgMax || 99999999999) : (this.$parent.selectData.RentAvgMax || ''),
-        'AreaTotalMin': this.$parent.selectData.AreaTotalMax ? (this.$parent.selectData.AreaTotalMin || 1) : (this.$parent.selectData.AreaTotalMin || ''),
-        'AreaTotalMax': this.$parent.selectData.AreaTotalMin ? (this.$parent.selectData.AreaTotalMax || 99999999999) : (this.$parent.selectData.AreaTotalMax || ''),
+        'RentAvgMin': this.$parent.selectData.RentAvgMax !== '' ? (this.$parent.selectData.RentAvgMin || 0) : (this.$parent.selectData.RentAvgMin || ''),
+        'RentAvgMax': this.$parent.selectData.RentAvgMin !== '' ? (this.$parent.selectData.RentAvgMax || 99999999999) : (this.$parent.selectData.RentAvgMax || ''),
+        'AreaTotalMin': this.$parent.selectData.AreaTotalMax !== '' ? (this.$parent.selectData.AreaTotalMin || 0) : (this.$parent.selectData.AreaTotalMin || ''),
+        'AreaTotalMax': this.$parent.selectData.AreaTotalMin !== '' ? (this.$parent.selectData.AreaTotalMax || 99999999999) : (this.$parent.selectData.AreaTotalMax || ''),
         'Page': this.page,
         'PageSize': this.pageSize
       })
@@ -93,6 +108,8 @@ export default {
         } else {
           this.listData = this.listData.concat(res.data)
         }
+      } else {
+        this.listData = []
       }
       if (res.data.length < this.pageSize - 1) {
         this.showTip = false
@@ -109,6 +126,7 @@ export default {
   created () {
     this.com_status_color()
     this.getDataList()
+    this.imgUrl = require('@/assets/img/investment/banner.png')
     console.log('inItmes....')
   }
 }

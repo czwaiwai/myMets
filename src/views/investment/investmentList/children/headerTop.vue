@@ -1,13 +1,13 @@
 <template>
   <div class="headerTop">
-    <div class="city" @click.stop="selectCity">
-      <span>{{$parent.delectLastWord($parent.cityData.LevelCityName)}}</span>
-      <i class="iconfont" :class="showCity?'icon-zhankai1':'icon-zhankai'"></i>
+    <div class="city clearfix" @click.stop="selectCity">
+      <span class="cityName">{{$parent.delectLastWord($parent.cityData.LevelCityName)}}</span>
+      <i class="iconfont icon" :class="showCity?'icon-zhankai1':'icon-zhankai'"></i>
     </div>
     <div class="searchBtn">
       <div class="_wrap clearfix" @click.stop="toInvestmentSearch">
         <i class="iconfont icon-sousuo icon"></i>
-        <span class="placeholder">请输入城市或项目</span>
+        <span class="placeholder">请输入项目名称</span>
       </div>
     </div>
     <i class="iconfont changeBtn" :class="isList?'icon-ditu':'icon-fenlei'" @click.stop="changeContent"></i>
@@ -106,12 +106,29 @@ export default {
     background: #fff;
     border-bottom: 1px solid #ededed;
     .city{
+      padding-left: .3rem;
       min-width: 1.5rem;
       height: .98rem;
       font-size: .34rem;
       color: #333;
       line-height: .98rem;
       text-align: center;
+      .cityName {
+        float: left;
+        max-width: 1.8rem;
+        height: .98rem;
+        line-height: .98rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .icon{
+        float: left;
+        width: .4rem;
+        height: .98rem;
+        line-height: .98rem;
+        text-align: left;
+      }
     }
     .searchBtn{
       flex: 1;

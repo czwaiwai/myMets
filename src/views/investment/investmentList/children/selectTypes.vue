@@ -27,9 +27,9 @@
         </div>
         <div class="auto clearfix">
           <span class="name">自定义</span>
-          <input type="text" class="inputBox rentAvgMin" @input="setNum('rentAvgMin')" v-model="rentAndArea.rentAvgMin" placeholder="最小㎡">
+          <input type="text" class="inputBox rentAvgMin" @input="setNum('rentAvgMin')" v-model="rentAndArea.rentAvgMin" placeholder="最小元/㎡/天">
           <span class="aline">—</span>
-          <input type="text" class="inputBox rentAvgMax" @input="setNum('rentAvgMax')" v-model="rentAndArea.rentAvgMax" placeholder="最大㎡">
+          <input type="text" class="inputBox rentAvgMax" @input="setNum('rentAvgMax')" v-model="rentAndArea.rentAvgMax" placeholder="最大元㎡/天">
           <div class="btn" @click.stop="confirm(2)">确定</div>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default {
     },
     setNum (type) {
       let num = this.rentAndArea[type]
-      if (num.substr(0, 1) === '.' || num.substr(0, 1) === '0') {
+      if (num.substr(0, 1) === '.') {
         num = ''
       }
       num = num.replace(/^0*(0\.|[1-9])/, '$1')
@@ -136,9 +136,9 @@ export default {
       num = num.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
       num = num.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
       if (num.indexOf('.') < 0 && num !== '') {
-        if (num.substr(0, 1) === '0' && num.length === 2) {
-          num = num.substr(1, num.length)
-        }
+        // if (num.substr(0, 1) === '0' && num.length === 2) {
+        //   num = num.substr(1, num.length)
+        // }
       }
       this.rentAndArea[type] = num
     },
@@ -185,10 +185,14 @@ export default {
       })
       console.log('getCountryList', res.data)
       if (res.data.length) {
+        let list = []
         res.data.forEach(arr => {
-          arr.isSelect = false
+          if (arr.CountyName !== '' || arr.ID !== '') {
+            arr.isSelect = false
+            list.push(arr)
+          }
         })
-        this.selectListData.type0 = this.selectListData.type0.concat(res.data)
+        this.selectListData.type0 = this.selectListData.type0.concat(list)
       }
       return true
     },
@@ -200,10 +204,14 @@ export default {
       let res = await this.$xml('UserCS_InvestmentTradeType', {})
       console.log('getTradeType', res)
       if (res.data.length) {
+        let list = []
         res.data.forEach(arr => {
-          arr.isSelect = false
+          if (arr.TradeType !== '' || arr.TradeTypeName !== '') {
+            arr.isSelect = false
+            list.push(arr)
+          }
         })
-        this.selectListData.type1 = this.selectListData.type1.concat(res.data)
+        this.selectListData.type1 = this.selectListData.type1.concat(list)
       }
       return true
     },
@@ -305,14 +313,14 @@ export default {
         ],
         type2: [
           {name: '不限', start: '', end: '', isSelect: true},
-          {name: '1-5元㎡/天', start: '1', end: '5', isSelect: false},
-          {name: '6-10元㎡/天', start: '6', end: '10', isSelect: false},
-          {name: '11-15元㎡/天', start: '11', end: '15', isSelect: false},
+          {name: '0-5元㎡/天', start: '0', end: '5', isSelect: false},
+          {name: '5-10元㎡/天', start: '5', end: '10', isSelect: false},
+          {name: '10-15元㎡/天', start: '10', end: '15', isSelect: false},
           {name: '15元㎡/天以上', start: '15', end: '', isSelect: false}
         ],
         type3: [
           {name: '不限', start: '', end: '', isSelect: true},
-          {name: '5000㎡以下', start: '', end: '5000', isSelect: false},
+          {name: '5000㎡以下', start: '0', end: '5000', isSelect: false},
           {name: '5000㎡-10000㎡', start: '5000', end: '10000', isSelect: false},
           {name: '10000㎡-30000㎡', start: '10000', end: '30000', isSelect: false},
           {name: '30000㎡-50000㎡', start: '30000', end: '50000', isSelect: false}
@@ -382,7 +390,7 @@ export default {
         }
         .inputBox {
           float: left;
-          width: 1.62rem;
+          width: 1.7rem;
           height: .58rem;
           margin: 0 .1rem;
           font-size: .28rem;
@@ -391,6 +399,7 @@ export default {
           border-radius: 3px;
           text-align: center;
           &::placeholder{
+            font-size: .28rem;
             color: #999;
           }
         }
