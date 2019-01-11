@@ -53,18 +53,6 @@
     <div class="arcMsg msgBox mt20">
       <h3 class="boxTitle">交通配套</h3>
       <div class="msg" v-if="moreData.TrafficMat" v-html="com_change(moreData.TrafficMat)">
-        <!-- <p class="iline">
-          <span class="name">连社区卫生服务中心:&nbsp;&nbsp;</span>
-          <span class="value">华山医院</span>
-        </p>
-        <p class="iline">
-          <span class="name">周边学校:&nbsp;&nbsp;</span>
-          <span class="value">华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中、华山医院、上大附中</span>
-        </p>
-        <p class="iline">
-          <span class="name">轨道交通:&nbsp;&nbsp;</span>
-          <span class="value">华山医院、上海大学站</span>
-        </p> -->
       </div>
       <div class="tip" v-else>暂无</div>
     </div>
@@ -84,7 +72,6 @@ export default {
   methods: {
     com_change (str) {
       let text = str.replace(/\n/g, '<br>')
-      console.log(text)
       return text
     }
   },

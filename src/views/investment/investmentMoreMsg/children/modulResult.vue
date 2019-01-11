@@ -78,7 +78,7 @@
         </div>
         <div class="showItem clearfix noneBb">
           <span class="name">涉外代表注册：</span>
-          <span class="value" v-if="moreData.IsRegist">{{com_regist(moreData.IsRegist)}}</span>
+          <span class="value" v-if="moreData.IsRegist">{{moreData.IsRegist=='True'?'是':'否'}}</span>
           <span class="value" v-else>暂无</span>
         </div>
       </div>
@@ -94,20 +94,6 @@ export default {
       default: () => {
         return {}
       }
-    }
-  },
-  data () {
-    return {}
-  },
-  methods: {
-    com_regist (regist) {
-      let status = ''
-      if (regist === 'True') {
-        status = '是'
-      } else if (regist === 'False') {
-        status = '否'
-      }
-      return status
     }
   }
 }

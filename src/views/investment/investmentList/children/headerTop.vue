@@ -69,7 +69,7 @@ export default {
     selectItem (item) {
       if (!item.isSelect) {
         this.citys.forEach(arr => {
-          if (arr.LevelCityName === item.LevelCityName) {
+          if (arr.ID === item.ID) {
             arr.isSelect = true
           } else {
             arr.isSelect = false
@@ -84,7 +84,7 @@ export default {
     async getCityList () {
       let res = await this.$xml('UserCS_InvestmentCityName', {})
       res.data.forEach(arr => {
-        if (arr.LevelCityName === this.$parent.cityData.LevelCityName) {
+        if (arr.ID === this.$parent.cityData.ID) {
           arr.isSelect = true
         } else {
           arr.isSelect = false

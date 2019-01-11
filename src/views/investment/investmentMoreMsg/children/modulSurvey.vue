@@ -136,6 +136,11 @@ export default {
       }
       .msg{
         padding: .2rem .3rem;
+        .value{
+          font-size: .3rem;
+          color: #333;
+          line-height: 1.5;
+        }
       }
       .goodMsg,.badMsg{
         padding: .2rem .3rem;
