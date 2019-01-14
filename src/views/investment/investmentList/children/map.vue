@@ -10,14 +10,14 @@
       <i class="iconfont icon-jujiao icon" @click.stop="reset"></i>
     </baidu-map>
     <transition name="mapList">
-      <div class="mapList" v-show="showMapList" @touchmove.prevent>
+      <div class="mapList" v-if="showMapList" >
         <div class="mark" @click.stop="showMapList=false"></div>
         <div class="_content">
           <h4 class="title">
             <span>{{mapItem.CountyName}}({{mapItem.CountyNum}}套)</span>
             <i class="iconfont icons" :class="showMapList?'icon-zhankai':'icon-zhankai1'" @click.stop="showMapList=false"></i>
           </h4>
-          <div class="list"  @touchmove.stop>
+          <div class="list" >
             <div class="items" v-for="(item,index) in mapItem.CountyData" :key="index" @click.stop="toInvestmentDetail(item)">
               <div class="name">{{item.ProjName}}</div>
               <div class="location">{{item.ProjAddr}}</div>
@@ -175,16 +175,14 @@ export default {
     position: absolute;
     left: 0;
     bottom: 0;
-    z-index: 999;
+    z-index: 9999;
     transition: all .5s ease;
     width: 100vw;
-    height: calc(100vh - 2.74rem);
-    // height: 100%;
+    height: 100%;
     .mark{
       position: absolute;
       width: 100%;
-      // height: 100%;
-      height: calc(100vh - 2.74rem);
+      height: 100%;
       z-index: 9;
     }
     ._content{

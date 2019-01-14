@@ -3,7 +3,7 @@
     <nav-title :title="title"></nav-title>
     <header-top v-model="isMap" @changeCity="changeCity"></header-top>
     <select-types ref="selectTypes" @selectData="setSelectData"></select-types>
-    <div class="page_bd map"  v-if="isMap">
+    <div class="page_bd map" v-if="isMap">
       <transition name="slide-right">
         <baidu-map ref="mapPage"></baidu-map>
       </transition>
@@ -129,5 +129,8 @@ export default {
   }
   .slide-right-enter-active, .slide-right-leave-active {
     transition: all .3s ease;
+  }
+  .map{
+    overflow: hidden;
   }
 </style>
