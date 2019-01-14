@@ -49,7 +49,7 @@
       </div>
     </collapse-transition>
     <transition name="mark">
-      <div class="mark" v-show="showMark" @click.stop="clickMark"></div>
+      <div class="mark" v-show="showMark" @click.stop="clickMark" @touchmove.prevent></div>
     </transition>
   </div>
 </template>

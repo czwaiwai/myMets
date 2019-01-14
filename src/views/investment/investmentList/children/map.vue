@@ -8,24 +8,24 @@
         :content="item.CountyName+'/'+item.CountyNum+'套'"
       />
       <i class="iconfont icon-jujiao icon" @click.stop="reset"></i>
-      <transition name="mapList">
-        <div class="mapList" v-if="showMapList">
-          <div class="mark" @click.stop="showMapList=false"></div>
-          <div class="_content">
-            <h4 class="title">
-              <span>{{mapItem.CountyName}}({{mapItem.CountyNum}}套)</span>
-              <i class="iconfont icons" :class="showMapList?'icon-zhankai':'icon-zhankai1'" @click.stop="showMapList=false"></i>
-            </h4>
-            <div class="list">
-              <div class="items" v-for="(item,index) in mapItem.CountyData" :key="index" @click.stop="toInvestmentDetail(item)">
-                <div class="name">{{item.ProjName}}</div>
-                <div class="location">{{item.ProjAddr}}</div>
-              </div>
+    </baidu-map>
+    <transition name="mapList">
+      <div class="mapList" v-if="showMapList" @touchmove.prevent>
+        <div class="mark" @click.stop="showMapList=false"></div>
+        <div class="_content">
+          <h4 class="title">
+            <span>{{mapItem.CountyName}}({{mapItem.CountyNum}}套)</span>
+            <i class="iconfont icons" :class="showMapList?'icon-zhankai':'icon-zhankai1'" @click.stop="showMapList=false"></i>
+          </h4>
+          <div class="list">
+            <div class="items" v-for="(item,index) in mapItem.CountyData" :key="index" @click.stop="toInvestmentDetail(item)">
+              <div class="name">{{item.ProjName}}</div>
+              <div class="location">{{item.ProjAddr}}</div>
             </div>
           </div>
         </div>
-      </transition>
-    </baidu-map>
+      </div>
+    </transition>
   </div>
 </template>
 <script>
