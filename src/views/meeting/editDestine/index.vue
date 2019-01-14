@@ -251,7 +251,7 @@ export default {
       this.com_num('UnitPrice')
       this.com_num('AdvanceMoney')
       console.log('res:', this.detailData)
-      if (this.detailData.BookStatus === 'HB') {
+      if (this.detailData.BookStatus === 'HB' || this.detailData.BookStatus === 'QR') {
         this.getEquipMatching()
         this.getFileService()
       }

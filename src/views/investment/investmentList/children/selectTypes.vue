@@ -201,7 +201,9 @@ export default {
       if (this.selectListData.type1.length > 1) {
         return
       }
-      let res = await this.$xml('UserCS_InvestmentTradeType', {})
+      let res = await this.$xml('UserCS_InvestmentTradeType', {
+        'CityID': this.$parent.cityData.ID
+      })
       console.log('getTradeType', res)
       if (res.data.length) {
         let list = []

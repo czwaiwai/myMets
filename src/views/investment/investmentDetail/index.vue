@@ -249,6 +249,7 @@ export default {
         display: block;
         width: 100vw;
         height: 3.12rem;
+        margin-top: -1px;
       }
     }
     .headerData{
