@@ -8,7 +8,15 @@ import meeting from './meeting'
 import meter from './meter'
 // 投资物业
 import investment from './investment'
+// 扫码进入的设备详情
+import scanDetail from './scanDetail'
+// 报表
 import report from './report'
+// 巡检保养
+import workOrder from './workOrder'
+// 监控中心
+import monitorCenter from './monitorCenter'
+
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
 import TabWork from '@/views/tabWork'
@@ -51,7 +59,10 @@ export default new Router({
         } else {
           // 会议室
           return '/tab/work'
+          // // 投资性物业
+          // return '/investmentIndex'
           // return '/meeting'
+          // return '/monitor/monitorInspection'
         }
       }
     },
@@ -274,6 +285,9 @@ export default new Router({
     ...report,
     ...meter,
     ...investment,
+    ...scanDetail,
+    ...workOrder,
+    ...monitorCenter,
     {
       path: '*',
       redirect: to => {

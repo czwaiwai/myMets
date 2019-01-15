@@ -35,9 +35,9 @@ button, input {
 
 
 /*gap between btn*/
-.#{$weui_ns}btn + .#{$weui_ns}btn {
-    margin-top: $weuiBtnDefaultGap;
-}
+// .#{$weui_ns}btn + .#{$weui_ns}btn {
+//     margin-top: $weuiBtnDefaultGap;
+// }
 
 .#{$weui_ns}btn.#{$weui_ns}btn_inline + .#{$weui_ns}btn.#{$weui_ns}btn_inline {
     margin-top: auto;
