@@ -86,6 +86,15 @@ export default {
       }
     }
   },
+  watch: {
+    showMark (newVal, oldVal) {
+      if (newVal) {
+        this.$emit('status', true)
+      } else {
+        this.$emit('status', false)
+      }
+    }
+  },
   methods: {
     // 点击下拉列表项
     async selectItem (item, type) {
@@ -99,6 +108,7 @@ export default {
       this.showMark = false
       this.typeList[type].isSelect = false
       this.setSelectData(item, type)
+      
     },
     // 整合搜索类型
     setSelectData (item, type) {

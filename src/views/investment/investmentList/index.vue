@@ -2,13 +2,13 @@
   <div class="page page_bg">
     <nav-title :title="title"></nav-title>
     <header-top v-model="isMap" @changeCity="changeCity"></header-top>
-    <select-types ref="selectTypes" @selectData="setSelectData"></select-types>
-    <div class="page_bd map" v-if="isMap">
+    <select-types ref="selectTypes" @selectData="setSelectData" @status="status"></select-types>
+    <div class="page_bd map hidden" v-if="isMap">
       <transition name="slide-right">
         <baidu-map ref="mapPage"></baidu-map>
       </transition>
     </div>
-    <div class="page_bd items" v-else>
+    <div class="page_bd items" :class="{hidden:hidden}" v-else>
       <transition name="slide-right">
         <items ref="items"></items>
       </transition>
@@ -44,7 +44,8 @@ export default {
         'AreaTotalMax': ''
       },
       isChange: false,
-      type: 0
+      type: 0,
+      hidden: false
     }
   },
   watch: {
@@ -57,6 +58,10 @@ export default {
     }
   },
   methods: {
+    // 禁止背景滚动设置
+    status (status) {
+      this.hidden = status
+    },
     // 切换了城市
     changeCity (cityData) {
       console.log('cityData', cityData)
@@ -130,7 +135,7 @@ export default {
   .slide-right-enter-active, .slide-right-leave-active {
     transition: all .3s ease;
   }
-  .map{
+  .hidden{
     overflow: hidden;
   }
 </style>
