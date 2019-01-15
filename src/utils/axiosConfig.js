@@ -2,12 +2,10 @@ import axios from 'axios'
 import Qs from 'qs'
 import { Indicator } from 'mint-ui'
 import xml from './xml'
-
+const baseUrl = '/NetApp/CstService.asmx/GetService'
 export default {
   install (Vue, options) {
     console.log(options, 'axios--ip')
-    const baseUrl = '/NetApp/CstService.asmx/GetService'
-    // const baseOldUrl = '/NetApp/CstService.asmx/GetETSService'
     let instance = axios.create({
       baseURL: 'http://' + options.ip,
       timeout: 60000,
@@ -47,6 +45,8 @@ export default {
       Indicator.close()
       return Promise.reject(error)
     })
+
+    // xml
     let instanceXml = axios.create({
       baseURL: 'http://' + options.ip,
       url: baseUrl,

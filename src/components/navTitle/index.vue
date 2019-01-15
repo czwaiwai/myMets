@@ -19,12 +19,12 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.go(-1)
-      // if (this.$route.name === 'meeting') {
-      //   this.$app.back()
-      // } else {
-      //   this.$router.go(-1)
-      // }
+      // this.$router.go(-1)
+      if (['meeting', 'investmentIndex', 'monitorInspection'].indexOf(this.$route.name) > -1) {
+        this.$app.back()
+      } else {
+        this.$router.go(-1)
+      }
     }
   }
 }

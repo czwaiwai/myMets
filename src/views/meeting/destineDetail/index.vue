@@ -11,7 +11,7 @@
           </swipe>
           <swipe v-else  :auto="4000">
             <swipe-item >
-              <img src="../../../assets/img/meeting/banner_detail.png">
+              <img src="../../../assets/img/meeting/banner_detail.jpg">
             </swipe-item>
           </swipe>
         </template>

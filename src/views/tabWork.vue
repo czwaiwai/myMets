@@ -24,6 +24,18 @@
           </div>
           <p class="weui-grid__label">巡检</p>
         </a>
+        <a  @click="$router.forward('/workOrder/inspection')" href="javascript:;" class="weui-grid">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
+          </div>
+          <p class="weui-grid__label">巡检</p>
+        </a>
+        <a  @click="$router.forward('/workOrder/customerService')" href="javascript:;" class="weui-grid">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
+          </div>
+          <p class="weui-grid__label">客服工单</p>
+        </a>
         <a  @click="$app.loadView({url:'http://' + ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_by.png"  alt="">
@@ -67,12 +79,13 @@
           <p class="weui-grid__label">离线中心</p>
           <span v-if="offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
         </a>
-        <a @click="$router.forward('/cash')" href="javascript:;" class="weui-grid">
+        <!-- 暂时无用 -->
+        <!-- <a @click="$router.forward('/cash')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_off_download.png" alt="">
           </div>
           <p class="weui-grid__label">收款测试</p>
-        </a>
+        </a> -->
         <a @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_off_download.png" alt="">
@@ -81,7 +94,7 @@
         </a>
         <a @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_off_download.png" alt="">
+            <img src="../assets/img/work/ic_work_cb.png"  alt="">
           </div>
           <p class="weui-grid__label">抄表</p>
         </a>

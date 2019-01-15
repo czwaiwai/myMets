@@ -141,6 +141,10 @@ export default {
         // this.$router.forward({path: '/btnFunc', params:{data: res}})
         this.$app.loadView({url: `http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
       }).catch(err => {
+        if (this.$dev) {
+          this.quickOut()
+          this.$router.forward('/scan/ScanDetail/XM001RD-XF-CC001')
+        }
         console.log(err)
       })
     },
