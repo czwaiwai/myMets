@@ -8,6 +8,8 @@ import meeting from './meeting'
 import meter from './meter'
 // 投资物业
 import investment from './investment'
+// 租赁
+import rent from './rent'
 // 扫码进入的设备详情
 import scanDetail from './scanDetail'
 // 报表
@@ -288,6 +290,7 @@ export default new Router({
     ...scanDetail,
     ...workOrder,
     ...monitorCenter,
+    ...rent,
     {
       path: '*',
       redirect: to => {

@@ -5,7 +5,7 @@
         @click="clickItem(item)"
         v-for="(item,index) in mapList" :key="index"
         :position="{lng: item.Longitude, lat: item.Latitude}"
-        :content="item.CountyName+'/'+item.CountyNum+'套'"
+        :content="item.CountyName+'/'+item.CountyNum"
       />
       <i class="iconfont icon-jujiao icon" @click.stop="reset"></i>
     </baidu-map>

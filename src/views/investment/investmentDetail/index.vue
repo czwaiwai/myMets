@@ -28,7 +28,7 @@
             <!-- <span class="floor">小高层</span> -->
           </div>
           <div class="areaPrice">
-            <span class="area" v-if="detailData.AreaFloor">{{detailData.AreaFloor}}㎡</span>
+            <span class="area" v-if="detailData.AreaTotal">{{detailData.AreaTotal}}㎡</span>
             <span class="area" v-else>暂无</span>
             <span class="price" v-if="detailData.RentAvg">{{detailData.RentAvg}}元/㎡</span>
             <span class="price" v-else>暂无</span>
