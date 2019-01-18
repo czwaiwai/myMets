@@ -10,7 +10,7 @@
     </div>
     <div class="listBtn" v-else>
       <div class="textShowItem clearfix noneBb">
-        <span class="name">配套设施</span>
+        <span class="name">配套设施：</span>
         <span class="value" style="min-height:.44rem;">
           <span v-for="(item, index) in detailData.Facilities" :key="index">
             {{item.MaterialsnName}}<span v-show="index!=detailData.Facilities.length-1">、</span>

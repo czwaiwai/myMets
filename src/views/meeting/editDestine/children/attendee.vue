@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="inputItem clearfix noneBb">
-        <span class="name">其他参会人</span>
+        <span class="name">其他参会人：</span>
         <input class="inputs" type="text" name="OtherMeettingPerson" @input="inputText" :value="detailData.OtherMeettingPerson" placeholder="请输入其他参会人">
       </div>
     </div>
@@ -26,7 +26,7 @@
         </p>
       </div>
       <div class="selectItem clearfix noneBb">
-        <span class="name">其他参会人</span>
+        <span class="name">其他参会人：</span>
         <span class="value textLeft">{{detailData.OtherMeettingPerson}}</span>
       </div>
     </div>

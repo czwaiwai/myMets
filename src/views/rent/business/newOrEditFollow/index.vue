@@ -6,13 +6,13 @@
         <div class="wrap">
           <!-- <datetime v-model="dateTimes" format="YYYY-MM-DD" :max-year=3000 @on-change="changeDate"> -->
             <div class="date clearfix" @click.stop="toChoiseDate">
-              <span class="dateName">跟进时间</span>
+              <span class="dateName">跟进时间：</span>
               <input class="inputBox" type="text" placeholder="请选择" v-model="dateTimes" readonly="readonly">
               <i class="iconfont icon-calendar"></i>
             </div>
           <!-- </datetime> -->
           <div class="selectItem clearfix"  @click.stop="getSelectType()">
-            <span class="name">跟进方式</span>
+            <span class="name">跟进方式：</span>
             <span class="value textLeft" v-if="mode.hasSelect">{{mode.showText}}</span>
             <span class="value" v-else>请选择</span>
             <i class="iconfont icon-tubiao- icon"></i>

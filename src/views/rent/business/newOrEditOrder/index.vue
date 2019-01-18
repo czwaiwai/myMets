@@ -5,36 +5,36 @@
       <div class="content">
         <div class="wrap">
           <div class="selectItem clearfix" @click.stop="getSelectType">
-            <span class="name">资源类型</span>
+            <span class="name">资源类型：</span>
             <span class="value textLeft" v-if="detailData.ResType">{{detailData.ResTypeName}}</span>
             <span class="value" v-else>请选择</span>
             <i class="iconfont icon-tubiao- icon"></i>
           </div>
           <div class="selectItem clearfix" @click.stop="getSelectHouse">
-            <span class="name">意向资源</span>
+            <span class="name">意向资源：</span>
             <span class="value textLeft" v-if="detailData.ResCode">{{detailData.ResCode}}</span>
             <span class="value" v-else>请选择</span>
             <i class="iconfont icon-tubiao- icon"></i>
           </div>
           <div class="inputItem clearfix">
-            <span class="name">意向用途</span>
+            <span class="name">意向用途：</span>
             <input class="inputs" maxlength="20" v-model="detailData.IntenUse" @input="changeDate" type="text" placeholder="请输入">
           </div>
           <div class="textareaItem clearfix">
-            <span class="name">配套要求</span>
+            <span class="name">配套要求：</span>
             <textarea placeholder="请输入" v-model="detailData.MatcRequ" @input="changeDate" maxlength="200" class="text"></textarea>
           </div>
           <div class="inputItem clearfix">
-            <span class="name">价格上限</span>
+            <span class="name">价格上限：</span>
             <input class="inputs" @input="inputSetVal" v-model="detailData.IntenPriceLimit" type="text" placeholder="请输入">
           </div>
           <div class="status clearfix">
-            <span class="name">关注度</span>
+            <span class="name">关注度：</span>
             <span class="bt" :class="item.type===statusData.type?item.color:''" @click.stop="selectStatus(item)" v-for="(item,index) in statusData.list" :key="index">{{item.name}}</span>
           </div>
           <!-- <datetime v-model="detailData.Validity" format="YYYY-MM-DD" :start-date="startDate" :max-year=3000 @on-change="changeDate"> -->
             <div class="date clearfix" @click.stop="toChoiseDate">
-              <span class="dateName">有效期限</span>
+              <span class="dateName">有效期限：</span>
               <input class="inputBox" type="text" placeholder="请选择" v-model="detailData.Validity" readonly="readonly">
               <i class="iconfont icon-calendar"></i>
             </div>

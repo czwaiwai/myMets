@@ -33,7 +33,7 @@
           <span v-for="(item, index) in room.facilities" :key="index">{{item.materialsnName}}<small>({{item.quantity}})</small></span>
         </div>
         <div class="selectItem">
-          <span class="name">责任人</span>
+          <span class="name">责任人：</span>
           <span class="value textLeft">{{room.responsible}}  {{room.phone}}</span>
         </div>
         <div class="selectItem noneBb" @click.stop="routeTo('otherDetail')">

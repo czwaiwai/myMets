@@ -11,51 +11,51 @@
         <div class="more-msg" v-show="showMore">
           <div class="msg1">
             <div class="selectItem clearfix" @click.stop="getSelectType('MeetForm')">
-              <span class="name">会议形式</span>
+              <span class="name">会议形式：</span>
               <span class="value textLeft" v-if="detailData.MeetFormName">{{detailData.MeetFormName}}</span>
               <span class="value" v-else >请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
             <div class="selectItem clearfix" @click.stop="getSelectType('MeetUse')">
-              <span class="name">会议用途</span>
+              <span class="name">会议用途：</span>
               <span class="value textLeft" v-if="detailData.MeetUseName||detailData.MeetUse">{{detailData.MeetUseName||detailData.MeetUse}}</span>
               <span class="value" v-else >请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
             <div class="inputItem clearfix">
-              <span class="name">参会人数</span>
+              <span class="name">参会人数：</span>
               <input class="inputs" type="text" name="MeetNumber" :value="detailData.MeetNumber" @input="inputInt" placeholder="请输入参会人数">
             </div>
             <div class="inputItem clearfix noneBb">
-              <span class="name">使用部门</span>
+              <span class="name">使用部门：</span>
               <input class="inputs" type="text" name="UserDepartments" :value="detailData.UserDepartments" @input="inputText" placeholder="请输入使用部门">
             </div>
           </div>
           <div class="msg2">
             <div class="inputItem clearfix">
-              <span class="name">会议联系人</span>
+              <span class="name">会议联系人：</span>
               <input class="inputs" type="text" name="MeetPerson" :value="detailData.MeetPerson" @input="inputText" placeholder="请输入联系人">
             </div>
             <div class="inputItem clearfix">
-              <span class="name">联系人电话</span>
+              <span class="name">联系人电话：</span>
               <input class="inputs" type="text" name="Phone" :value="detailData.Phone" maxlength="11" @input="inputNum" placeholder="请输入联系人电话">
             </div>
             <div class="inputItem clearfix noneBb">
-              <span class="name">联系人邮箱</span>
+              <span class="name">联系人邮箱：</span>
               <input class="inputs" type="text" name="Email" :value="detailData.Email" @input="inputText" placeholder="请输入联系人邮箱">
             </div>
           </div>
           <div class="msg3">
             <div class="inputItem clearfix">
-              <span class="name">单价</span>
+              <span class="name">单价：</span>
               <input class="inputs" type="text" name="UnitPrice" :value="detailData.UnitPrice" @input="inputFloat" placeholder="请输入单价">
             </div>
             <div class="inputItem clearfix">
-              <span class="name">预收金额</span>
+              <span class="name">预收金额：</span>
               <input class="inputs" type="text" name="AdvanceMoney" :value="detailData.AdvanceMoney" @input="inputFloat" placeholder="请输入预收金额">
             </div>
             <div class="inputItem clearfix noneBb">
-              <span class="name">会议套餐</span>
+              <span class="name">会议套餐：</span>
               <input class="inputs" type="text" name="MeetPackage" :value="detailData.MeetPackage" @input="inputText" placeholder="请输入会议套餐">
             </div>
           </div>
@@ -73,47 +73,47 @@
         <div class="more-msg" v-show="showMore">
           <div class="msg1">
             <div class="selectItem clearfix">
-              <span class="name">会议形式</span>
+              <span class="name">会议形式：</span>
               <span class="value textLeft">{{detailData.MeetFormName}}</span>
             </div>
             <div class="selectItem clearfix">
-              <span class="name">会议用途</span>
+              <span class="name">会议用途：</span>
               <span class="value textLeft">{{detailData.MeetUseName||detailData.MeetUse}}</span>
             </div>
             <div class="selectItem clearfix">
-              <span class="name">参会人数</span>
+              <span class="name">参会人数：</span>
               <span class="value textLeft">{{detailData.MeetNumber}}</span>
             </div>
             <div class="selectItem clearfix noneBb">
-              <span class="name">使用部门</span>
+              <span class="name">使用部门：</span>
               <span class="value textLeft">{{detailData.UserDepartments}}</span>
             </div>
           </div>
           <div class="msg2">
             <div class="selectItem clearfix">
-              <span class="name">会议联系人</span>
+              <span class="name">会议联系人：</span>
               <span class="value textLeft">{{detailData.MeetPerson}}</span>
             </div>
             <div class="selectItem clearfix">
-              <span class="name">联系人电话</span>
+              <span class="name">联系人电话：</span>
               <span class="value textLeft">{{detailData.Phone}}</span>
             </div>
             <div class="selectItem clearfix noneBb">
-              <span class="name">联系人邮箱</span>
+              <span class="name">联系人邮箱：</span>
               <span class="value textLeft">{{detailData.Email}}</span>
             </div>
           </div>
           <div class="msg3">
             <div class="selectItem clearfix">
-              <span class="name">单价</span>
+              <span class="name">单价：</span>
               <span class="value textLeft">{{detailData.UnitPrice}}</span>
             </div>
             <div class="selectItem clearfix">
-              <span class="name">预收金额</span>
+              <span class="name">预收金额：</span>
               <span class="value textLeft">{{detailData.AdvanceMoney}}</span>
             </div>
             <div class="selectItem clearfix noneBb">
-              <span class="name">会议套餐</span>
+              <span class="name">会议套餐：</span>
               <span class="value textLeft">{{detailData.MeetPackage}}</span>
             </div>
           </div>

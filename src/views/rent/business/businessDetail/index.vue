@@ -25,64 +25,64 @@
         <div class="busuness" v-if="businessDetailType.type===0">
           <div class="top">
             <div class="b-items clearfix">
-              <span class="key">业务员</span>
+              <span class="key">业务员：</span>
               <span class="value" :class="{'grad':!detailData.OpUser}">{{detailData.OpUser || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">紧急程度</span>
+              <span class="key">紧急程度：</span>
               <span class="value" :class="com_degree_color(detailData.UrgentDegree)">{{com_degree(detailData.UrgentDegree)}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">客户来源</span>
+              <span class="key">客户来源：</span>
               <span class="value" :class="{'grad':!detailData.CognitiveWayName}">{{detailData.CognitiveWayName || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">预定房间</span>
+              <span class="key">预定房间：</span>
               <span class="value" :class="{'grad':!detailData.ReservedHouseCode}" @click.stop="showCodesList">{{detailData.ReservedHouseCode || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">预定面积</span>
+              <span class="key">预定面积：</span>
               <span class="value" :class="{'grad':!detailData.ReserveArea}">{{detailData.ReserveArea || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">成交几率</span>
+              <span class="key">成交几率：</span>
               <span class="value">
                 <span>{{detailData.TradChance || 0}} %</span>
               </span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">开始日期</span>
+              <span class="key">开始日期：</span>
               <span class="value" :class="{'grad':!detailData.STime}">{{detailData.STime || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">结束日期</span>
+              <span class="key">结束日期：</span>
               <span class="value" :class="{'grad':!detailData.ETime}">{{detailData.ETime || '暂无'}}</span>
             </div>
           </div>
           <p class="tip">更多信息</p>
           <div class="bottom">
             <div class="b-items clearfix">
-              <span class="key">租赁用途</span>
+              <span class="key">租赁用途：</span>
               <span class="value" :class="{'grad':!detailData.RentUseFor}">{{detailData.RentUseFor || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">预定单价</span>
+              <span class="key">预定单价：</span>
               <span class="value" :class="{'grad':!detailData.ReservePrice}">{{detailData.ReservePrice || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">预估成交单价</span>
+              <span class="key">预估成交单价：</span>
               <span class="value" :class="{'grad':!detailData.EstimatePrice}">{{detailData.EstimatePrice || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">免租天数</span>
+              <span class="key">免租天数：</span>
               <span class="value" :class="{'grad':!detailData.RentFreeDay}">{{detailData.RentFreeDay || '暂无'}}</span>
             </div>
             <div class="b-items clearfix" v-show="detailData.OpportType<3">
-              <span class="key">报价单编号</span>
+              <span class="key">报价单编号：</span>
               <span class="value">{{detailData.ApplyCode}}</span>
             </div>
             <div class="b-items clearfix" v-show="detailData.OpportType==1">
-              <span class="key">合同编号</span>
+              <span class="key">合同编号：</span>
               <span class="value">{{detailData.CttCode}}</span>
             </div>
             <p class="remarks">

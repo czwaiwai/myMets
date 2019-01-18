@@ -10,7 +10,7 @@
     </div>
     <div class="listBtn" v-else>
       <div class="textShowItem clearfix noneBb">
-        <span class="name">服务清单</span>
+        <span class="name">服务清单：</span>
         <span class="value" style="min-height:.44rem;">
           <span v-for="(item,index) in detailData.Service" :key="index">
             {{item.ServiceDesc}}<span v-show="index!=detailData.Service.length-1">、</span>

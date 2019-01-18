@@ -23,23 +23,23 @@
       <div class="content" :class="{'hasGuest':hasGuest}">
         <div class="top">
           <div class="selectItem clearfix" @click.stop="getSelectType">
-            <span class="name">客户来源</span>
+            <span class="name">客户来源：</span>
             <span class="value textLeft" v-if="detailData.CognitiveWay">{{detailData.CognitiveWayName}}</span>
             <span class="value" v-else>请选择(必填)</span>
             <i class="iconfont icon-tubiao- icon"></i>
           </div>
           <div class="selectItem clearfix">
-            <span class="name">预定房屋</span>
+            <span class="name">预定房屋：</span>
             <span class="value textLeft" v-if="detailData.ReservedHouseCode" @click.stop="toShowHouse">{{detailData.ReservedHouseCode}}</span>
             <span class="value" v-else  @click.stop="toSelectResHouse">请选择</span>
             <i class="iconfont icon-tubiao- icon" @click.stop="toSelectResHouse"></i>
           </div>
           <div class="inputItem clearfix">
-            <span class="name">预定面积</span>
+            <span class="name">预定面积：</span>
             <input class="inputs" type="text" @input="setNum('area')" v-model="detailData.ReserveArea" placeholder="请输入">
           </div>
           <div class="rang clearfix">
-            <span class="name">成交机率</span>
+            <span class="name">成交机率：</span>
             <span class="num">{{detailData.TradChance}}%</span>
             <span class="ranger" @touchMove="BtnTouchMove">
               <!-- <range v-model="detailData.TradChance" @on-change="changeRange"></range> -->
@@ -54,19 +54,19 @@
             </span>
           </div>
           <div class="status clearfix">
-            <span class="name">紧急程度</span>
+            <span class="name">紧急程度：</span>
             <span class="bt" :class="item.type===statusData.type?item.color:''" @click.stop="selectStatus(item)" v-for="(item,index) in statusData.list" :key="index">{{item.name}}</span>
           </div>
           <!-- <datetime v-model="detailData.STime" format="YYYY-MM-DD" :end-date="detailData.ETime" :max-year=3000 @on-change="changeData"> -->
             <div class="date clearfix" @click.stop="toChoiseDate('STime')">
-              <span class="dateName">开始时间</span>
+              <span class="dateName">开始时间：</span>
               <input class="inputBox" type="text" placeholder="请选择" v-model="detailData.STime" readonly="readonly">
               <i class="iconfont icon-calendar"></i>
             </div>
           <!-- </datetime>
           <datetime v-model="detailData.ETime" format="YYYY-MM-DD" :start-date="detailData.STime" :max-year=3000 @on-change="changeData"> -->
             <div class="date clearfix noneBb" @click.stop="toChoiseDate('ETime')">
-              <span class="dateName">结束时间</span>
+              <span class="dateName">结束时间：</span>
               <input class="inputBox" type="text" placeholder="请选择" v-model="detailData.ETime" readonly="readonly">
               <i class="iconfont icon-calendar"></i>
             </div>
@@ -75,23 +75,23 @@
         <p class="tip">更多信息</p>
         <div class="bottom">
           <div class="inputItem clearfix">
-            <span class="name">租赁用途</span>
+            <span class="name">租赁用途：</span>
             <input class="inputs" v-model="detailData.RentUseFor" @input="changeData" maxlength="40" type="text" placeholder="请输入">
           </div>
           <div class="inputItem clearfix">
-            <span class="name">预定单价</span>
+            <span class="name">预定单价：</span>
             <input class="inputs" @input="setNum('price')" v-model="detailData.ReservePrice" type="text" placeholder="请输入">
           </div>
           <div class="inputItem clearfix">
-            <span class="name">预估成交单价</span>
+            <span class="name">预估成交单价：</span>
             <input class="inputs" @input="setNum('money')" v-model="detailData.EstimatePrice" type="text" placeholder="请输入">
           </div>
           <div class="inputItem clearfix">
-            <span class="name">免租期天数</span>
+            <span class="name">免租期天数：</span>
             <input class="inputs" @input="setDays" v-model="detailData.RentFreeDay" type="text" placeholder="请输入">
           </div>
           <div class="text-wrap clearfix">
-            <p class="name">备注</p>
+            <p class="name">备注：</p>
             <textarea class="text-box" placeholder="请填入" v-model="detailData.Memo" @input="changeData" maxlength="300"></textarea>
           </div>
           <!-- <div class="inputItem clearfix">

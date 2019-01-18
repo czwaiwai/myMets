@@ -5,35 +5,35 @@
     <div class="page_bd _content">
       <div class="date">
         <div class="selectItem">
-          <span class="name">会议室</span>
+          <span class="name">会议室：</span>
           <span class="value textLeft">{{room.meetName}}</span>
         </div>
         <div class="selectItem">
-          <span class="name">会议日期</span>
+          <span class="name">会议日期：</span>
           <span class="value textLeft">{{com_date(dateTime)}}</span>
         </div>
         <div class="selectItem noneBb">
-          <span class="name">预订时段</span>
+          <span class="name">预订时段：</span>
           <span class="value textLeft">{{subDate.start}} — {{subDate.end}}</span>
         </div>
       </div>
       <div class="theme">
         <div class="inputItem clearfix">
-          <span class="name">会议主题</span>
+          <span class="name">会议主题：</span>
           <input class="inputs" v-model="formObj.meetName" type="text" placeholder="请输入会议主题">
         </div>
         <div class="textItem clearfix">
-          <span class="name">会议内容</span>
+          <span class="name">会议内容：</span>
           <textarea class="areas" v-model="formObj.meettingContent" placeholder="请输入会议内容"></textarea>
         </div>
         <div class="selectItem clearfix" @click.stop="routeTo">
-          <span class="name">预订人</span>
+          <span class="name">预订人：</span>
           <span class="value textLeft" v-if="formObj.meetPerson">{{formObj.meetPerson}}</span>
           <span class="value" v-else >请选择</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
         <div class="inputItem clearfix noneBb">
-          <span class="name">预订人电话</span>
+          <span class="name">预订人电话：</span>
           <input class="inputs" type="text" v-model="formObj.bookPhone" placeholder="请输入电话">
         </div>
       </div>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="inputItem clearfix noneBb">
-          <span class="name">其他参会人</span>
+          <span class="name">其他参会人：</span>
           <input class="inputs" type="text" v-model="formObj.otherMeettingPerson" placeholder="请输入其他参会人">
         </div>
       </div>

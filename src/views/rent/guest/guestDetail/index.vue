@@ -37,10 +37,10 @@
         <div class="person">
           <p class="tip">更多信息</p>
           <div class="msg">
-            <div class="items"><p class="name">客户类别</p><span>{{detailData.CategoryName}}</span></div>
-            <div class="items"><p class="name">客户等级</p><span>{{detailData.CstLevelName}}</span></div>
-            <div class="items"><p class="name">认知途径</p><span>{{detailData.CognitiveWayName}}</span></div>
-            <div class="items" v-if="detailData.CstType!='P'"><p class="name">传真</p><span>{{detailData.Fax}}</span></div>
+            <div class="items"><p class="name">客户类别：</p><span>{{detailData.CategoryName}}</span></div>
+            <div class="items"><p class="name">客户等级：</p><span>{{detailData.CstLevelName}}</span></div>
+            <div class="items"><p class="name">认知途径：</p><span>{{detailData.CognitiveWayName}}</span></div>
+            <div class="items" v-if="detailData.CstType!='P'"><p class="name">传真：</p><span>{{detailData.Fax}}</span></div>
           </div>
         </div>
         <div class="business">

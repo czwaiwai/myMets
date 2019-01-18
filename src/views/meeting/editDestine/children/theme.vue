@@ -2,39 +2,39 @@
   <div>
     <div class="theme" v-if="detailData.BookStatus==='HB' || detailData.BookStatus==='QR'">
       <div class="inputItem clearfix">
-        <span class="name">会议主题</span>
+        <span class="name">会议主题：</span>
         <input class="inputs" type="text" name="MeetName" @input="inputText" :value="detailData.MeetName" placeholder="请输入会议主题">
       </div>
       <div class="textItem clearfix">
-        <span class="name">会议内容</span>
+        <span class="name">会议内容：</span>
         <textarea class="areas" placeholder="请输入会议内容" name="MeettingContent" :value="detailData.MeettingContent" @input="inputText"></textarea>
       </div>
       <div class="selectItem clearfix" @click.stop="routeTo">
-        <span class="name">预订人</span>
+        <span class="name">预订人：</span>
         <span class="value textLeft" v-if="detailData.BookName">{{detailData.BookName}}</span>
         <span class="value" v-else >请选择</span>
         <i class="iconfont icon-tubiao- icon"></i>
       </div>
       <div class="inputItem clearfix noneBb">
-        <span class="name">预订人电话</span>
+        <span class="name">预订人电话：</span>
         <input class="inputs" type="text" maxlength="11" name="BookPhone" @input="inputNum" placeholder="请输入电话" :value="detailData.BookPhone">
       </div>
     </div>
     <div class="theme"  v-else>
       <div class="selectItem clearfix">
-        <span class="name">会议主题</span>
+        <span class="name">会议主题：</span>
         <span class="value textLeft">{{detailData.MeetName}}</span>
       </div>
       <div class="textShowItem clearfix">
-        <span class="name">会议内容</span>
+        <span class="name">会议内容：</span>
         <span class="value">{{detailData.MeettingContent}}</span>
       </div>
       <div class="selectItem clearfix">
-        <span class="name">预订人</span>
+        <span class="name">预订人：</span>
         <span class="value textLeft">{{detailData.BookName}}</span>
       </div>
       <div class="selectItem clearfix noneBb">
-        <span class="name">预订人电话</span>
+        <span class="name">预订人电话：</span>
         <span class="value textLeft">{{detailData.BookPhone}}</span>
       </div>
     </div>

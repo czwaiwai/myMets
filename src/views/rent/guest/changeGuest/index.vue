@@ -7,21 +7,21 @@
           <h3 class="title">基本信息 <span>(必填)</span></h3>
           <div class="top">
             <div class="selectItem clearfix">
-              <span class="name">客源类型</span>
+              <span class="name">客源类型：</span>
               <span class="value textLeft">{{cstType.showText}}</span>
               <!-- <span class="value" v-else>请选择</span> -->
               <!-- <i class="iconfont icon-tubiao- icon"></i> -->
             </div>
             <div class="inputItem clearfix">
-              <span class="name">客源名称</span>
+              <span class="name">客源名称：</span>
               <input class="inputs" type="text" v-model="name" readonly>
             </div>
             <div class="inputItem clearfix" v-show="cstType.value!='P'">
-              <span class="name">联系人</span>
+              <span class="name">联系人：</span>
               <input class="inputs" type="text" placeholder="请输入" v-model="person">
             </div>
             <div class="sex">
-              <span>联系人性别</span>
+              <span>联系人性别：</span>
               <div class="select-box clearfix">
                 <p class="man" @click.stop="sexType='M'">
                   <i class="iconfont icons" :class="sexType=='M'?'icon-xuanzhong':'icon-yuancircle46'"></i>
@@ -34,7 +34,7 @@
               </div>
             </div>
             <div class="inputItem clearfix noneBb">
-              <span class="name">联系方式</span>
+              <span class="name">联系方式：</span>
               <input class="inputs" type="text" placeholder="请输入" v-model="phone">
             </div>
           </div>
@@ -43,29 +43,29 @@
           <h3 class="title">更多信息 <span>(选填)</span></h3>
           <div class="msg">
             <div class="selectItem clearfix" @click.stop="selectType('CstCategory')">
-              <span class="name">客源类别</span>
+              <span class="name">客源类别：</span>
               <span class="value textLeft" v-if="cstCategory.hasSelect">{{cstCategory.showText}}</span>
               <span class="value" v-else>请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
             <div class="selectItem clearfix" @click.stop="selectType('CstLevel')">
-              <span class="name">客源等级</span>
+              <span class="name">客源等级：</span>
               <span class="value textLeft" v-if="cstLevel.hasSelect">{{cstLevel.showText}}</span>
               <span class="value" v-else>请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
             <div class="selectItem clearfix" @click.stop="selectType('CognitiveWay')">
-              <span class="name">认知途径</span>
+              <span class="name">认知途径：</span>
               <span class="value textLeft" v-if="cognitiveWay.hasSelect">{{cognitiveWay.showText}}</span>
               <span class="value" v-else>请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
             <div class="inputItem clearfix" v-show="cstType.value!='P'">
-              <span class="name">传真</span>
+              <span class="name">传真：</span>
               <input class="inputs" type="text" placeholder="请输入" v-model="fax">
             </div>
             <div class="inputItem clearfix noneBb">
-              <span class="name">备注</span>
+              <span class="name">备注：</span>
               <input class="inputs" type="text" placeholder="请输入" v-model="remark">
             </div>
           </div>

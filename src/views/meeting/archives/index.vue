@@ -31,7 +31,7 @@
           <span class="items" v-for="(item,index) in detailData.Facilities" :key="index">{{item.MaterialsnName}}</span>
         </div>
         <div class="selectItem clearfix noneBb">
-          <span class="name">责任人</span>
+          <span class="name">责任人：</span>
           <span class="value textLeft">{{detailData.Responsible}} {{detailData.Phone}}</span>
         </div>
       </div>
@@ -46,37 +46,37 @@
           <div class="more-msg" v-show="showMore">
             <div class="msg1">
               <div class="selectItem clearfix">
-                <span class="name">会议室编号</span>
+                <span class="name">会议室编号：</span>
                 <span class="value textLeft">{{detailData.MeetNumber}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">参与座位数</span>
+                <span class="name">参与座位数：</span>
                 <span class="value textLeft">{{detailData.InvolvSeats}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">主席台座位</span>
+                <span class="name">主席台座位：</span>
                 <span class="value textLeft">{{detailData.RostrumSeats}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">需提前天数</span>
+                <span class="name">需提前天数：</span>
                 <span class="value textLeft">{{detailData.AdvanceDay}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">所属部门</span>
+                <span class="name">所属部门：</span>
                 <span class="value textLeft">{{detailData.Department}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">单价</span>
+                <span class="name">单价：</span>
                 <span class="value textLeft">{{detailData.UnitPrice}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
-                <span class="name">计费方式</span>
+                <span class="name">计费方式：</span>
                 <span class="value textLeft">{{detailData.BillingName}}</span>
               </div>
             </div>
             <div class="remark">
               <div class="textShowItem clearfix noneBb">
-                <span class="name">备注</span>
+                <span class="name">备注：</span>
                 <span class="value">{{detailData.Memo}}</span>
               </div>
             </div>

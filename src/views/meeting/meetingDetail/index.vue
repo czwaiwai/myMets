@@ -4,42 +4,42 @@
     <div class="page_bd _content">
       <div class="date">
         <div class="selectItem clearfix" @click.stop="toArchives">
-          <span class="name">会议室</span>
+          <span class="name">会议室：</span>
           <span class="value textLeft textColor">{{detailData.Meet}}</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
         <div class="selectItem clearfix">
-          <span class="name">会议日期</span>
+          <span class="name">会议日期：</span>
           <span class="value textLeft">{{com_date(detailData.MeetTime)}}</span>
         </div>
         <div class="selectItem clearfix">
-          <span class="name">会议时段</span>
+          <span class="name">会议时段：</span>
           <span class="value textLeft">{{detailData.STime}} — {{detailData.ETime}}</span>
         </div>
         <div class="selectItem clearfix" :class="{'noneBb': detailData.BookStatus=='CL'}">
-          <span class="name">会议状态</span>
+          <span class="name">会议状态：</span>
           <span class="value textLeft">{{detailData.BookStatusName}}</span>
         </div>
         <div class="textShowItem clearfix noneBb" v-show="detailData.BookStatus=='CL'">
-          <span class="name">取消原因</span>
+          <span class="name">取消原因：</span>
           <span class="value">{{detailData.CancelReason}}</span>
         </div>
       </div>
       <div class="theme">
         <div class="selectItem clearfix">
-          <span class="name">会议主题</span>
+          <span class="name">会议主题：</span>
           <span class="value textLeft">{{detailData.MeetName}}</span>
         </div>
         <div class="textShowItem clearfix">
-          <span class="name">会议内容</span>
+          <span class="name">会议内容：</span>
           <span class="value">{{detailData.MeettingContent}}</span>
         </div>
         <div class="selectItem clearfix">
-          <span class="name">预订人</span>
+          <span class="name">预订人：</span>
           <span class="value textLeft">{{detailData.BookName}}</span>
         </div>
         <div class="selectItem clearfix noneBb">
-          <span class="name">预订人电话</span>
+          <span class="name">预订人电话：</span>
           <span class="value textLeft">{{detailData.BookPhone}}</span>
         </div>
       </div>
@@ -53,7 +53,7 @@
           </p>
         </div>
         <div class="selectItem clearfix noneBb">
-          <span class="name">其他参会人</span>
+          <span class="name">其他参会人：</span>
           <span class="value textLeft">{{detailData.OtherMeettingPerson}}</span>
         </div>
       </div>
@@ -79,7 +79,7 @@
       </div>
       <div class="remark">
         <div class="textShowItem clearfix noneBb">
-          <span class="name">预订备注</span>
+          <span class="name">预订备注：</span>
           <span class="value">{{detailData.Memo}}</span>
         </div>
       </div>
@@ -94,47 +94,47 @@
           <div class="more-msg" v-show="showMore">
             <div class="msg1">
               <div class="selectItem clearfix">
-                <span class="name">会议形式</span>
+                <span class="name">会议形式：</span>
                 <span class="value textLeft">{{detailData.MeetFormName}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">会议用途</span>
+                <span class="name">会议用途：</span>
                 <span class="value textLeft">{{detailData.MeetUseName||detailData.MeetUse}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">参会人数</span>
+                <span class="name">参会人数：</span>
                 <span class="value textLeft">{{detailData.MeetNumber}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
-                <span class="name">使用部门</span>
+                <span class="name">使用部门：</span>
                 <span class="value textLeft">{{detailData.UserDepartments}}</span>
               </div>
             </div>
             <div class="msg2">
               <div class="selectItem clearfix">
-                <span class="name">会议联系人</span>
+                <span class="name">会议联系人：</span>
                 <span class="value textLeft">{{detailData.MeetPerson}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">联系人电话</span>
+                <span class="name">联系人电话：</span>
                 <span class="value textLeft">{{detailData.Phone}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
-                <span class="name">联系人邮箱</span>
+                <span class="name">联系人邮箱：</span>
                 <span class="value textLeft">{{detailData.Email}}</span>
               </div>
             </div>
             <div class="msg3">
               <div class="selectItem clearfix">
-                <span class="name">单价</span>
+                <span class="name">单价：</span>
                 <span class="value textLeft">{{detailData.UnitPrice}}</span>
               </div>
               <div class="selectItem clearfix">
-                <span class="name">预收金额</span>
+                <span class="name">预收金额：</span>
                 <span class="value textLeft">{{detailData.AdvanceMoney}}</span>
               </div>
               <div class="selectItem clearfix noneBb">
-                <span class="name">会议套餐</span>
+                <span class="name">会议套餐：</span>
                 <span class="value textLeft">{{detailData.MeetPackage}}</span>
               </div>
             </div>

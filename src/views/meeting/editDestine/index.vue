@@ -4,16 +4,16 @@
     <div class="page_bd _content">
       <div class="date">
         <div class="selectItem clearfix" @click.stop="toArchives">
-          <span class="name">会议室</span>
+          <span class="name">会议室：</span>
           <span class="value textLeft textColor">{{detailData.Meet}}</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
         <div class="selectItem clearfix">
-          <span class="name">会议日期</span>
+          <span class="name">会议日期：</span>
           <span class="value textLeft">{{com_date(detailData.MeetTime)}}</span>
         </div>
         <div class="selectItem noneBb">
-          <span class="name">预订时段</span>
+          <span class="name">预订时段：</span>
           <span class="value textLeft">{{detailData.STime}} — {{detailData.ETime}}</span>
         </div>
       </div>

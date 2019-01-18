@@ -3,29 +3,29 @@
     <nav-title title="选择有效时间"></nav-title>
     <div class="page_bd selectTime">
       <div class="content">
-        <div class="showItem clearfix" @click.stop="$router.go(-1)">
-          <span class="name">意向资源</span>
-          <span class="value">{{resCode}}</span>
+        <div class="selectItem clearfix item" @click.stop="$router.go(-1)">
+          <span class="name">意向资源：</span>
+          <span class="value textLeft">{{resCode}}</span>
           <i class="iconfont icon-tubiao- icon"></i>
         </div>
         <div class="msg">
           <!-- <datetime v-model="dateTimes" format="YYYY-MM-DD" :start-date="startDate" :max-year=3000> -->
             <div class="date clearfix" @click.stop="toChoiseDate">
-              <span class="dateName">跟进时间</span>
+              <span class="dateName">跟进时间：</span>
               <input class="inputBox" type="text" placeholder="请选择(必填)" v-model="dateTimes" readonly="readonly">
               <i class="iconfont icon-calendar"></i>
             </div>
           <!-- </datetime> -->
           <div class="inputItem clearfix">
-            <span class="name">意向用途</span>
+            <span class="name">意向用途：</span>
             <input class="inputs" v-model="orderUse" maxlength="40" type="text" placeholder="请输入(选填)">
           </div>
           <div class="inputItem clearfix">
-            <span class="name">价格上限</span>
+            <span class="name">价格上限：</span>
             <input class="inputs" v-model="price" @input="setPrice" type="text" placeholder="请输入(选填)">
           </div>
           <div class="status clearfix noneBb">
-            <span class="name">紧急程度</span>
+            <span class="name">紧急程度：</span>
             <span class="bt" :class="item.isSelect?item.color:''" @click.stop="selectStatus(item)" v-for="(item,index) in statusData.list" :key="index">{{item.name}}</span>
           </div>
         </div>
@@ -202,40 +202,10 @@ export default {
       bottom: 1.2rem;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      .showItem{
-        position: relative;
-        height: .88rem;
+      .item{
         padding-left: .3rem;
         background: #fff;
         margin-bottom: .2rem;
-        .name{
-          float: left;
-          width: 2rem;
-          height: .88rem;
-          font-size: .3rem;
-          color: #999;
-          text-align: left;
-          line-height: .88rem;
-        }
-        .value{
-          float: left;
-          width: 4.5rem;
-          height: .88rem;
-          line-height: .88rem;
-          font-size: .3rem;
-          color: #333;
-        }
-        .icon-gengduo{
-          position: absolute;
-          right: .3rem;
-          top: 0;
-          display: block;
-          width: .4rem;
-          height: .88rem;
-          font-size: .34rem;
-          line-height: .88rem;
-          color: #999;
-        }
       }
       .msg{
         padding-left: .3rem;

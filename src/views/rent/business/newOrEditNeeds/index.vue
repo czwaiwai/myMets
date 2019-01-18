@@ -5,13 +5,13 @@
       <div class="content">
         <div class="wrap">
           <div class="selectItem clearfix" @click.stop="getSelectType('ResType')">
-            <span class="name">资源类型</span>
+            <span class="name">资源类型：</span>
             <span class="value textLeft" v-if="resType.hasSelect">{{resType.showText}}</span>
             <span class="value" v-else>请选择</span>
             <i class="iconfont icon-tubiao- icon"></i>
           </div>
           <div class="selectItem clearfix" @click.stop="getRequCstDrop()">
-            <span class="name">需求提交人</span>
+            <span class="name">需求提交人：</span>
             <span class="value textLeft" v-if="requCstDrop.hasSelect">{{requCstDrop.CstName}}</span>
             <span class="value" v-else>请选择</span>
             <i class="iconfont icon-tubiao- icon"></i>
