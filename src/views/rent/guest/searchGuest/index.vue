@@ -27,7 +27,7 @@
         <img src="../../../styles/images/none.png">
         <p>暂无满足条件的客源~</p>
       </div> -->
-      <none-page title="暂无满足条件的客源~" height="70" v-show="!dataList.length && hasSearch"></none-page>
+      <none-page title="暂无满足条件的客源~" height="50" v-show="!dataList.length && hasSearch"></none-page>
       <div class="content" v-show="dataList.length">
         <load-view ref="list">
           <ul class="c-list">
@@ -366,6 +366,7 @@ export default {
             }
             span{
               float: left;
+              color: #3395FF;
             }
           }
           .name{

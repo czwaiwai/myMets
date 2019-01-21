@@ -560,6 +560,9 @@ export default {
           font-size: .3rem;
           color: #333;
           margin-top: .06rem;
+          a{
+            color: #3395FF;
+          }
           .icon-dianhua{
             display: inline-block;
             margin-left: .1rem;
@@ -613,6 +616,17 @@ export default {
       &.hasGuest{
         top: 2.06rem;
       }
+      .inputItem,.selectItem{
+        .name {
+          width: 2.2rem;
+        }
+        .value{
+          width: 4.3rem;
+        }
+        .inputs{
+          width: 4.7rem;
+        }
+      }
       .top{
         margin-top: .2rem;
         padding-left: .3rem;
@@ -623,7 +637,7 @@ export default {
           border-bottom: 1px solid #E9E9E9;
           .name{
             float: left;
-            width: 2rem;
+            width: 2.2rem;
             height: .88rem;
             line-height: .88rem;
             font-size: .3rem;
@@ -640,7 +654,7 @@ export default {
           }
           .ranger{
             float: left;
-            width: 3.9rem;
+            width: 3.7rem;
             height: .88rem;
             padding-top: calc((.88rem - 30px) / 2);
           }
@@ -651,7 +665,7 @@ export default {
           border-bottom: 1px solid #E9E9E9;
           .name{
             float: left;
-            width: 2rem;
+            width: 2.2rem;
             height: .88rem;
             line-height: .88rem;
             font-size: .3rem;
@@ -685,7 +699,7 @@ export default {
           border-bottom: 1px solid #E9E9E9;
           .dateName{
             float: left;
-            width: 2rem;
+            width: 2.2rem;
             height: .88rem;
             line-height: .88rem;
             font-size: .3rem;
@@ -694,7 +708,7 @@ export default {
           .inputBox{
             float: left;
             height: .88rem;
-            width: 4.9rem;
+            width: 4.7rem;
             border: 0;
             font-size: .3rem;
             // line-height: .8rem;
@@ -735,14 +749,14 @@ export default {
           padding: .2rem 0;
           .name{
             float: left;
-            width: 2rem;
+            width: 2.2rem;
             font-size: .3rem;
             color: #999;
             line-height: 1.5;
           }
           .text-box{
             float: left;
-            width: 4.9rem;
+            width: 4.7rem;
             height: 2rem;
             font-size: .3rem;
             color: #333;

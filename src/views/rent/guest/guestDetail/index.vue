@@ -246,6 +246,7 @@ export default {
             }
             .phone{
               float: left;
+              color: #3395FF;
             }
             .phoneIcon{
               color: #3395FF;

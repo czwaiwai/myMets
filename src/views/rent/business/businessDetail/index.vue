@@ -85,10 +85,14 @@
               <span class="key">合同编号：</span>
               <span class="value">{{detailData.CttCode}}</span>
             </div>
-            <p class="remarks">
+            <div class="b-items clearfix noneBb">
+              <span class="key">备注：</span>
+              <span class="value" :class="{'grad':!detailData.Memo}">{{detailData.Memo || '暂无'}}</span>
+            </div>
+            <!-- <p class="remarks">
               <span>备注：</span>
               <span class="remark" :class="{'grad':!detailData.Memo}">{{detailData.Memo || '暂无'}}</span>
-            </p>
+            </p> -->
           </div>
         </div>
         <div class="needs" v-else-if="businessDetailType.type===1">
@@ -617,6 +621,9 @@ export default {
           span{
             display: inline-block;
           }
+          a{
+            color: #3395FF;
+          }
           .icon-dianhua{
             display: inline-block;
             margin-left: .1rem;
@@ -691,7 +698,7 @@ export default {
         border-bottom: 1px solid #E9E9E9;
         .key{
           float: left;
-          width: 2rem;
+          width: 2.2rem;
           height: .88rem;
           line-height: .88rem;
           font-size: .3rem;
@@ -700,7 +707,7 @@ export default {
         }
         .value{
           float: left;
-          width: 4.9rem;
+          width: 4.7rem;
           height: .88rem;
           line-height: .88rem;
           color: #333;

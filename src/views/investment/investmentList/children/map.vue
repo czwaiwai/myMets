@@ -14,7 +14,7 @@
         <div class="mark" @click.stop="showMapList=false"></div>
         <div class="_content">
           <h4 class="title">
-            <span>{{mapItem.CountyName}}({{mapItem.CountyNum}}套)</span>
+            <span>{{mapItem.CountyName}}({{mapItem.CountyNum}})</span>
             <i class="iconfont icons" :class="showMapList?'icon-zhankai':'icon-zhankai1'" @click.stop="showMapList=false"></i>
           </h4>
           <div class="list" >

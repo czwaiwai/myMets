@@ -365,6 +365,7 @@ export default {
             line-height: .6rem;
             .phone{
               float: left;
+              color: #3395FF;
             }
             .icon{
               float: left;

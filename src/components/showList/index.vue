@@ -110,7 +110,7 @@ export default {
       left: 50%;
       top: 50%;
       z-index: 11;
-      width: 5.8rem;
+      width: 6.5rem;
       white-space:nowrap;
       transform: translate(-50%,-50%);
       background: #fff;
