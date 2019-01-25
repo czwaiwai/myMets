@@ -90,7 +90,7 @@ export default {
         return Promise.reject(res[0])
       }
       let syswin = response.data.Syswin
-      if (syswin && syswin[0].status === 0) {
+      if (syswin && syswin.length && syswin[0].status === 0) {
         Vue.toast(syswin[0].msg)
         return Promise.reject(syswin[0])
       }
@@ -100,7 +100,7 @@ export default {
       if (response.data.Table && response.data.Table instanceof Array) {
         response.data = response.data.Table
       }
-      if (syswin && (syswin[0].status === 1 || syswin[0].status === '1')) {
+      if (syswin && syswin.length && (syswin[0].status === 1 || syswin[0].status === '1')) {
         response.data = syswin[0].data || syswin[0].Data
         response.msg = syswin[0].msg || syswin[0].Msg || ''
       }

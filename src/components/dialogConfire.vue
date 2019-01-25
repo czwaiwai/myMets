@@ -1,17 +1,17 @@
 <template>
   <transition name="dialog">
-      <div class="_dialog" v-if="showDialog">
-          <div class="_mark" @click.stop="clickMark"></div>
-          <div class="_content">
-              <div class="_title">{{title}}</div>
-              <div class="oneBtn" v-if="oneBtn" @click.stop="clickOneBtn">确定</div>
-              <div class="_btns clearfix" v-else>
-                  <div class="_cancel" @click.stop="clickLeftBtn">{{leftName}}</div>
-                  <div class="_sure" @click.stop="clickRightBtn">{{rightName}}</div>
-              </div>
-          </div>
+    <div class="_dialog" v-if="showDialog">
+      <div class="_mark" @click.stop="clickMark"></div>
+      <div class="_content">
+        <div class="_title" :class="textAlign">{{title}}</div>
+        <div class="oneBtn" v-if="oneBtn" @click.stop="clickOneBtn">确定</div>
+        <div class="_btns clearfix" v-else>
+          <div class="_cancel" @click.stop="clickLeftBtn">{{leftName}}</div>
+          <div class="_sure" @click.stop="clickRightBtn">{{rightName}}</div>
+        </div>
       </div>
-    </transition>
+    </div>
+  </transition>
 </template>
 <script>
 export default {
@@ -32,6 +32,10 @@ export default {
     oneBtn: {
       type: Boolean,
       default: false
+    },
+    textAlign: {
+      type: String,
+      default: 'left'
     }
   },
   data () {
@@ -86,7 +90,7 @@ export default {
       width: 100vw;
       height: 100vh;
       background: #000;
-      opacity: .8;
+      opacity: .5;
       z-index: 10;
     }
     ._content{
@@ -103,6 +107,15 @@ export default {
         line-height: 1.5;
         font-size: .3rem;
         color: #333;
+        &.left{
+          text-align: left;
+        }
+        &.center{
+          text-align: center;
+        }
+        &.right{
+          text-align: right;
+        }
       }
       .oneBtn{
         border-top: 1px solid #D2D2D2;

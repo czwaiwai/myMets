@@ -133,6 +133,18 @@ export default {
       }   
       let new_date = new Date(new_year, new_month, 1)   
       return (new Date(new_date.getTime() - (1000 * 60 * 60 * 24))).getDate()   
+    },
+    // 时间戳转年月日
+    setDateTime (timeStamp) {
+      if (!timeStamp) {
+        return
+      }
+      let date = new Date()
+      date.setTime(timeStamp - 0)
+      let y = date.getFullYear() 
+      let m = date.getMonth() + 1
+      let d = date.getDate() 
+      return y + '-' + this.add0(m) + '-' + this.add0(d)
     }
   }
 }

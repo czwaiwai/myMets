@@ -5,6 +5,7 @@ import meeting from './module/meeting'
 import meter from './module/meter'
 import investment from './module/investment'
 import rent from './module/rent'
+import approval from './module/approval'
 Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     meeting,
     meter,
     investment,
-    rent
+    rent,
+    approval
   }
 })

@@ -10,6 +10,8 @@ import meter from './meter'
 import investment from './investment'
 // 租赁
 import rent from './rent'
+// 审批
+import approval from './approval'
 // 扫码进入的设备详情
 import scanDetail from './scanDetail'
 // 报表
@@ -291,6 +293,7 @@ export default new Router({
     ...workOrder,
     ...monitorCenter,
     ...rent,
+    ...approval,
     {
       path: '*',
       redirect: to => {
