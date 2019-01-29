@@ -54,7 +54,7 @@ export default {
 </script>
 <style lang="scss" scoped >
 .ins_radio_group .right_text_color {
-  color:#0dc88c;
+  color:#3395FF;
 }
 .ins_radio_group .wrong_text_color {
   color: #f00404;

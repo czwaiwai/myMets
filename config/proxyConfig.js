@@ -13,7 +13,9 @@ module.exports = {
       },
       {
         api: '/roc',
-        url: 'http://172.31.118.201:8082/roc'
+        // url: 'http://172.31.118.201:8082/roc'
+        url: 'http://39.108.209.97:35002/roc'
+        
         // url: 'http://172.31.118.23:35006/adapter/ets/open'
         // http://172.31.118.23:35006/adapter/ets/open'
       }

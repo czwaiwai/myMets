@@ -10,6 +10,12 @@ const RentCash = () => import(/* webpackChunkName:'report' */ '@/views/report/re
 const RentRate = () => import(/* webpackChunkName:'report' */ '@/views/report/rentRate') // 出租率
 const ChangeProject = () => import(/* webpackChunkName:'report' */ '@/views/report/changeProject') // 出租率
 const DeviceRate = () => import(/* webpackChunkName:'report' */ '@/views/report/child/deviceRate') // 设备运行状态
+
+const Agreement = () => import(/* webpackChunkName:'report' */ '@/views/report/agreement') // 合同统计
+const AgreementDetail = () => import(/* webpackChunkName:'report' */ '@/views/report/agreementDetail') // 合同统计
+const CountLease = () => import(/* webpackChunkName:'report' */ '@/views/report/countLease') // 租赁统计
+const Warrant = () => import(/* webpackChunkName:'report' */ '@/views/report/warrant') // 权证统计
+const WarrantDetail = () => import(/* webpackChunkName:'report' */ '@/views/report/warrantDetail') // 权证统计
 export default [
   {
     path: '/report/customer',
@@ -129,5 +135,67 @@ export default [
     meta: {
       title: '出租率'
     }
+  },
+  {
+    path: '/report/agreement',
+    name: 'report_agreement',
+    component: Agreement,
+    meta: {
+      title: '合同统计'
+    },
+    children: [{
+      path: 'changeProject',
+      name: 'report_agreement_change',
+      component: ChangeProject,
+      meta: {
+        title: '切换项目'
+      }
+    }, {
+      path: 'agreementDetail/:id',
+      name: 'report_agreementDetail',
+      component: AgreementDetail,
+      meta: {
+        title: '合同统计详情'
+      }
+    }]
+  },
+  {
+    path: '/report/countLease',
+    name: 'report_countLease',
+    component: CountLease,
+    meta: {
+      title: '租赁统计'
+    },
+    children: [{
+      path: 'changeProject',
+      name: 'report_countLease_change',
+      component: ChangeProject,
+      meta: {
+        title: '切换项目'
+      }
+    }]
+  },
+  {
+    path: '/report/warrant',
+    name: 'report_warrant',
+    component: Warrant,
+    meta: {
+      title: '权证统计'
+    },
+    children: [{
+      path: 'changeProject',
+      name: 'report_countLease_change',
+      component: ChangeProject,
+      meta: {
+        title: '切换项目'
+      }
+    }, {
+      path: 'warrantDetail/:id',
+      name: 'report_warrantDetail',
+      component: WarrantDetail,
+      meta: {
+        title: '权证统计详情'
+      }
+    }]
   }
 ]

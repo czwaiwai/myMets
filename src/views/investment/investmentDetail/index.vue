@@ -180,7 +180,7 @@ export default {
     },
     // 获取详情数据
     async getDetailData () {
-      console.log('route', this.$route)
+      // console.log('route', this.$route)
       let res = await this.$xml('UserCS_InvestmentPropertyDetail', {
         'ID': this.$route.params.id
       })

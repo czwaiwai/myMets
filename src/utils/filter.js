@@ -7,6 +7,10 @@ export default function (Vue) {
     if (!value) return '0.00'
     return parseFloat(value).toFixed(2)
   })
+  Vue.filter('dateMonth', function (value) {
+    if (!value) return ''
+    return (new Date(value)).format('yyyy-MM')
+  })
   Vue.filter('dateChina', function (value) {
     if (!value) return ''
     let arr = ['年', '月', '日']

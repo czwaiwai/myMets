@@ -20,6 +20,8 @@ import report from './report'
 import workOrder from './workOrder'
 // 监控中心
 import monitorCenter from './monitorCenter'
+// 整改对比
+import comparedBuild from './comparedBuild'
 
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
@@ -65,6 +67,8 @@ export default new Router({
           return '/tab/work'
           // // 投资性物业
           // return '/investmentIndex'
+          // 整改对比
+          // return '/comparedBuild'
           // return '/meeting'
           // return '/monitor/monitorInspection'
         }
@@ -294,6 +298,7 @@ export default new Router({
     ...monitorCenter,
     ...rent,
     ...approval,
+    ...comparedBuild,
     {
       path: '*',
       redirect: to => {

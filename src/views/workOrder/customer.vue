@@ -6,7 +6,7 @@
         <div>
           <navbar :list="typeList" v-model="currIndex"></navbar>
         </div>
-        <component ref="test" :is="currIndex" :config="currConfig" >
+        <component ref="pageList" :is="currIndex" :params="currConfig.params"  :config="currConfig" @listDone="listDone" >
           <template slot-scope="scope" >
             <div class="weui-panel weui-panel_access margin-bottom">
               <div @click="routeTo(scope.item)"   class="weui-panel__hd">
@@ -20,16 +20,22 @@
                 </span>
               </div>
               <div @click="routeTo(scope.item)"  class="weui-panel__bd">
-                  <div class="weui-media-box weui-media-box_text">
+                  <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px;">
                       <h4 class="weui-media-box__title">{{scope.item.QuesDesc}}</h4>
-                      <div>展示图片区域</div>
+                      <div class="img_list_wrap">
+                        <ul class="clearfix">
+                          <li @click.stop  class="img_wrap" v-for="(item,index) in scope.item.ImageList" :key="index">
+                            <img :preview="'list'+scope.item.WONo" :src="item.Path">
+                          </li>
+                        </ul>
+                      </div>
                       <p class="dark_99"><i class="iconfont icon-z-location"></i> {{scope.item.WorkPos}}</p>
                       <p class="dark_99"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
                   </div>
               </div>
-              <div class="weui-panel__ft text-right">
+              <div class="weui-panel__ft text-right padding-right15 padding-bottom">
                   <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
-                  <button :key="index" v-for="(buttonItem,index) in showButtons(scope.item.WorkOrdState, scope.item.bHandle, scope.item.IsFromSkill)" @click="covertOrder" class="weui-btn weui-btn_mini weui-btn_default">{{buttonItem}}</button>
+                  <button :key="index" v-for="(buttonItem,index) in showButtons(scope.item.WorkOrdState, scope.item.bHandle, scope.item.IsFromSkill)" @click="btnAction(scope.item, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
               </div>
             </div>
           </template>
@@ -47,7 +53,7 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-import navbar from './child/navbar'
+import navbar from '@/components/navbar'
 import PageList from '@/components/pageList'
 export default {
   name: 'inspection',
@@ -83,11 +89,11 @@ export default {
     // --------------
     this.orderType = 'Inspection'
     this.nav = {
-      orgId: '11091315263400010000' || this.user.OrgID,
+      orgId: this.user.OrgID,
       orgName: this.user.OrgName,
       userName: this.user.userName,
       positionId: this.user.PositionID,
-      memberId: '30' || this.user.memberId
+      memberId: '1' || this.user.memberId
     }
     this.getStatus()
     this.configList = this.typeList.map(item => {
@@ -109,9 +115,8 @@ export default {
       this.workItem = item
       this.$router.push({path: this.$route.path + '/detail'})
     },
-    // 转单
-    covertOrder (obj) {
-      this.$router.push({path: this.$route.path + '/personSelector'})
+    listDone () {
+      this.$previewRefresh()
     },
     createListConfig (name, params) {
       return {
@@ -184,18 +189,55 @@ export default {
         return []
       }
     },
+    btnAction (item, btnName) {
+      this.workItem = item
+      switch (btnName) {
+        case '抢单': this.routeTakeOrder(item); break
+        case '接单': this.routeTakeOrder(item); break
+        case '转单': this.covertOrder(item); break
+        case '反馈': this.routeFeedback(item); break
+        case '材料申请': this.routeMaterial(item); break
+        case '完成回访': this.routeVisit(item); break
+        case '回访详情': this.routeVisitDetail(item); break
+        case '关闭工单': this.closeOrder(item); break
+      }
+    },
+    // 抢单
+    // 接单
+    routeTakeOrder (obj) {
+      this.$router.push({path: this.$route.path + '/takeOrder'})
+    },
+    // 转单
+    covertOrder (obj) {
+      this.$router.push({path: this.$route.path + '/personSelector'})
+    },
+    // 反馈
+    routeFeedback (obj) {
+      this.$router.push({path: this.$route.path + '/feedback'})
+    },
+    // 材料申请
+    routeMaterial (obj) {
+      this.$router.push({path: this.$route.path + '/material'})
+    },
+    // 完成回访
+    routeVisit (obj) {
+      this.$router.push({path: this.$route.path + '/visit'})
+    },
+    // 回访详情
+    routeVisitDetail (obj) {
+      this.$router.push({path: this.$route.path + '/visitDetail'})
+    },
     // 关闭工单
     async closeOrder (obj) {
-      console.log(this.$refs.test)
-      await this.$message.confirm('确定关闭该巡检工单？')
-      let url = '/ets/syswin/smd/equipBaseWorkCompletionColse'
+      await this.$message.confirm('确认关闭此客服工单？')
+      let url = '/ets/syswin/smd/userServiceVisitManClose'
       let res = await this.$http.post(url, {
-        wordId: obj.WorkID,
-        wordType: obj.WordType,
-        workState: obj.WorkState,
-        opUserId: this.nav.memberId
+        userName: this.nav.userName,
+        orderId: obj.WorkOrdID,
+        closeDate: new Date().format('yyyy-MM-dd hh:mm:ss')
       })
-      this.$toast('关闭巡检成功')
+      this.refresh()
+      this.$toast('工单关闭成功')
       console.log(res)
     }
   }
@@ -203,5 +245,38 @@ export default {
 </script>
 
 <style lang="scss">
-
+.img_list_wrap {
+  padding:5px 0;
+}
+.img_list_wrap .img_wrap{
+  float:left;
+  width:65px;
+  height:65px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+.img_list_wrap .img_wrap img{
+  max-width:100%;
+  // max-height:100%;
+}
+.ins_btn + .ins_btn {
+  margin-left:5px;
+}
+.ins_btn_plain_default{
+  border-radius:5px;
+  border:1px solid #999;
+  padding:5px 10px;
+  color:#999;
+}
+.ins_btn:last-child{
+   border:1px solid #3395FF;
+   color:#3395FF;
+}
+.ins_btn_plain_primary {
+  border-radius:5px;
+  border:1px solid #3395FF;
+  padding:5px 10px;
+  color:#3395FF;
+}
 </style>

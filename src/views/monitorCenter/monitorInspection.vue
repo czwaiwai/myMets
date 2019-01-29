@@ -1,12 +1,12 @@
 <template>
     <div class="page">
         <mt-header title="巡保工作监控">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+            <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button>
         </mt-header>
         <div>
           <navbar :list="typeList" v-model="currIndex"></navbar>
         </div>
-        <component ref="test" :is="currIndex" :config="currConfig" >
+        <component ref="pageList" :params="currConfig.params"  :is="currIndex" :config="currConfig" >
             <template slot-scope="scope" >
               <div class="weui-panel weui-panel_access margin-bottom">
                 <div @click="routeTo(scope.item)"   class="weui-panel__hd">
@@ -20,7 +20,7 @@
                     <div class="moni_ins_bg weui-media-box weui-media-box_text weui-flex" >
                       <div class="light" style="width: 95px;padding-right: 15px;text-align: center;">
                         <p class="fs18 padding-top padding-bottom5" >{{scope.item.Principal}}</p>
-                        <p >共{{scope.item.BillNum }}设备</p>
+                        <!-- <p >共{{scope.item.BillNum }}设备</p> -->
                       </div>
                       <div class="weui-flex__item">
                         <h4 class="weui-media-box__title">{{scope.item.WORID}}</h4>

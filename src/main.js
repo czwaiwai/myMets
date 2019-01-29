@@ -73,9 +73,6 @@ Vue.prototype.$message = MessageBox
 Vue.prototype.$app = appApi
 Vue.prototype.$toLower = toLower
 Vue.prototype.$indicator = Indicator
-// document.addEventListener("deviceready", function () {
-//   console.log('设备初始化------------------', arguments)
-// }, false)
 
 // Vue.use(axiosHelper, {
 //   ip: ''

@@ -6,8 +6,9 @@ const baseUrl = '/NetApp/CstService.asmx/GetService'
 export default {
   install (Vue, options) {
     console.log(options, 'axios--ip')
+    let ipAddr = options.ip ? 'http://' + options.ip : ''
     let instance = axios.create({
-      baseURL: 'http://' + options.ip,
+      baseURL: ipAddr,
       timeout: 60000,
       transformRequest: [function (data) {
         if (typeof data === 'object' && data.hideLoad) {
@@ -48,7 +49,7 @@ export default {
 
     // xml
     let instanceXml = axios.create({
-      baseURL: 'http://' + options.ip,
+      baseURL: ipAddr,
       url: baseUrl,
       method: 'POST',
       timeout: 60000,

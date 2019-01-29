@@ -104,6 +104,12 @@
           </div>
           <p class="weui-grid__label">投资性物业</p>
         </a>
+        <a @click="$router.forward('/comparedBuild')" href="javascript:;" class="weui-grid">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_compare.png" alt="">
+          </div>
+          <p class="weui-grid__label">整改对比</p>
+        </a>
         <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'other', isTitle: item.appName})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img :src="item.h5Icon" alt="">
@@ -217,7 +223,7 @@ export default {
       // res.data
     },
     async authLogin () {
-      let url = '/roc/open/app/admin/login?userName=test30&password=59adb24ef3cdbe0297f05b395827453f'
+      let url = '/roc/open/app/admin/login?userName=demo1&password=59adb24ef3cdbe0297f05b395827453f'
       let res = await this.$http.post(url, {}, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'

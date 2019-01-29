@@ -20,7 +20,7 @@
                     <p>{{item.EquiName}}</p>
                     <p class="dark_99 fs13"><i class="iconfont icon-weizhi-tianchong"></i>{{item.InstallationSite}}</p>
                   </div>
-                  <div class="ft item_center direct_icon" :class="item.show?'weui_icon_download':''" >
+                  <div class="ft item_center direct_icon " :class="item.show?'weui_icon_download':''" >
                     <i class="iconfont   icon-shouqi" ></i>
                   </div>
                 </div>

@@ -5,6 +5,10 @@ const MonitorInspection = () => import(/* webpackChunkName:'monitorCenter' */ '@
 const MonitorInsDetail = () => import(/* webpackChunkName:'monitorCenter' */ '@/views/monitorCenter/monitorInsDetail') // 巡保工作监控
 const MonitorRepair = () => import(/* webpackChunkName:'monitorCenter' */ '@/views/monitorCenter/monitorRepair') // 维修工单监控
 
+// 客服工单详情
+const MonitorCustomerServiceDetail = () => import(/* webpackChunkName:'monitorCenter' */ '@/views/workOrder/customerDetail') // 客服工单详情
+const MonitorCustomerTracking = () => import(/* webpackChunkName:'monitorCenter' */ '@/views/workOrder/customerTracking') // 服务跟踪
+
 export default [
   {
     path: '/monitor/index',
@@ -20,7 +24,51 @@ export default [
     component: MonitorCustomer,
     meta: {
       title: '客服工单监控'
-    }
+    },
+    children: [
+      {
+        path: 'detail',
+        name: 'customerServiceDetail',
+        component: MonitorCustomerServiceDetail,
+        meta: {
+          title: '客服详情'
+        },
+        children: [{
+          path: 'customerTracking',
+          name: 'customerTracking',
+          component: MonitorCustomerTracking,
+          meta: {
+            title: '服务跟踪'
+          }
+        }]
+      }
+    ]
+  },
+  {
+    path: '/monitor/monitorRepair',
+    name: 'monitorRepair',
+    component: MonitorRepair,
+    meta: {
+      title: '维修工单监控'
+    },
+    children: [
+      {
+        path: 'detail',
+        name: 'customerServiceDetail',
+        component: MonitorCustomerServiceDetail,
+        meta: {
+          title: '客服详情'
+        },
+        children: [{
+          path: 'customerTracking',
+          name: 'customerTracking',
+          component: MonitorCustomerTracking,
+          meta: {
+            title: '服务跟踪'
+          }
+        }]
+      }
+    ]
   },
   {
     path: '/monitor/monitorInspection',
@@ -39,13 +87,5 @@ export default [
         }
       }
     ]
-  },
-  {
-    path: '/monitor/monitorRepair',
-    name: 'monitorRepair',
-    component: MonitorRepair,
-    meta: {
-      title: '维修工单监控'
-    }
   }
 ]

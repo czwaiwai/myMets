@@ -5,9 +5,16 @@ const Photo = () => import(/* webpackChunkName:'workOrder' */ '@/views/workOrder
 const PersonSelector = () => import(/* webpackChunkName:'workOrder' */ '@/views/customerService/responsibleChoose') // 巡检
 
 // 客服工单
-const CustomerService = () => import(/* webpackChunkName:'workOrder' */ '@/views/workOrder/customer') // 客服工单
-const CustomerServiceDetail = () => import(/* webpackChunkName:'workOrder' */ '@/views/workOrder/customerDetail') // 客服工单详情
-const CustomerTracking = () => import(/* webpackChunkName:'workOrder' */ '@/views/workOrder/customerTracking') // 服务跟踪
+const CustomerService = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/customer') // 客服工单
+const CustomerServiceDetail = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/customerDetail') // 客服工单详情
+const CustomerTracking = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/customerTracking') // 服务跟踪
+const VisitDetail = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/customerChild/visitDetail') // 服务跟踪
+const Visit = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/customerChild/visit') // 服务跟踪
+const TakeOrder = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/customerChild/takeOrder') // 服务跟踪
+const Feedback = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/customerChild/feedback') // 工单反馈
+const Material = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/materialChild/index') // 材料申请
+const MaterialAdd = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/materialChild/add') // 添加材料
+const MaterialDetail = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/materialChild/detail') // 材料详情
 export default [
   {
     path: '/workOrder/inspection',
@@ -53,7 +60,7 @@ export default [
     children: [
       {
         path: 'detail',
-        name: 'sustomerServiceDetail',
+        name: 'customerServiceDetail',
         component: CustomerServiceDetail,
         meta: {
           title: '客服详情'
@@ -66,6 +73,80 @@ export default [
             title: '服务跟踪'
           }
         }]
+      },
+      {
+        path: 'personSelector',
+        name: 'cusPersonSelector',
+        component: PersonSelector,
+        meta: {
+          title: '转单'
+        }
+      },
+      {
+        path: 'visit',
+        name: 'visit',
+        component: Visit,
+        meta: {
+          title: '填报回访'
+        }
+      },
+      {
+        path: 'visitDetail',
+        name: 'visitDetail',
+        component: VisitDetail,
+        meta: {
+          title: '回访详情'
+        }
+      },
+      {
+        path: 'takeOrder',
+        name: 'takeOrder',
+        component: TakeOrder,
+        meta: {
+          title: '接单'
+        }
+      },
+      {
+        path: 'feedback',
+        name: 'feedback',
+        component: Feedback,
+        meta: {
+          title: '工单反馈'
+        },
+        children: [{
+          path: 'materialDetail',
+          name: 'feedMaterialDetail',
+          component: MaterialDetail,
+          meta: {
+            title: '材料申请详情'
+          }
+        }]
+      },
+      {
+        path: 'material',
+        name: 'material',
+        component: Material,
+        meta: {
+          title: '材料申请'
+        },
+        children: [
+          {
+            path: 'materialAdd',
+            name: 'materialAdd',
+            component: MaterialAdd,
+            meta: {
+              title: '查找添加'
+            }
+          },
+          {
+            path: 'materialDetail',
+            name: 'materialDetail',
+            component: MaterialDetail,
+            meta: {
+              title: '材料申请详情'
+            }
+          }
+        ]
       }
     ]
   }

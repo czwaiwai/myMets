@@ -65,7 +65,7 @@ export default {
 </script>
 <style lang="scss" scoped >
 .right_text_color {
-  color:#0dc88c;
+  color:#3395FF;
 }
 .wrong_text_color {
   color: #f00404;

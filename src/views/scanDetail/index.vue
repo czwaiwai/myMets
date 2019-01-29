@@ -33,7 +33,7 @@
           <mt-tab-item id="list2">维修记录</mt-tab-item>
         </mt-navbar>
         <keep-alive>
-           <component :is="selected" :config="currConfig" :obj="scanObj">
+           <component :is="selected" :params="currConfig.params"  :config="currConfig" :obj="scanObj">
              <template slot-scope="scope" >
                <div v-if="['list0','list1'].indexOf(selected) > -1" class="light_bg weui-flex padding15-h padding-v border-bottom-half">
                  <div class="weui-flex__item">{{scope.item.PlanStartTime}}</div>

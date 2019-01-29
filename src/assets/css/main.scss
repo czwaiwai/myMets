@@ -2,12 +2,15 @@
 @import 'tool';
 @import './font/iconfont.css';
 @import './fontService/iconfont.css';
-@import './animate.css';
+// @import './animate.css';
 @import './meeting/init.scss';
 @import './meter/init.scss';
 @import './investment/init.scss';
 .mint-toast {
   z-index: 9999;
+}
+.mint-indexlist-content {
+  -webkit-overflow-scrolling: touch; 
 }
 .mint-tab-container-wrap {
   height:100%;
@@ -48,4 +51,25 @@
 }
 .year_month .picker-items .picker-slot:nth-last-child(2) {
   display: none;
+}
+
+.ins_submit_btn {
+  height:35px;
+  display:block;
+  color:#FFF;
+  width:100%;
+  border-radius:5px;
+  background:#3395FF;
+}
+.direct_icon.weui_icon_download {
+  -webkit-transform: rotateZ(180deg);
+  transform: rotateZ(180deg);
+}
+.direct_icon {
+  -webkit-transform: rotateZ(0deg);
+  transform: rotateZ(0deg);
+  -webkit-transition: -webkit-transform 0.2s linear;
+  transition: -webkit-transform 0.2s linear;
+  transition: transform 0.2s linear;
+  transition: transform 0.2s linear, -webkit-transform 0.2s linear;
 }

@@ -3,17 +3,40 @@
     <div class="page_hd">
       <mt-header   :title="$route.meta && $route.meta.title"></mt-header>
     </div>
-    <div class="page_sub_hd" style="height:50px;line-height:50px;">
+    <div v-if="!singleMode" class="page_sub_hd" style="height:50px;line-height:50px;">
       <mt-navbar v-model="selected">
         <mt-tab-item id="1"><span style="font-size:16px;"><i class="iconfont icon-loudong" style="margin-top: -2px;display: inline-block;font-size:32px;vertical-align: middle;"></i><span style="vertical-align: middle;">集团统计</span></span></mt-tab-item>
         <mt-tab-item id="2"><span style="font-size:16px;"><i class="iconfont icon-loudong01" style="font-size:32px;vertical-align: middle;"></i><span style="vertical-align: middle;">单个项目统计</span></span></mt-tab-item>
       </mt-navbar>
     </div>
     <div class="page_bd">
-      <mt-tab-container v-model="selected">
+      <div v-if="singleMode">
+        <div class="relative">
+          <img src="../assets/img/report/index_bg.png" style="width:100%;" >
+          <div class="weui-flex padding15" style="width:100%;position:absolute;bottom:0;color:#FFF;">
+            <div class="weui-flex__item fs16">{{nav.orgName}}</div>
+            <div class="fs16">{{(new Date()).format('yyyy-MM')}}</div>
+          </div>
+        </div>
+        <div class="padding15">
+          <div v-show="item.show" @click="routeTo(item)" v-for="(item, index) in rightList" :key="index" class="weui-flex flex_center padding15 margin-bottom" style="border-radius:5px;height:80px;background:#FFF;">
+            <div class="weui-flex__item item_center">
+              <p>
+                <span class="icon_wrap" :style="'background:'+ item.color"><i class="iconfont" :class="item.icon"></i></span>
+                <span class="padding-left main_text">{{item.name}}</span>
+              </p>
+            </div>
+            <div v-for="(sub,subIndex) in item.value" :key="subIndex" class="right_text_item flex_center item_center " >
+              <p class="num_text text-center"><span :style="sub.color?'color:'+sub.color:''">{{sub.value}}</span><span v-html="sub.unit"></span></p>
+              <p class="sub_text text-center">{{sub.name}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mt-tab-container v-if="!singleMode" v-model="selected">
         <mt-tab-container-item id="1">
          <div class="padding15">
-            <div  @click="routeTo(item)" v-for="(item, index) in leftList" :key="index" class="weui-flex flex_center padding15 margin-bottom" style="border-radius:5px;height:80px;background:#FFF;">
+            <div  v-show="item.show" @click="routeTo(item)" v-for="(item, index) in leftList" :key="index" class="weui-flex flex_center padding15 margin-bottom" style="border-radius:5px;height:80px;background:#FFF;">
               <div class="weui-flex__item item_center">
                 <p>
                   <span class="icon_wrap"  :style="'background:'+ item.color"><i class="iconfont" :class="item.icon"></i></span>
@@ -29,7 +52,7 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
           <div class="padding15">
-            <div @click="routeTo(item)" v-for="(item, index) in rightList" :key="index" class="weui-flex flex_center padding15 margin-bottom" style="border-radius:5px;height:80px;background:#FFF;">
+            <div v-show="item.show" @click="routeTo(item)" v-for="(item, index) in rightList" :key="index" class="weui-flex flex_center padding15 margin-bottom" style="border-radius:5px;height:80px;background:#FFF;">
               <div class="weui-flex__item item_center">
                 <p>
                   <span class="icon_wrap" :style="'background:'+ item.color"><i class="iconfont" :class="item.icon"></i></span>
@@ -49,18 +72,29 @@
 </template>
 
 <script>
+// http://localhost:8080/mets/report/docs/index.html?UserId=test30&PositionId=11091316310300010000&projectID=11091315263400010000&memberId=30&projectName=测试项目&Report=APP_Report&ReportWork=APP_ReportWork&ReportEquip=APP_ReportEquip&ReportCollection=APP_ReportCollection#page=0
 import {mapGetters} from 'Vuex'
+import qs from 'qs'
 export default {
   name: 'tabReport',
   data () {
     return {
       selected: '2',
       currRand: 0,
+      singleMode: true,
       leftList: [],
       rightList: []
     }
   },
   created () {
+    let searchObj = qs.parse(location.search.replace('?', ''))
+    this.nav = {
+      orgId: searchObj.projectID || this.user.OrgID,
+      orgName: searchObj.projectName,
+      userId: searchObj.UserId || this.user.UserID,
+      positionId: searchObj.PositionId || this.user.PositionID
+    }
+    console.log(searchObj, 'qs 转换----------------------------------------------------------------')
     this.getPageData()
   },
   activated () {
@@ -86,9 +120,7 @@ export default {
         // 显示空
         return
       }
-      console.log(res)
       let arr = await Promise.all([this.rightInfo(), this.leftTopInfo(), this.leftbottomInfo()])
-      console.log(arr, 'arr')
       // arr[0]
       this.rightList.forEach((item, index) => {
         item.value = arr[0][index]
@@ -127,7 +159,10 @@ export default {
         {name: '客服服务', urlName: 'report_customer', color: '#46A9FC', icon: 'icon-kehufuwu', auth: 'APP_ReportWork', value: []},
         {name: '设备管理', urlName: 'report_device', color: '#FA8A2C', icon: 'icon-shebeiguanli', auth: 'APP_ReportEquip', value: []},
         {name: '项目收款', urlName: 'report_cash', color: '#0DC88C', icon: 'icon-shoukuan', auth: 'APP_ReportCollection', value: []},
-        {name: '项目出租', urlName: 'report_lease', color: '#FCBA46', icon: 'icon-chuzu', auth: 'APP_ReportRent', value: []}
+        {name: '项目出租', urlName: 'report_lease', color: '#FCBA46', icon: 'icon-chuzu', auth: 'APP_ReportRent', value: []},
+        {name: '合同统计', urlName: 'report_agreement', color: '#46A9FC', icon: 'icon-tubiaozhizuomoban_fuzhi', auth: 'DQ_APP_ContractStatistics', value: []},
+        {name: '租赁统计', urlName: 'report_countLease', color: '#FA8A2C', icon: 'icon-zu', auth: 'DQ_APP_LeasingStatistics', value: []},
+        {name: '权证统计', urlName: 'report_warrant', color: '#0DC88C', icon: 'icon-hetong', auth: 'DQ_APP_WarrantStatistics', value: []}
       ]
       leftArr.forEach(item => {
         item.show = resData.some(sub => sub.Content === item.auth)
@@ -135,25 +170,36 @@ export default {
       rightArr.forEach(item => {
         item.show = resData.some(sub => sub.Content === item.auth)
       })
+      if (leftArr.length === 0) {
+        this.singleMode = true
+      } else {
+        this.singleMode = false
+      }
       this.leftList = leftArr
       this.rightList = rightArr
-      console.log(this.rightList, this.leftList)
+      console.log('权限结果', this.rightList, this.leftList)
       return true
     },
     // 右侧的内容
     async rightInfo () {
-      let res = await this.$xml('UserCS_ReportGlobalReport', {
+      let resArr = await Promise.all([this.$xml('UserCS_ReportGlobalReport', {
         orgID: this.user.OrgID,
         financeDate: (new Date()).format('yyyy-MM')
-      })
-      console.log(res.data, '---right--')
-      let arr = res.data
+      }), this.$xml('UserCS_ReportGrpStatistics', {
+        Etime: (new Date()).format('yyyy-MM')
+      })])
+      // console.log(res.data, '---right--')
+      let arr = resArr[0].data
+      let obj = resArr[1].data[0]
       console.log(arr)
       let values = [
         [{name: '满意度', value: this.formatNum(arr[0].VisitRate), color: '#FA4E2C', unit: '<span class="unit_text">分</span>'}, {name: '关闭率', value: this.formatNum(arr[0].CloseRate), unit: '%'}],
         [{name: '设备完好率', value: this.formatNum(arr[1].EquiRate), unit: '%'}],
         [{name: '本月帐期已收', value: this.formatNum((arr[2].PaidMoney)), color: '#FA4E2C', unit: '<span class="unit_text">万元</span>'}, {name: '收缴率', value: this.formatNum(arr[2].PaidRate), unit: '%'}],
-        [{name: '出租数量', value: arr[3].HouseCount, color: '#FA4E2C', unit: '<span class="unit_text">套</span>'}, {name: '出租率', value: this.formatNum(arr[3].CZRate), unit: '%'}]
+        [{name: '出租数量', value: arr[3].HouseCount, color: '#FA4E2C', unit: '<span class="unit_text">套</span>'}, {name: '出租率', value: this.formatNum(arr[3].CZRate), unit: '%'}],
+        [{name: '合同统计', value: obj.ContractCount, color: '#FA4E2C', unit: '<span class="unit_text"></span>'}],
+        [{name: '租赁统计', value: obj.LeasingCount, unit: '<span class="unit_text">㎡</span>'}],
+        [{name: '权证统计', value: obj.TotalCount, color: '#FA4E2C', unit: '<span class="unit_text"></span>'}]
       ]
       return values
     },

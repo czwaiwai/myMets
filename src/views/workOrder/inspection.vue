@@ -6,7 +6,7 @@
         <div>
           <navbar :list="typeList" v-model="currIndex"></navbar>
         </div>
-        <component ref="test" :is="currIndex" :config="currConfig" >
+        <component ref="inslist" :params="currConfig.params"  :is="currIndex" :config="currConfig" >
           <template slot-scope="scope" >
             <div class="weui-panel weui-panel_access margin-bottom">
               <div @click="routeTo(scope.item)"   class="weui-panel__hd">
@@ -17,18 +17,18 @@
                   <span class="dark_99" v-if="scope.item.WorkState === '4'">完成</span>
                 </span>
               </div>
-              <div @click="routeTo(scope.item)"  class="weui-panel__bd">
-                  <div class="weui-media-box weui-media-box_text">
+              <div @click="routeTo(scope.item)"  class="weui-panel__bd" >
+                  <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px">
                       <h4 class="weui-media-box__title">{{scope.item.PlanName}}</h4>
                       <p><span class="dark_99">巡 检 人:</span> {{scope.item.Principal}}</p>
                       <p><span class="dark_99">开始时间:</span> {{scope.item.PlanStartTime}}</p>
                   </div>
               </div>
-              <div class="weui-panel__ft text-right">
+              <div class="weui-panel__ft text-right padding-right15 padding-bottom">
                   <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
-                  <button @click="covertOrder" class="weui-btn weui-btn_mini weui-btn_default"  v-if="scope.item.WorkState==='2'">转单</button>
-                  <button @click="routeTo(scope.item)"  style="margin-top:0" class="weui-btn weui-btn_mini weui-btn_primary" v-if="scope.item.WorkState==='2'">巡检</button>
-                  <button @click="closeOrder"  style="margin-top:0" class="weui-btn weui-btn_mini weui-btn_primary"   v-if="scope.item.WorkState==='3'">关闭</button>
+                  <button @click="covertOrder(scope.item)" class="ins_btn ins_btn_plain_default"  v-if="scope.item.WorkState==='2'">转单</button>
+                  <button @click="routeTo(scope.item)"   class="ins_btn ins_btn_plain_primary" v-if="scope.item.WorkState==='2'">巡检</button>
+                  <button @click="closeOrder(scope.item)"  class="ins_btn ins_btn_plain_primary"   v-if="scope.item.WorkState==='3'">关闭</button>
               </div>
             </div>
           </template>
@@ -100,6 +100,11 @@ export default {
     }
   },
   methods: {
+    // 刷新当前列表页
+    refresh () {
+      this.getStatus()
+      this.$refs.inslist.refresh()
+    },
     routeTo (item) {
       console.log(item)
       this.workItem = item
@@ -107,7 +112,42 @@ export default {
     },
     // 转单
     covertOrder (obj) {
-      this.$router.push({path: this.$route.path + '/personSelector'})
+      console.log(obj, 'order')
+      this.$router.push({path: this.$route.path + '/personSelector', query: {workId: obj.WorkID}})
+    },
+    // 转单结果
+    async setPerson (item, query) {
+      let url = '/ets/syswin/smd/equipBaseSingleBill'
+      await this.$http.post(url, {
+        orgID: item.PositionID,
+        workOrdID: query.workId,
+        workType: this.orderType,
+        ordersID: item.EmployeeID,
+        orders: item.EmployeeName
+      })
+      // 刷新当前列表
+      this.refresh()
+      // 发送消息
+      try {
+        await this.sendMsg(item, query.workId)
+        // 提示
+        this.$toast('转单成功')
+      } catch (e) {
+        console.log(e)
+        this.$toast('转单成功但推送失败')
+      }
+    },
+    // 推送消息
+    async sendMsg (data, workId) {
+      let url = '/ets/message/getMessage'
+      await this.$http.post(url, {
+        id: workId,
+        type: 'E_Inspection', // [E_Inspection, E_KeepFit]
+        title: '巡检工单', // [巡检工单, 保养工单]
+        content: '您有一个新的转单工单，请及时处理',
+        tag: data.UserId,
+        status: '1'
+      })
     },
     createListConfig (name, params) {
       return {
@@ -162,7 +202,6 @@ export default {
 
     // 关闭工单
     async closeOrder (obj) {
-      console.log(this.$refs.test)
       await this.$message.confirm('确定关闭该巡检工单？')
       let url = '/ets/syswin/smd/equipBaseWorkCompletionColse'
       let res = await this.$http.post(url, {
@@ -171,6 +210,7 @@ export default {
         workState: obj.WorkState,
         opUserId: this.nav.memberId
       })
+      this.refresh()
       this.$toast('关闭巡检成功')
       console.log(res)
     }
@@ -179,5 +219,19 @@ export default {
 </script>
 
 <style lang="scss">
-
+.ins_btn + .ins_btn {
+  margin-left:5px;
+}
+.ins_btn_plain_default{
+  border-radius:5px;
+  border:1px solid #999;
+  padding:5px 10px;
+  color:#999;
+}
+.ins_btn_plain_primary {
+  border-radius:5px;
+  border:1px solid #3395FF;
+  padding:5px 10px;
+  color:#3395FF;
+}
 </style>
