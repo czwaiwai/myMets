@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import navTitle from '@/components/navTitle'
 export default {
   name: 'meterLocation',
@@ -32,6 +33,11 @@ export default {
       items: [],
       loactionData: {}
     }
+  },
+  computed: {
+    ...mapGetters({
+      userData: 'user'
+    })
   },
   methods: {
     selectList (item, index) {
@@ -85,8 +91,8 @@ export default {
     }
   },
   created () {
-    this.title = this.$route.query.orgName
-    this.loactionData.orgData = {orgName: this.$route.query.orgName, orgId: this.$route.query.orgId}
+    this.title = this.userData.OrgName
+    this.loactionData.orgData = {orgName: this.userData.OrgName, orgId: this.userData.OrgID}
     this.getListData()
   }
 }

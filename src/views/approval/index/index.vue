@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import navTitle from '@/components/navTitle'
 import searchBox from './children/searchBox.vue'
 import selectType from './children/selectType.vue'
@@ -21,10 +22,11 @@ export default {
   components: {navTitle, searchBox, selectType, listBox},
   data () {
     return {
-      orgId: '11091315263400010000',
-      orgName: '银河世纪花园',
-      employeeJobId: '11091316310300010000',
-      employeeId: '20',
+      orgId: '',
+      orgName: '',
+      employeeJobId: '',
+      employeeId: '',
+      userId: '',
       timeType: 2,
       statusName: 'Executing',
       typesData: {
@@ -33,6 +35,11 @@ export default {
         AskTimeE: ''
       }
     }
+  },
+  computed: {
+    ...mapGetters({
+      userData: 'user'
+    })
   },
   methods: {
     // 设置筛选类型时间
@@ -43,8 +50,7 @@ export default {
         AskTimeS: typesData.timesData.startTime || '',
         AskTimeE: typesData.timesData.endTime || ''
       }
-      await this.$refs.selectType.getSelectList()
-      await this.$refs.list.getInitList()
+      this.getAllData()
     },
     // 隐藏选择器
     showSelect () {
@@ -59,7 +65,19 @@ export default {
     setTimeStatus (type) {
       this.timeType = type
       this.$refs.list.getInitList()
+    },
+    async getAllData () {
+      await this.$refs.selectType.getSelectList()
+      await this.$refs.list.getInitList()
     }
+  },
+  created () {
+    console.log('userData:', this.userData)
+    this.orgId = this.userData.OrgID // '11091315263400010000'
+    this.orgName = this.userData.OrgName // '银河世纪花园'
+    this.employeeJobId = this.userData.PositionID // '11091316310300010000'
+    this.employeeId = this.userData.memberId // '20'
+    this.userId = this.userData.UserID
   }
 }
 </script>

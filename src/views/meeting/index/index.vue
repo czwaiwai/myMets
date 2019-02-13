@@ -36,7 +36,8 @@ export default {
   computed: {
     ...mapGetters({
       locationData: 'getMeetingLocation',
-      statusColor: 'getStatusColor'
+      statusColor: 'getStatusColor',
+      userData: 'user'
     })
   },
   methods: {
@@ -58,7 +59,7 @@ export default {
     async getStatusColor () {
       this.$indicator.open({spinnerType: 'fading-circle'})
       let res = await this.$xml('UserCS_MeetingUseStatusColor', {
-        'OrgID': this.$route.query.orgId
+        'OrgID': this.userData.OrgID
       })
       this.$indicator.close()
       console.log(res)
@@ -74,16 +75,21 @@ export default {
         return
       }
       let location = {
-        orgId: this.$route.query.orgId,
-        orgName: this.$route.query.orgName,
-        employeeId: this.$route.query.employeeId,
-        employeeJobId: this.$route.query.employeeJobId
+        // orgId: this.$route.query.orgId,
+        // orgName: this.$route.query.orgName,
+        // employeeId: this.$route.query.employeeId,
+        // employeeJobId: this.$route.query.employeeJobId
+        orgId: this.userData.OrgID,
+        orgName: this.userData.OrgName,
+        employeeId: this.userData.memberId,
+        employeeJobId: this.userData.PositionID
       }
       this.$store.commit('setMeetingLocation', location)
       console.log('locationData', this.locationData)
     }
   },
   created () {
+    console.log(this.userData)
     this.getLocationData()
     this.getStatusColor()
   }

@@ -111,7 +111,7 @@ export default {
 <style lang="scss" scoped>
   .selectType {
     position: relative;
-    z-index: 8;
+    // z-index: 8;
     display: flex;
     height: .88rem;
     padding: .2rem 0;

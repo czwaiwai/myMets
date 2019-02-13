@@ -97,7 +97,7 @@ export default {
           statusName = '否决'
           break
       }
-      console.log('statusName:', statusName)
+      // console.log('statusName:', statusName)
       return statusName
     }
   }

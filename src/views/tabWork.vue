@@ -6,18 +6,24 @@
   <div class="page_bd">
     <div class="scroll">
       <div class="weui-grids light_bg">
-        <a @click="$app.loadView({url: 'http://' + ip +'/ETSmobileApproval/#page=0', type:'shenpi'})" href="javascript:;" class="weui-grid">
+        <a @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_sp.png" alt="">
           </div>
           <p class="weui-grid__label">审批</p>
         </a>
-        <a @click="$app.loadView({url: chaoBiaoUrl, type:'chaobiao', isTitle: '抄表'})"  href="javascript:;" class="weui-grid">
+        <a @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_cb.png"  alt="">
+          </div>
+          <p class="weui-grid__label">抄表</p>
+        </a>
+        <!-- <a @click="$app.loadView({url: chaoBiaoUrl, type:'chaobiao', isTitle: '抄表'})"  href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_cb.png" alt="">
           </div>
           <p class="weui-grid__label">抄表</p>
-        </a>
+        </a> -->
         <a  @click="$app.loadView({url: 'http://' + ip +'/ETSInspection/#page=0', type:'xunjian'})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
@@ -60,7 +66,7 @@
           </div>
           <p class="weui-grid__label">收款</p>
         </a>
-        <a  @click="$app.loadView({url: etsRentUrl, type: 'zulin', isTitle: '租赁'})" href="javascript:;" class="weui-grid">
+        <a  @click="$router.forward('/rentIndex')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_work_zl.png" alt="">
           </div>
@@ -91,12 +97,6 @@
             <img src="../assets/img/work/ic_off_download.png" alt="">
           </div>
           <p class="weui-grid__label">会议室</p>
-        </a>
-        <a @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid">
-          <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_work_cb.png"  alt="">
-          </div>
-          <p class="weui-grid__label">抄表</p>
         </a>
         <a @click="$router.forward('/investmentIndex')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">

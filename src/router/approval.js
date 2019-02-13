@@ -20,25 +20,46 @@ export default [
         meta: {
           title: '详情'
         },
-        component: () => import('@/views/approval/detail')
-      }, {
-        name: 'approvalAction',
-        path: 'approvalAction/:id',
-        meta: {
-          title: ''
-        },
-        component: () => import('@/views/approval/action'),
+        component: () => import('@/views/approval/detail'),
         children: [
           {
-            name: 'approvalResponsibleChoose',
-            path: 'approvalResponsibleChoose',
-            component: () => import('@/views/customerService/responsibleChoose'),
+            name: 'approvalAction',
+            path: 'approvalAction',
             meta: {
-              title: '责任人'
-            }
+              title: ''
+            },
+            component: () => import('@/views/approval/action'),
+            children: [
+              {
+                name: 'approvalResponsibleChoose',
+                path: 'approvalResponsibleChoose',
+                component: () => import('@/views/customerService/responsibleChoose'),
+                meta: {
+                  title: '责任人'
+                }
+              }
+            ]
           }
         ]
       }
+      // {
+      //   name: 'approvalAction',
+      //   path: 'approvalAction/:id',
+      //   meta: {
+      //     title: ''
+      //   },
+      //   component: () => import('@/views/approval/action'),
+      //   children: [
+      //     {
+      //       name: 'approvalResponsibleChoose',
+      //       path: 'approvalResponsibleChoose',
+      //       component: () => import('@/views/customerService/responsibleChoose'),
+      //       meta: {
+      //         title: '责任人'
+      //       }
+      //     }
+      //   ]
+      // }
     ]
   }
 ]

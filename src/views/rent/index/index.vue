@@ -38,7 +38,9 @@ export default {
   computed: {
     ...mapGetters({
       guestStatus: 'getGuestStatus',
-      businessStatus: 'getBusinessStatus'
+      businessStatus: 'getBusinessStatus',
+      userData: 'user',
+      authData: 'auth'
     })
   },
   methods: {
@@ -89,46 +91,63 @@ export default {
         })
       }
       this.$router.push(`/businessList`)
+    },
+    // 模块权限
+    setAuth () {
+      if (this.authData) {
+        this.showHouse = this.authData['APP_LeaseHouse']
+        this.showGuest = this.authData['APP_LeaseCst']
+        this.showBusiness = this.authData['APP_LeaseOpport']
+      }
+    },
+    // 设置缓存
+    setLocationData () {
+      if (localStorage.locationData) {
+        let locationData = JSON.parse(localStorage.locationData)
+        if (this.userData.OrgID !== locationData.orgData.orgId) {
+          let local = {
+            orgData: {orgName: this.userData.OrgName, orgId: this.userData.OrgID},
+            employeeData: {employeeId: this.userData.memberId, employeeJobId: this.userData.PositionID}
+          }
+          localStorage.locationData = JSON.stringify(local)
+        } else {
+          locationData.employeeData = {employeeId: this.userData.memberId, employeeJobId: this.userData.PositionID}
+          localStorage.locationData = JSON.stringify(locationData)
+        }
+      } else {
+        let local = {
+          // orgData: {orgName: this.$route.query.orgName, orgId: this.$route.query.orgId},
+          // employeeData: {employeeId: this.$route.query.employeeId, employeeJobId: this.$route.query.employeeJobId}
+          orgData: {orgName: this.userData.OrgName, orgId: this.userData.OrgID},
+          employeeData: {employeeId: this.userData.memberId, employeeJobId: this.userData.PositionID}
+        }
+        localStorage.locationData = JSON.stringify(local)
+      }
     }
   },
   created () {
-    if (this.$route.query.mode) {
-      let mode = this.$route.query.mode
-      if (mode.indexOf('APP_LeaseHouse') > -1) {
-        this.showHouse = true
-      } else {
-        this.showHouse = false
-      }
-      if (mode.indexOf('APP_LeaseCst') > -1) {
-        this.showGuest = true
-      } else {
-        this.showGuest = false
-      }
-      if (mode.indexOf('APP_LeaseOpport') > -1) {
-        this.showBusiness = true
-      } else {
-        this.showBusiness = false
-      }
-    }
-    if (localStorage.locationData) {
-      let locationData = JSON.parse(localStorage.locationData)
-      if (this.$route.query.orgId !== locationData.orgData.orgId) {
-        let local = {
-          orgData: {orgName: this.$route.query.orgName, orgId: this.$route.query.orgId},
-          employeeData: {employeeId: this.$route.query.employeeId, employeeJobId: this.$route.query.employeeJobId}
-        }
-        localStorage.locationData = JSON.stringify(local)
-      } else {
-        locationData.employeeData = {employeeId: this.$route.query.employeeId, employeeJobId: this.$route.query.employeeJobId}
-        localStorage.locationData = JSON.stringify(locationData)
-      }
-    } else {
-      let local = {
-        orgData: {orgName: this.$route.query.orgName, orgId: this.$route.query.orgId},
-        employeeData: {employeeId: this.$route.query.employeeId, employeeJobId: this.$route.query.employeeJobId}
-      }
-      localStorage.locationData = JSON.stringify(local)
-    }
+    console.log('userData', this.userData)
+    console.log('authData:', this.authData)
+    this.setAuth()
+    this.setLocationData()
+    // if (this.$route.query.mode) {
+    //   let mode = this.$route.query.mode
+    //   if (mode.indexOf('APP_LeaseHouse') > -1) {
+    //     this.showHouse = true
+    //   } else {
+    //     this.showHouse = false
+    //   }
+    //   if (mode.indexOf('APP_LeaseCst') > -1) {
+    //     this.showGuest = true
+    //   } else {
+    //     this.showGuest = false
+    //   }
+    //   if (mode.indexOf('APP_LeaseOpport') > -1) {
+    //     this.showBusiness = true
+    //   } else {
+    //     this.showBusiness = false
+    //   }
+    // }
   }
 }
 </script>

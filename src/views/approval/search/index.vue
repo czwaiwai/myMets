@@ -86,6 +86,7 @@ export default {
     // 到详情
     toDetail (item) {
       this.$store.commit('setSelectItemData', item)
+      this.$store.commit('setApprovalSearchKey', this.searchKey)
       this.$router.push({
         name: 'approvalDetail',
         params: {
@@ -175,7 +176,7 @@ export default {
         }
       }
       this.hasHttp = true
-      if (res.data.length < this.pageSize - 1) {
+      if (res.data.Syswin.length < this.pageSize - 1) {
         this.showTip = false
       } else {
         this.showTip = true
@@ -190,6 +191,7 @@ export default {
     }
   },
   mounted () {
+    console.log('key:', this.key)
     if (this.key) {
       this.searchKey = this.key
       this.search()

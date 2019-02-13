@@ -8,14 +8,22 @@
           <textarea class="text" maxlength="200" v-model="value" placeholder="请输入意见（选填）"></textarea>
           <!-- <p class="num">{{value.length}}/200</p> -->
         </div>
+        <div class="padding15 pictrues">
+          <div class="weui-uploader">
+            <div class="weui-uploader__bd">
+              <ul class="weui-uploader__files" id="uploaderFiles">
+                <li v-for="(item, index) in imgs" :key="index" class="weui-uploader__file" style="overflow:hidden;position:relative;">
+                  <img preview  style="max-width:100%;width:100%;height:100%;" :src="'data:image/jpg;base64,'+ item" >
+                  <a @click="imgDelClick(index)" class="img_del_btn">-</a>
+                </li>
+              </ul>
+              <div @click="getPic" v-show="imgs.length <= 2" class="weui-uploader__input-box"></div>
+            </div>
+          </div>
+        </div>
         <div class="items" v-show="$route.query.type==2" @click.stop="setStatus">
           <span class="name">打回节点执行后，直接回到本节点</span>
           <i class="iconfont icon" :class="status?'blue icon-kaiguanguan':'grad icon-kaiguanguan1'"></i>
-        </div>
-        <div class="items" @click.stop="">
-          <span class="name">附件</span>
-          <i class="iconfont icon-fujian icon"></i>
-          <input type="file" ref="ifile" class="file">
         </div>
         <div class="items" @click.stop="toChoisePerson" v-show="$route.query.appointNext>0">
           <span class="name">选择下一节点执行人</span>
@@ -57,7 +65,10 @@ export default {
       title: '',
       value: '',
       status: false,
-      person: {}
+      person: {},
+      isAndroid: false,
+      imgs: [],
+      isHttp: false
     }
   },
   methods: {
@@ -83,6 +94,9 @@ export default {
       this.status = !this.status
     },
     async submit () {
+      if (this.isHttp) {
+        return
+      }
       this.$refs.dialog.show()
     },
     // 点击左边按钮
@@ -96,28 +110,53 @@ export default {
     },
     // 提交
     async upData () {
-      let res = await this.$xml('UserAudit_SubmitAuditTaskResult', {
-        'EmployeeId': this.$parent.employeeId,
-        'TaskId': this.$route.params.id,
+      let obj = {
+        'EmployeeId': this.$parent.$parent.userId,
+        'TaskId': this.$parent.detailId,
         'Result': this.$route.query.type,
         'Reason': this.value
-        // 'IsBackToThisNode': this.status ? '1' : '0',
-        // 'NextExecutorId': this.person.EmployeeID,
-        // 'AppointNext': '',
-        // 'Image1': '',
-        // 'Image2': '',
-        // 'Image3': '',
-        // 'FieldName1': '',
-        // 'FieldName2': '',
-        // 'FieldName3': ''
+      }
+      this.imgs.forEach((arr, index) => {
+        obj['Image' + (index + 1)] = arr
+        obj['FieldName' + (index + 1)] = ''
       })
+      console.log(this.person)
+      if (this.$route.query.appointNext > 0) {
+        if (this.person.EmployeeID) {
+          obj.NextExecutorId = this.person.EmployeeID
+        } else {
+          this.$toast('请选择下一节点执行人！')
+          return
+        }
+      }
+      if (this.$route.query.type === 2) {
+        obj.IsBackToThisNode = this.status ? '1' : '0'
+      }
+      this.isHttp = true
+      let res = await this.$xml('UserAudit_SubmitAuditTaskResult', obj)
+      // 'IsBackToThisNode': this.status ? '1' : '0',
+      // 'NextExecutorId': this.person.EmployeeID,
+      // 'AppointNext': '',
+      // 'Image1': '',
+      // 'Image2': '',
+      // 'Image3': '',
+      // 'FieldName1': '',
+      // 'FieldName2': '',
+      // 'FieldName3': ''
       console.log(res)
       if (res.status === 200 || res.status === '200') {
-        if (res.data.Syswin[0].status === 0 || res.data.Syswin[0].status === '0') {
+        if (res.data) {
           this.$toast(res.data.Syswin[0].msg)
+          setTimeout(() => {
+            this.isHttp = false
+          }, 2000)
         } else {
-          this.$toast(res.data.Syswin[0].msg)
-          this.$router.go(-1)
+          this.$toast(res.msg)
+          this.$parent.$parent.getAllData()
+          setTimeout(() => {
+            this.isHttp = false
+            this.$router.go(-2)
+          }, 2000)
         }
       }
     },
@@ -137,12 +176,23 @@ export default {
           this.value = '打回'
           break
       }
+    },
+    async getPic () {
+      // this.imgs.push('iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII=')
+      let img = await this.$app.getPic()
+      this.imgs.push(img)
+      this.$previewRefresh()
+    },
+    imgDelClick (index) {
+      this.imgs.splice(index, 1)
     }
   },
   created () {
     this.setInit()
-    this.nav.orgId = this.$parent.orgId
-    this.nav.orgName = this.$parent.orgName
+    this.nav.orgId = this.$parent.$parent.orgId
+    this.nav.orgName = this.$parent.$parent.orgName
+    var u = navigator.userAgent
+    this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
   }
 }
 </script>
@@ -162,6 +212,23 @@ export default {
       &::placeholder{
         color: #999;
       }
+    }
+  }
+  .pictrues{
+    background: #fff;
+    border-top: 1px solid #ededed;
+    .img_del_btn {
+      width:20px;
+      height:20px;
+      display:block;
+      position: absolute;
+      top:0;
+      right:0;
+      z-index:2;
+      color:#FFF;
+      text-align:center;
+      background:url('../../../assets/img/tool/close_img.png') no-repeat;
+      background-size:cover;
     }
   }
   .items{

@@ -137,6 +137,14 @@ export default {
     },
     // 确定选择
     confirm () {
+      if (this.dateTimes.startTime && this.dateTimes.endTime) {
+        let startTime = new Date(this.dateTimes.startTime)
+        let endTime = new Date(this.dateTimes.endTime)
+        if (startTime > endTime) {
+          this.$toast('结束时间不能小于开始时间！')
+          return
+        }
+      }
       this.selectData.typesData = this.typesData
       this.selectData.timesData = this.dateTimes
       console.log('selectData:', this.selectData)
@@ -294,6 +302,7 @@ export default {
     },
     // 到搜索
     toSearch () {
+      this.$store.commit('setApprovalSearchKey', '')
       this.$router.push({
         name: `approvalSearch`
       })
@@ -343,9 +352,10 @@ export default {
     position: relative;
     top: 0;
     left: 0;
-    z-index: 9;
+    // z-index: 9;
     padding: 0.2rem 0.3rem;
     border-bottom: 1px solid #e9e9e9;
+    background: #F0F2F4;
     .header-wrap{
       float: left;
       width: 6.08rem;

@@ -14,6 +14,9 @@
         <div class="btn" @click.stop="toAction(1)">同意</div>
       </div>
     </div>
+    <transition name="page">
+      <router-view/>
+    </transition>
   </div>
 </template>
 <script>
@@ -33,7 +36,8 @@ export default {
         SubForms: [],
         Attachments: []
       },
-      techProcessList: []
+      techProcessList: [],
+      detailId: ''
     }
   },
   computed: {
@@ -47,7 +51,7 @@ export default {
       let res = await this.$xml('UserAudit_GetAuditTaskDetail', {
         'AuditTaskId': this.$route.params.id
       })
-      console.log(res)
+      // console.log(res)
       if (res.status === 200 || res.status === '200') {
         res.data[0].SubForms.forEach(arr => {
           arr.DataFormFields.forEach(a => {
@@ -57,7 +61,7 @@ export default {
         this.detailData = res.data[0]
         this.setTechProcessList()
       }
-      console.log(this.detailData)
+      // console.log(this.detailData)
     },
     // 拼接审批流程列表
     setTechProcessList () {
@@ -90,9 +94,9 @@ export default {
     toAction (type) {
       this.$router.push({
         name: 'approvalAction',
-        params: {
-          id: this.$route.params.id
-        },
+        // params: {
+        //   id: this.$route.params.id
+        // },
         query: {
           type: type,
           appointNext: this.detailData.IsAppointNext
@@ -101,8 +105,9 @@ export default {
     }
   },
   created () {
+    this.detailId = this.$route.params.id
     this.getData()
-    console.log('itemData', this.itemData)
+    // console.log('itemData', this.itemData)
   }
 }
 </script>
