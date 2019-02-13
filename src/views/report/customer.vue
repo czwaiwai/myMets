@@ -163,6 +163,7 @@ import {mapGetters} from 'Vuex'
 import mapReady from '@/utils/getEchars'
 // import sleep from '@/utils/sleep'
 import {option1, option2, option3, option4} from './child/customerMap'
+import qs from 'qs'
 export default {
   name: 'customer',
   data () {
@@ -183,8 +184,9 @@ export default {
   },
   created () {
     console.log(this.user, 'user--')
-    this.orgId = this.user.OrgID
-    this.orgName = this.user.OrgName
+    let searchObj = qs.parse(location.search.replace('?', ''))
+    this.orgId = searchObj.projectID || this.user.OrgID
+    this.orgName = searchObj.projectName || this.user.OrgName
     this.financeDate = (new Date()).format('yyyy-MM')
     this.getMap()
     this.getPageData()

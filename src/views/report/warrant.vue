@@ -5,7 +5,7 @@
     </mt-header>
     <div class="weui-flex">
       <div class="weui-flex__item">
-        <search v-model="search" url="UserCS_GetRectificationGrpInfo"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
+        <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入地块名称" searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
       </div>
       <div @click="filterVisible = true" class="padding-right padding-left5"><i class="main_color iconfont icon-shaixuan" style="font-size: 23px; line-height: 43px;"></i></div>
     </div>
@@ -150,7 +150,7 @@ export default {
       console.log(res.data)
     },
     routeDetail (item) {
-      this.$router.push(this.$route.path + '/warrantDetail/' + item.propertyRightCardTypeId)
+      this.$router.push(this.$route.path + '/warrantDetail/' + item.propertyRightCardTypeId + '?name=' + item.propertyRightCardTypeName)
     },
     setCharOption (data) {
       let option = {

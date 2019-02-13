@@ -14,7 +14,7 @@
 </template>
 <script>
 export default {
-  name: 'navbar',
+  name: 'insNumber',
   props: {
     value: String,
     min: String,

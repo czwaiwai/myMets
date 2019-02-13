@@ -101,6 +101,7 @@
 <script>
 import ready from '@/utils/getEchars'
 import {mapGetters} from 'Vuex'
+import qs from 'qs'
 export default {
   name: 'rentCash',
   // components: {Toast, Datetime, Popup},
@@ -130,9 +131,14 @@ export default {
   created () {
     // this.resource = this.$route.query.resource === 'zujin' ? '租金统计' : '出租率统计'
     // this.Resource = this.$route.query.resource
-    this.orgId = this.user.OrgID
-    this.orgName = this.user.OrgName
-    this.positionId = this.user.PositionID
+    // this.orgId = this.user.OrgID
+    // this.orgName = this.user.OrgName
+    // this.positionId = this.user.PositionID
+    let searchObj = qs.parse(location.search.replace('?', ''))
+    this.orgId = searchObj.projectID || this.user.OrgID
+    this.orgName = searchObj.projectName || this.user.OrgName
+    this.positionId = searchObj.PositionId || this.user.PositionID
+
     this.projectIds = [this.orgId]
     this.resource = '出租率统计'
     this.Resource = 'chuzulv'

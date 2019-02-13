@@ -44,7 +44,7 @@
                 </p>
               </div>
               <div v-for="(sub,subIndex) in item.value" :key="subIndex" class="right_text_item flex_center item_center " >
-                <p class="num_text text-center"><span :style="sub.color?'color:'+sub.color:''">{{sub.value}}</span></p>
+                <p class="num_text text-center"><span :style="sub.color?'color:'+sub.color:''">{{sub.value}}</span><span v-html="sub.unit"></span></p>
                 <p class="sub_text text-center">{{sub.name}}</p>
               </div>
             </div>
@@ -94,7 +94,6 @@ export default {
       userId: searchObj.UserId || this.user.UserID,
       positionId: searchObj.PositionId || this.user.PositionID
     }
-    console.log(searchObj, 'qs 转换----------------------------------------------------------------')
     this.getPageData()
   },
   activated () {
@@ -153,16 +152,16 @@ export default {
         {name: '租赁分析', urlName: 'report_rent', color: '#0DC8BD', icon: 'icon-zulinhetong-', auth: 'SL_APP_ReportRent', value: []},
         {name: '特色园分析', urlName: 'report_features', color: '#FCB546', icon: 'icon-fenxi', auth: 'SL_APP_ReportTSY', value: []},
         {name: '租金', urlName: 'report_rentCash', color: '#41BFE9', icon: 'icon-shoukuan', auth: 'JLT_APP_ReportRentReprises', value: []},
-        {name: '出租率', urlName: 'report_rentRate', color: '#FA7466', icon: 'icon-chuzu', auth: 'JLT_APP_ReportRentRentalRate', value: []}
+        {name: '出租率', urlName: 'report_rentRate', color: '#FA7466', icon: 'icon-chuzu', auth: 'JLT_APP_ReportRentRentalRate', value: []},
+        {name: '合同统计', urlName: 'report_agreement', color: '#46A9FC', icon: 'icon-tubiaozhizuomoban_fuzhi', auth: 'DQ_APP_ContractStatistics', value: []},
+        {name: '租赁统计', urlName: 'report_countLease', color: '#FA8A2C', icon: 'icon-zu', auth: 'DQ_APP_LeasingStatistics', value: []},
+        {name: '权证统计', urlName: 'report_warrant', color: '#0DC88C', icon: 'icon-hetong', auth: 'DQ_APP_WarrantStatistics', value: []}
       ]
       let rightArr = [
         {name: '客服服务', urlName: 'report_customer', color: '#46A9FC', icon: 'icon-kehufuwu', auth: 'APP_ReportWork', value: []},
         {name: '设备管理', urlName: 'report_device', color: '#FA8A2C', icon: 'icon-shebeiguanli', auth: 'APP_ReportEquip', value: []},
         {name: '项目收款', urlName: 'report_cash', color: '#0DC88C', icon: 'icon-shoukuan', auth: 'APP_ReportCollection', value: []},
-        {name: '项目出租', urlName: 'report_lease', color: '#FCBA46', icon: 'icon-chuzu', auth: 'APP_ReportRent', value: []},
-        {name: '合同统计', urlName: 'report_agreement', color: '#46A9FC', icon: 'icon-tubiaozhizuomoban_fuzhi', auth: 'DQ_APP_ContractStatistics', value: []},
-        {name: '租赁统计', urlName: 'report_countLease', color: '#FA8A2C', icon: 'icon-zu', auth: 'DQ_APP_LeasingStatistics', value: []},
-        {name: '权证统计', urlName: 'report_warrant', color: '#0DC88C', icon: 'icon-hetong', auth: 'DQ_APP_WarrantStatistics', value: []}
+        {name: '项目出租', urlName: 'report_lease', color: '#FCBA46', icon: 'icon-chuzu', auth: 'APP_ReportRent', value: []}
       ]
       leftArr.forEach(item => {
         item.show = resData.some(sub => sub.Content === item.auth)
@@ -182,24 +181,16 @@ export default {
     },
     // 右侧的内容
     async rightInfo () {
-      let resArr = await Promise.all([this.$xml('UserCS_ReportGlobalReport', {
+      let res = await this.$xml('UserCS_ReportGlobalReport', {
         orgID: this.user.OrgID,
         financeDate: (new Date()).format('yyyy-MM')
-      }), this.$xml('UserCS_ReportGrpStatistics', {
-        Etime: (new Date()).format('yyyy-MM')
-      })])
-      // console.log(res.data, '---right--')
-      let arr = resArr[0].data
-      let obj = resArr[1].data[0]
-      console.log(arr)
+      })
+      let arr = res.data
       let values = [
-        [{name: '满意度', value: this.formatNum(arr[0].VisitRate), color: '#FA4E2C', unit: '<span class="unit_text">分</span>'}, {name: '关闭率', value: this.formatNum(arr[0].CloseRate), unit: '%'}],
+        [{name: '满意度', value: this.formatInt(arr[0].VisitRate), color: '#FA4E2C', unit: '<span class="unit_text">分</span>'}, {name: '关闭率', value: this.formatInt(arr[0].CloseRate), unit: '%'}],
         [{name: '设备完好率', value: this.formatNum(arr[1].EquiRate), unit: '%'}],
-        [{name: '本月帐期已收', value: this.formatNum((arr[2].PaidMoney)), color: '#FA4E2C', unit: '<span class="unit_text">万元</span>'}, {name: '收缴率', value: this.formatNum(arr[2].PaidRate), unit: '%'}],
-        [{name: '出租数量', value: arr[3].HouseCount, color: '#FA4E2C', unit: '<span class="unit_text">套</span>'}, {name: '出租率', value: this.formatNum(arr[3].CZRate), unit: '%'}],
-        [{name: '合同统计', value: obj.ContractCount, color: '#FA4E2C', unit: '<span class="unit_text"></span>'}],
-        [{name: '租赁统计', value: obj.LeasingCount, unit: '<span class="unit_text">㎡</span>'}],
-        [{name: '权证统计', value: obj.TotalCount, color: '#FA4E2C', unit: '<span class="unit_text"></span>'}]
+        [{name: '本月帐期已收', value: this.formatNum((arr[2].PaidMoney)), color: '#FA4E2C', unit: '<span class="unit_text">万元</span>'}, {name: '收缴率', value: this.formatInt(arr[2].PaidRate), unit: '%'}],
+        [{name: '出租数量', value: arr[4].HouseCount, color: '#FA4E2C', unit: '<span class="unit_text">套</span>'}, {name: '出租率', value: this.formatInt(arr[4].CZRate), unit: '%'}]
       ]
       return values
     },
@@ -210,12 +201,19 @@ export default {
       let resData = res.data.Summery[0]
       console.log(resData, 'Summery')
       let values = [
-        [{name: '管理面积', value: this.formatNum(resData['BudArea']), unit: '%'}],
-        [{name: '当月应收', value: this.formatNum(resData['PriPaid']), color: '#FA4E2C', unit: '%'}],
-        [{name: '已出租面积', value: this.formatNum(resData['RentArea']), unit: '%'}],
-        [{name: '平均租金', value: this.formatNum(resData['AvgPaid']), color: '#FA4E2C', unit: '%'}]
+        [{name: '管理面积', value: this.formatNum(resData['BudArea']), unit: '<span class="unit_text">㎡</span>'}],
+        [{name: '当月应收', value: this.formatNum(resData['PriPaid']), color: '#FA4E2C', unit: ''}],
+        [{name: '已出租面积', value: this.formatNum(resData['RentArea']), unit: '<span class="unit_text">㎡</span>'}],
+        [{name: '平均租金', value: this.formatNum(resData['AvgPaid']), color: '#FA4E2C', unit: ''}]
       ]
       return values
+    },
+    formatInt (numStr) {
+      if (numStr) {
+        return parseInt(numStr)
+      } else {
+        return '0'
+      }
     },
     formatNum (numStr) {
       if (numStr) {
@@ -226,14 +224,25 @@ export default {
     },
     // 左侧下方的内容
     async leftbottomInfo () {
-      let res = await this.$xml('UserCS_ReportLeaseSituation', {
+      let resArr = await Promise.all([this.$xml('UserCS_ReportLeaseSituation', {
         OrgID: this.user.OrgID,
         Etime: (new Date()).format('yyyy-MM-dd')
-      })
+      }), this.$xml('UserCS_ReportGrpStatistics', {
+        Etime: (new Date()).format('yyyy-MM')
+      })])
+      // let res = await this.$xml('UserCS_ReportLeaseSituation', {
+      //   OrgID: this.user.OrgID,
+      //   Etime: (new Date()).format('yyyy-MM-dd')
+      // })
+      let res = resArr[0]
+      let obj = resArr[1].data[0]
       let data = res.data.pop()
       let values = [
         [{name: '实际租金', value: this.formatNum(data.ZJmoney)}, {name: '目标租金', value: this.formatNum(data.MSR)}],
-        [{name: '实际出租率', color: '#FA4E2C', value: this.formatNum(data.CZL), unit: '%'}, {name: '目标出租率', color: '#FA4E2C', value: this.formatNum(data.MCZL), unit: '%'}]
+        [{name: '实际出租率', color: '#FA4E2C', value: this.formatNum(data.CZL), unit: '%'}, {name: '目标出租率', color: '#FA4E2C', value: this.formatNum(data.MCZL), unit: '%'}],
+        [{name: '合同数量', value: obj.ContractCount, color: '#FA4E2C', unit: '<span class="unit_text">份</span>'}],
+        [{name: '已租面积', value: this.formatNum(obj.LeasingCount), unit: '<span class="unit_text">㎡</span>'}],
+        [{name: '权证数量', value: obj.TotalCount, color: '#FA4E2C', unit: '<span class="unit_text">个</span>'}]
       ]
       return values
     }

@@ -11,6 +11,11 @@ export default function (Vue) {
     if (!value) return ''
     return (new Date(value)).format('yyyy-MM')
   })
+  // 截取.net时间格式中的月份
+  Vue.filter('sMonth', function (value) {
+    if (!value) return ''
+    return value.substring(0, 2)
+  })
   Vue.filter('dateChina', function (value) {
     if (!value) return ''
     let arr = ['年', '月', '日']

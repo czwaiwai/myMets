@@ -10,7 +10,7 @@
             <p><i style="font-size:30px;vertical-align: middle;" class="iconfont padding-right" :class="orderStateObj.fontClass"></i><span class="fs16">{{orderStateObj.text}}</span></p>
           </div>
 
-        <div class="weui-media-box weui-media-box_small-appmsg">
+          <div class="weui-media-box weui-media-box_small-appmsg">
               <div class="weui-cells" @click="routeTracking">
                   <a class="weui-cell weui-cell_access" href="javascript:;">
                       <div class="weui-cell__hd padding-right">
@@ -70,11 +70,17 @@
                 </div>
               </div>
             </div>
-        </div>
+          </div>
           <div  class="light_bg padding-v padding15-h margin-bottom">
             <p v-for="(item,index) in timeList" :key="index"><span class="dark_99">{{item.Name}}：</span><span>{{item.Content}}</span></p>
           </div>
-
+        </div>
+        <div v-if="detail.WorkOrdState === 'WOSta_Close'" class="page_ft light_bg weui-flex" >
+          <div class="fs16 padding-left15" style="line-height:42px;">已评价</div>
+          <div class="weui-flex__item padding-top5"><star v-model="score" :readonly="true"></star></div>
+        </div>
+        <div v-else class="page_ft light_bg text-right padding-right15 padding-top5">
+          <button :key="index" v-for="(buttonItem,index) in buttons" @click="btnAction(work, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
         </div>
         <transition name="page">
           <router-view/>
@@ -84,13 +90,18 @@
 </template>
 <script>
 import voiceIcon from '@/components/voiceIcon'
+import customerMixin from './customerMixin'
+import Star from './child/star'
 export default {
   name: 'inspectionDetail',
+  mixins: [customerMixin],
   components: {
-    voiceIcon
+    voiceIcon,
+    Star
   },
   data () {
     return {
+      score: 5,
       work: {},
       list: [],
       detail: {},
@@ -98,16 +109,20 @@ export default {
       newTracks: {},
       tracks: [],
       isVoice: false,
+      workItem: {},
       feedbackList: []
+      // showButtons: function () {}
     }
   },
   created () {
+    // 从原生来的数据
+    this.isTransferBtn = true // 是否显示转单按钮
+    this.isMaterial = true // 材料申请权限
+  
     this.nav = this.$parent.nav
-    this.work = this.$parent.workItem
-    this.getPageData()
-    this.getWorkTime()
-    this.getTracking()
-    this.getFeedback()
+    this.work = this.workItem = this.$parent.workItem
+    // this.showButtons = this.$parent.showButtons
+    this.init()
   },
   computed: {
     trackStr () {
@@ -137,9 +152,59 @@ export default {
         case 'WOSta_Close':obj = {text: '完成', fontClass: 'icon-wanchengdu'}; break
       }
       return obj
+    },
+    buttons () {
+      let workOrderState = this.detail.WorkOrdState
+      let bHandle = this.work.bHandle
+      let isFromSkill = this.work.IsFromSkill
+      /*
+        WOSta_Sub    : 已提交
+        WOSta_Proc   : 处理中
+        WOSta_Finish : 已完成
+        WOSta_Visit  : 已评价
+        WOSta_Close  : 已关闭
+        */
+      if (workOrderState === 'WOSta_Sub') {
+        if (bHandle === '1') {
+          if (isFromSkill === '1') {
+            return ['抢单']
+          } else {
+            if (this.isTransferBtn) {
+              return ['转单', '接单']
+            } else {
+              return ['接单']
+            }
+          }
+        }
+      } else if (workOrderState === 'WOSta_Proc') {
+        if (this.isMaterial && this.isTransferBtn) {
+          return ['转单', '材料申请', '反馈']
+        } else if (!this.isMaterial && this.isTransferBtn) {
+          return ['转单', '反馈']
+        } else if (this.isMaterial && !this.isTransferBtn) {
+          return ['材料申请', '反馈']
+        } else {
+          return ['反馈']
+        }
+      } else if (workOrderState === 'WOSta_Finish') {
+        return this.isTransferBtn ? ['转单', '完成回访'] : ['完成回访']
+      } else if (workOrderState === 'WOSta_Visit') {
+        return ['回访详情', '关闭工单']
+      } else {
+        return []
+      }
     }
   },
   methods: {
+    init () {
+      this.getPageData()
+      this.getWorkTime()
+      this.getTracking()
+      this.getFeedback()
+    },
+    reload () {
+      this.init()
+    },
     async getPageData () {
       let url = '/ets/syswin/smd/userCSGetWorkOrdDetailSyswinH5'
       let res = await this.$http.post(url, {
@@ -187,6 +252,10 @@ export default {
     },
     routeTracking () {
       this.$router.push({path: this.$route.path + '/customerTracking'})
+    },
+    async closeOrder (item) {
+      await this.$parent.closeOrder(item)
+      this.init()
     },
     // 最新服务跟踪
     newTrack () {

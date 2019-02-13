@@ -1,12 +1,12 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <mt-header title="合同统计详情">
+    <mt-header :title="title">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header>
     <div class="weui-flex">
       <div class="weui-flex__item">
-        <search v-model="search" url="UserCS_GetRectificationGrpInfo"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
+        <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入地块名称"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
       </div>
       <div @click="filterVisible = true"   class="padding-right padding-left5"><i class="main_color iconfont icon-shaixuan" style="font-size: 23px; line-height: 43px;"></i></div>
     </div>
@@ -16,12 +16,12 @@
     </filter-modal>
     <page-list ref="pageList" :params="pageConfig.params" ulClass="table_line light_bg"  :config="this.pageConfig" @listDone="listDone">
       <template slot-scope="scope" >
-          <div  class="weui-flex table_item ">
+          <div  @click="showDetailHandle(scope.item, scope.$index)" class="weui-flex table_item ">
             <div class="col " style="width:1.8rem;">
               <p class="dot_line">{{scope.item.cstName}}</p></div>
             <div class="col weui-flex__item text-center">{{scope.item.stime | dateMonth}} ~ {{scope.item.etime | dateMonth}}</div>
             <div class="col " style="width: 1.3rem;">{{scope.item.status}}</div>
-            <div @click="showDetailHandle(scope.item, scope.$index)"  class="padding-right">
+            <div   class="padding-right">
               <div class="item_center direct_icon " :class="scope.item.show?'weui_icon_download':''" >
                 <i class="iconfont   icon-shouqi " ></i>
               </div>
@@ -31,15 +31,15 @@
             <div v-if="scope.item.show"  class="table_item_info">
                 <div class="weui-flex padding-v">
                   <dl class="weui-flex__item">
-                    <dt class="fs15">{{scope.item.budArea}}</dt>
+                    <dt class="fs15">{{scope.item.budArea}}㎡</dt>
                     <dd class="dark_99  fs12">租赁建筑面积</dd>
                   </dl>
                   <dl class="weui-flex__item border-left-half">
-                    <dt class="fs15">{{scope.item.yearsRent | float2}}</dt>
+                    <dt class="fs15">{{scope.item.yearsRent | float2}}<small>元</small></dt>
                     <dd class="dark_99  fs12">合同年租金</dd>
                   </dl>
                   <dl class="weui-flex__item border-left-half">
-                    <dt class="fs15">{{scope.item.rentUse | float2}}</dt>
+                    <dt class="fs15">{{scope.item.rentUse | float2}}<small>元</small></dt>
                     <dd class="dark_99  fs12">平均单价</dd>
                   </dl>
                 </div>
@@ -61,6 +61,7 @@ export default {
   components: {Search, PageList, FilterModal, FilterDateEnd, FilterRadio},
   data () {
     return {
+      title: '合同统计详情',
       search: '',
       filterForm: {
         date: '',
@@ -75,6 +76,7 @@ export default {
     }
   },
   created () {
+    this.title = this.$route.query.name
     this.grpId = this.$route.params.id
     this.pageConfig = this.pageListConfig({pageSize: 20})
   },
@@ -102,6 +104,9 @@ export default {
         let dateArr = form.date.split(',')
         this.pageConfig.params['Stime'] = dateArr[0]
         this.pageConfig.params['Etime'] = dateArr[1]
+      } else {
+        this.pageConfig.params['Stime'] = ''
+        this.pageConfig.params['Etime'] = ''
       }
       this.$refs.pageList.refresh()
     },

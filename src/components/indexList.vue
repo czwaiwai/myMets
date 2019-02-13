@@ -3,7 +3,6 @@
     <mt-index-section v-for="(item,index) in charList" :key="index"  :index="item.name">
       <mt-cell @click.native="itemClick(sub)" v-for="(sub,index) in item.value" :key="index" :title="sub.EmployeeName" :value="sub.PositionName" >
         <span class="icon_color" slot="icon" >{{sub.char}}</span>
-
       </mt-cell>
     </mt-index-section>
   </mt-index-list>
@@ -110,19 +109,19 @@ export default {
   margin-right:10px;
 }
 
-.mint-indexlist-content > .mint-indexsection  .mint-cell:nth-of-type(n) .icon_color {
+.mint-indexsection  .mint-cell:nth-of-type(n) .icon_color {
   background: #4da9ec;
 }
-.mint-indexlist-content > .mint-indexsection  .mint-cell:nth-of-type(2n) .icon_color {
+.mint-indexsection  .mint-cell:nth-of-type(2n) .icon_color {
   background: #16c295;
 }
-.mint-indexlist-content > .mint-indexsection  .mint-cell:nth-of-type(3n) .icon_color {
+.mint-indexsection  .mint-cell:nth-of-type(3n) .icon_color {
   background: #f3725d;
 }
-.mint-indexlist-content > .mint-indexsection  .mint-cell:nth-of-type(4n) .icon_color {
+.mint-indexsection  .mint-cell:nth-of-type(4n) .icon_color {
   background: #f7b55e;
 }
-.mint-indexlist-content > .mint-indexsection  .mint-cell:nth-of-type(5n) .icon_color {
+.mint-indexsection  .mint-cell:nth-of-type(5n) .icon_color {
   background: #9b89b9;
 }
 

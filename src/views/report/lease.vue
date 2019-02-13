@@ -191,7 +191,7 @@
 import {mapGetters} from 'Vuex'
 import {Popup} from 'mint-ui'
 import ready from '@/utils/getEchars'
-
+import qs from 'qs'
 export default {
   name: 'lease',
   data () {
@@ -222,8 +222,9 @@ export default {
   created () {
     console.log(this.user, 'user--')
     this.endDate = this.startDate = new Date()
-    this.orgId = this.user.OrgID
-    this.orgName = this.user.OrgName
+    let searchObj = qs.parse(location.search.replace('?', ''))
+    this.orgId = searchObj.projectID || this.user.OrgID
+    this.orgName = searchObj.projectName || this.user.OrgName
     if (this.srcollRmove) {
       // 如果存在事件监听移除事件
       this.srcollRmove()

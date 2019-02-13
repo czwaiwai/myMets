@@ -127,12 +127,14 @@ export default (function () {
     glob = window.callData
     callObj.isAndroid = true
     callObj.isIOS = false
+    document.body.classList.add('android')
   }
   if (os.iphone) {
     tmp = 'postMessage'
     obj.getPic = 'Native_Js_camera|1'
     callObj.isAndroid = false
     callObj.isIOS = true
+    document.body.classList.add('ios')
   }
 
   function isJSON (str) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="app_bd">
+  <div class="app_bd only_report"><!-- 单独上线报表 -->
     <div class="tab-bd">
         <transition name="fade">
           <keep-alive include="">
@@ -7,7 +7,7 @@
           </keep-alive>
         </transition>
     </div>
-    <div class="tab-bar">
+    <div  class="tab-bar">
       <mt-tabbar v-model="selected">
         <mt-tab-item id="tabHome">
           <img v-if="selected === 'tabHome'"  slot="icon" src="../assets/img/tab/ic_tab_message_selected.png">
@@ -169,6 +169,21 @@ export default {
 }
 </script>
 <style lang="scss">
+// 兼容报表发版---start
+// #app> .app_bd.only_report > .tab-bd {
+//   height:100%;
+// }
+// .only_report .tab-bar{
+//   display:none;
+// }
+// .ios .page_bd {
+//   padding-bottom: 45px;
+// }
+// .ios .filter_modal .page_ft{
+//   height:90px;
+//   padding-bottom: 45px;
+// }
+// 兼容报表发版-----end
   .mint-tabbar {
     background-color: #FFF;
     padding-top: 1px;

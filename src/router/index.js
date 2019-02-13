@@ -63,12 +63,14 @@ export default new Router({
         if (Vue.isPos) {
           return '/home'
         } else {
-          // 会议室
           return '/tab/work'
+          // 报表
+          // return '/tab/report'
           // // 投资性物业
           // return '/investmentIndex'
           // 整改对比
           // return '/comparedBuild'
+          // 会议室
           // return '/meeting'
           // return '/monitor/monitorInspection'
         }

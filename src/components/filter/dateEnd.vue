@@ -6,12 +6,12 @@
       </dt>
       <dd class="weui-flex">
         <div @click="dateShow(dateArr[0], 'start')"  class="date_input clearfix">
-          <input readonly  :value="dateArr[0]">
+          <input readonly  :value="dateArr[0]" placeholder="开始时间">
           <i class="float_right padding-right iconfont icon-calendar icon-gengduo1"></i>
         </div>
         <div class="padding5"></div>
         <div @click="dateShow(dateArr[1], 'end')"  class="date_input clearfix">
-          <input readonly  :value="dateArr[1]">
+          <input readonly  :value="dateArr[1]" placeholder="结束时间">
           <i class="float_right padding-right iconfont icon-calendar icon-gengduo1"></i>
         </div>
       </dd>
@@ -33,6 +33,7 @@ export default {
   },
   created () {
     this.formItemId = this.dateId
+    this.saveVal = this.value
   },
   computed: {
     dateArr () {
@@ -48,6 +49,9 @@ export default {
     }
   },
   methods: {
+    filterReset () {
+      this.$emit('input', this.saveVal)
+    },
     validateFilterItem () {
       if (this.dateArr[0] && !this.dateArr[1]) {
         return '请填写结束日期'

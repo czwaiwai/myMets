@@ -6,7 +6,7 @@
     </mt-header>
     <div class="weui-flex">
       <div class="weui-flex__item">
-         <search v-model="search" url="UserCS_GetRectificationGrpInfo"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
+         <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入地块名称"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
       </div>
       <div  @click="filterVisible = true"  class="padding-right padding-left5"><i class="main_color iconfont icon-shaixuan" style="font-size: 23px; line-height: 43px;"></i></div>
     </div>
@@ -33,7 +33,7 @@
           <div  class="weui-flex table_item ">
             <!-- <div class="flex_item bf"></div> -->
             <div @click="routeDetail(scope.item)" class="col main_color dot_line" style="width: 40%;" >{{scope.item.grpName}}</div>
-            <div class="col weui-flex__item">正常合同数:{{scope.item.grpCount}}</div>
+            <div @click="showDetailHandle(scope.item, scope.$index)" class="col weui-flex__item">正常合同数:{{scope.item.grpCount}}</div>
             <div @click="showDetailHandle(scope.item, scope.$index)"  class="padding-right">
               <div class="item_center direct_icon " :class="scope.item.show?'weui_icon_download':''" >
                 <i class="iconfont   icon-shouqi " ></i>
@@ -45,15 +45,15 @@
               <div class="weui-flex padding-v">
                 <dl class="weui-flex__item">
                   <dt class="fs15">{{scope.item.beOverdue}}</dt>
-                  <dd class="dark_99  fs12">9月前逾期合同</dd>
+                  <dd class="dark_99  fs12">{{scope.item.yqsj | sMonth}}月前逾期合同</dd>
                 </dl>
                 <dl class="weui-flex__item border-left-half">
                   <dt class="fs15">{{scope.item.dueTime}}</dt>
-                  <dd class="dark_99  fs12">10月-11月到期合同</dd>
+                  <dd class="dark_99  fs12">{{scope.item.x1time | sMonth}}月-{{scope.item.x2time | sMonth}}月到期合同</dd>
                 </dl>
                 <dl class="weui-flex__item border-left-half">
                   <dt class="fs15">{{scope.item.dueTimeX}}</dt>
-                  <dd class="dark_99  fs12">12月后到期合同</dd>
+                  <dd class="dark_99  fs12">{{scope.item.x3time | sMonth}}月后到期合同</dd>
                 </dl>
               </div>
               <div class="padding15-h padding5-v border-top-half">
@@ -90,7 +90,7 @@ export default {
     }
   },
   created () {
-    this.currDate = (new Date()).format('yyyy-MM-dd')
+    this.currDate = this.filterForm.date = (new Date()).format('yyyy-MM-dd')
     this.pageConfig = this.pageListConfig({pageSize: 20, Etime: this.currDate})
   },
   methods: {
@@ -114,6 +114,7 @@ export default {
     filterSubmit (form) {
       console.log(form, '过滤的结果')
       this.currDate = form.date
+      this.pageConfig.params.Etime = form.date
       this.$refs.pageList.refresh()
     },
     pageListConfig (params) {
@@ -137,7 +138,6 @@ export default {
       }
     },
     showDetailHandle (item, index) {
-      console.log(item, index, '----showDetailHandle')
       if (item.orgName) {
         item.show = !item.show
       } else {
@@ -157,7 +157,7 @@ export default {
       console.log(res.data)
     },
     routeDetail (item) {
-      this.$router.push(this.$route.path + '/agreementDetail/' + item.grpID)
+      this.$router.push(this.$route.path + '/agreementDetail/' + item.grpID + '?name=' + item.grpName)
     }
   }
 }

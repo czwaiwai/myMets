@@ -74,31 +74,44 @@ export default {
       return 'checkbox_' + Date.now() + '' + parseInt(Math.random() * 1000) + '' + parseInt(Math.random() * 1000) + '' + parseInt(Math.random() * 1000)
     }
   },
-  watch: {
-    value: {
-      immediate: true,
-      handler: function (val) {
-        console.log(val, '执行了')
-        if (val !== undefined) {
-          let arr = val.split(',')
-          this.validList.forEach(item => {
-            if (arr.indexOf(item.value) > 0) {
-              item.checked = true
-            }
-          })
-        }
-      }
-    }
-  },
+  // watch: {
+  //   value: {
+  //     immediate: true,
+  //     handler: function (val) {
+  //       console.log(val, '执行了')
+  //       if (val !== undefined) {
+  //         let arr = val.split(',')
+  //         this.validList.forEach(item => {
+  //           if (arr.indexOf(item.value) > 0) {
+  //             item.checked = true
+  //           }
+  //         })
+  //       }
+  //     }
+  //   }
+  // },
   created () {
     this.formItemId = this.checkboxId
     this.validList = this.formatData(this.dataList)
     this.shortList = this.showList
+    this.saveVal = this.value
   },
   methods: {
     // '设置了组件的初始值'
     activeFilter () {
       let val = this.value
+      if (val !== undefined) {
+        let arr = val.split(',')
+        this.validList.forEach(item => {
+          if (arr.indexOf(item.value) > 0) {
+            item.checked = true
+          }
+        })
+      }
+    },
+    // 重置组件
+    filterReset () {
+      let val = this.saveVal
       if (val !== undefined) {
         let arr = val.split(',')
         this.validList.forEach(item => {

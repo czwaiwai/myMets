@@ -6,7 +6,7 @@
     <div class="weui-flex">
       <div class="weui-flex__item">
         <!-- <search v-model="search"></search> -->
-        <search v-model="search" url="UserCS_GetRectificationGrpInfo"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
+        <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入地块名称"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
       </div>
       <div @click="filterVisible = true" class="padding-right padding-left5"><i class="main_color iconfont icon-shaixuan" style="font-size: 23px; line-height: 43px;"></i></div>
     </div>
@@ -77,19 +77,29 @@ export default {
       currDate: '',
       filterVisible: false,
       filterForm: {
-        date: '2012-01-01,2019-01-31'
+        date: ''
       },
       pageConfig: {}
     }
   },
   created () {
     this.mapReady = mapReady()
-    // new Date()
-    this.filterForm.date = ''
+    // let curr = new Date()
+    let dateStr = new Date().format('yyyy-MM')
+    this.filterForm.date = dateStr + '-01,' + dateStr + '-' + this.getDays()
     this.mapNeedInit = true
-    this.pageConfig = this.pageListConfig({pageSize: 20})
+    this.pageConfig = this.pageListConfig({
+      pageSize: 20,
+      Stime: dateStr + '-01',
+      Etime: dateStr + '-' + this.getDays()
+    })
   },
   methods: {
+    getDays () {
+      var date = new Date()
+      var monthDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+      return monthDate.getDate()
+    },
     searchRes (item) {
       console.log(item, 'searchRes')
       this.pageConfig.params.GrpID = item.ID
@@ -139,9 +149,9 @@ export default {
           ...params
         },
         format: function (data) {
-          // console.log(data, '---------------------------------')
-          // console.log(data, 'what---???')
-
+          if (typeof data === 'string') {
+            return []
+          }
           return that.$toLower(data)
         }
       }

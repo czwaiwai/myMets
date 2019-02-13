@@ -4,4 +4,5 @@
 /*.js
 /src/utils/md5.js
 /src/utils/dateFormat.js
+/src/utils/accounting.js
 /test/unit/coverage/

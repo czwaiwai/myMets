@@ -5,19 +5,11 @@
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header>
     <div class="page_bd">
-      <div class="light_bg padding15">
-        <p><span class="dark_99">单据编号：</span>{{detail.applyCode}}</p>
-        <p><span class="dark_99">申 领 人：</span>{{detail.applyUser}}</p>
-        <p><span class="dark_99">申领时间：</span>{{detail.applyTime}}</p>
-      </div>
       <div class="weui-panel">
-            <div class="weui-panel__hd">
-              <p class="dark_33 fs15 padding-left" style="border-left:2px solid #3395FF;">材料清单</p>
-            </div>
             <div class="weui-panel__bd">
                 <div class="weui-media-box weui-media-box_small-appmsg">
                     <div class="weui-cells">
-                        <div v-for="(sub,subIndex) in detail.materialList" :key="subIndex" class="weui-cell " href="javascript:;">
+                        <div v-for="(sub,subIndex) in list" :key="subIndex" class="weui-cell " href="javascript:;">
                             <div class="weui-cell__hd"></div>
                             <div class="weui-cell__bd weui-cell_primary">
                               <p class="fs14">{{sub.materialName}}</p>
@@ -28,7 +20,7 @@
                             </div>
                             <div class="weui-cell__ft fs14">
                               <span class="error_color">￥{{sub.price | formatMoney}}</span>
-                              <span  class="inline-block dark_33" style="width:50px;">X{{sub.planNum}}</span>
+                              <span  class="inline-block dark_33" style="width:50px;">X{{sub.actualNum}}</span>
                             </div>
                         </div>
                     </div>
@@ -38,11 +30,11 @@
     </div>
     <div class="page_ft weui-flex light_bg">
        <div class="padding-h" style="line-height:44px;">
-         共{{detail.materialList.length}}钟,{{detail.planAllNum}}件材料
+         共{{list.length}}钟,{{numAll}}件材料
        </div>
        <div class="weui-flex__item text-right padding-right15">
          <p class="dark_33 fs16" style="line-height:44px;">
-           合计:<span class="error_color">￥{{detail.planAllPrice  | formatMoney}}</span>
+           合计:<span class="error_color">￥{{totalPrice  | formatMoney}}</span>
          </p>
        </div>
     </div>
@@ -54,17 +46,34 @@ export default {
   name: 'repairDetail',
   data () {
     return {
-      detail: {},
-      totalPrice: 0
+      detail: {materialList: []},
+      list: []
+      // totalPrice: 0
     }
   },
   created () {
-    this.totalPrice = this.$parent.totalPrice
-    this.detail = this.$parent.subItem
-    console.log(this.detail, 'detail----')
+    this.work = this.$parent.work
+    this.getPageData()
+  },
+  computed: {
+    // 材料数
+    numAll () {
+      return this.list.reduce((before, item) => before + (item.actualNum - 0), 0)
+    },
+    // 总价
+    totalPrice () {
+      return this.list.reduce((before, item) => before + ((item.price - 0) * (item.actualNum - 0)), 0)
+    }
   },
   methods: {
-
+    async getPageData () {
+      let params = {orgID: this.work.OrgID, wordQuertionID: this.work.WorkQuestionID}
+      let url = '/ets/table/list/userCSGetClaimsInfoH5'
+      let res = await this.$http.post(url, params)
+      if (res.data && res.data[0]) {
+        this.list = this.$toLower(res.data)
+      }
+    }
   }
 }
 </script>

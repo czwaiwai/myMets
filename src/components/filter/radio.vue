@@ -3,7 +3,7 @@
     <dl class="">
       <dt class="weui-flex padding-bottom">
         <div class="weui-flex__item"><slot></slot></div>
-        <div>{{chooseItem.name}}</div>
+        <div style="max-width: 80%;">{{chooseItem.name}}</div>
       </dt>
       <dd>
         <ul class="clearfix">
@@ -21,6 +21,10 @@ export default {
   props: {
     value: String,
     name: String,
+    noAll: {
+      type: Boolean,
+      default: false
+    },
     dataList: {
       type: Array,
       default: () => [
@@ -37,7 +41,6 @@ export default {
   },
   data () {
     return {
-      // activeIndex: 0
     }
   },
   computed: {
@@ -61,7 +64,9 @@ export default {
             value: item
           }
         })
-        list.unshift({name: '全部', value: ''})
+        if (!this.noAll) {
+          list.unshift({name: '全部', value: ''})
+        }
         return list
       } else {
         let list = this.dataList.map(item => {
@@ -70,7 +75,9 @@ export default {
             value: item.value
           }
         })
-        list.unshift({name: '全部', value: ''})
+        if (!this.noAll) {
+          list.unshift({name: '全部', value: ''})
+        }
         return list
       }
     },
@@ -92,8 +99,12 @@ export default {
   },
   created () {
     this.formItemId = this.radioId
+    this.saveVal = this.value
   },
   methods: {
+    filterReset () {
+      this.$emit('input', this.saveVal)
+    },
     chooseClick (item, index) {
       if (item.value === 'more') {
         this.$parent.setList(this.name, this.formatList, this.activeIndex)

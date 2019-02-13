@@ -24,6 +24,7 @@
 <script>
 import {mapGetters} from 'Vuex'
 import Search from '@/components/search'
+import qs from 'qs'
 export default {
   name: 'detail',
   data () {
@@ -34,8 +35,10 @@ export default {
     }
   },
   created () {
-    this.currPro = this.user.OrgID
-    this.currPositionID = this.user.PositionID
+    let searchObj = qs.parse(location.search.replace('?', ''))
+    this.currPro = searchObj.projectID || this.user.OrgID
+    this.currPositionID = searchObj.PositionId || this.user.PositionID
+    this.memberId = searchObj.memberId || this.user.memberId
     this.getPageDataNet()
   },
   components: {
@@ -57,7 +60,7 @@ export default {
     // 原java接口
     async getPageData () {
       console.log(this.user)
-      let res = await this.$http.post('/ets/syswin/smd/userGetOrgIDList', {memberId: this.user.memberId})
+      let res = await this.$http.post('/ets/syswin/smd/userGetOrgIDList', {memberId: this.memberId})
       // this.$http.post(obj)
       console.log(res)
       this.list = res.data
@@ -65,7 +68,7 @@ export default {
     async getPageDataNet () {
       let p0 = 'UserCS_GetPositionIdInfo'
       let res = await this.$xml(p0, {
-        EmployeeID: this.user.memberId
+        EmployeeID: this.memberId
       })
       if (!res.data) return
       let resData = this.$toLower(res.data)

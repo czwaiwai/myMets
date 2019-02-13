@@ -10,7 +10,7 @@
       </div>
       <label @click="$refs.search.focus()" class="weui-search-bar__label" id="searchText">
         <i class="weui-icon-search"></i>
-        <span>搜索</span>
+        <span>{{placeholder}}</span>
       </label>
     </form>
     <a v-show="!noFocus" href="javascript:" @click="searchCancel" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>

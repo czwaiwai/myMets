@@ -106,17 +106,5 @@ export default {
 </script>
 
 <style lang="scss">
-    .img_del_btn {
-      width:20px;
-      height:20px;
-      display:block;
-      position: absolute;
-      top:0;
-      right:0;
-      z-index:2;
-      color:#FFF;
-      text-align:center;
-      background:url('../../assets/img/tool/close_img.png') no-repeat;
-      background-size:cover;
-    }
+
 </style>

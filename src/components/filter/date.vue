@@ -28,6 +28,7 @@ export default {
   },
   created () {
     this.formItemId = this.dateId
+    this.saveVal = this.value
   },
   computed: {
     dateId () {
@@ -35,6 +36,9 @@ export default {
     }
   },
   methods: {
+    filterReset () {
+      this.$emit('input', this.saveVal)
+    },
     dateShow () {
       this.$parent.dateOpen(this.name)
     }

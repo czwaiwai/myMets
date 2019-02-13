@@ -98,6 +98,7 @@
 import {mapGetters} from 'Vuex'
 import mapReady from '@/utils/getEchars'
 import {option1, option2} from './child/cashMap'
+import qs from 'qs'
 export default {
   name: 'cash',
   data () {
@@ -116,9 +117,9 @@ export default {
     }
   },
   created () {
-    console.log(this.user, 'user--')
-    this.orgId = this.user.OrgID
-    this.orgName = this.user.OrgName
+    let searchObj = qs.parse(location.search.replace('?', ''))
+    this.orgId = searchObj.projectID || this.user.OrgID
+    this.orgName = searchObj.projectName || this.user.OrgName
     this.currentMonth = (new Date()).format('yyyy-MM')
     this.dateList = this.lastMonth(this.currentMonth)
     this.getPageData()

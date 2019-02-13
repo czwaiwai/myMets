@@ -5,24 +5,18 @@
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
         </mt-header>
         <div class="page_bd">
-          <div class="weui-cells weui-cells_form" style="margin-top:0;">
+          <div class="weui-cells " style="margin-top:0;">
             <div class="weui-cell">
                 <div class="weui-cell__hd">客服满意度</div>
                 <div class="weui-cell__bd">
-                    <span>
-                      <i class="iconfont icon-star" ></i>
-                      <i class="iconfont icon-star" ></i>
-                      <i class="iconfont icon-star" ></i>
-                      <i class="iconfont icon-star" ></i>
-                      <i class="iconfont icon-wujiaoxingkong" ></i>
-                    </span>
+                  <star v-model="formObj.star"></star>
                 </div>
-                <div class="weui-cell__ft">说明文字</div>
+                <div class="weui-cell__ft"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="客户的评价是..." rows="3"></textarea>
-                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                    <textarea v-model="formObj.content" class="weui-textarea" maxlength="200" placeholder="客户的评价是..." rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>{{formObj.content.length}}</span>/200</div>
                 </div>
             </div>
             <div class="weui-cell weui-cell_select weui-cell_select-after">
@@ -30,23 +24,29 @@
                     <label for="" class="weui-label">回访方式</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <select class="weui-select text-right" name="select2">
+                    <select v-model="formObj.way"  dir="rtl" class="weui-select " name="select2">
                       <option v-for="(item,index) in options" :key="index" :value="item.value">{{item.showText}}</option>
                     </select>
                 </div>
             </div>
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a @click="$refs.picker.open()" class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__bd">
                     <p>回访时间</p>
                 </div>
-                <div class="weui-cell__ft">2019-01-18 6-16:28</div>
+                <div class="weui-cell__ft">{{formObj.datetime}}</div>
             </a>
           </div>
           <div class="weui-cells weui-cells_form">
             <div class="weui-cell weui-cell_switch">
                 <div class="weui-cell__bd">有效</div>
                 <div class="weui-cell__ft">
-                    <input class="weui-switch" type="checkbox">
+                    <input class="weui-switch" v-model="formObj.isValid" type="checkbox">
+                </div>
+            </div>
+            <div v-if="!formObj.isValid" class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea v-model="formObj.failContent" class="weui-textarea" maxlength="200" placeholder="无效原因是..." rows="2"></textarea>
+                    <div class="weui-textarea-counter"><span>{{formObj.failContent.length}}</span>/200</div>
                 </div>
             </div>
           </div>
@@ -54,14 +54,26 @@
             <button class="ins_submit_btn" @click="submit">提交回访</button>
           </div>
         </div>
+        <mt-datetime-picker class="mydate"  @confirm="dateConfirm" ref="picker" type="datetime" v-model="pickerValue" year-format="{value}年"  month-format="{value}月"  date-format="{value}日" hour-format="{value}时" minute-format="{value}分" ></mt-datetime-picker>
     </div>
 </div>
 </template>
 <script>
+import Star from '../child/star'
 export default {
-  name: 'repairDetail',
+  name: 'visit',
+  components: {Star},
   data () {
     return {
+      formObj: {
+        star: 0,
+        content: '',
+        way: '',
+        failContent: '',
+        datetime: '',
+        isValid: true
+      },
+      pickerValue: new Date(),
       nav: {},
       work: {},
       detail: {},
@@ -71,36 +83,74 @@ export default {
   created () {
     this.nav = this.$parent.nav
     this.work = this.$parent.workItem
+    this.formObj.datetime = (new Date()).format('yyyy-MM-dd hh:mm')
     this.getPageData()
   },
+  computed: {
+    isDetail () {
+      return this.$route.path.indexOf('/customerService/detail') > -1
+    }
+  },
   methods: {
+    // getBigParent () {
+    //   let name = ''
+    //   let parent = this.$parent
+    //   while (parent && name !== 'customer') {
+    //     parent = parent.$parent
+    //     name = parent.$options.componentName
+    //   }
+    //   return parent
+    // },
     async getPageData () {
       let url = '/ets/table/list/userRentGetOptionList'
       let res = await this.$http.post(url, {
         typeName: 'ReturnVisitWay'
       })
-      this.options = res.data
+      if (res.data && res.data[0]) {
+        this.options = res.data
+        this.formObj.way = this.options[0].value
+      }
       console.log(res, 'ReturnVisitWay')
     },
     async submit () {
+      console.log(this.formObj, '-----')
+      if (!this.formObj.star) {
+        return this.$toast('请先选择满意度')
+      }
+      let scoreArr = [10, 30, 70, 80, 90]
+      let satisfactionArr = ['NotSatisfaction1', 'NotSatisfaction1', 'Satisfaction3', 'Satisfaction2', 'Satisfaction1']
       let url = '/ets/syswin/smd/userServiceInsertReturnVisit'
       let res = await this.$http.post(url, {
-        userName: '',
+        userName: this.nav.userName,
         object: '',
-        objectName: '',
-        returnVisitWay: '',
-        totalScore: '',
-        failureCause: '',
+        objectName: this.nav.userName,
+        returnVisitWay: this.formObj.way,
+        totalScore: scoreArr[this.formObj.star - 1],
+        failureCause: this.formObj.isValid ? '' : this.formObj.failContent, // 无效原因
         returnVisitType: 'WorkVisit',
-        returnSatisfaction: '',
-        satisfiedVisit: '',
-        workOrdID: '',
-        visitState: '',
-        returnVisitDate: '',
-        opUser: '',
-        memo: ''
+        returnSatisfaction: satisfactionArr[this.formObj.star - 1],
+        satisfiedVisit: this.formObj.isValid ? 1 : 2,
+        workOrdID: this.work.WorkOrdID,
+        visitState: this.formObj.isValid ? 1 : 2,
+        returnVisitDate: this.formObj.datetime,
+        opUser: this.nav.memberId,
+        memo: this.formObj.content
       })
+      this.$toast('回访成功')
+      this.$root.back()
+      if (!this.isDetail) {
+        this.$parent.refresh()
+      }
       console.log(res)
+    },
+    dateConfirm (date) {
+      this.formObj.datetime = date.format('yyyy-MM-dd hh:mm')
+    }
+  },
+  destroyed () {
+    if (this.isDetail) {
+      this.$parent.reload && this.$parent.reload() // 在详情页时reload
+      this.$parent.$parent.refresh()
     }
   }
 }

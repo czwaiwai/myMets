@@ -12,8 +12,8 @@
             <transition name="filter">
               <div v-if="isList" class="page_modal">
                 <div class="page">
-                  <div class="page_hd">
-                    <a @click.stop="radioBack" href="javascript:void(0)">
+                  <div class="page_hd"  style="height: 34px;line-height: 34px;padding-left: 10px;">
+                    <a @click.stop="radioBack" class="main_color"  href="javascript:void(0)">
                       <i class="iconfont icon-fanhui1 icon" ></i>
                      <span>返回</span>
                     </a>
@@ -37,8 +37,8 @@
           <transition name="filter">
             <div v-if="isCheckList" class="page_modal">
               <div class="page">
-                <div class="page_hd">
-                  <a @click.stop="checkBack" href="javascript:void(0)">
+                <div class="page_hd" style="height: 34px;line-height: 34px;padding-left: 10px;">
+                  <a @click.stop="checkBack" class="main_color" href="javascript:void(0)">
                     <i class="iconfont icon-fanhui1 icon" ></i>
                     <span>返回</span>
                   </a>
@@ -60,7 +60,7 @@
             </div>
           </transition>
           <div class="page_ft weui-flex">
-            <button class="filter_btn weui-flex__item filter_cancel_btn">重置</button>
+            <button @click="reset" class="filter_btn weui-flex__item filter_cancel_btn">重置</button>
             <button @click="confirm" class="filter_btn weui-flex__item  filter_ok_btn">确定</button>
           </div>
         </div>
@@ -244,6 +244,11 @@ export default {
         return true
       }
     },
+    reset () {
+      this.$children.forEach(item => {
+        item.filterReset && item.filterReset()
+      })
+    },
     confirm () {
       if (this.validatesItem()) {
         this.$emit('submit', this.form)
@@ -263,7 +268,7 @@ export default {
     right: 0;
     left: 0;
     bottom: 0;
-     z-index: 2;
+    z-index: 2;
     background: rgba(0, 0, 0, 0.35);
   }
   & .filter_modal {
