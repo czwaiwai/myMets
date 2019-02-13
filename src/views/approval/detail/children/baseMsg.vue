@@ -32,7 +32,7 @@ export default {
   },
   data () {
     return {
-      showMsg: false
+      showMsg: true
     }
   },
   methods: {
