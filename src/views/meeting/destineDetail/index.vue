@@ -154,7 +154,14 @@ export default {
       })
       this.imgReay = true
       if (res.data && res.data.length > 0) {
-        this.roomImgs = this.$toLower(res.data[0]).imageList
+        // this.roomImgs = this.$toLower(res.data[0]).imageList
+        let ip = this.$store.getters.ip
+        this.roomImgs = this.$toLower(res.data[0]).imageList.map(item => {
+          if (ip) {
+            item.Path = 'http://' + ip + item.Path
+          }
+          return item
+        })
       }
     },
     // 设置预订结果

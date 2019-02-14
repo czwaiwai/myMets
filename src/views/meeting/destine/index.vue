@@ -173,7 +173,14 @@ export default {
       console.log('res:', res)
       this.isLoading = false
       if (res.data) {
-        this.list = res.data || []
+        let ip = this.$store.getters.ip
+        this.list = res.data.map(item => {
+          if (ip) {
+            item.Url = 'http://' + ip + item.Url
+          }
+          return item
+        })
+        // this.list = res.data || []
       }
       // Indicator.close()
       // this.showLoadTip = true

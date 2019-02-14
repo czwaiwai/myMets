@@ -199,6 +199,13 @@ export default {
       })
       console.log(res)
       if (res.data.length) {
+        let ip = this.$store.getters.ip
+        res.data = res.data.map(item => {
+          if (ip) {
+            item.Url = 'http://' + ip + item.Url
+          }
+          return item
+        })
         if (this.page === 1) {
           this.dataList = res.data
         } else {

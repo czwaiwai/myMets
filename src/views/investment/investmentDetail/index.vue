@@ -187,6 +187,13 @@ export default {
       console.log(res.data)
       if (res.data.length) {
         this.detailData = res.data[0]
+        let ip = this.$store.getters.ip
+        this.detailData.ImageList = this.detailData.ImageList.map(item => {
+          if (ip) {
+            item.Url = 'http://' + ip + item.Url
+          }
+          return item
+        })
         this.center = {
           lng: (res.data[0].Longitude || 0) - 0,
           lat: (res.data[0].Latitude || 0) - 0

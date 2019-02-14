@@ -33,7 +33,14 @@ export default {
       console.log('UserCS_GetMeettingRoomImageInfo:', res)
       this.$indicator.close()
       if (res.data.length && res.data[0].ImageList && res.data[0].ImageList.length) {
-        this.imageList = res.data[0].ImageList
+        // this.imageList = res.data[0].ImageList
+        let ip = this.$store.getters.ip
+        this.imageList = res.data[0].ImageList.map(item => {
+          if (ip) {
+            item.Path = 'http://' + ip + item.Path
+          }
+          return item
+        })
         this.$previewRefresh()
       }
     }
