@@ -5,31 +5,31 @@
       <div class="page_bd _content">
         <div class="top">
           <div class="selectItem">
-            <span class="name">会议室编号</span>
+            <span class="name">会议室编号：</span>
             <span class="value textLeft">{{room.meetNumber}}</span>
           </div>
           <div class="selectItem">
-            <span class="name">参与座位数</span>
+            <span class="name">参与座位数：</span>
             <span class="value textLeft">{{room.involvSeats}}</span>
           </div>
           <div class="selectItem">
-            <span class="name">主席台座位</span>
+            <span class="name">主席台座位：</span>
             <span class="value textLeft">{{room.rostrumSeats}}</span>
           </div>
           <div class="selectItem">
-            <span class="name">需提前天数</span>
+            <span class="name">需提前天数：</span>
             <span class="value textLeft">{{room.advanceDay}}天</span>
           </div>
           <div class="selectItem">
-            <span class="name">所属部门</span>
+            <span class="name">所属部门：</span>
             <span class="value textLeft">{{room.department}}</span>
           </div>
           <div class="selectItem">
-            <span class="name">单价</span>
+            <span class="name">单价：</span>
             <span class="value textLeft">{{room.unitPrice}}元</span>
           </div>
           <div class="selectItem noneBb">
-            <span class="name">计费方式</span>
+            <span class="name">计费方式：</span>
             <span class="value textLeft">{{room.billing}}</span>
           </div>
         </div>
