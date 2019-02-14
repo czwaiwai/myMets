@@ -5,7 +5,7 @@
   </div>
   <div class="page_bd">
     <mt-loadmore :auto-fill="true" style="height:100%" :top-method="loadTop"  ref="loadmore">
-      <div class="weui-cells" style="margin-top:0;">
+      <!-- <div class="weui-cells" style="margin-top:0;">
         <div @click="$app.loadView(item.url)" v-for="item in list" :key="item.GDType" class="weui-cell">
           <div class="weui-cell__hd" style="position: relative;margin-right: 10px;width:50px;height:50px;">
             <img :src="item.img" style="width: 50px;display: block">
@@ -19,6 +19,25 @@
             <p class="" v-show="item.num != '0'"><span class="weui-badge" style="margin-left: 5px;">{{item.num}}</span></p>
           </div>
         </div>
+      </div> -->
+      <div class="weui-cells" style="margin-top:0;">
+        <div @click="routeTo(item)" v-for="item in list" :key="item.GDType" class="weui-cell">
+          <div class="weui-cell__hd" style="position: relative;margin-right: 10px;width:50px;height:50px;">
+            <img :src="item.img" style="width: 50px;display: block">
+          </div>
+          <div class="weui-cell__bd">
+            <p>{{item.name}}</p>
+            <p style="font-size: 13px;color: #888888;">{{item.GDQuesDesc}}</p>
+          </div>
+          <div class="weui-cell__ft">
+            <p class="fs12">{{item.GDCreateTime}}</p>
+            <p class="" v-show="item.num != '0'"><span class="weui-badge" style="margin-left: 5px;">{{item.num}}</span></p>
+          </div>
+        </div>
+      </div>
+      <div v-if="list.length === 0" class="weui-loadmore">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
       </div>
     </mt-loadmore>
     <!--<router-link to="/detail">-->
@@ -72,7 +91,14 @@ export default {
         this.$refs.loadmore.onTopLoaded()
       })
     },
-
+    routeTo (item) {
+      console.log(item)
+      if (item.url.url.indexOf('http') > -1) {
+        this.$app.loadView(item.url)
+      } else {
+        this.$router.forward(item.url.url)
+      }
+    },
     // async getPageData1 () {
     //
     //   console.log(res, '----哈哈哈--')
@@ -97,8 +123,12 @@ export default {
         './static/tabHome/msg_list_icon_maintain.png'
       ]
       let urlArr = [
-        {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'},
-        {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
+        // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'},
+        // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
+        // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
+        // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
+        {url: `/workOrder/customerService`, type: 'kefugongdan'},
+        {url: `/workOrder/customerService?workPosFrom=Equipment`, type: 'weixiugongdan'},
         {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
         {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
       ]

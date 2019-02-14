@@ -147,7 +147,12 @@ export default {
         'TypeStr': this.currIndex
       })
       if (res.data && res.data[0]) {
-        this.list = res.data[0].ImageList
+        this.list = res.data[0].ImageList.map(item => {
+          if (this.$store.getters.ip) {
+            item.Path = 'http://' + this.$store.getters.ip + item.Path
+          }
+          return item
+        })
         this.$previewRefresh()
       } else {
         this.list = []

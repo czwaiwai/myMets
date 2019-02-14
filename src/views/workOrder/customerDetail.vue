@@ -1,7 +1,7 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <mt-header title="巡检详情">
+        <mt-header :title="title">
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
         </mt-header>
         <div class="page_bd">
@@ -75,13 +75,15 @@
             <p v-for="(item,index) in timeList" :key="index"><span class="dark_99">{{item.Name}}：</span><span>{{item.Content}}</span></p>
           </div>
         </div>
-        <div v-if="detail.WorkOrdState === 'WOSta_Close'" class="page_ft light_bg weui-flex" >
-          <div class="fs16 padding-left15" style="line-height:42px;">已评价</div>
-          <div class="weui-flex__item padding-top5"><star v-model="score" :readonly="true"></star></div>
-        </div>
-        <div v-else class="page_ft light_bg text-right padding-right15 padding-top5">
-          <button :key="index" v-for="(buttonItem,index) in buttons" @click="btnAction(work, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
-        </div>
+        <template v-if="!monitor">
+          <div v-if="detail.WorkOrdState === 'WOSta_Close'" class="page_ft light_bg weui-flex" >
+            <div class="fs16 padding-left15" style="line-height:42px;">已评价</div>
+            <div class="weui-flex__item padding-top5"><star v-model="score" :readonly="true"></star></div>
+          </div>
+          <div v-else class="page_ft light_bg text-right padding-right15 padding-top5">
+            <button :key="index" v-for="(buttonItem,index) in buttons" @click="btnAction(work, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
+          </div>
+        </template>
         <transition name="page">
           <router-view/>
         </transition>
@@ -102,6 +104,7 @@ export default {
   data () {
     return {
       score: 5,
+      title: '客服详情',
       work: {},
       list: [],
       detail: {},
@@ -110,7 +113,8 @@ export default {
       tracks: [],
       isVoice: false,
       workItem: {},
-      feedbackList: []
+      feedbackList: [],
+      monitor: false
       // showButtons: function () {}
     }
   },
@@ -118,7 +122,13 @@ export default {
     // 从原生来的数据
     this.isTransferBtn = true // 是否显示转单按钮
     this.isMaterial = true // 材料申请权限
-  
+    this.monitor = this.$route.query.monitor || false
+    this.workPosFrom = this.$parent.workPosFrom
+    if (this.workPosFrom === 'Resource') {
+      this.title = '客服详情'
+    } else {
+      this.title = '维修详情'
+    }
     this.nav = this.$parent.nav
     this.work = this.workItem = this.$parent.workItem
     // this.showButtons = this.$parent.showButtons
@@ -213,8 +223,21 @@ export default {
         employeeid: this.nav.userName,
         nativeDict: this.work.nativeDict
       })
-      this.detail = res.data[0]
-      this.$previewRefresh()
+      if (res.data && res.data[0]) {
+        let ip = this.$store.getters.ip
+        let detail = res.data[0]
+        if (detail.Voice && ip) {
+          detail.Voice = 'http://' + ip + detail.Voice
+        }
+        detail.ImageList.map(item => {
+          if (ip) {
+            item.Path = 'http://' + ip + item.Path
+          }
+          return item
+        })
+        this.detail = detail
+        this.$previewRefresh()
+      }
       console.log(res)
     },
     // 工单进度查询
@@ -247,7 +270,15 @@ export default {
         orgid: this.nav.orgId,
         wordQuertionID: this.work.WorkQuestionID
       })
-      this.feedbackList = res.data
+      if (res.data && res.data[0]) {
+        let ip = this.$store.getters.ip
+        this.feedbackList = res.data.map(item => {
+          if (ip) {
+            item.Path = 'http://' + ip + item.Path
+          }
+          return item
+        })
+      }
       this.$previewRefresh()
     },
     routeTracking () {
@@ -256,6 +287,10 @@ export default {
     async closeOrder (item) {
       await this.$parent.closeOrder(item)
       this.init()
+    },
+    setPerson (item) {
+      this.$parent.setPerson(item)
+      this.$root.back()
     },
     // 最新服务跟踪
     newTrack () {

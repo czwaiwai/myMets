@@ -156,6 +156,9 @@ export default {
       let a = (this.formObj.labourCost || 0) - 0
       let b = (this.formObj.materialCostSum || 0) - 0
       return Math.round((a + b) * 100) / 100
+    },
+    isDetail () {
+      return this.$route.path.indexOf('/customerService/detail') > -1
     }
   },
   methods: {
@@ -313,7 +316,10 @@ export default {
       let res = await this.$http.post(url, params)
       this.$toast('反馈成功')
       this.$root.back()
-      this.$parent.refresh && this.$parent.refresh()
+      if (!this.isDetail) {
+        this.$parent.refresh()
+      }
+      //   this.$parent.refresh && this.$parent.refresh()
       console.log(res)
     }
   },
@@ -321,6 +327,10 @@ export default {
     // 清空roundTime
     if (this.roundTime) {
       clearTimeout(this.roundTime)
+    }
+    if (this.isDetail) {
+      this.$parent.reload && this.$parent.reload() // 在详情页时reload
+      this.$parent.$parent.refresh()
     }
   }
 }

@@ -15,7 +15,7 @@
         <div class="page_bd">
           <ul class="type_ul">
 
-            <li v-for="(item, index) in list" :key="item.index">
+            <li v-for="(item, index) in list" :key="index">
               <div @click="itemClick(item, index)" class="title">
                 <i class="iconfont icon-wenjianjia padding-right"></i>{{item.Name}}
                 <i class="iconfont float_right " :class="index === activeIndex?'icon-shouqi':'icon-xiala'"></i>
@@ -26,7 +26,7 @@
                     <i class="iconfont icon-qingdan padding-right"></i>{{sub.EquiName}}
                   </li>
                   <template v-if="item.EquiList.length > 0">
-                   <li v-for="(sub, subIndex ) in item.EquiList"  @click="setSelectDevice(item)" :key="subIndex">
+                   <li v-for="(sub, subIndex ) in item.EquiList"  @click="setSelectDevice(item)" :key="'sub'+subIndex">
                      <i class="iconfont icon-qingdan padding-right"></i>{{sub.Name}}
                      <i class="iconfont float_right icon-xiala"></i>
                    </li>

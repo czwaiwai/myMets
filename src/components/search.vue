@@ -1,11 +1,11 @@
 <template>
 <div>
-  <div class="weui-search-bar " :class="isFocus || noFocus?'weui-search-bar_focusing':''" id="searchBar">
+  <div  class="weui-search-bar " :class="isFocus || noFocus?'weui-search-bar_focusing':''" id="searchBar">
     <form @submit.prevent="submitSearch" class="weui-search-bar__form">
       <div class="weui-search-bar__box">
         <i class="weui-icon-search"></i>
         <!-- v-model="search" -->
-        <input ref="search" :value="value" @input="searchInput" type="search" :placeholder="placeholder"  @focus="inputFocus"  @blur="inputBlur" class="weui-search-bar__input" id="searchInput"  >
+        <input ref="search" :value="value" @input="searchInput"  type="search" :placeholder="placeholder"  @focus="inputFocus"  @blur="inputBlur" class="weui-search-bar__input" id="searchInput"  >
         <a v-show="value" @click="searchClear" href="javascript:" class="weui-icon-clear" id="searchClear"></a>
       </div>
       <label @click="$refs.search.focus()" class="weui-search-bar__label" id="searchText">
@@ -101,13 +101,16 @@ export default {
       if (!this.value) {
         this.$emit('searchCancel')
       } else {
+        this.$emit('searchRes', this.value)
         if (this.url) this.getSearchList(this.value)
       }
     },
     searchClear () {
       this.$emit('input', '')
       this.$emit('searchCancel')
-      this.$refs.search.focus()
+      if (!this.noFocus) {
+        this.$refs.search.focus()
+      }
     },
     searchCancel () {
       this.$emit('input', '')

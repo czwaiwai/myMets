@@ -6,7 +6,7 @@
         <div class="page_bd">
           <form ref="form">
             <div class="customer_service" >
-              <div class="text_wrap" style="position:relative;">
+          <div class="text_wrap" style="position:relative;padding-bottom: 5px;">
                 <textarea v-model="formObj.quesDesc" maxlength="200" :placeholder="titleType+'的内容是...'"></textarea>
                 <div class="weui-flex padding15-h">
                   <div class="weui-flex__item">
@@ -22,8 +22,9 @@
                     <div class="weui-uploader__bd">
                       <ul class="weui-uploader__files" id="uploaderFiles">
                         <li v-for="(item, index) in imgs" :key="index" class="weui-uploader__file" style="overflow:hidden;position:relative;">
-                          <img preview  style="max-width:100%;width:100%;height:100%;" :src="'data:image/jpg;base64,'+ item" >
-                          <a @click="imgDelClick(index)" class="img_del_btn">删除</a>
+                      <img preview  :src="'data:image/jpg;base64,'+ item"  style="max-width:100%;width:100%;height:100%;" >
+                      <a class="img_del_btn" @click="imgDelClick(index)" ></a>
+                      <!--<img src="../../assets/img/tool/close_img.png" >-->
                         </li>
                       </ul>
                       <div @click="getPic" v-show="imgs.length <= 3" class="weui-uploader__input-box"></div>
@@ -33,12 +34,12 @@
                 <span class="txt_nums">{{formObj.quesDesc.length}}/200</span>
               </div>
               <div class="weui-cells weui-cells_form  margin-top">
-                <div v-if="type==='baoshi'" class="weui-cell weui-cell_access">
-                  <div class="weui-cell__hd padding-right15"><i class="iconfont icon-weizhibiaoji" ></i></div>
-                  <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" v-model="this.formObj.workPos"  placeholder="选择地址（必填）">
+            <div v-if="type==='baoshi'" class="weui-cell weui-cell_select padding-left15 ">
+              <div class="weui-cell__hd padding-right15 padding-v"><i class="iconfont icon-weizhibiaoji" ></i></div>
+              <div class="weui-cell__bd padding-v">
+                <input class="weui-input" type="text" v-model="formObj.workPos"  placeholder="选择地址（必填）">
                   </div>
-                  <div style="width:40px;" class="weui-cell__ft" @click="routeTo('locationChoose')" >&nbsp;</div>
+              <div style="width:60px;" class="weui-cell__ft padding-v" @click="routeTo('locationChoose')" >&nbsp;</div>
                 </div>
                 <a  v-if="type==='baoxiu'"  @click="routeTo('deviceChoose')" class="weui-cell weui-cell_access" href="javascript:;">
                   <div class="weui-cell__hd padding-right15"><i class="iconfont icon-shebei" ></i></div>
@@ -76,7 +77,7 @@
                   <div class="weui-cell__bd">
                     <input class="weui-input" v-model="formObj.cstName" type="text" placeholder="请输入报事人名称(必填)">
                   </div>
-                  <div v-if="userList.length > 0"  class="weui-cell__ft" >
+              <div class="weui-cell__ft"  v-if="userList.length > 0">
                     <select class="weui-select" @change="userIndexChange" v-model="userIndex">
                       <option v-for="(user, index) in userList" :key="index" :value='index' >{{user.CstName}}</option>
                     </select>
@@ -108,8 +109,8 @@
             </div>
           </form>
         </div>
-        <div class="page_ft" style="padding: 5px 15px 0 15px;border-top: 1px solid #e5e5e5;height: 50px;">
-          <button class="weui-btn weui-btn_primary"  type="button" @click="submit">提交{{titleType}}</button>
+    <div class="page_ft light_bg" style="padding: 10px 15px 0px;border-top: 1px solid rgb(229, 229, 229);height: 60px;">
+      <button class="weui-btn weui-btn_primary"  type="button" @click="submitXml">提交{{titleType}}</button>
         </div>
         <transition name="page">
           <keep-alive>
@@ -132,7 +133,7 @@
 import { DatetimePicker } from 'mint-ui'
 import {mapGetters} from 'Vuex'
 // import Vue from 'vue'
-import sess from '../utils/sess'
+import sess from '../../utils/sess'
 export default {
   name: 'customerService',
   data () {
@@ -177,6 +178,7 @@ export default {
         opTime: '', // 图3
         image: '', // 图4
         opUser: '', // 语音.
+        memo: '',
         rStartTime: ''
       }
     }
@@ -186,17 +188,28 @@ export default {
   },
   computed: {
     ...mapGetters({
-      'user': 'user'
+      'user': 'user',
+      'ip': 'ip'
     })
   },
   created () {
     // 判断是报事还是报修
     this.deviceOrLocation()
+    if (this.$route.query.type === 'baoxiu') {
+      this.title = '设备'
+      this.titleType = '报修'
+      this.type = 'baoxiu'
+    }
+    if (this.$route.query.type === 'baoshi') {
+      this.title = '客服'
+      this.titleType = '报事'
+      this.type = 'baoshi'
+    }
 
     this.nav = {
       orgId: this.user.OrgID,
       orgName: this.user.OrgName,
-      userName: this.user.userName
+      userName: this.user.UserID
     }
     this.formObj.orgName = this.nav.orgName
     this.formObj.orgId = this.nav.orgId
@@ -280,7 +293,6 @@ export default {
       }
     },
     async getPageData () {
-      console.log('---------------------???---')
       let res = await this.$http.get('/ets/table/list/userRentGetOptionList?typeName=ReceiptMethod')
       console.log(res)
       this.options = res.data
@@ -306,12 +318,14 @@ export default {
     },
     delVoice: function () {
       this.formObj.opUser = ''
+      this.formObj.memo = ''
       this.recTime = ''
     },
     async voiceClick () {
       if (!this.recTime) {
         let mp3 = await this.$app.getRec()
         this.formObj.opUser = mp3.path
+        this.formObj.memo = mp3.duration
         this.recTime = `${mp3.duration}''`
       } else {
         await this.$app.playAudio(this.formObj.opUser)
@@ -409,8 +423,46 @@ export default {
         this.$toast('提交成功')
         setTimeout(() => {
           this.isSendForm = false
-          this.$root.back()
-          // this.$app.back()
+          // this.$root.back()
+          this.$app.back()
+        }, 1500)
+      } catch (err) {
+        console.log(err)
+        this.isSendForm = false
+      }
+    },
+    titleCase (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+      // return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+    },
+    async submitXml () {
+      if (!this.validate()) return
+      if (this.isSendForm) return
+      try {
+        this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS')
+        this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss')
+        this.setImgs()
+        this.isSendForm = true
+        let sendObj = {}
+        let arr = ['RSDate', 'OrdersID', 'WOID', 'WOID', 'QuesTypeID', 'CstID', 'WONoBasicID', 'WONo', 'OrgID', 'RSWay', 'OrdersPositionID']
+        for (let key in this.formObj) {
+          let newkey = arr.find(item => item.toLocaleLowerCase() === key.toLocaleLowerCase())
+          if (newkey) {
+            sendObj[newkey] = this.formObj[key]
+          } else {
+            sendObj[this.titleCase(key)] = this.formObj[key]
+          }
+        }
+        console.log(sendObj, 'this.formObj.userName', '--------------')
+        let res = await this.$xml('UserCS_SaveWorkOrdInfo', sendObj, {
+          p1: this.formObj.userName
+        })
+        console.log(res)
+        this.$toast('提交成功')
+        setTimeout(() => {
+          this.isSendForm = false
+          // this.$root.back()
+          this.$app.back()
         }, 1500)
       } catch (err) {
         console.log(err)
@@ -436,7 +488,7 @@ export default {
   }
   .txt_nums {
     position: absolute;
-    bottom: 0;
+    bottom: 5px;
     right: 15px;
     color: #999;
   }
@@ -474,14 +526,17 @@ export default {
     outline: none;
   }
   .img_del_btn {
-    width:100%;
+      width:20px;
+      height:20px;
     display:block;
     position: absolute;
-    bottom:0;
-    z-index:1;
-    background: rgba(0, 0, 0, 0.35);
+      top:0;
+      right:0;
+      z-index:2;
     color:#FFF;
     text-align:center;
+      background:url('../../assets/img/tool/close_img.png') no-repeat;
+      background-size:cover;
+    }
   }
-}
 </style>

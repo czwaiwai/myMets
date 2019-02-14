@@ -37,6 +37,7 @@ export default {
     play () {
       if (!this.audio) {
         this.audio = this.$refs.audio
+        console.log(this.url)
         this.audio.src = this.url
         this.audio.onended = () => {
           this.$emit('update:isVoice', false)

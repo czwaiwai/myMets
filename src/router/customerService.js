@@ -1,5 +1,5 @@
-// const CustomerService = () => import(/* webpackChunkName:'customerService' */'@/views/customerService/index')
-const CustomerService = () => import(/* webpackChunkName:'customerService' */'@/views/customerService/indexSingle')
+const CustomerService = () => import(/* webpackChunkName:'customerService' */'@/views/customerService/index')
+// const CustomerService = () => import(/* webpackChunkName:'customerService' */'@/views/customerService/indexSingle')
 const LocationChoose = () => import(/* webpackChunkName:'customerService' */'@/views/customerService/locationChoose')
 const ResponsibleChoose = () => import(/* webpackChunkName:'customerService' */'@/views/customerService/responsibleChoose')
 const ServiceTypeChoose = () => import(/* webpackChunkName:'customerService' */'@/views/customerService/serviceTypeChoose')

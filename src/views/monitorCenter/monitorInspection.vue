@@ -1,7 +1,8 @@
 <template>
     <div class="page">
         <mt-header title="巡保工作监控">
-            <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button>
+            <!-- <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button> -->
+            <mt-button slot="left" @click="$root.back()" icon="back">返回</mt-button>
         </mt-header>
         <div>
           <navbar :list="typeList" v-model="currIndex"></navbar>

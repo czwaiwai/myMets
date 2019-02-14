@@ -7,7 +7,7 @@
           <navbar :list="typeList" v-model="currIndex"></navbar>
           <div class="weui-flex" style="background:#EFEFF4;">
             <div class="weui-flex__item">
-               <search v-model="searchStr"></search>
+               <search v-model="searchKey" placeholder="关键字、工单号或位置" :no-focus="true" @searchRes="searchHandle" @searchCancel="searchHandle"></search>
             </div>
             <div class="padding-h" @click="sheetVisible = true"><i  style="font-size: 23px;line-height: 43px;" class="main_color iconfont icon-shaixuan"></i></div>
           </div>
@@ -86,7 +86,7 @@ export default {
         startTime: '',
         endTime: ''
       },
-      searchStr: '',
+      searchKey: '',
       workItem: {},
       typeList: [
         {id: 'all', name: '全部', state: '5', badge: ''},
@@ -102,14 +102,16 @@ export default {
     this.isTransferBtn = true // 是否显示转单按钮
     this.isMaterial = true // 材料申请权限
     // --------------
-    this.orderType = 'Inspection'
+    // （Equipment设备（维修）、Resource资源(客服)
+    this.workPosFrom = 'Equipment'
     this.nav = {
-      orgId: '11091315263400010000' || this.user.OrgID,
+      orgId: this.user.OrgID || '11091315263400010000',
       orgName: this.user.OrgName,
       userName: this.user.userName,
       positionId: this.user.PositionID,
-      memberId: '30' || this.user.memberId
+      memberId: this.user.memberId || '30'
     }
+    this.currMember = ''
     this.getStatus()
     this.configList = this.typeList.map(item => {
       return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
@@ -132,40 +134,71 @@ export default {
         {
           name: '全部工单',
           method: (arg) => {
-            console.log(arg)
+            this.currMember = ''
+            this.currConfig.params.employeeId = this.currMember
+            this.configList = this.typeList.map(item => {
+              return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, employeeId: this.currMember})
+            })
+            this.refresh()
           }
         },
         {
           name: '我的发布',
-          method: function (arg) {
-            console.log(arg)
+          method: (arg) => {
+            this.currMember = this.nav.memberId
+            this.currConfig.params.employeeId = this.currMember
+            this.configList = this.typeList.map(item => {
+              return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, employeeId: this.currMember})
+            })
+            this.refresh()
           }
         }
       ]
     },
+    // 刷新当前列表页
+    refresh () {
+      this.getStatus()
+      this.$refs.pageList.refresh()
+    },
+    searchHandle () {
+      this.currConfig.params.workPos = this.searchKey
+      this.configList = this.typeList.map(item => {
+        return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, workPos: this.searchKey})
+      })
+      this.refresh()
+    },
     routeTo (item) {
       console.log(item)
       this.workItem = item
-      this.$router.push({path: this.$route.path + '/detail'})
+      this.$router.push({path: this.$route.path + '/detail', query: {monitor: true}})
     },
     listDone () {
       this.$previewRefresh()
     },
     createListConfig (name, params) {
+      let ip = this.$store.getters.ip
       return {
         name: name,
         url: '/ets/syswin/smd/userCSGetWorkOrdSyswinH5',
         params: {
           projectId: this.nav.orgId,
-          employeeId: this.nav.memberId,
-          workPosFrom: 'Resource', // （Equipment设备（维修）、Resource资源(客服)
+          employeeId: this.currMember,
+          workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
           positionID: this.nav.positionId,
           sort: '-1', // 1为升序，其他为降序
-          workPos: '', // search 筛选
+          workPos: this.searchKey, // search 筛选
           ...params
         },
         format: function (data) {
-          return data.WorkInfo
+          return data.WorkInfo.map(item => {
+            if (ip) {
+              item.ImageList.map(sub => {
+                sub.Path = 'http://' + ip + sub.Path
+                return sub
+              })
+            }
+            return item
+          })
         }
       }
     },
@@ -173,8 +206,8 @@ export default {
       let url = '/ets/syswin/smd/userCSGetWorkOrdCountInfoH5'
       let res = await this.$http.post(url, {
         projectId: this.nav.orgId,
-        employeeId: this.nav.memberId,
-        workPosFrom: 'Resource', // （Equipment设备（维修）、Resource资源(客服)
+        employeeId: this.currMember,
+        workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
         positionID: this.nav.positionId
       })
       res.data.map((item, index) => {

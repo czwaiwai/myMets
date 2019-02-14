@@ -36,29 +36,29 @@
           </div>
           <p class="weui-grid__label">巡检</p>
         </a>
-        <a  @click="$router.forward('/workOrder/customerService')" href="javascript:;" class="weui-grid">
+        <!-- <a  @click="$router.forward('/workOrder/customerService')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
           </div>
           <p class="weui-grid__label">客服工单</p>
-        </a>
+        </a> -->
         <a  @click="$app.loadView({url:'http://' + ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_by.png"  alt="">
           </div>
           <p class="weui-grid__label">保养</p>
         </a>
-        <a  @click="$router.forward('/customerService')" href="javascript:;" class="weui-grid">
+        <a  @click="$router.forward('/customerService?type=baoshi')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_bs.png" alt="">
           </div>
           <p class="weui-grid__label">报事</p>
         </a>
-        <a  @click="$router.forward('/customerService')" href="javascript:;" class="weui-grid">
+        <a  @click="$router.forward('/customerService?type=baoxiu')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_wx.png" alt="">
           </div>
-          <p class="weui-grid__label">维修</p>
+          <p class="weui-grid__label">报修</p>
         </a>
         <a @click="$router.forward('/getCash')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
@@ -94,13 +94,13 @@
         </a> -->
         <a @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_off_download.png" alt="">
+            <img src="../assets/img/work/ic_work_meeting.png" alt="">
           </div>
-          <p class="weui-grid__label">会议室</p>
+          <p class="weui-grid__label">会议</p>
         </a>
         <a @click="$router.forward('/investmentIndex')" href="javascript:;" class="weui-grid">
           <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_off_download.png" alt="">
+            <img src="../assets/img/work/ic_work_investment.png" alt="">
           </div>
           <p class="weui-grid__label">投资性物业</p>
         </a>

@@ -79,6 +79,11 @@ export default {
       this.formObj.plusEmployeeName = arr.join('、')
     })
   },
+  computed: {
+    isDetail () {
+      return this.$route.path.indexOf('/customerService/detail') > -1
+    }
+  },
   methods: {
     chooseMain () {
       this.$router.push({path: this.$route.path + '/personSelector'})
@@ -115,11 +120,18 @@ export default {
       console.log(res, 'res')
       this.$toast('接单成功')
       this.$root.back()
-      this.$parent.refresh && this.$parent.refresh()
+      if (!this.isDetail) {
+        this.$parent.refresh()
+      }
+      // this.$parent.refresh && this.$parent.refresh()
     }
   },
   destroyed () {
     this.$root.$off('personMulti')
+    if (this.isDetail) {
+      this.$parent.reload && this.$parent.reload() // 在详情页时reload
+      this.$parent.$parent.refresh()
+    }
   }
 }
 </script>

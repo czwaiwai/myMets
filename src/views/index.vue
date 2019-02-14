@@ -192,7 +192,7 @@ export default {
     color:#989898;
   }
   .mint-tabbar > .mint-tab-item.is-selected {
-    color:#0DC88C;
+    color:#3395FF;
     background-color:#FFF;
   }
   .tool_warp {
