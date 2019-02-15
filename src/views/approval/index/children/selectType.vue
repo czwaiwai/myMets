@@ -91,7 +91,7 @@ export default {
       })
       console.log(res)
       for (let key in res.data[0]) {
-        console.log(key)
+        // console.log(key)
         if (key === this.selectItem.type + 'Count') {
           this.selectItem.num = res.data[0][key]
         }

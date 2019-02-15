@@ -147,7 +147,7 @@ export default {
       }
       this.selectData.typesData = this.typesData
       this.selectData.timesData = this.dateTimes
-      console.log('selectData:', this.selectData)
+      // console.log('selectData:', this.selectData)
       this.showBox = false
       this.showMark = false
       this.$emit('setSelectType', this.selectData)
@@ -197,7 +197,7 @@ export default {
           endTime: times.endTime
         }
       }
-      console.log('dateTimes:', this.dateTimes)
+      // console.log('dateTimes:', this.dateTimes)
     },
     // 时间类型转具体时间
     async typeToTime (type) {
@@ -233,7 +233,7 @@ export default {
     // 确定时间
     handleConfirm (date) {
       this.dateTimes[this.dateTimes.name] = date.format('yyyy-MM-dd')
-      console.log('dateTimes:', this.dateTimes)
+      // console.log('dateTimes:', this.dateTimes)
     },
     // 打开时间选择器
     openPicker (type) {
@@ -249,7 +249,7 @@ export default {
         if (this.typesList.length === 1) {
           this.setInitTimesList()
           await this.getListData()
-          console.log('typeslist:', this.typesList)
+          // console.log('typeslist:', this.typesList)
         } else {
           await this.setInitData()
         }
