@@ -37,7 +37,7 @@
       </div>
       <div class="weui-flex padding15-h padding-v light_bg">
         <div @click="isAllClick" class="weui-flex__item">
-          <i class="iconfont padding-right5 " style="color: #3395FF;" :class="allCheck?'icon-select':'icon-Ellipse'"></i>全选
+          <i class="iconfont padding-right5 " style="color: #3395FF;" :class="allCheck?'icon-select-copy':'icon-Ellipse'"></i>全选
         </div>
         <div style="padding-right: 30px;">合计:<span style="color: #e40101;">￥{{totalMoney | formatMoney}}</span></div>
         <div class="pay_up_btn"  @click="payUp">收款</div>

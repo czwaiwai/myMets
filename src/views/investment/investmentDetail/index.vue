@@ -189,7 +189,7 @@ export default {
         this.detailData = res.data[0]
         let ip = this.$store.getters.ip
         this.detailData.ImageList = this.detailData.ImageList.map(item => {
-          if (ip) {
+          if (ip && item.Url) {
             item.Url = 'http://' + ip + item.Url
           }
           return item

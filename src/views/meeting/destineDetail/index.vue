@@ -157,8 +157,8 @@ export default {
         // this.roomImgs = this.$toLower(res.data[0]).imageList
         let ip = this.$store.getters.ip
         this.roomImgs = this.$toLower(res.data[0]).imageList.map(item => {
-          if (ip) {
-            item.Path = 'http://' + ip + item.Path
+          if (ip && item.path) {
+            item.path = 'http://' + ip + item.path
           }
           return item
         })

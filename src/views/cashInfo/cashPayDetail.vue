@@ -40,7 +40,7 @@
                   </div>
                   <div @click="showSubClick(item)">
                     <span style="color: #e40101;">￥{{item.moneyTotal}}</span>
-                    <i class="iconfont direct_icon inline-block icon-xiala-copy" :class="item.subShow?'icon_up':'icon_down'"></i>
+                    <i class="iconfont direct_icon inline-block icon-shouqi" :class="item.subShow?'icon_up':'icon_down'"></i>
                   </div>
                 </div>
                 <div v-if="item.subShow" style="padding: 10px 15px 10px 30px;color:#999;">

@@ -27,22 +27,22 @@ export default {
       }
       if (!state.user) {
         return {
-          // UserID: 'LiaoJiangWei',
-          // PositionName: '财务经理',
-          // // OrgName: '思源大厦',
-          // // OrgID: 10000,
-          // OrgName: '银河世纪花园',
-          // OrgID: '11091315263400010000', // 项目id
-          // PositionID: '11091316310300010000', // 职位id
-          // memberId: '18102416111400010024',
-          // memberName: '廖江伟'
-          UserID: 'test1',
+          UserID: 'LiaoJiangWei',
           PositionName: '财务经理',
-          OrgName: '测试项目名',
+          // OrgName: '思源大厦',
+          // OrgID: 10000,
+          OrgName: '银河世纪花园',
           OrgID: '11091315263400010000', // 项目id
           PositionID: '11091316310300010000', // 职位id
-          memberId: '30',
+          memberId: '18102416111400010024',
           memberName: '廖江伟'
+          // UserID: 'test1',
+          // PositionName: '财务经理',
+          // OrgName: '测试项目名',
+          // OrgID: '11091315263400010000', // 项目id
+          // PositionID: '11091316310300010000', // 职位id
+          // memberId: '30',
+          // memberName: '廖江伟'
         }
       }
       return state.user

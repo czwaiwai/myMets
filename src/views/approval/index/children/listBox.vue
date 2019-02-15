@@ -57,7 +57,7 @@ export default {
         'Status': this.$parent.statusName,
         'WorkflowTypeId': this.$parent.typesData.WorkflowTypeId || '',
         'Subject': '',
-        'AskerJobId': this.$parent.employeeJobId,
+        'AskerJobId': '', // this.$parent.employeeJobId,
         'AskTimeS': this.$parent.typesData.AskTimeS || '',
         'AskTimeE': this.$parent.typesData.AskTimeE || '',
         'Sort': this.$parent.timeType,

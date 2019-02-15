@@ -13,7 +13,7 @@
                     <button type="button" @click="voiceClick" class="voice_btn" :class="recTime?'voice_btn_show':''">
                       <i class="icon-yuyin iconfont"></i>
                       {{recTime || '语音'}}
-                    </button><button v-show="recTime" class="voice_btn_del" type="button" @click="delVoice"><i class="iconfont icon-icon-"></i></button>
+                    </button><button v-show="recTime" class="voice_btn_del" type="button" @click="delVoice"><i class="iconfont icon-tuichu"></i></button>
                   </div>
                   <div class="weui-flex__item text-right item_center" ></div>
                 </div>

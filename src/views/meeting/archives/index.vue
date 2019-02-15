@@ -136,7 +136,7 @@ export default {
         // this.imageList = res.data[0].ImageList
         let ip = this.$store.getters.ip
         this.imageList = res.data[0].ImageList.map(item => {
-          if (ip) {
+          if (ip && item.Path) {
             item.Path = 'http://' + ip + item.Path
           }
           return item

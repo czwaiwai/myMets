@@ -201,7 +201,7 @@ export default {
       if (res.data.length) {
         let ip = this.$store.getters.ip
         res.data = res.data.map(item => {
-          if (ip) {
+          if (ip && item.Url) {
             item.Url = 'http://' + ip + item.Url
           }
           return item
