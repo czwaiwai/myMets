@@ -125,12 +125,18 @@ export default {
   },
   methods: {
     async getPageData () {
-      let url = '/ets/table/list/userCSGetMaterialInfoH5'
-      let res = await this.$http.post(url, {
-        orgID: this.nav.orgId,
-        employeeID: this.nav.memberId,
-        materialQuery: this.search
+      let p0 = 'UserCS_GetMaterialInfoH5'
+      let res = await this.$xml(p0, {
+        OrgID: this.nav.orgId,
+        EmployeeID: this.nav.memberId,
+        MaterialQuery: this.search
       })
+      // let url = '/ets/table/list/userCSGetMaterialInfoH5'
+      // let res = await this.$http.post(url, {
+      //   orgID: this.nav.orgId,
+      //   employeeID: this.nav.memberId,
+      //   materialQuery: this.search
+      // })
       if (res.data && res.data[0]) {
         this.list = this.$toLower(res.data).map(item => {
           item.num = 0
@@ -155,21 +161,37 @@ export default {
       this.getPageData()
     },
     async submit () {
-      await this.$message.confirm('提交此次材料申请?')
+      await this.$message.confirm('提交此次材料申请?') // ???
+      let p0 = 'UserCS_GetMaterialApplyH5'
       let params = {
-        'wordOrdId': this.work.WorkOrdID,
-        'wordQuertionID': this.work.WorkQuestionID,
-        'orgID': this.work.OrgID,
-        //   "opUser": T.createNew.obj.userName,
-        //   "employeeId": T.createNew.employeeID,
-        'materialList': []
+        'WordOrdId': this.work.WorkOrdID,
+        'WordQuertionID': this.work.WorkQuestionID,
+        'OrgID': this.work.OrgID,
+        //   "OpUser": T.createNew.obj.userName,
+        //   "EmployeeId": T.createNew.employeeID,
+        'MaterialList': []
       }
       let arr = []
+      console.log(this.chooseShowList, 'this.chooseShowList')
       this.chooseShowList.forEach(item => {
-        arr.push({'materialId': item.materialID, 'getNum': item.num, 'collarDetID': '', 'wareHouseId': item.wareHouseId, 'wareHouseName': item.wareHouseName})
+        arr.push({'MaterialId': item.materialID, 'GetNum': item.num, 'CollarDetID': '', 'WareHouseId': item.wareHouseId, 'WareHouseName': item.wareHouseName})
       })
-      params.materialList = JSON.stringify(this.chooseShowList)
-      let res = await this.$http.post('/ets/table/list/userCSGetMaterialApplyH5', params)
+      params.MaterialList = arr
+      let res = await this.$xml(p0, params)
+      // let params = {
+      //   'wordOrdId': this.work.WorkOrdID,
+      //   'wordQuertionID': this.work.WorkQuestionID,
+      //   'orgID': this.work.OrgID,
+      //   //   "opUser": T.createNew.obj.userName,
+      //   //   "employeeId": T.createNew.employeeID,
+      //   'materialList': []
+      // }
+      // let arr = []
+      // this.chooseShowList.forEach(item => {
+      //   arr.push({'materialId': item.materialID, 'getNum': item.num, 'collarDetID': '', 'wareHouseId': item.wareHouseId, 'wareHouseName': item.wareHouseName})
+      // })
+      // params.materialList = JSON.stringify(this.chooseShowList)
+      // let res = await this.$http.post('/ets/table/list/userCSGetMaterialApplyH5', params)
       this.$root.back()
       this.$parent.getPageData()
       console.log(res)

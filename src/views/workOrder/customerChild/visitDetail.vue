@@ -50,10 +50,14 @@ export default {
   },
   methods: {
     async getPageData () {
-      let url = '/ets/syswin/smd/userCSReturnVisitHistoryH5'
-      let res = await this.$http.post(url, {
-        wordOrdId: this.work.WorkOrdID
+      let p0 = 'UserCS_ReturnVisitHistoryH5'
+      let res = await this.$xml(p0, {
+        WordOrdId: this.work.WorkOrdID
       })
+      // let url = '/ets/syswin/smd/userCSReturnVisitHistoryH5'
+      // let res = await this.$http.post(url, {
+      //   wordOrdId: this.work.WorkOrdID
+      // })
       if (res.data[0]) {
         this.detail = res.data[0]
         this.setScore()

@@ -67,9 +67,12 @@ export default {
   },
   methods: {
     async getPageData () {
-      let params = {orgID: this.work.OrgID, wordQuertionID: this.work.WorkQuestionID}
-      let url = '/ets/table/list/userCSGetClaimsInfoH5'
-      let res = await this.$http.post(url, params)
+      let p0 = 'UserCS_GetClaimsInfoH5'
+      let params = {OrgID: this.work.OrgID, WordQuertionID: this.work.WorkQuestionID}
+      let res = await this.$xml(p0, params)
+      // let params = {orgID: this.work.OrgID, wordQuertionID: this.work.WorkQuestionID}
+      // let url = '/ets/table/list/userCSGetClaimsInfoH5'
+      // let res = await this.$http.post(url, params)
       if (res.data && res.data[0]) {
         this.list = this.$toLower(res.data)
       }

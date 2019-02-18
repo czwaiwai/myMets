@@ -75,8 +75,10 @@ export default {
     async getPageDataNet (isStart) {
       let p0 = this.config.url
       let res = await this.$xml(p0, {
+        // Page: this.page,
+        // PageSize: this.config.params.pageSize || 10,
         page: this.page,
-        pageSIze: this.config.params.pageSize || 10,
+        pageSize: this.config.params.pageSize || 10,
         ...this.config.params
       }, {}, true)
       if (isStart) {

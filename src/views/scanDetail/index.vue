@@ -94,12 +94,15 @@ export default {
     createPageConfig (name, workType = 'Inspection') {
       return {
         name: name,
-        url: '/ets/syswin/smd/userCS_GetEquiInspectionH5',
+        // url: '/ets/syswin/smd/userCS_GetEquiInspectionH5',
+        url: 'UserCS_GetEquiInspectionH5',
+        xml: true,
         params: {
           equipmentId: this.deviceId,
           workType: workType // KeepFit
         },
-        format: function (data) {
+        format: function (res) {
+          let data = res[0]
           return data.WorkList
         }
       }
@@ -109,23 +112,25 @@ export default {
       // /ets/syswin/smd/userCS_GetEquiRepairH5
       return {
         name: name,
-        url: '/ets/syswin/smd/userCS_GetEquiRepairH5',
+        // url: '/ets/syswin/smd/userCS_GetEquiRepairH5',
+        url: 'UserCS_GetEquiRepairH5',
+        xml: true,
         params: {
           equipmentId: this.deviceId
         },
-        format: function (data) {
+        format: function (res) {
+          let data = res[0]
           return data.WorkList
         }
       }
     },
     async getPageData () {
+      let res = await this.$xml('UserCS_GetEquiArchivesH5', {
+        barcodeCode: this.deviceId
+      })
       // let res = await this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
       //   barcodeCode: this.deviceId
       // })
-      let p0 = 'UserCS_GetEquiArchivesH5'
-      let res = await this.$xml(p0, {
-        BarcodeCode: this.deviceId
-      })
       if (res.data && res.data[0]) {
         this.scanObj = res.data[0]
       }

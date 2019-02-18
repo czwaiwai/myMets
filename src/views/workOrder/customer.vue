@@ -152,7 +152,9 @@ export default {
       let ip = this.$store.getters.ip
       return {
         name: name,
-        url: '/ets/syswin/smd/userCSGetWorkOrdSyswinH5',
+        // url: '/ets/syswin/smd/userCSGetWorkOrdSyswinH5',
+        url: 'UserCS_GetWorkOrdSyswinTestingH5',
+        xml: true,
         params: {
           projectId: this.nav.orgId,
           employeeId: this.nav.memberId,
@@ -162,7 +164,8 @@ export default {
           workPos: this.searchKey, // search 筛选
           ...params
         },
-        format: function (data) {
+        format: function (res) {
+          let data = res[0]
           return data.WorkInfo.map(item => {
             if (ip) {
               item.ImageList.map(sub => {
@@ -176,13 +179,20 @@ export default {
       }
     },
     async getStatus () {
-      let url = '/ets/syswin/smd/userCSGetWorkOrdCountInfoH5'
-      let res = await this.$http.post(url, {
-        projectId: this.nav.orgId,
-        employeeId: this.nav.memberId,
-        workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
-        positionID: this.nav.positionId
+      let p0 = 'UserCS_GetWorkOrdCountInfoTestingH5'
+      let res = await this.$xml(p0, {
+        projectID: this.nav.orgId,
+        EmployeeID: this.nav.memberId,
+        WorkPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
+        PositionID: this.nav.positionId
       })
+      // let url = '/ets/syswin/smd/userCSGetWorkOrdCountInfoH5'
+      // let res = await this.$http.post(url, {
+      //   projectId: this.nav.orgId,
+      //   employeeId: this.nav.memberId,
+      //   workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
+      //   positionID: this.nav.positionId
+      // })
       res.data.map((item, index) => {
         this.typeList[index].name = item['GDName']
         this.typeList[index].badge = item['GDCount']
@@ -192,12 +202,18 @@ export default {
     // 关闭工单
     async closeOrder (obj) {
       await this.$message.confirm('确认关闭此' + this.title + '？')
-      let url = '/ets/syswin/smd/userServiceVisitManClose'
-      let res = await this.$http.post(url, {
-        userName: this.nav.userName,
-        orderId: obj.WorkOrdID,
-        closeDate: new Date().format('yyyy-MM-dd hh:mm:ss')
+      let p0 = 'UserService_VisitManClose'
+      let res = await this.$xml(p0, {}, {
+        p1: this.nav.userName,
+        p2: obj.WorkOrdID,
+        p3: new Date().format('yyyy-MM-dd hh:mm:ss')
       })
+      // let url = '/ets/syswin/smd/userServiceVisitManClose'
+      // let res = await this.$http.post(url, {
+      //   userName: this.nav.userName,
+      //   orderId: obj.WorkOrdID,
+      //   closeDate: new Date().format('yyyy-MM-dd hh:mm:ss')
+      // })
       this.refresh()
       this.$toast('工单关闭成功')
       console.log(res)
@@ -207,14 +223,25 @@ export default {
       console.log(this.workItem, item)
       let params = {
         strWorkOrdID: this.workItem.WorkOrdID,
-        positionId: item.PositionID,
-        positionName: item.PositionName,
-        ordersID: item.EmployeeID,
-        orders: item.EmployeeName,
-        ordersDepart: item.DeptName
+        PositionId: item.PositionID,
+        PositionName: item.PositionName,
+        OrdersID: item.EmployeeID,
+        Orders: item.EmployeeName,
+        OrdersDepart: item.DeptName,
+        PlusEmployeeName: ''
       }
-      let url = '/ets/syswin/smd/userServiceSingleBill'
-      let res = await this.$http.post(url, params)
+      let p0 = 'UserService_SingleBill'
+      let res = await this.$xml(p0, params)
+      // let params = {
+      //   strWorkOrdID: this.workItem.WorkOrdID,
+      //   positionId: item.PositionID,
+      //   positionName: item.PositionName,
+      //   ordersID: item.EmployeeID,
+      //   orders: item.EmployeeName,
+      //   ordersDepart: item.DeptName
+      // }
+      // let url = '/ets/syswin/smd/userServiceSingleBill'
+      // let res = await this.$http.post(url, params)
       console.log(res)
       this.$toast('转单成功')
       this.refresh()
@@ -239,7 +266,7 @@ export default {
         tag: work.UserId,
         status: '1'
       }
-      let res = await this.$http.post(url, params)
+      let res = await this.$http.post(url, params) // 暂无.net接口
       this.$toast('消息推送成功')
       console.log(res)
     }

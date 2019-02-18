@@ -98,6 +98,7 @@ export default {
       this.formObj = {
         userName: userName,
         workOrdId: workOrdId,
+        Idea: '',
         ordersId: item.EmployeeID,
         orders: item.EmployeeName,
         ordersDepart: item.DeptName,
@@ -115,8 +116,20 @@ export default {
     async submit () {
       let err = this.validateForm()
       if (err) return this.$toast(err)
-      let url = '/ets/syswin/smd/userServiceWorkOrdAccept'
-      let res = await this.$http.post(url, this.formObj)
+      let p0 = 'User_Service_WorkOrdAcceptAndroid'
+      let res = await this.$xml(p0, {
+        'Idea': this.formObj.Idea,
+        'Orders': this.formObj.orders,
+        'OrdersDepart': this.formObj.ordersDepart,
+        'OrdersID': this.formObj.EmployeeID,
+        'OrdersPositionID': this.formObj.PositionID,
+        'PlusEmployeeName': this.formObj.plusEmployeeName,
+        'WorkOrdID': this.formObj.workOrdId
+      }, {
+        p1: this.nav.userName
+      })
+      // let url = '/ets/syswin/smd/userServiceWorkOrdAccept'
+      // let res = await this.$http.post(url, this.formObj)
       console.log(res, 'res')
       this.$toast('接单成功')
       this.$root.back()

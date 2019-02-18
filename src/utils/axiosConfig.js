@@ -101,6 +101,9 @@ export default {
       if (response.data.Table && response.data.Table instanceof Array) {
         response.data = response.data.Table
       }
+      if (syswin && syswin.length > 0) {
+        response.data = syswin
+      }
       if (syswin && syswin.length && (syswin[0].status === 1 || syswin[0].status === '1')) {
         response.data = syswin[0].data || syswin[0].Data
         response.msg = syswin[0].msg || syswin[0].Msg || ''

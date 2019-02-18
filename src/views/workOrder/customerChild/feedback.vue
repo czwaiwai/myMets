@@ -164,8 +164,12 @@ export default {
   methods: {
     // 客服工单反馈状态
     async getPageData () {
-      let url = '/ets/table/list/userRentGetOptionList'
-      let res = await this.$http.post(url, {typeName: 'HandleResult'})
+      let p0 = 'UserRent_GetOptionList'
+      let res = await this.$xml(p0, {
+        TypeName: 'HandleResult'
+      })
+      // let url = '/ets/table/list/userRentGetOptionList'
+      // let res = await this.$http.post(url, {typeName: 'HandleResult'})
       if (res.data && res.data[0]) {
         // console.log(res.data)
         this.options = res.data.filter(item => item.value !== 'Add')
@@ -293,27 +297,49 @@ export default {
     async submitHandle  () {
       let error = this.validateForm()
       if (error) return this.$toast(error)
+      let p0 = 'User_Service_SaveWorkOrdFeedbackMerge'
       let params = {
-        userName: this.nav.userName,
-        workOrdId: this.work.WorkOrdID,
-        woQuestionId: this.work.WorkQuestionID,
-        orgId: this.work.OrgID,
-        orgName: this.work.OrgName,
-        vQuesType: this.work.QuesTypeID,
-        vQuesTypeName: this.work.QuesTypeName,
-        startTime: this.formObj.startTime + ':00',
-        endTime: this.formObj.endTime + ':00',
-        labourCost: this.formObj.labourCost,
-        materialCostSum: this.formObj.materialCostSum,
-        compResult: this.formObj.workState,
-        processDetaile: this.formObj.processDetaile,
-        voice1: this.mp3.path || ''
+        userName: this.nav.userName, // ???
+        WorkOrdID: this.work.WorkOrdID,
+        WOQuestionID: this.work.WorkQuestionID,
+        OrgID: this.work.OrgID,
+        OrgName: this.work.OrgName,
+        VQuesType: this.work.QuesTypeID,
+        VQuesTypeName: this.work.QuesTypeName,
+        StartTime: this.formObj.startTime + ':00',
+        EndTime: this.formObj.endTime + ':00',
+        LabourCost: this.formObj.labourCost,
+        MaterialCostSum: this.formObj.materialCostSum,
+        CompResult: this.formObj.workState,
+        ProcessDetaile: this.formObj.processDetaile,
+        Voice1: this.mp3.path || ''
       }
+      this.imgs.forEach((item, index) => {
+        params['Image' + (index + 1)] = item
+      })
+      let res = await this.$xml(p0, params)
+
+      // let params = {
+      //   userName: this.nav.userName,
+      //   workOrdId: this.work.WorkOrdID,
+      //   woQuestionId: this.work.WorkQuestionID,
+      //   orgId: this.work.OrgID,
+      //   orgName: this.work.OrgName,
+      //   vQuesType: this.work.QuesTypeID,
+      //   vQuesTypeName: this.work.QuesTypeName,
+      //   startTime: this.formObj.startTime + ':00',
+      //   endTime: this.formObj.endTime + ':00',
+      //   labourCost: this.formObj.labourCost,
+      //   materialCostSum: this.formObj.materialCostSum,
+      //   compResult: this.formObj.workState,
+      //   processDetaile: this.formObj.processDetaile,
+      //   voice1: this.mp3.path || ''
+      // }
       this.imgs.forEach((item, index) => {
         params['image' + (index + 1)] = item
       })
-      let url = '/ets/syswin/smd/userServiceSaveWorkOrdFeedbackMerge'
-      let res = await this.$http.post(url, params)
+      // let url = '/ets/syswin/smd/userServiceSaveWorkOrdFeedbackMerge'
+      // let res = await this.$http.post(url, params)
       this.$toast('反馈成功')
       this.$root.back()
       if (!this.isDetail) {

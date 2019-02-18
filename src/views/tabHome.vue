@@ -129,8 +129,8 @@ export default {
         // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
         {url: `/workOrder/customerService`, type: 'kefugongdan'},
         {url: `/workOrder/customerService?workPosFrom=Equipment`, type: 'weixiugongdan'},
-        {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
-        {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
+        {url: `/workOrder/inspection`, type: 'xunjian'},
+        {url: `/workOrder/inspection?orderType=KeepFit`, type: 'baoyang'}
       ]
       this.list = res.data.filter((item, index) => {
         if (item.GDType !== '5') {

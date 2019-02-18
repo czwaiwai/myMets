@@ -216,13 +216,21 @@ export default {
       this.init()
     },
     async getPageData () {
-      let url = '/ets/syswin/smd/userCSGetWorkOrdDetailSyswinH5'
-      let res = await this.$http.post(url, {
-        workOrdID: this.work.WorkOrdID,
-        orgid: this.nav.orgId,
-        employeeid: this.nav.userName,
-        nativeDict: this.work.nativeDict
+      // UserCS_GetWorkOrdDetailSyswinH5
+      let p0 = 'UserCS_GetWorkOrdDetailSyswinH5'
+      let res = await this.$xml(p0, {
+        WorkOrdID: this.work.WorkOrdID,
+        OrgID: this.nav.orgId,
+        EmployeeID: this.nav.userName,
+        PositionID: this.work.nativeDict
       })
+      // let url = '/ets/syswin/smd/userCSGetWorkOrdDetailSyswinH5'
+      // let res = await this.$http.post(url, {
+      //   workOrdID: this.work.WorkOrdID,
+      //   orgid: this.nav.orgId,
+      //   employeeid: this.nav.userName,
+      //   nativeDict: this.work.nativeDict
+      // })
       if (res.data && res.data[0]) {
         let ip = this.$store.getters.ip
         let detail = res.data[0]
@@ -242,10 +250,16 @@ export default {
     },
     // 工单进度查询
     async getTracking () {
-      let url = '/ets/syswin/list/userCSGetWorkSchedule'
-      let res = await this.$http.post(url, {
-        workId: this.work.WorkOrdID
+      // UserCS_GetWorkSchedule
+      let p0 = 'UserCS_GetWorkSchedule'
+      let res = await this.$xml(p0, {
+        WorkID: this.work.WorkOrdID
       })
+      // let url = '/ets/syswin/list/userCSGetWorkSchedule'
+      // let res = await this.$http.post(url, {
+      //   workId: this.work.WorkOrdID
+      // })
+      // console.log(res, 'getTracking')
       if (res.data[0]) {
         this.tracks = res.data
         this.newTracks = {
@@ -256,20 +270,31 @@ export default {
     },
     // 请求工单状态时间列表
     async getWorkTime () {
-      let url = '/ets/syswin/smd/userCSGetWorkTimneScheduleH5'
-      let res = await this.$http.post(url, {
-        workID: this.work.WorkOrdID
+      // UserCS_GetWorkTimneScheduleH5
+      let p0 = 'UserCS_GetWorkTimneScheduleH5'
+      let res = await this.$xml(p0, {
+        WorkID: this.work.WorkOrdID
       })
+      // let url = '/ets/syswin/smd/userCSGetWorkTimneScheduleH5'
+      // let res = await this.$http.post(url, {
+      //   workID: this.work.WorkOrdID
+      // })
       this.timeList = res.data
       console.log(res)
     },
     // 请求客服工单进度反馈详情
     async getFeedback () {
-      let url = '/ets/syswin/smd/userCSGetWorkFeedBackInfoH5'
-      let res = await this.$http.post(url, {
-        orgid: this.nav.orgId,
-        wordQuertionID: this.work.WorkQuestionID
+      // UserCS_GetWorkFeedBackInfoH5
+      let p0 = 'UserCS_GetWorkFeedBackInfoH5'
+      let res = await this.$xml(p0, {
+        OrgID: this.nav.orgId,
+        WordQuertionID: this.work.WorkQuestionID
       })
+      // let url = '/ets/syswin/smd/userCSGetWorkFeedBackInfoH5'
+      // let res = await this.$http.post(url, {
+      //   orgid: this.nav.orgId,
+      //   wordQuertionID: this.work.WorkQuestionID
+      // })
       if (res.data && res.data[0]) {
         let ip = this.$store.getters.ip
         this.feedbackList = res.data.map(item => {

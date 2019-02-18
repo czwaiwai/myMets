@@ -188,8 +188,11 @@ export default {
     }
     this.getThreeMouth()
     this.getStatus()
+    // this.configList = this.typeList.map(item => {
+    //   return this.createListConfig(item.id, {orderState: item.state})
+    // })
     this.configList = this.typeList.map(item => {
-      return this.createListConfig(item.id, {orderState: item.state})
+      return this.createListConfigNet(item.id, {eventStateId: item.state})
     })
     console.log(this.configList, 'configList')
   },
@@ -221,6 +224,13 @@ export default {
       return this.currList.filter(item => item.check)
     }
   },
+  watch: {
+    currNav (val) {
+      if (val) {
+        this.downloadEdit = false
+      }
+    }
+  },
   methods: {
     // 扫一扫
     async scanHandle () {
@@ -232,12 +242,17 @@ export default {
       this.currConfig.params.queryStarTime = this.search.startTime
       this.currConfig.params.queryEndTime = this.search.endTime
       this.configList = this.typeList.map(item => {
-        return this.createListConfig(item.id, {
-          orderState: item.state,
+        return this.createListConfigNet(item.id, {
+          // orderState: item.state,
+          // pageSize: 15,
+          // code: this.searchKey,
+          // queryStarTime: this.search.startTime,
+          // queryEndTime: this.search.endTime
+          eventStateId: item.state,
+          'PCode': this.searchKey,
           pageSize: 15,
-          code: this.searchKey,
-          queryStarTime: this.search.startTime,
-          queryEndTime: this.search.endTime
+          'QueryStarTime': this.search.startTime,
+          'QueryEndTime': this.search.endTime
         })
       })
       this.refresh()
@@ -298,18 +313,29 @@ export default {
       if (this.currList.length === 0) {
         return this.$toast('没有可离线的数据')
       }
-      var param = {
-        projId: this.nav.orgId,
-        memberId: this.nav.memberId,
-        orderState: '2',
-        orderType: this.orderType,
-        code: this.searchKey,
-        stid: ''
-      }
-      param.queryStarTime = this.search.startTime
-      param.queryEndTime = this.search.endTime
       await this.$message.confirm('确定要离线所有么?')
-      let res = await this.$http.post('/ets/table/list/equipBaseGetInspectionInfoH5', param)
+      let p0 = 'EquipBase_GetInspectionInfoH5'
+      let res = await this.$xml(p0, {
+        'strOrgID': this.nav.orgId,
+        'strCstID': this.nav.memberId,
+        'strAppWordType': this.orderType,
+        'PCode': this.searchKey,
+        'eventStateId': '2',
+        'QueryStarTime': this.search.startTime,
+        'QueryEndTime': this.search.endTime,
+        'STID': ''
+      })
+      // var param = {
+      //   projId: this.nav.orgId,
+      //   memberId: this.nav.memberId,
+      //   orderState: '2',
+      //   orderType: this.orderType,
+      //   code: this.searchKey,
+      //   stid: '',
+      // }
+      // param.queryStarTime = this.search.startTime
+      // param.queryEndTime = this.search.endTime
+      // let res = await this.$http.post('/ets/table/list/equipBaseGetInspectionInfoH5', param)
       if (res.data && res.data[0]) {
         let list = res.data[0].EquiInfo
         if (list.length > 0) {
@@ -321,8 +347,10 @@ export default {
     },
     // 获取巡检设备检查项信息
     async getOfflineDetail (param) {
-      let url = '/ets/table/list/equipBaseGetInspectionEquipmentH5'
-      let res = await this.$http.post(url, param)
+      let p0 = 'EquipBase_GetInspectionEquipmentH5'
+      let res = await this.$xml(p0, param)
+      // let url = '/ets/table/list/equipBaseGetInspectionEquipmentH5'
+      // let res = await this.$http.post(url, param)
       if (res.data && res.data[0]) {
         return res.data
       }
@@ -350,10 +378,14 @@ export default {
             setTimeout(async () => {
               try {
                 let data = await this.getOfflineDetail({
-                  projId: this.nav.orgId,
-                  workID: item.WorkID,
-                  caseID: item.CaseID,
-                  isCase: item.IsCase
+                  'OrgID': this.nav.orgId,
+                  'BillID': item.WorkID,
+                  'CaseID': item.CaseID,
+                  'IsCase': item.IsCase
+                  // projId: this.nav.orgId,
+                  // workID: item.WorkID,
+                  // caseID: item.CaseID,
+                  // isCase: item.IsCase
                 })
                 i++
                 if (data.length > 0) {
@@ -426,14 +458,24 @@ export default {
     },
     // 转单结果
     async setPerson (item, query) {
-      let url = '/ets/syswin/smd/equipBaseSingleBill'
-      await this.$http.post(url, {
-        orgID: item.PositionID,
-        workOrdID: query.workId,
-        workType: this.orderType,
-        ordersID: item.EmployeeID,
-        orders: item.EmployeeName
+      let p0 = 'EquipBase_SingleBill'
+      await this.$xml(p0, {
+        'OrgID': item.PositionID,
+        'WorkOrdID': query.workId,
+        'WorkType': this.orderType,
+        'OrdersID': item.EmployeeID,
+        'Orders': item.EmployeeName
+      }, {
+        p1: this.nav.userName
       })
+      // let url = '/ets/syswin/smd/equipBaseSingleBill'
+      // await this.$http.post(url, {
+      //   orgID: item.PositionID,
+      //   workOrdID: query.workId,
+      //   workType: this.orderType,
+      //   ordersID: item.EmployeeID,
+      //   orders: item.EmployeeName
+      // })
       // 刷新当前列表
       this.refresh()
       // 发送消息
@@ -449,7 +491,7 @@ export default {
     // 推送消息
     async sendMsg (data, workId) {
       let url = '/ets/message/getMessage'
-      await this.$http.post(url, {
+      await this.$http.post(url, { // 暂无.net接口
         id: workId,
         type: 'E_' + this.orderType, // [E_Inspection, E_KeepFit]
         title: this.typeTxt + '工单', // [巡检工单, 保养工单]
@@ -458,40 +500,82 @@ export default {
         status: '1'
       })
     },
-    createListConfig (name, params) {
+    createListConfigNet (name, params) {
       return {
         name: name,
-        url: '/ets/table/list/equipBaseGetInspectionInfoH5',
+        // url: '/ets/table/list/equipBaseGetInspectionInfoH5',
+        url: 'EquipBase_GetInspectionInfoH5',
+        xml: true,
         params: {
-          projId: this.nav.orgId,
-          memberId: this.nav.memberId,
-          orderType: this.orderType,
-          starTime: '1', // 1为升序其他都为降序
-          code: '', // search 筛选
+          'strOrgID': this.nav.orgId,
+          'strCstID': this.nav.memberId,
+          'strAppWordType': this.orderType,
+          'PCode': this.searchKey,
           pageSize: 15,
-          queryStarTime: this.search.startTime,
-          queryEndTime: this.search.endTime,
-          stid: '',
+          'QueryStarTime': this.search.startTime,
+          'QueryEndTime': this.search.endTime,
+          'STID': '',
+
+          // projectID: this.nav.orgId,
+          // EmployeeID: this.nav.memberId,
+          // WorkPosFrom: this.orderType,
+          // starTime: '1', // 1为升序其他都为降序
+          // code: '', // search 筛选
+          // pageSize: 15,
+          // stid: '',
           ...params
         },
-        format: function (data) {
+        format: function (res) {
+          let data = res[0]
           return data.EquiInfo.map(item => {
             item.check = false
             return item
           })
         }
       }
-      // let = /ets/table/list/equipBaseGetInspectionInfoH5
     },
+    // createListConfig (name, params) {
+    //   return {
+    //     name: name,
+    //     url: '/ets/table/list/equipBaseGetInspectionInfoH5',
+    //     params: {
+    //       projId: this.nav.orgId,
+    //       memberId: this.nav.memberId,
+    //       orderType: this.orderType,
+    //       starTime: '1', // 1为升序其他都为降序
+    //       code: '', // search 筛选
+    //       pageSize: 15,
+    //       queryStarTime: this.search.startTime,
+    //       queryEndTime: this.search.endTime,
+    //       stid: '',
+    //       ...params
+    //     },
+    //     format: function (data) {
+    //       return data.EquiInfo.map(item => {
+    //         item.check = false
+    //         return item
+    //       })
+    //     }
+    //   }
+    // },
     async getStatus () {
-      let url = '/ets/syswin/smd/equipBaseGetInspectionCount'
-      let res = await this.$http.post(url, {
-        strOrgId: this.nav.orgId,
-        strCstId: this.nav.memberId,
+      let p0 = 'EquipBase_GetInspectionCount'
+      let res = await this.$xml(p0, {
+        strOrgID: this.nav.orgId,
+        strCstID: this.nav.memberId,
         strAppWordType: this.orderType,
-        queryStarTime: this.search.startTime,
-        queryEndTime: this.search.endTime
+        QueryStarTime: this.search.startTime,
+        QueryEndTime: this.search.endTime
       })
+
+      // let url = '/ets/syswin/smd/equipBaseGetInspectionCount'
+      // let res = await this.$http.post(url, {
+      //   strOrgId: this.nav.orgId,
+      //   strCstId: this.nav.memberId,
+      //   strAppWordType: this.orderType,
+      //   queryStarTime: this.search.startTime,
+      //   queryEndTime: this.search.endTime
+      // })
       res.data.map((item, index) => {
         this.typeList[index].name = item['GDName']
         this.typeList[index].badge = item['GDCount']
@@ -556,13 +640,20 @@ export default {
     // 关闭工单
     async closeOrder (obj) {
       await this.$message.confirm('确定关闭该' + this.typeTxt + '工单？')
-      let url = '/ets/syswin/smd/equipBaseWorkCompletionColse'
-      let res = await this.$http.post(url, {
-        wordId: obj.WorkID,
-        wordType: obj.WordType,
-        workState: obj.WorkState,
-        opUserId: this.nav.memberId
+      let p0 = 'EquipBase_WorkCompletionColse'
+      let res = await this.$xml(p0, {}, {
+        p1: this.work.WorkID,
+        p2: this.work.WordType,
+        p3: this.work.WorkState,
+        p4: this.nav.memberId
       })
+      // let url = '/ets/syswin/smd/equipBaseWorkCompletionColse'
+      // let res = await this.$http.post(url, {
+      //   wordId: obj.WorkID,
+      //   wordType: obj.WordType,
+      //   workState: obj.WorkState,
+      //   opUserId: this.nav.memberId
+      // })
       this.refresh()
       this.$toast('关闭' + this.typeTxt + '成功')
       console.log(res)

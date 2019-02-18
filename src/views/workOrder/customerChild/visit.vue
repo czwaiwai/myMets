@@ -102,10 +102,15 @@ export default {
     //   return parent
     // },
     async getPageData () {
-      let url = '/ets/table/list/userRentGetOptionList'
-      let res = await this.$http.post(url, {
-        typeName: 'ReturnVisitWay'
+      let p0 = 'UserRent_GetOptionList'
+      let res = await this.$xml(p0, {
+        TypeName: 'ReturnVisitWay'
       })
+      // let url = '/ets/table/list/userRentGetOptionList'
+      // let res = await this.$http.post(url, {
+      //   typeName: 'ReturnVisitWay'
+      // })
+
       if (res.data && res.data[0]) {
         this.options = res.data
         this.formObj.way = this.options[0].value
@@ -119,23 +124,41 @@ export default {
       }
       let scoreArr = [10, 30, 70, 80, 90]
       let satisfactionArr = ['NotSatisfaction1', 'NotSatisfaction1', 'Satisfaction3', 'Satisfaction2', 'Satisfaction1']
-      let url = '/ets/syswin/smd/userServiceInsertReturnVisit'
-      let res = await this.$http.post(url, {
-        userName: this.nav.userName,
-        object: '',
-        objectName: this.nav.userName,
-        returnVisitWay: this.formObj.way,
-        totalScore: scoreArr[this.formObj.star - 1],
-        failureCause: this.formObj.isValid ? '' : this.formObj.failContent, // 无效原因
-        returnVisitType: 'WorkVisit',
-        returnSatisfaction: satisfactionArr[this.formObj.star - 1],
-        satisfiedVisit: this.formObj.isValid ? 1 : 2,
-        workOrdID: this.work.WorkOrdID,
-        visitState: this.formObj.isValid ? 1 : 2,
-        returnVisitDate: this.formObj.datetime,
-        opUser: this.nav.memberId,
-        memo: this.formObj.content
+      let p0 = 'UserService_InsertReturnVisit'
+      let res = await this.$xml(p0, {
+        'Object': '',
+        'ObjectName': this.nav.userName,
+        'ReturnVisitWay': this.formObj.way,
+        'TotalScore': scoreArr[this.formObj.star - 1],
+        'FailureCause': this.formObj.isValid ? '' : this.formObj.failContent, // 无效原因
+        'ReturnVisitType': 'WorkVisit',
+        'ReturnSatisfaction': satisfactionArr[this.formObj.star - 1],
+        'SatisfiedVisit': this.formObj.isValid ? 1 : 2,
+        'WorkOrdID': this.work.WorkOrdID,
+        'VisitState': this.formObj.isValid ? 1 : 2,
+        'ReturnVisitDate': this.formObj.datetime,
+        'OpUser': this.nav.memberId,
+        Memo: this.formObj.content
+      }, {
+        p1: this.nav.userName
       })
+      // let url = '/ets/syswin/smd/userServiceInsertReturnVisit'
+      // let res = await this.$http.post(url, {
+      //   userName: this.nav.userName,
+      //   object: '',
+      //   objectName: this.nav.userName,
+      //   returnVisitWay: this.formObj.way,
+      //   totalScore: scoreArr[this.formObj.star - 1],
+      //   failureCause: this.formObj.isValid ? '' : this.formObj.failContent, // 无效原因
+      //   returnVisitType: 'WorkVisit',
+      //   returnSatisfaction: satisfactionArr[this.formObj.star - 1],
+      //   satisfiedVisit: this.formObj.isValid ? 1 : 2,
+      //   workOrdID: this.work.WorkOrdID,
+      //   visitState: this.formObj.isValid ? 1 : 2,
+      //   returnVisitDate: this.formObj.datetime,
+      //   opUser: this.nav.memberId,
+      //   memo: this.formObj.content
+      // })
       this.$toast('回访成功')
       this.$root.back()
       if (!this.isDetail) {

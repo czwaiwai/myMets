@@ -50,11 +50,15 @@ export default {
   },
   methods: {
     async getPageData () {
-      // 巡检保养工单设备图片显示
-      let url = '/ets/syswin/smd/userCSGetIamgeInfo'
-      let res = await this.$http.post(url, {
-        imageID: this.detail.IamgeID
+      let p0 = 'UserCS_GetIamgeInfo'
+      let res = await this.$xml(p0, {
+        ImageID: this.detail.IamgeID
       })
+      // 巡检保养工单设备图片显示
+      // let url = '/ets/syswin/smd/userCSGetIamgeInfo'
+      // let res = await this.$http.post(url, {
+      //   imageID: this.detail.IamgeID
+      // })
       if (res.data[0]) {
         let {Memo: remark, ImageList: imgs} = res.data[0]
         if (imgs && imgs.length > 0) {
@@ -70,12 +74,13 @@ export default {
     },
     formatParam () {
       let param = {
-        equipmentID: this.detail.IamgeID,
-        iamge1: '',
-        iamge2: '',
-        iamge3: '',
-        iamge4: '',
-        memo: this.remark
+        EquipmentID: this.detail.IamgeID,
+        Iamge1: '',
+        Iamge2: '',
+        Iamge3: '',
+        Iamge4: '',
+        DeImage: '',
+        Memo: this.remark
       }
       let resArr = ['', '', '', '']
       this.imgs.forEach((item, index) => {
@@ -87,20 +92,22 @@ export default {
       })
       if (this.imgs.length > 0) {
         resArr.forEach((item, index) => {
-          param['iamge' + (index + 1)] = item
+          param['Iamge' + (index + 1)] = item
         })
       }
       if (this.delImgs.length > 0) {
-        param.deImage = this.delImgs.join(',')
+        param.DeImage = this.delImgs.join(',')
       }
-      if (resArr.every(item => !item) && param.memo === '') {
-        param.memo = '无'
+      if (resArr.every(item => !item) && param.Memo === '') {
+        param.Memo = '无'
       }
       return param
     },
     async submit () {
-      let url = '/ets/syswin/smd/userCSGetEquipmentIamge'
-      let res = this.$http.post(url, this.formatParam())
+      let p0 = 'UserCS_GetEquipmentIamge'
+      let res = await this.$xml(p0, this.formatParam())
+      // let url = '/ets/syswin/smd/userCSGetEquipmentIamge'
+      // let res = await this.$http.post(url, this.formatParam())
       this.$parent.detailItem.ImageExsit = '1'
       this.$root.back()
       console.log(res)

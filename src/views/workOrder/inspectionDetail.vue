@@ -225,12 +225,19 @@ export default {
       local.set('ins_page_' + this.work.WorkID, this.insList)
     },
     async getPageData () {
-      let res = await this.$http.post('/ets/table/list/equipBaseGetInspectionEquipmentH5', {
-        projId: this.nav.orgId,
-        workID: this.work.WorkID,
-        caseID: this.work.CaseID,
-        isCase: this.work.IsCase
+      let p0 = 'EquipBase_GetInspectionEquipmentH5'
+      let res = await this.$xml(p0, {
+        OrgID: this.nav.orgId,
+        BillID: this.work.WorkID,
+        CaseID: this.work.CaseID,
+        IsCase: this.work.IsCase
       })
+      // let res = await this.$http.post('/ets/table/list/equipBaseGetInspectionEquipmentH5', {
+      //   projId: this.nav.orgId,
+      //   workID: this.work.WorkID,
+      //   caseID: this.work.CaseID,
+      //   isCase: this.work.IsCase
+      // })
       // let list = res.data
       let insList = []
       if (this.work.IsCase === '0') {
@@ -320,11 +327,11 @@ export default {
     // 提交参数生成
     getSubmitParams () {
       let params = {
-        billId: this.work.WorkID,
-        wordType: this.work.WordType,
-        workState: this.work.WorkState,
-        opUserId: this.nav.memberId,
-        listStr: ''
+        BillID: this.work.WorkID,
+        WordType: this.work.WordType,
+        WorkState: this.work.WorkState,
+        OpUserId: this.nav.memberId,
+        Syswin: []
       }
       let arr = []
       this.insList.forEach(top => {
@@ -348,14 +355,18 @@ export default {
           arr.push(obj)
         })
       })
-      params.listStr = JSON.stringify(arr)
+      params.Syswin = arr
+      // params.listStr = JSON.stringify(arr)
       return params
     },
     // 提交巡检
     async submitIns () {
-      let url = '/ets/syswin/smd/equipBaseSaveBackWork'
       await this.$message.confirm('确定提交吗?')
-      let res = await this.$http.post(url, this.getSubmitParams())
+      let p0 = 'EquipBase_SaveBackWork'
+      let res = await this.$xml(p0, this.getSubmitParams())
+
+      // let url = '/ets/syswin/smd/equipBaseSaveBackWork'
+      // let res = await this.$http.post(url, this.getSubmitParams())
       console.log(res)
       // _this.removeStorage(_this.detailDatas.WorkID);
       local.remove('inspection_work_' + this.work.WorkID)
@@ -368,14 +379,21 @@ export default {
     },
     // 关闭巡检
     async closeIns () {
-      let url = '/ets/syswin/smd/equipBaseWorkCompletionColse'
       await this.$message.confirm('确定要关闭吗?')
-      let res = await this.$http.post(url, {
-        wordId: this.work.WorkID,
-        wordType: this.work.WordType,
-        workState: this.work.WorkState,
-        opUserId: this.nav.memberId
+      let p0 = 'EquipBase_WorkCompletionColse'
+      let res = await this.$xml(p0, {}, {
+        p1: this.work.WorkID,
+        p2: this.work.WordType,
+        p3: this.work.WorkState,
+        p4: this.nav.memberId
       })
+      // let url = '/ets/syswin/smd/equipBaseWorkCompletionColse'
+      // let res = await this.$http.post(url, {
+      //   wordId: this.work.WorkID,
+      //   wordType: this.work.WordType,
+      //   workState: this.work.WorkState,
+      //   opUserId: this.nav.memberId
+      // })
       console.log(res)
       this.$toast('关闭' + this.typeTxt + '成功')
       // 返回主页面

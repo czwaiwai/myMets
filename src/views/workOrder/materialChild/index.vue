@@ -62,11 +62,16 @@ export default {
   },
   methods: {
     async getPageData () {
-      let url = '/ets/syswin/smd/userCSGetApplyInfoH5'
-      let res = await this.$http.post(url, {
-        orgID: this.work.OrgID,
-        wordQuertionID: this.work.WorkQuestionID
+      let p0 = 'UserCS_GetApplyInfoH5'
+      let res = await this.$xml(p0, {
+        OrgID: this.work.OrgID,
+        WordQuertionID: this.work.WorkQuestionID
       })
+      // let url = '/ets/syswin/smd/userCSGetApplyInfoH5'
+      // let res = await this.$http.post(url, {
+      //   orgID: this.work.OrgID,
+      //   wordQuertionID: this.work.WorkQuestionID
+      // })
       if (res.data && res.data[0]) {
         let total = 0
         this.list = this.$toLower(res.data).map(item => {
