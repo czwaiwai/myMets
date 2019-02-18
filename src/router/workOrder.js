@@ -27,14 +27,14 @@ export default [
     },
     children: [
       {
-        path: 'detail',
+        path: 'detail/:workId',
         name: 'inspectionDetail',
         component: InspectionDetail,
         meta: {
           title: '巡检详情'
         },
         children: [{
-          path: 'photo',
+          path: 'photo/:type',
           name: 'photo',
           component: Photo,
           meta: {

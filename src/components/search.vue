@@ -3,7 +3,7 @@
   <div  class="weui-search-bar " :class="isFocus || noFocus?'weui-search-bar_focusing':''" id="searchBar">
     <form @submit.prevent="submitSearch" class="weui-search-bar__form">
       <div class="weui-search-bar__box">
-        <i class="weui-icon-search"></i>
+        <slot name="icon"><i class="weui-icon-search"></i></slot>
         <!-- v-model="search" -->
         <input ref="search" :value="value" @input="searchInput"  type="search" :placeholder="placeholder"  @focus="inputFocus"  @blur="inputBlur" class="weui-search-bar__input" id="searchInput"  >
         <a v-show="value" @click="searchClear" href="javascript:" class="weui-icon-clear" id="searchClear"></a>

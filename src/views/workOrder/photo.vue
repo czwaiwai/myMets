@@ -5,7 +5,7 @@
         <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header>
     <div class="page_bd">
-      <div class="weui-cells weui-cells_form" style="margin-top:0;">
+      <div v-if="!onlyPhoto" class="weui-cells weui-cells_form" style="margin-top:0;">
         <div class="weui-cell">
             <div class="weui-cell__bd">
                 <textarea v-model="remark" class="weui-textarea" maxlength="200" placeholder="请描述巡检情况..." rows="3"></textarea>
@@ -14,8 +14,8 @@
         </div>
       </div>
       <div class="light_bg padding-h padding-v">
-        <ins-img-list :imgs.sync="imgs" :max="3" @del="delItems" >
-            <p class="dark_99"><i class="iconfont icon-weizhi-tianchong padding-right5"></i> {{detail.InstallationSite}}</p>
+        <ins-img-list :imgs.sync="imgs" :max="maxImgNum" @del="delItems" :only-water="true" >
+          <p class="dark_99"><i class="iconfont icon-weizhi-tianchong padding-right5"></i> {{detail.InstallationSite}}</p>
        </ins-img-list>
       </div>
         <div class="padding15">
@@ -34,6 +34,7 @@ export default {
       imgs: [],
       delImgs: [],
       remark: '',
+      maxImgNum: 3,
       detail: {}
     }
   },
@@ -41,7 +42,10 @@ export default {
   created () {
     this.detail = this.$parent.detailItem
     console.log(this.detail)
-    this.onlyPhoto = this.$route.params.type === 'ins'
+    this.onlyPhoto = this.$route.params.type === 'inspection'
+    if (this.onlyPhoto) {
+      this.maxImgNum = 1
+    }
     this.getPageData()
   },
   methods: {

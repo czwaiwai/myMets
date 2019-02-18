@@ -4,7 +4,7 @@
       <mt-header  title="我的"></mt-header>
     </div>
     <div class="page_bd">
-      <div class="weui-cells" style="margin-top:15px;">
+      <div class="weui-cells" style="margin-top:0;">
         <div @click="$router.forward('/setting')" class="weui-cell weui-cell_access">
           <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
             <!--<img src="images/pic_160.png" style="width: 50px;display: block">-->
@@ -74,9 +74,7 @@
       <!--<button @click="testGetData">取出出去</button>-->
       <!--<button @click="testDelData">删除数据</button>-->
       <!--<button @click="testHasData">是否存在数据</button>-->
-      <div class="weui-btn-area">
-        <a @click="logoutHandle" class="weui-btn weui-btn_default" href="javascript:" id="showTooltips">退出登录</a>
-      </div>
+      <a @click="logoutHandle"  class="logout_btn"  href="javascript:" id="showTooltips">退出登录</a>
     </div>
   </div>
 </template>
@@ -146,5 +144,7 @@ export default {
     line-height: 50px;
     font-size: 20px;
   }
-
+  .logout_btn {
+    text-align:center;display:block;color:#333;font-size:16px;height:40px;line-height:40px;background:#FFF;margin-top:15px;border:none;
+  }
 </style>

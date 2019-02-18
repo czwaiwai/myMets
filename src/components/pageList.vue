@@ -158,6 +158,9 @@ export default {
     setItem (item, index) {
       this.$set(this.list, index, item)
     },
+    getList () {
+      return this.list
+    },
     loadMore () {
       if (['empty', 'end'].indexOf(this.listStatus) > -1) {
         this.loading = true

@@ -41,7 +41,7 @@
                       <p class="dark_99"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
                   </div>
               </div>
-              <div class="weui-panel__ft text-right padding-right15 padding-bottom">
+              <div class="weui-panel__ft text-right padding-right15 padding-bottom15">
                   <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
                   <button :key="index" v-for="(buttonItem,index) in showButtons(scope.item.WorkOrdState, scope.item.bHandle, scope.item.IsFromSkill)" @click="btnAction(scope.item, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
               </div>

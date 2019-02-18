@@ -5,80 +5,86 @@
   </div>
   <div class="page_bd">
     <div class="scroll">
-      <div class="weui-grids light_bg">
-        <a @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid">
+      <div class="weui-grids">
+        <a @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_sp.png" alt="">
           </div>
           <p class="weui-grid__label">审批</p>
         </a>
-        <a @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid">
+        <a @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_cb.png"  alt="">
           </div>
           <p class="weui-grid__label">抄表</p>
         </a>
-        <!-- <a @click="$app.loadView({url: chaoBiaoUrl, type:'chaobiao', isTitle: '抄表'})"  href="javascript:;" class="weui-grid">
+        <!-- <a @click="$app.loadView({url: chaoBiaoUrl, type:'chaobiao', isTitle: '抄表'})"  href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_cb.png" alt="">
           </div>
           <p class="weui-grid__label">抄表</p>
         </a> -->
-        <a  @click="$app.loadView({url: 'http://' + ip +'/ETSInspection/#page=0', type:'xunjian'})" href="javascript:;" class="weui-grid">
+        <!-- <a  @click="$app.loadView({url: 'http://' + ip +'/ETSInspection/#page=0', type:'xunjian'})" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
           </div>
           <p class="weui-grid__label">巡检</p>
-        </a>
-        <a  @click="$router.forward('/workOrder/inspection')" href="javascript:;" class="weui-grid">
+        </a> -->
+        <a  @click="$router.forward('/workOrder/inspection')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
-            <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
+            <img src="../assets/img/work/icon_work_inspection.png"  alt="">
           </div>
           <p class="weui-grid__label">巡检</p>
         </a>
-        <!-- <a  @click="$router.forward('/workOrder/customerService')" href="javascript:;" class="weui-grid">
+        <!-- <a  @click="$router.forward('/workOrder/customerService')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
           </div>
           <p class="weui-grid__label">客服工单</p>
         </a> -->
-        <a  @click="$app.loadView({url:'http://' + ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid">
+        <!-- <a  @click="$app.loadView({url:'http://' + ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid light_bg">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_by.png"  alt="">
+          </div>
+          <p class="weui-grid__label">保养</p>
+        </a> -->
+        <a  @click="$router.forward('/workOrder/inspection?orderType=KeepFit')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_by.png"  alt="">
           </div>
           <p class="weui-grid__label">保养</p>
         </a>
-        <a  @click="$router.forward('/customerService?type=baoshi')" href="javascript:;" class="weui-grid">
+        <a  @click="$router.forward('/customerService?type=baoshi')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_bs.png" alt="">
           </div>
           <p class="weui-grid__label">报事</p>
         </a>
-        <a  @click="$router.forward('/customerService?type=baoxiu')" href="javascript:;" class="weui-grid">
+        <a  @click="$router.forward('/customerService?type=baoxiu')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_wx.png" alt="">
           </div>
           <p class="weui-grid__label">报修</p>
         </a>
-        <a @click="$router.forward('/getCash')" href="javascript:;" class="weui-grid">
+        <a @click="$router.forward('/getCash')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_sk.png" alt="">
           </div>
           <p class="weui-grid__label">收款</p>
         </a>
-        <a  @click="$router.forward('/rentIndex')" href="javascript:;" class="weui-grid">
+        <a  @click="$router.forward('/rentIndex')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_work_zl.png" alt="">
           </div>
           <p class="weui-grid__label">租赁</p>
         </a>
-        <a @click="$app.loadView({url:shenlinagUrl, type: 'oa'})" href="javascript:;" class="weui-grid">
+        <a @click="$app.loadView({url:shenlinagUrl, type: 'oa'})" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_oa.png" alt="">
           </div>
           <p class="weui-grid__label">OA</p>
         </a>
-        <a @click="jumpOffline" href="javascript:;" class="weui-grid">
+        <a @click="jumpOffline" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_off_download.png" alt="">
           </div>
@@ -86,31 +92,31 @@
           <span v-if="offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
         </a>
         <!-- 暂时无用 -->
-        <!-- <a @click="$router.forward('/cash')" href="javascript:;" class="weui-grid">
+        <!-- <a @click="$router.forward('/cash')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_off_download.png" alt="">
           </div>
           <p class="weui-grid__label">收款测试</p>
         </a> -->
-        <a @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid">
+        <a @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_meeting.png" alt="">
           </div>
           <p class="weui-grid__label">会议</p>
         </a>
-        <a @click="$router.forward('/investmentIndex')" href="javascript:;" class="weui-grid">
+        <a @click="$router.forward('/investmentIndex')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_investment.png" alt="">
           </div>
           <p class="weui-grid__label">投资性物业</p>
         </a>
-        <a @click="$router.forward('/comparedBuild')" href="javascript:;" class="weui-grid">
+        <a @click="$router.forward('/comparedBuild')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_compare.png" alt="">
           </div>
           <p class="weui-grid__label">整改对比</p>
         </a>
-        <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'other', isTitle: item.appName})" href="javascript:;" class="weui-grid">
+        <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'other', isTitle: item.appName})" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img :src="item.h5Icon" alt="">
           </div>
@@ -281,8 +287,8 @@ export default {
     background:#FFF;
   }
   .weui-grid__icon {
-    width: 54px;
-    height: 54px;
+    width: 40px;
+    height: 40px;
     margin: 0 auto;
   }
   .weui-grid {

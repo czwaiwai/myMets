@@ -80,6 +80,12 @@ export default {
     form: {
       type: Object,
       default: () => {}
+    },
+    validate: {
+      type: Function,
+      default: function () {
+        return true
+      }
     }
   },
   data () {
@@ -250,7 +256,7 @@ export default {
       })
     },
     confirm () {
-      if (this.validatesItem()) {
+      if (this.validatesItem() && this.validate(this.form)) {
         this.$emit('submit', this.form)
         this.$emit('input', false)
       }

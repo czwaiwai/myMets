@@ -31,6 +31,10 @@ export default {
     max: {
       type: Number,
       default: 1
+    },
+    onlyWater: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -59,7 +63,12 @@ export default {
         this.$emit('update:imgs', imgs)
         this.$previewRefresh()
       } else {
-        let img = await this.$app.getPic()
+        let img
+        if (this.onlyWater) {
+          img = await this.$app.waterCamera()
+        } else {
+          img = await this.$app.getPic()
+        }
         let imgs = [...this.imgs, img]
         this.$emit('update:imgs', imgs)
         this.$previewRefresh()

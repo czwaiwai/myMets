@@ -4,7 +4,7 @@
       <dt class="padding-bottom">
         <label><slot></slot></label>
       </dt>
-      <dd class="weui-flex">
+      <dd class="weui-flex padding-bottom5">
         <div @click="dateShow(dateArr[0], 'start')"  class="date_input clearfix">
           <input readonly  :value="dateArr[0]" placeholder="开始时间">
           <i class="float_right padding-right iconfont icon-calendar icon-gengduo1"></i>

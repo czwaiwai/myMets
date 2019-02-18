@@ -4,7 +4,7 @@
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
         </mt-header>
         <div class="page_bd">
-          <div class="weui-cells">
+          <div class="weui-cells" style="margin-top:0;">
             <a @click="$router.forward('/monitor/monitorCustomer')"  class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__hd"><img src="../../assets/img/tabHome/ic_service_pool.png" alt="" style="width:35px;margin-right:5px;display:block"></div>
                 <div class="weui-cell__bd">

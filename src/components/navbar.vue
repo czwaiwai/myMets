@@ -3,7 +3,7 @@
       <li class="items" v-for="(item,index) in list" :key="index"  @click="$emit('input', item.id)">
         <span class="name" :class="{'isSelect':value === item.id}">
           {{item.name}}
-          <small class="main_color">{{(item.badge-0)>99?'+99':item.badge}}</small>
+          <small class="main_color">{{ (item.badge-0) > 99? '99+':item.badge }}</small>
         </span>
       </li>
     </ul>
