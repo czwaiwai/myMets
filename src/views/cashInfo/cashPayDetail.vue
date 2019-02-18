@@ -77,14 +77,14 @@ export default {
     }
   },
   methods: {
-    async getPageData () {
-      let url = '/ets/payment/fnpaid/getFeeSingle'
-      let res = await this.$http.post(url, {
-        paidId: this.$route.params.id || '1706081744050001003D'
-      })
-      let data = res.data[0]
-      this.formatData(data)
-    },
+    // async getPageData () {
+    //   let url = '/ets/payment/fnpaid/getFeeSingle'
+    //   let res = await this.$http.post(url, {
+    //     paidId: this.$route.params.id || '1706081744050001003D'
+    //   })
+    //   let data = res.data[0]
+    //   this.formatData(data)
+    // },
     async getPageDataNet () {
       let postName = 'UserAppFn_GetFeeSingle'
       console.log(this.$route.params.id, 'cashPayId')

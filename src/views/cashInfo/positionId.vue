@@ -40,12 +40,12 @@ export default {
     })
   },
   methods: {
-    async getPageData () {
-      let url = '/ets/table/list/userCSGetPositionIdInfo'
-      let res = await this.$http.post(url, {employeeId: this.user.memberId})
-      console.log(res)
-      this.list = res.data
-    },
+    // async getPageData () {
+    //   let url = '/ets/table/list/userCSGetPositionIdInfo'
+    //   let res = await this.$http.post(url, {employeeId: this.user.memberId})
+    //   console.log(res)
+    //   this.list = res.data
+    // },
     async getPageDataNet () {
       let p0 = 'UserCS_GetPositionIdInfo'
       let res = await this.$xml(p0, {

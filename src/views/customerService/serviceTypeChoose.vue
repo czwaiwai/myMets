@@ -56,8 +56,11 @@ export default {
   },
   methods: {
     async getPageData () {
-      let url = '/ets/syswin/smd/userCSGetRulesNode'
-      let res = await this.$http.post(url, {orgId: this.orgId})
+      // let url = '/ets/syswin/smd/userCSGetRulesNode'
+      // let res = await this.$http.post(url, {orgId: this.orgId})
+      let res = await this.$xml('UserCS_GetRulesNode', {
+        'OrgID': this.orgId
+      })
       console.log(res.data)
       this.list = res.data
       this.currType = this.list[0]

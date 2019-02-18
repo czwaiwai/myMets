@@ -87,29 +87,29 @@ export default {
     })
   },
   methods: {
-    async getPageData () {
-      let url = '/ets/payment/fnpaid/getHistoryPay'
-      let res = await this.$http.post(url, {
-        orgID: this.orgId,
-        fillpro: this.fillpro,
-        fillDate: this.yesterday
-        // 'orgID': this.user.OrgID, // orgId
-        // 'fillpro': this.user.memberId, // 员工id
-        // 'fillDate': '2018-11-13' // 日期
-      })
-      let data = res.data
-      if (data) {
-        this.list = data.customerData
-        this.cashObj = {
-          fillDate: data.fillDate,
-          totalMoney: data.totalMoney,
-          totalNumber: data.totalNumber
-        }
-        this.noData = false
-      } else {
-        this.noData = true
-      }
-    },
+    // async getPageData () {
+    //   let url = '/ets/payment/fnpaid/getHistoryPay'
+    //   let res = await this.$http.post(url, {
+    //     orgID: this.orgId,
+    //     fillpro: this.fillpro,
+    //     fillDate: this.yesterday
+    //     // 'orgID': this.user.OrgID, // orgId
+    //     // 'fillpro': this.user.memberId, // 员工id
+    //     // 'fillDate': '2018-11-13' // 日期
+    //   })
+    //   let data = res.data
+    //   if (data) {
+    //     this.list = data.customerData
+    //     this.cashObj = {
+    //       fillDate: data.fillDate,
+    //       totalMoney: data.totalMoney,
+    //       totalNumber: data.totalNumber
+    //     }
+    //     this.noData = false
+    //   } else {
+    //     this.noData = true
+    //   }
+    // },
     async getPageDataNet () {
       let p0 = 'UserAppFn_GetHistoryPay'
       let res = await this.$xml(p0, {

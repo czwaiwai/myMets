@@ -270,15 +270,20 @@ export default {
         this.type = 'baoshi'
       }
     },
-    deviceInit () {
+    async deviceInit () {
       this.urlinfo = window.location.href.split('?')[1]
       this.urlinfo = decodeURI(this.urlinfo)
       if (this.urlinfo.split('=')[0] === 'device_id') {
-        this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
-          barcodeCode: this.urlinfo.split('=')[1]
-        }).then(res => {
-          this.formObj.workPos = res.data[0].EquiName
+        // this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
+        //   barcodeCode: this.urlinfo.split('=')[1]
+        // }).then(res => {
+        //   this.formObj.workPos = res.data[0].EquiName
+        // })
+        let p0 = 'UserCS_GetEquiArchivesH5'
+        let res = await this.$xml(p0, {
+          BarcodeCode: this.urlinfo.split('=')[1]
         })
+        this.formObj.workPos = res.data[0].EquiName
       }
       if (this.urlinfo.split('=')[0] === 'name') {
         var data = this.urlinfo.split('&')
@@ -293,7 +298,11 @@ export default {
       }
     },
     async getPageData () {
-      let res = await this.$http.get('/ets/table/list/userRentGetOptionList?typeName=ReceiptMethod')
+      // let res = await this.$http.get('/ets/table/list/userRentGetOptionList?typeName=ReceiptMethod')
+      let p0 = 'UserRent_GetOptionList'
+      let res = await this.$xml(p0, {
+        TypeName: 'ReceiptMethod'
+      })
       console.log(res)
       this.options = res.data
       if (res.data) {
@@ -409,28 +418,28 @@ export default {
         this.formObj.image = this.imgs[3]
       }
     },
-    async submit () {
-      if (!this.validate()) return
-      if (this.isSendForm) return
-      try {
-        this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS')
-        this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss')
-        this.setImgs()
-        let url = '/ets/syswin/smd/userCSSaveWorkOrdInfo'
-        this.isSendForm = true
-        let res = await this.$http.post(url, this.formObj)
-        console.log(res)
-        this.$toast('提交成功')
-        setTimeout(() => {
-          this.isSendForm = false
-          // this.$root.back()
-          this.$app.back()
-        }, 1500)
-      } catch (err) {
-        console.log(err)
-        this.isSendForm = false
-      }
-    },
+    // async submit () {
+    //   if (!this.validate()) return
+    //   if (this.isSendForm) return
+    //   try {
+    //     this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS')
+    //     this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss')
+    //     this.setImgs()
+    //     let url = '/ets/syswin/smd/userCSSaveWorkOrdInfo'
+    //     this.isSendForm = true
+    //     let res = await this.$http.post(url, this.formObj)
+    //     console.log(res)
+    //     this.$toast('提交成功')
+    //     setTimeout(() => {
+    //       this.isSendForm = false
+    //       // this.$root.back()
+    //       this.$app.back()
+    //     }, 1500)
+    //   } catch (err) {
+    //     console.log(err)
+    //     this.isSendForm = false
+    //   }
+    // },
     titleCase (str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
       // return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())

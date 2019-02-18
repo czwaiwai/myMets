@@ -48,20 +48,20 @@ export default {
     this.getPageDataNet()
   },
   methods: {
-    async getPageData () {
-      let url = '/ets/payment/house/getArrearsCost'
-      let res = await this.$http.post(url, {
-        orgID: this.orgId,
-        resID: this.$route.params.roomId
-      })
-      if (res.data) {
-        console.log(res.data, '我去')
-        this.noCash = false
-        this.userList = res.data
-      } else {
-        this.noCash = true
-      }
-    },
+    // async getPageData () {
+    //   let url = '/ets/payment/house/getArrearsCost'
+    //   let res = await this.$http.post(url, {
+    //     orgID: this.orgId,
+    //     resID: this.$route.params.roomId
+    //   })
+    //   if (res.data) {
+    //     console.log(res.data, '我去')
+    //     this.noCash = false
+    //     this.userList = res.data
+    //   } else {
+    //     this.noCash = true
+    //   }
+    // },
     async getPageDataNet () {
       let p0 = 'UserAppFn_GetArrearsCost'
       let res = await this.$xml(p0, {

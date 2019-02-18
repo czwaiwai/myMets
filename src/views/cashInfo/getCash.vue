@@ -7,22 +7,22 @@
   <div class="page_bd location">
     <h1 class="room-project_name">{{orgName}}</h1>
     <div v-if="list.length > 0" class="one" style="overflow:hidden;">
-      <div class="title">{{list.length > 0 && list[0].HouesType}}</div>
+      <div class="title">分期</div>
       <ul class="list_ul clearfix">
-        <li @click="clickItem(item, index)"  :class="listIndex === index? 'active':''" v-for="(item, index) in list" :key="item.GrpID">
+        <li @click="clickItem(item, index)"  :class="listIndex === index? 'active':''" v-for="(item, index) in list" :key="item.Id">
           {{item.GrpName}}
         </li>
       </ul>
     </div>
-    <div class="two"  v-if="subItem && subItem.BudData"  style="overflow:hidden;">
-      <div class="title">{{subItem.BudData[0].HouesType}}</div>
+    <div class="two"  v-if="subItem.length"  style="overflow:hidden;">
+      <div class="title">楼栋</div>
       <ul  class="list_ul clearfix">
-        <li @click="clickSubItem(item, index)"  :class="subItemIndex === index? 'active':''" v-for="(item, index) in this.subItem.BudData"  :key="item.BudID" >
+        <li @click="clickSubItem(item, index)"  :class="subItemIndex === index? 'active':''" v-for="(item, index) in this.subItem"  :key="item.Id" >
           {{item.BudName}}
         </li>
       </ul>
     </div>
-    <div class="three" v-if="smallItem && smallItem.Unitdata && smallItem.Unitdata.length > 0"  style="overflow:hidden;" >
+    <!-- <div class="three" v-if="smallItem && smallItem.Unitdata && smallItem.Unitdata.length > 0"  style="overflow:hidden;" >
       <div class="title">{{smallItem.Unitdata[0].HouesType}}</div>
       <ul class="list_ul clearfix">
         <li class="small" @click="chooseItemUnit(item, index)" :class="unitItemIndex === index? 'active':''"  v-for="(item, index) in this.smallItem.Unitdata"  :key="index" >
@@ -37,11 +37,11 @@
           </li>
         </ul>
       </div>
-    </div>
-    <div class="three" v-if="smallItem && smallItem.ResData && smallItem.ResData.length > 0"  style="overflow:hidden;">
-      <div class="title">{{smallItem.ResData[0].HouesType}}</div>
+    </div> -->
+    <div class="three" v-if="smallItem.length > 0"  style="overflow:hidden;">
+      <div class="title">房号</div>
       <ul class="list_ul clearfix">
-        <li class="small" @click="chooseItem(item, index)" :class="smallItemIndex === index? 'active':''"  v-for="(item, index) in this.smallItem.ResData"  :key="item.BudID" >
+        <li class="small" @click="chooseItem(item, index)" :class="smallItemIndex === index? 'active':''"  v-for="(item, index) in this.smallItem"  :key="item.Id" >
           {{item.ResName}}
         </li>
       </ul>
@@ -65,9 +65,9 @@ export default {
       roomName: '',
       list: [],
       listIndex: -1,
-      subItem: null,
+      subItem: [],
       subItemIndex: -1,
-      smallItem: null,
+      smallItem: [],
       smallItemIndex: -1,
       unitItem: null,
       unitItemIndex: -1,
@@ -95,47 +95,77 @@ export default {
         this.memberId = res.memberID
         this.userId = res.userID
         this.roomName = ''
-        this.getPageData()
+        this.getPageDataNet()
       }).catch(err => {
         console.log(err)
         this.roomName = ''
-        this.getPageData()
+        this.getPageDataNet()
       })
     } else { // pos机
       this.roomName = ''
-      this.getPageData()
+      this.getPageDataNet()
     }
   },
   methods: {
-    async getPageData () {
-      let reqBudHouse = '/ets/syswin/smd/imagetGrpBudHouseInfo'
-      let res = await this.$http.post(reqBudHouse, {projectId: this.orgId})
+    // async getPageData () {
+    //   let reqBudHouse = '/ets/syswin/smd/imagetGrpBudHouseInfo'
+    //   let res = await this.$http.post(reqBudHouse, {projectId: this.orgId})
+    //   console.log(res.data)
+    //   this.list = res.data
+    // },
+    async getPageDataNet () {
+      let p0 = 'UserCS_GetGrpInfo'
+      let res = await this.$xml(p0, {
+        OrgID: this.orgId
+      })
+      // let data = this.$toLower(res.data)
       console.log(res.data)
       this.list = res.data
     },
-    clickItem (item, index) {
+    async clickItem (item, index) {
+      if (this.listIndex === index) {
+        return
+      }
       this.listIndex = index
-      this.subItem = item
+      let p0 = 'UserCS_GetBudInfo'
+      let res = await this.$xml(p0, {
+        GrpID: item.Id
+      })
+      // let data = this.$toLower(res.data)
+      console.log(res.data)
+      this.subItem = res.data
 
       this.subItemIndex = -1
       this.smallItemIndex = -1
       this.unitItemIndex = -1
       this.unitSubItemIndex = -1
-      this.smallItem = null
+      this.smallItem = []
     },
-    clickSubItem (item, index) {
+    async clickSubItem (item, index) {
+      if (this.subItemIndex === index) {
+        return
+      }
       this.subItemIndex = index
-      this.smallItem = item
-      this.unitItemIndex = -1
-      this.unitSubItemIndex = -1
-      this.unitItem = null
+
+      let p0 = 'UserCS_GetHouesInfo'
+      let res = await this.$xml(p0, {
+        BudID: item.Id
+      })
+      // let data = this.$toLower(res.data)
+      console.log(res.data)
+      this.smallItem = res.data
+
+      // this.smallItem = item
+      // this.unitItemIndex = -1
+      // this.unitSubItemIndex = -1
+      // this.unitItem = null
     },
     async chooseItem (item, index) {
       this.smallItemIndex = index
       this.unitItem = null
       let data = {
         ...item,
-        name: this.subItem['GrpName'] + this.smallItem['BudName'] + item['ResName']
+        name: this.list[this.listIndex]['GrpName'] + this.subItem[this.subItemIndex]['BudName'] + item['ResName']
       }
       console.log(item, 'room--')
       this.goRoom(data)

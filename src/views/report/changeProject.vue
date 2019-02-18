@@ -58,13 +58,13 @@ export default {
   },
   methods: {
     // 原java接口
-    async getPageData () {
-      console.log(this.user)
-      let res = await this.$http.post('/ets/syswin/smd/userGetOrgIDList', {memberId: this.memberId})
-      // this.$http.post(obj)
-      console.log(res)
-      this.list = res.data
-    },
+    // async getPageData () {
+    //   console.log(this.user)
+    //   let res = await this.$http.post('/ets/syswin/smd/userGetOrgIDList', {memberId: this.memberId})
+    //   // this.$http.post(obj)
+    //   console.log(res)
+    //   this.list = res.data
+    // },
     async getPageDataNet () {
       let p0 = 'UserCS_GetPositionIdInfo'
       let res = await this.$xml(p0, {

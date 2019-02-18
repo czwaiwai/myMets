@@ -203,12 +203,19 @@ export default {
       }
     },
     async getStatus () {
-      let url = '/ets/syswin/smd/userCSGetWorkOrdCountInfoH5'
-      let res = await this.$http.post(url, {
-        projectId: this.nav.orgId,
-        employeeId: this.currMember,
-        workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
-        positionID: this.nav.positionId
+      // let url = '/ets/syswin/smd/userCSGetWorkOrdCountInfoH5'
+      // let res = await this.$http.post(url, {
+      //   projectId: this.nav.orgId,
+      //   employeeId: this.currMember,
+      //   workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
+      //   positionID: this.nav.positionId
+      // })
+      let p0 = 'UserCS_GetWorkOrdCountInfoH5'
+      let res = await this.$xml(p0, {
+        projectID: this.nav.orgId,
+        EmployeeID: this.currMember,
+        WorkPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
+        PositionID: this.nav.positionId
       })
       res.data.map((item, index) => {
         this.typeList[index].name = item['GDName']
@@ -296,11 +303,17 @@ export default {
     // 关闭工单
     async closeOrder (obj) {
       await this.$message.confirm('确认关闭此客服工单？')
-      let url = '/ets/syswin/smd/userServiceVisitManClose'
-      let res = await this.$http.post(url, {
-        userName: this.nav.userName,
-        orderId: obj.WorkOrdID,
-        closeDate: new Date().format('yyyy-MM-dd hh:mm:ss')
+      // let url = '/ets/syswin/smd/userServiceVisitManClose'
+      // let res = await this.$http.post(url, {
+      //   userName: this.nav.userName,
+      //   orderId: obj.WorkOrdID,
+      //   closeDate: new Date().format('yyyy-MM-dd hh:mm:ss')
+      // })
+      let p0 = 'UserService_VisitManClose'
+      let res = await this.$xml(p0, {
+        UserName: this.nav.userName,
+        OrderId: obj.WorkOrdID,
+        CloseDate: new Date().format('yyyy-MM-dd hh:mm:ss')
       })
       this.refresh()
       this.$toast('工单关闭成功')

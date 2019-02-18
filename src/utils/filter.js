@@ -48,7 +48,7 @@ export default function (Vue) {
     return time
   })
   Vue.filter('formatDate', function (time) {
-    if (time.indexOf('/') > -1 || time.indexOf('-') > -1) {
+    if ((time + '').indexOf('/') > -1 || (time + '').indexOf('-') > -1) {
       time = new Date(time)
     } else {
       time = new Date(parseInt(time))

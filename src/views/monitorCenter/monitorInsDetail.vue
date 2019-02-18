@@ -79,11 +79,18 @@ export default {
   },
   methods: {
     async getPageData () {
-      let res = await this.$http.post('/ets/table/list/equipBaseGetInspectionEquipmentH5', {
-        projId: this.nav.orgId,
-        workID: this.work.WorkID,
-        caseID: this.work.CaseID,
-        isCase: this.work.IsCase
+      // let res = await this.$http.post('/ets/table/list/equipBaseGetInspectionEquipmentH5', {
+      //   projId: this.nav.orgId,
+      //   workID: this.work.WorkID,
+      //   caseID: this.work.CaseID,
+      //   isCase: this.work.IsCase
+      // })
+      let p0 = 'EquipBase_GetInspectionEquipmentH5'
+      let res = await this.$xml(p0, {
+        OrgID: this.nav.orgId,
+        BillID: this.work.WorkID,
+        CaseID: this.work.CaseID,
+        IsCase: this.work.IsCase
       })
       let list = res.data
       list.forEach((item, index) => {

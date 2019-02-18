@@ -260,16 +260,20 @@ export default {
         this.formObj.workPosFrom = 'Resource'
       }
     },
-    deviceInit () {
+    async deviceInit () {
       this.urlinfo = window.location.href.split('?')[1]
       this.urlinfo = decodeURI(this.urlinfo)
       // console.log(this.urlinfo, '-0000000000000000000000')
       if (this.urlinfo.split('=')[0] === 'device_id') {
-        this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
-          barcodeCode: this.urlinfo.split('=')[1]
-        }).then(res => {
-          this.formObj.workPos = res.data[0].EquiName
+        // this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
+        //   barcodeCode: this.urlinfo.split('=')[1]
+        // }).then(res => {
+        //   this.formObj.workPos = res.data[0].EquiName
+        // })
+        let res = await this.$xml('UserCS_GetEquiArchivesH5', {
+          BarcodeCode: this.urlinfo.split('=')[1]
         })
+        this.formObj.workPos = res.data[0].EquiName
       }
       if (this.urlinfo.split('=')[0] === 'name') {
         var data = this.urlinfo.split('&')
@@ -286,7 +290,10 @@ export default {
       }
     },
     async getPageData () {
-      let res = await this.$http.get('/ets/table/list/userRentGetOptionList?typeName=ReceiptMethod')
+      // let res = await this.$http.get('/ets/table/list/userRentGetOptionList?typeName=ReceiptMethod')
+      let res = await this.$xml('UserRent_GetOptionList', {
+        'TypeName': 'ReceiptMethod'
+      })
       console.log(res)
       this.options = res.data
       if (res.data) {
@@ -409,9 +416,10 @@ export default {
         this.formObj.woNo = 'KF' + new Date().format('yyyyMMddhhmmssS')
         this.formObj.rsDate = new Date().format('yyyy-MM-dd hh:mm:ss')
         this.setImgs()
-        let url = '/ets/syswin/smd/userCSSaveWorkOrdInfo'
+        // let url = '/ets/syswin/smd/userCSSaveWorkOrdInfo'
         this.isSendForm = true
-        let res = await this.$http.post(url, this.formObj)
+        // let res = await this.$http.post(url, this.formObj)
+        let res = await this.$xml('UserCS_SaveWorkOrdInfo', this.formObj)
         console.log(res)
         this.$toast('提交成功')
         setTimeout(() => {

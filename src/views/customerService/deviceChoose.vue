@@ -57,8 +57,12 @@ export default {
   },
   methods: {
     async getPageData () {
-      let res = await this.$http.post('/ets/syswin/smd/userCSGetEquiArchives', {
-        orgId: this.orgId
+      // let res = await this.$http.post('/ets/syswin/smd/userCSGetEquiArchives', {
+      //   orgId: this.orgId
+      // })
+      let p0 = 'UserCS_GetEquiArchives'
+      let res = await this.$xml(p0, {
+        OrgID: this.orgId
       })
       this.tmpData = res.data
       this.list = res.data

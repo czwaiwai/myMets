@@ -119,8 +119,12 @@ export default {
       }
     },
     async getPageData () {
-      let res = await this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
-        barcodeCode: this.deviceId
+      // let res = await this.$http.post('/ets/table/list/userCSGetEquiArchivesH5', {
+      //   barcodeCode: this.deviceId
+      // })
+      let p0 = 'UserCS_GetEquiArchivesH5'
+      let res = await this.$xml(p0, {
+        BarcodeCode: this.deviceId
       })
       if (res.data && res.data[0]) {
         this.scanObj = res.data[0]
