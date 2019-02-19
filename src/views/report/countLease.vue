@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header title="租赁统计">
+    <!-- <mt-header title="租赁统计">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="租赁统计"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
         <!-- <search v-model="search"></search> -->
@@ -66,9 +67,10 @@ import mapReady from '@/utils/getEchars'
 import PageList from '@/components/pageList'
 import FilterModal from '@/components/filterModal'
 import FilterDateEnd from '@/components/filter/dateEnd'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'repairDetail',
-  components: {Search, PageList, FilterModal, FilterDateEnd},
+  components: {Search, PageList, FilterModal, FilterDateEnd, navTitle},
   data () {
     return {
       mapShow: true,

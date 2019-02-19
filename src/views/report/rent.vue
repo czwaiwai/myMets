@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="租赁分析">
+    <!-- <mt-header  title="租赁分析">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="租赁分析"></nav-title>
     <div class="page_bd">
       <div class="weui-flex  text-center padding-v padding15-h">
         <dl  class="weui-flex__item">
@@ -10,7 +11,7 @@
           <dd class="fs14">已出租面积</dd>
         </dl>
         <dl class="weui-flex__item">
-          <dt class="fs20" style="color: #0DC88C;">{{rentSummery.Num}}<small>户</small></dt>
+          <dt class="fs20" style="color: #3395ff;">{{rentSummery.Num}}<small>户</small></dt>
           <dd class="fs14">企业户数</dd>
         </dl>
       </div>
@@ -54,8 +55,10 @@
 </template>
 <script>
 import ready from '@/utils/getEchars'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'rent',
+  components: {navTitle},
   data () {
     return {
       rentSummery: {},

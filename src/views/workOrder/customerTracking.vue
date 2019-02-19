@@ -1,40 +1,43 @@
 <template>
   <div class="page_modal">
-      <div class="page">
-          <mt-header title="服务跟踪">
-              <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-          </mt-header>
-          <div class="page_bd">
-            <div class="light_bg weui-flex padding15 margin-bottom">
-              <div class="padding-right item_center">
-                <i class="iconfont icon-fuwuerji c-666 fs60" style="font-size:30px;"></i>
-              </div>
-              <div class="weui-flex__item">
-                <p>责任人：{{detail.Orders }} <span class="main_color padding-left">{{detail.OrdersMobile }}</span></p>
-                <p class="dark_99">辅助责任人:{{detail.PlusEmployeeName }} <span class="padding-left">{{detail.PlusEmployeeNameMobile }}</span></p>
-              </div>
-            </div>
-            <div class="light_bg">
-              <ul class="track_time_wrap">
-                <li class="border-top-half " v-for="(item, index) in tracks" :key="index" :class="index==0? 'main_color':'dark_99'">
-                    <div class="cell padding15-h padding-v">
-                        <div class="dot"></div>
-                        <!-- <div class="dot" v-bind:class="{'new': index == 0}"></div> -->
-                        <div class="pl90 pr30 pt30 pb30">
-                            <p class="text">{{item.name}}</p>
-                            <p class="fs12">{{ item.time }}</p>
-                        </div>
-                    </div>
-                </li>
-              </ul>
-            </div>
+    <div class="page">
+      <!-- <mt-header title="服务跟踪">
+        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+      </mt-header> -->
+      <nav-title title="服务跟踪"></nav-title>
+      <div class="page_bd">
+        <div class="light_bg weui-flex padding15 margin-bottom">
+          <div class="padding-right item_center">
+            <i class="iconfont icon-fuwuerji c-666 fs60" style="font-size:30px;"></i>
           </div>
+          <div class="weui-flex__item">
+            <p>责任人：{{detail.Orders }} <span class="main_color padding-left">{{detail.OrdersMobile }}</span></p>
+            <p class="dark_99">辅助责任人:{{detail.PlusEmployeeName }} <span class="padding-left">{{detail.PlusEmployeeNameMobile }}</span></p>
+          </div>
+        </div>
+        <div class="light_bg">
+          <ul class="track_time_wrap">
+            <li class="border-top-half " v-for="(item, index) in tracks" :key="index" :class="index==0? 'main_color':'dark_99'">
+              <div class="cell padding15-h padding-v">
+                <div class="dot"></div>
+                <!-- <div class="dot" v-bind:class="{'new': index == 0}"></div> -->
+                <div class="pl90 pr30 pt30 pb30">
+                  <p class="text">{{item.name}}</p>
+                  <p class="fs12">{{ item.time }}</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
+    </div>
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'customerTracking',
+  components: {navTitle},
   data () {
     return {
       tracks: [],

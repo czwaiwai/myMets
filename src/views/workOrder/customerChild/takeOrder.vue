@@ -1,31 +1,32 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <mt-header title="接单">
+    <!-- <mt-header title="接单">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="接单"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin:0;">
         <div class="weui-cell padding15 " href="javascript:;">
-            <div class="weui-cell__bd">
-              <p class="bold">选择责任人</p>
-            </div>
+          <div class="weui-cell__bd">
+            <p class="bold">选择责任人</p>
+          </div>
         </div>
         <a  @click="chooseMain" class="weui-cell weui-cell_access" href="javascript:;">
-            <div class="weui-cell__bd">
-              <p>责任人</p>
+          <div class="weui-cell__bd">
+            <p>责任人</p>
+          </div>
+          <div class="weui-cell__ft"  :class="formObj.orders?'dark_33':''">
+            {{formObj.orders  || '必选'}}
             </div>
-            <div class="weui-cell__ft"  :class="formObj.orders?'dark_33':''">
-              {{formObj.orders  || '必选'}}
-              </div>
         </a>
         <a @click="chooseOther" class="weui-cell weui-cell_access" href="javascript:;">
-            <div class="weui-cell__bd" style="min-width: 100px;">
-              <p>辅助责任人</p>
-            </div>
-            <div class="weui-cell__ft " :class="formObj.plusEmployeeName?'dark_33':''">
-              {{formObj.plusEmployeeName || '选填(可多选)' }}
-            </div>
+          <div class="weui-cell__bd" style="min-width: 100px;">
+            <p>辅助责任人</p>
+          </div>
+          <div class="weui-cell__ft " :class="formObj.plusEmployeeName?'dark_33':''">
+            {{formObj.plusEmployeeName || '选填(可多选)' }}
+          </div>
         </a>
       </div>
       <div class="padding15">
@@ -49,8 +50,10 @@
 // var userServiceSingleBill = '/ets/syswin/smd/userServiceSingleBill'
 // // 消息推送
 // var getMetsMessage = '/ets/message/getMessage'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'takeOrder',
+  components: {navTitle},
   data () {
     return {
       formObj: {

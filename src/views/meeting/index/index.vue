@@ -130,7 +130,7 @@ export default {
       }
     }
     .destine .pics{
-      background: #0DC88C;
+      background: #3395ff;
     }
     .myDestine .pics{
       background: #FA8A2C;

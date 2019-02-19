@@ -12,7 +12,7 @@
     text-align: center;
     color: #fff;
     border-radius: .1rem;
-    background: #0DC88C;
+    background: #3395ff;
   }
 }
 .selectItem{
@@ -149,7 +149,7 @@
 	background: #E8E8E8 !important;
 	opacity: 1 !important;
 	&.is-active{
-		background: #0DC88C !important;
+		background: #3395ff !important;
 	}
 }
 .picker-toolbar{
@@ -207,8 +207,8 @@
 	width: 0 !important;
 	height: 0 !important;
 	overflow: hidden;
-	border-top: 4px solid #0DC88C !important;
-	border-left: 4px solid #0DC88C !important;
+	border-top: 4px solid #3395ff !important;
+	border-left: 4px solid #3395ff !important;
 	border-bottom: 4px solid #F0F2F4 !important;
 	border-right: 4px solid #F0F2F4 !important;
 }
@@ -225,8 +225,8 @@
 	width: 0 !important;
 	height: 0 !important;
 	overflow: hidden;
-	border-top: 4px solid #0DC88C !important;
-	border-right: 4px solid #0DC88C !important;
+	border-top: 4px solid #3395ff !important;
+	border-right: 4px solid #3395ff !important;
 	border-bottom: 4px solid #F0F2F4 !important;
 	border-left: 4px solid #F0F2F4 !important;
 }
@@ -247,7 +247,7 @@
 	color: #FC5A5A !important;
 }
 .wh_content_item .wh_chose_day{
-	background: #0DC88C !important;
+	background: #3395ff !important;
 	color: #fff !important;
 }
 .wh_item_date{
@@ -262,7 +262,7 @@
 	z-index: 9;
 	width: 30px;
 	height: 44px;
-	// background: #0DC88C;
+	// background: #3395ff;
 	&::after{
 		position: absolute;
 		top: 18px;
@@ -272,8 +272,8 @@
 		display: block;
 		content: '';
 		overflow: hidden;
-		border-top: 4px solid #0DC88C;
-		border-left: 4px solid #0DC88C;
+		border-top: 4px solid #3395ff;
+		border-left: 4px solid #3395ff;
 		border-bottom: 4px solid #F0F2F4;
 		border-right: 4px solid #F0F2F4;
 		transform: rotate(-45deg);
@@ -296,8 +296,8 @@
 		display: block;
 		content: '';
 		overflow: hidden;
-		border-top: 4px solid #0DC88C;
-		border-right: 4px solid #0DC88C;
+		border-top: 4px solid #3395ff;
+		border-right: 4px solid #3395ff;
 		border-bottom: 4px solid #F0F2F4;
 		border-left: 4px solid #F0F2F4;
 		transform: rotate(45deg);
@@ -328,7 +328,7 @@
 		width: 8px;
 		height: 8px;
 		border-radius: 4px;
-		background: #0DC88C;
+		background: #3395ff;
 		content: '';
 	}
 }

@@ -266,10 +266,10 @@ export default {
       let res = await this.$xml('UserAudit_GetWorkflowTypes', {})
       console.log(res)
       if (res.status === 200 || res.status === '200') {
-        res.data.Syswin.forEach(arr => {
+        res.data.forEach(arr => {
           arr.isSelect = false
         })
-        this.typesList = this.typesList.concat(res.data.Syswin)
+        this.typesList = this.typesList.concat(res.data)
       }
       return true
     },

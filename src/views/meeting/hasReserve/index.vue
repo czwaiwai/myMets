@@ -72,7 +72,7 @@ export default {
           height: .88rem;
           line-height: .88rem;
           font-size: .34rem;
-          color: #0DC88C;
+          color: #3395ff;
         }
         .name{
           float: left;
@@ -102,7 +102,7 @@ export default {
             height: .5rem;
             margin-bottom: .1rem;
             font-size: .3rem;
-            color: #0DC88C;
+            color: #3395ff;
             line-height: .5rem;
             &::before{
               position: absolute;
@@ -128,7 +128,7 @@ export default {
             font-size: .3rem;
             color: #999;
             .icon{
-              color: #0DC88C;
+              color: #3395ff;
               font-size: .34rem;
             }
             .phone{

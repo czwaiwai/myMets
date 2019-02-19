@@ -298,7 +298,7 @@ export default {
       font-size: 0.3rem;
       line-height: 0.56rem;
       text-align: right;
-      color: #0DC88C;
+      color: #3395ff;
     }
   }
   .investmentSearch {
@@ -322,7 +322,7 @@ export default {
           height: .88rem;
           line-height: .88rem;
           font-size: .28rem;
-          color: #0DC88C;
+          color: #3395ff;
         }
       }
       .list{
@@ -388,7 +388,7 @@ export default {
             background: #FA8A2C;
           }
           &.statusColor1 {
-            background: #0DC88C;
+            background: #3395ff;
           }
           &.statusColor2 {
             background: #2CB4FA;

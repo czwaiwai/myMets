@@ -150,7 +150,7 @@ export default {
             white-space: nowrap;
             text-overflow: ellipsis;
             &.isSelect{
-              // color: #0dc88c;
+              // color: #3395ff;
               border: 1px solid #3395ff;
             }
             &:nth-child(3n){

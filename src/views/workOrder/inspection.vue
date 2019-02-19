@@ -1,8 +1,9 @@
 <template>
     <div class="page">
-      <mt-header :title="typeTxt+'工单'">
-          <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      </mt-header>
+      <!-- <mt-header :title="typeTxt+'工单'">
+        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+      </mt-header> -->
+      <nav-title :title="typeTxt+'工单'"></nav-title>
       <div class="weui-flex">
         <div class="weui-flex__item">
           <search v-model="searchKey"  placeholder="扫码或输设备号、设备名"  :noFocus="true" @searchRes="searchRes" >
@@ -46,17 +47,17 @@
                 </span>
               </div>
               <div @click="routeTo(scope.item)"  class="weui-panel__bd" >
-                  <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px">
-                      <h4 class="weui-media-box__title">{{scope.item.PlanName}}</h4>
-                      <p><span class="dark_99">巡 检 人:</span> {{scope.item.Principal}}</p>
-                      <p><span class="dark_99">开始时间:</span> {{scope.item.PlanStartTime}}</p>
-                  </div>
+                <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px">
+                  <h4 class="weui-media-box__title">{{scope.item.PlanName}}</h4>
+                  <p><span class="dark_99">巡 检 人:</span> {{scope.item.Principal}}</p>
+                  <p><span class="dark_99">开始时间:</span> {{scope.item.PlanStartTime}}</p>
+                </div>
               </div>
               <div class="weui-panel__ft text-right padding-right15 padding-bottom">
-                  <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
-                  <button @click="covertOrder(scope.item)" class="ins_btn ins_btn_plain_default"  v-if="scope.item.WorkState==='2'">转单</button>
-                  <button @click="routeTo(scope.item)"   class="ins_btn ins_btn_plain_primary" v-if="scope.item.WorkState==='2'">{{typeTxt}}</button>
-                  <button @click="closeOrder(scope.item)"  class="ins_btn ins_btn_plain_primary"   v-if="scope.item.WorkState==='3'">关闭</button>
+                <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
+                <button @click="covertOrder(scope.item)" class="ins_btn ins_btn_plain_default"  v-if="scope.item.WorkState==='2'">转单</button>
+                <button @click="routeTo(scope.item)"   class="ins_btn ins_btn_plain_primary" v-if="scope.item.WorkState==='2'">{{typeTxt}}</button>
+                <button @click="closeOrder(scope.item)"  class="ins_btn ins_btn_plain_primary"   v-if="scope.item.WorkState==='3'">关闭</button>
               </div>
             </div>
           </template>
@@ -86,6 +87,7 @@ import FilterRadio from '@/components/filter/radio'
 import {mapGetters} from 'Vuex'
 import navbar from '@/components/navbar'
 import PageList from '@/components/pageList'
+import navTitle from '@/components/navTitle'
 /*
           @param arr Array
           @param cut int
@@ -131,6 +133,7 @@ function asyncForEach (arr, cut, fn) {
 export default {
   name: 'inspection',
   components: {
+    navTitle,
     MtProgress: Progress,
     Search,
     FilterModal,

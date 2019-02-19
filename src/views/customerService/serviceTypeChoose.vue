@@ -1,9 +1,10 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <mt-header title="类型">
+        <!-- <mt-header title="类型">
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
+        </mt-header> -->
+        <nav-title title="类型"></nav-title>
         <div class="page_bd ">
           <div class="type_nav_bar">
             <div class="weui-cells" style="margin-top:0;">
@@ -21,7 +22,7 @@
               <li v-for="(item, index) in currType.ProblemList" :key="item.ID">
                 <div class="title weui-flex">
                   <div  @click="resChoose(item)"  class="weui-flex__item ">{{item.Name}}</div>
-                  <span  style="display:block;width: 40px;text-align: right;padding-right:15px;" @click="itemChoose(item, index)"  class="float_right"><i class="iconfont  " :class="index === currIndex?'icon-shouqi':'icon-xiala'"></i></span>
+                  <span  style="display:block;width: 40px;text-align: right;padding-right:15px;" @click="itemChoose(item, index)"  class="float_right"><i class="iconfont  " :class="index === currIndex?'icon-shouqi':'icon-xiala1'"></i></span>
                 </div>
                 <div class="sub_bottom" >
                   <ul v-show="index === currIndex" class="sub_ul clearfix">
@@ -38,8 +39,10 @@
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'serviceTypeChoose',
+  components: {navTitle},
   data () {
     return {
       list: [],

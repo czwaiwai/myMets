@@ -1,7 +1,8 @@
 <template>
   <div class="page report">
     <div class="page_hd">
-      <mt-header   :title="$route.meta && $route.meta.title"></mt-header>
+      <!-- <mt-header   :title="$route.meta && $route.meta.title"></mt-header> -->
+      <nav-title :title="$route.meta && $route.meta.title" :hasBtn="hasBtn"></nav-title>
     </div>
     <div v-if="!singleMode" class="page_sub_hd" style="height:50px;line-height:50px;">
       <mt-navbar v-model="selected">
@@ -75,10 +76,13 @@
 // http://localhost:8080/mets/report/docs/index.html?UserId=test30&PositionId=11091316310300010000&projectID=11091315263400010000&memberId=30&projectName=测试项目&Report=APP_Report&ReportWork=APP_ReportWork&ReportEquip=APP_ReportEquip&ReportCollection=APP_ReportCollection#page=0
 import {mapGetters} from 'Vuex'
 import qs from 'qs'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'tabReport',
+  components: {navTitle},
   data () {
     return {
+      hasBtn: false,
       selected: '2',
       currRand: 0,
       singleMode: true,
@@ -155,12 +159,12 @@ export default {
         {name: '出租率', urlName: 'report_rentRate', color: '#FA7466', icon: 'icon-chuzu', auth: 'JLT_APP_ReportRentRentalRate', value: []},
         {name: '合同统计', urlName: 'report_agreement', color: '#46A9FC', icon: 'icon-tubiaozhizuomoban_fuzhi', auth: 'DQ_APP_ContractStatistics', value: []},
         {name: '租赁统计', urlName: 'report_countLease', color: '#FA8A2C', icon: 'icon-zu', auth: 'DQ_APP_LeasingStatistics', value: []},
-        {name: '权证统计', urlName: 'report_warrant', color: '#0DC88C', icon: 'icon-hetong', auth: 'DQ_APP_WarrantStatistics', value: []}
+        {name: '权证统计', urlName: 'report_warrant', color: '#3395ff', icon: 'icon-hetong', auth: 'DQ_APP_WarrantStatistics', value: []}
       ]
       let rightArr = [
         {name: '客服服务', urlName: 'report_customer', color: '#46A9FC', icon: 'icon-kehufuwu', auth: 'APP_ReportWork', value: []},
         {name: '设备管理', urlName: 'report_device', color: '#FA8A2C', icon: 'icon-shebeiguanli', auth: 'APP_ReportEquip', value: []},
-        {name: '项目收款', urlName: 'report_cash', color: '#0DC88C', icon: 'icon-shoukuan', auth: 'APP_ReportCollection', value: []},
+        {name: '项目收款', urlName: 'report_cash', color: '#3395ff', icon: 'icon-shoukuan', auth: 'APP_ReportCollection', value: []},
         {name: '项目出租', urlName: 'report_lease', color: '#FCBA46', icon: 'icon-chuzu', auth: 'APP_ReportRent', value: []}
       ]
       leftArr.forEach(item => {

@@ -1,9 +1,10 @@
 <template>
   <div class="page_modal">
     <div class="page">
-      <mt-header title="收款">
+      <!-- <mt-header title="收款">
         <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      </mt-header>
+      </mt-header> -->
+      <nav-title title="收款"></nav-title>
       <div class="page_sub_hd padding15-h light_bg"  style="background: #FFF;">
         <i class="iconfont icon-shouye-copy main_color padding-right"></i>{{roomName}}
       </div>
@@ -31,8 +32,10 @@
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'customerList',
+  components: {navTitle},
   data () {
     return {
       orgId: '',

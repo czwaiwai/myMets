@@ -1,31 +1,33 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <mt-header title="选择人员">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
-        <div class="pro_title" v-show="!isMeeting">
-          <i class="iconfont icon-building-automation padding-right"></i>{{orgName}}
-        </div>
-        <search v-model="search"></search>
-        <div class="page_bd">
-          <index-list :proId="orgId" @setList="setList" @itemClick="indexListClick"></index-list>
-          <div v-show="search && search.length > 0" class="search_list_wrap">
-            <div class="weui-cells" style="margin-top:0;">
-              <a v-for="(item,index) in filterList" :key="index"  @click="indexListClick(item)" class="weui-cell weui-cell_access" href="javascript:;">
-                <div class="weui-cell__bd">
-                  <p>{{item.EmployeeName}} <span class="float_right " style="color:#999;">{{item.PositionName}}</span></p>
-                </div>
-              </a>
-            </div>
+      <!-- <mt-header title="选择人员">
+          <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+      </mt-header> -->
+      <nav-title title="选择人员"></nav-title>
+      <div class="pro_title" v-show="!isMeeting">
+        <i class="iconfont icon-building-automation padding-right"></i>{{orgName}}
+      </div>
+      <search v-model="search"></search>
+      <div class="page_bd">
+        <index-list :proId="orgId" @setList="setList" @itemClick="indexListClick"></index-list>
+        <div v-show="search && search.length > 0" class="search_list_wrap">
+          <div class="weui-cells" style="margin-top:0;">
+            <a v-for="(item,index) in filterList" :key="index"  @click="indexListClick(item)" class="weui-cell weui-cell_access" href="javascript:;">
+              <div class="weui-cell__bd">
+                <p>{{item.EmployeeName}} <span class="float_right " style="color:#999;">{{item.PositionName}}</span></p>
+              </div>
+            </a>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import Search from '@/components/search'
 import indexList from '@/components/indexList'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'responsibleChoose',
   data () {
@@ -43,7 +45,8 @@ export default {
   },
   components: {
     Search,
-    indexList
+    indexList,
+    navTitle
   },
   computed: {
     filterList () {

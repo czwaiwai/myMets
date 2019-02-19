@@ -1,40 +1,42 @@
 <template>
 <div class="page_modal">
-    <div class="page">
-        <mt-header title="回访详情">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
-        <div class="page_bd">
-          <div class="weui-panel weui-panel_access">
-            <div class="weui-panel__hd">
-              {{detail.ObjectName}} <span class="padding-left">{{detail.ReturnVisitWay}}</span>
-              <span class="fs15 main_color float_right" style="margin-top: -2px;">{{detail.VisitState }}</span>
-            </div>
-            <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_text">
-                    <h4 class="weui-media-box__title fs15">
-                      客服满意度
-                      <star v-model="score" :readonly="true"></star>
-                    </h4>
-                    <p v-if="detail.VisitState === '有效回访'">{{detail.Memo}}</p>
-                    <p v-if="detail.VisitState === '无效回访'">{{detail.FailureCause}}</p>
-                </div>
-            </div>
-            <div class="weui-panel__ft">
-                <div class="weui-cell weui-cell_access weui-cell_link">
-                    <div class="weui-cell__bd text-right dark_99">{{detail.ReturnVisitDate}}</div>
-                </div>
-            </div>
+  <div class="page">
+    <!-- <mt-header title="回访详情">
+      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+    </mt-header> -->
+    <nav-title title="回访详情"></nav-title>
+    <div class="page_bd">
+      <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__hd">
+          {{detail.ObjectName}} <span class="padding-left">{{detail.ReturnVisitWay}}</span>
+          <span class="fs15 main_color float_right" style="margin-top: -2px;">{{detail.VisitState }}</span>
+        </div>
+        <div class="weui-panel__bd">
+          <div class="weui-media-box weui-media-box_text">
+            <h4 class="weui-media-box__title fs15">
+              客服满意度
+              <star v-model="score" :readonly="true"></star>
+            </h4>
+            <p v-if="detail.VisitState === '有效回访'">{{detail.Memo}}</p>
+            <p v-if="detail.VisitState === '无效回访'">{{detail.FailureCause}}</p>
           </div>
         </div>
+        <div class="weui-panel__ft">
+          <div class="weui-cell weui-cell_access weui-cell_link">
+            <div class="weui-cell__bd text-right dark_99">{{detail.ReturnVisitDate}}</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 </template>
 <script>
 import Star from '../child/star'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'visitDetail',
-  components: {Star},
+  components: {navTitle, Star},
   data () {
     return {
       score: 0,

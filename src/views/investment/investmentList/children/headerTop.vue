@@ -160,7 +160,7 @@ export default {
       width: 1rem;
       height: .98rem;
       font-size: .56rem;
-      color: #0DC88C;
+      color: #3395ff;
       line-height: .98rem;
       text-align: center;
       &.icon-ditu{
@@ -208,7 +208,7 @@ export default {
         color: #333;
         border-bottom: 1px solid #ededed;
         &.isSelect{
-          color: #0DC88C;
+          color: #3395ff;
         }
       }
       .auto{
@@ -247,7 +247,7 @@ export default {
           height: .58rem;
           line-height: .58rem;
           text-align: center;
-          background: #0DC88C;
+          background: #3395ff;
           font-size: .32rem;
           color: #fff;
           border-radius: 3px;

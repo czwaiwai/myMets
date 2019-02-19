@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="租赁报表">
+    <!-- <mt-header  title="租赁报表">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="租赁报表"></nav-title>
     <div class="weui-cells" style="margin:0;">
       <a class="weui-cell weui-cell_access" @click="$router.push({name: 'report_lease_change'})" href="javascript:;">
           <div class="weui-cell__bd">
@@ -192,6 +193,7 @@ import {mapGetters} from 'Vuex'
 import {Popup} from 'mint-ui'
 import ready from '@/utils/getEchars'
 import qs from 'qs'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'lease',
   data () {
@@ -217,6 +219,7 @@ export default {
     }
   },
   components: {
+    navTitle,
     MtPopup: Popup
   },
   created () {

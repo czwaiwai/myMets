@@ -236,7 +236,7 @@ export default {
             font-size: .3rem;
             line-height: .44rem;
             .time{
-              color: #0DC88C;
+              color: #3395ff;
             }
             .status{
               position: absolute;
@@ -277,7 +277,7 @@ export default {
               line-height: .44rem;
               text-align: left;
               font-size: .34rem;
-              color: #0DC88C;
+              color: #3395ff;
             }
             .people,.steps{
               position: absolute;
@@ -290,7 +290,7 @@ export default {
               color: #7B7A7A;
             }
             .icon{
-              color: #0DC88C;
+              color: #3395ff;
             }
           }
           .say{
@@ -380,7 +380,7 @@ export default {
               color: #999;
             }
             &._right{
-              color: #0DC88C;
+              color: #3395ff;
             }
           }
         }

@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="收入分析">
+    <!-- <mt-header  title="收入分析">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="收入分析"></nav-title>
     <div class="page_bd report_wrap">
       <div @click="openPicker" class="date_choose">
         <span>{{chooseDate | dateChina}}<i class="iconfont icon-xiala" ></i></span>
@@ -62,8 +63,10 @@
 </template>
 <script>
 import ready from '@/utils/getEchars'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'income',
+  components: {navTitle},
   data () {
     return {
       searchForm: {
@@ -227,7 +230,7 @@ export default {
               value: 90,
               name: '',
               itemStyle: {
-                color: '#0DC88C'
+                color: '#3395ff'
               }
             },
             {
@@ -526,7 +529,7 @@ export default {
             yAxisIndex: 1,
             data: yAxisIncome,
             itemStyle: {
-              color: '#0DC88C'
+              color: '#3395ff'
             }
           }
         ]
@@ -610,7 +613,7 @@ export default {
           p{
             &:nth-child(1){
               font-size: 0.38rem;
-              color:#0DC88C;
+              color:#3395ff;
               margin-top: 0.48rem;
 
             }

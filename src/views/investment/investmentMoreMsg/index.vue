@@ -115,8 +115,8 @@ export default {
         font-size: .3rem;
         color: #333;
         &.isSelect{
-          color: #0DC88C;
-          border-bottom: 3px solid #0DC88C;
+          color: #3395ff;
+          border-bottom: 3px solid #3395ff;
         }
       }
     }

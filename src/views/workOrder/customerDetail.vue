@@ -1,92 +1,93 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <mt-header :title="title">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
-        <div class="page_bd">
+      <!-- <mt-header :title="title">
+        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+      </mt-header> -->
+      <nav-title :title="title"></nav-title>
+      <div class="page_bd">
 
-          <div class="cus_bg padding-v padding15-h margin-bottom" >
-            <p><i style="font-size:30px;vertical-align: middle;" class="iconfont padding-right" :class="orderStateObj.fontClass"></i><span class="fs16">{{orderStateObj.text}}</span></p>
-          </div>
+        <div class="cus_bg padding-v padding15-h margin-bottom" >
+          <p><i style="font-size:30px;vertical-align: middle;" class="iconfont padding-right" :class="orderStateObj.fontClass"></i><span class="fs16">{{orderStateObj.text}}</span></p>
+        </div>
 
-          <div class="weui-media-box weui-media-box_small-appmsg">
-              <div class="weui-cells" @click="routeTracking">
-                  <a class="weui-cell weui-cell_access" href="javascript:;">
-                      <div class="weui-cell__hd padding-right">
-                        <i class="iconfont icon-yonghu-copy"></i>
-                      </div>
-                      <div class="weui-cell__bd weui-cell_primary main_color">
-                          <p class="fs15">{{trackStr}}</p>
-                          <p class="weui-media-box__desc">{{newTracks.workOrdTime }}</p>
-                      </div>
-                      <span class="weui-cell__ft"></span>
-                  </a>
+        <div class="weui-media-box weui-media-box_small-appmsg">
+          <div class="weui-cells" @click="routeTracking">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+              <div class="weui-cell__hd padding-right">
+                <i class="iconfont icon-yonghu-copy"></i>
               </div>
-          </div>
-          <div  class="light_bg padding-v padding15-h margin-bottom">
-            <p><span class="dark_99">位  置：</span><span>{{detail.WorkPos}}</span></p>
-            <p><span class="dark_99">联系人：</span><span>{{detail.RSPeoName}}</span>
-            <a class="float_right" :href="'tel:'+detail.CallPhone">拨打电话</a></p>
-          </div>
-          <div class="weui-panel weui-panel_access padding-bottom  margin-bottom">
-            <div class="weui-panel__hd"><i class="iconfont icon-building-automation padding-right"></i>{{nav.orgName}}</div>
-            <div class="weui-panel__bd padding15-h ">
-              <h3 class="fs16">{{detail.QuesDesc}}</h3>
-              <!-- 图片 -->
-              <div class="img_list_wrap">
-                <ul class="clearfix">
-                  <li class="img_wrap" v-for="(item,index) in detail.ImageList" :key="index">
-                    <img preview="1" :src="item.Path">
-                  </li>
-                </ul>
+              <div class="weui-cell__bd weui-cell_primary main_color">
+                <p class="fs15">{{trackStr}}</p>
+                <p class="weui-media-box__desc">{{newTracks.workOrdTime }}</p>
               </div>
+              <span class="weui-cell__ft"></span>
+            </a>
+          </div>
+        </div>
+        <div  class="light_bg padding-v padding15-h margin-bottom">
+          <p><span class="dark_99">位  置：</span><span>{{detail.WorkPos}}</span></p>
+          <p><span class="dark_99">联系人：</span><span>{{detail.RSPeoName}}</span>
+          <a class="float_right" :href="'tel:'+detail.CallPhone">拨打电话</a></p>
+        </div>
+        <div class="weui-panel weui-panel_access padding-bottom  margin-bottom">
+          <div class="weui-panel__hd"><i class="iconfont icon-building-automation padding-right"></i>{{nav.orgName}}</div>
+          <div class="weui-panel__bd padding15-h ">
+            <h3 class="fs16">{{detail.QuesDesc}}</h3>
+            <!-- 图片 -->
+            <div class="img_list_wrap">
+              <ul class="clearfix">
+                <li class="img_wrap" v-for="(item,index) in detail.ImageList" :key="index">
+                  <img preview="1" :src="item.Path">
+                </li>
+              </ul>
+            </div>
 
-              <!-- 语音  -->
-              <div  v-if="detail.Voice"  class="padding-bottom">
-                <div @click="showVoice" class="voice_wrap ">
-                  <voice-icon :isVoice.sync="isVoice" :url="detail.Voice"  ></voice-icon>
+            <!-- 语音  -->
+            <div  v-if="detail.Voice"  class="padding-bottom">
+              <div @click="showVoice" class="voice_wrap ">
+                <voice-icon :isVoice.sync="isVoice" :url="detail.Voice"  ></voice-icon>
+              </div>
+            </div>
+
+            <p class="date dark_99">报事时间：{{ detail.RSDate }}</p>
+            <p class="date dark_99">预约时间：{{ (!detail.RStartTime || detail.RStartTime.indexOf('1900')> -1)? '无': detail.RStartTime }}</p>
+            <p class="dark_99">{{ detail.WONoBasicName }}</p>
+            <!-- 反馈 -->
+            <div v-if="feedbackList && feedbackList.length>0" class="feedback_wrap">
+              <div class="feed_item " v-for="(item,index) in feedbackList" :key="index">
+                {{'处理反馈' + (index + 1) + '：' + item.ProcessDetaile }}
+                <p class="cost">人工费:<span class="error_color">{{ '￥' + item.LabourCost }}</span> </p>
+                <p class="cost">材料费:<span class="error_color">{{ '￥' + item.MaterialCostSum }}</span></p>
+                <!-- 图片 -->
+                <div class="img_list_wrap no-padding">
+                  <ul class="clearfix">
+                    <li v-show="sub.Path !== ''" class="img_wrap" v-for="(sub,index) in item.ImageList" :key="index" style="width:40px;height:40px;">
+                      <img preview="2" :src="sub.Path">
+                    </li>
+                  </ul>
                 </div>
-              </div>
-
-              <p class="date dark_99">报事时间：{{ detail.RSDate }}</p>
-              <p class="date dark_99">预约时间：{{ (!detail.RStartTime || detail.RStartTime.indexOf('1900')> -1)? '无': detail.RStartTime }}</p>
-              <p class="dark_99">{{ detail.WONoBasicName }}</p>
-              <!-- 反馈 -->
-              <div v-if="feedbackList && feedbackList.length>0" class="feedback_wrap">
-                <div class="feed_item " v-for="(item,index) in feedbackList" :key="index">
-                  {{'处理反馈' + (index + 1) + '：' + item.ProcessDetaile }}
-                  <p class="cost">人工费:<span class="error_color">{{ '￥' + item.LabourCost }}</span> </p>
-                  <p class="cost">材料费:<span class="error_color">{{ '￥' + item.MaterialCostSum }}</span></p>
-                  <!-- 图片 -->
-                  <div class="img_list_wrap no-padding">
-                    <ul class="clearfix">
-                      <li v-show="sub.Path !== ''" class="img_wrap" v-for="(sub,index) in item.ImageList" :key="index" style="width:40px;height:40px;">
-                        <img preview="2" :src="sub.Path">
-                      </li>
-                    </ul>
-                  </div>
-                  <p class="fs12 dark_99"><span>{{ item.ResponsibleName }}</span><span>{{ item.EndTime }}</span></p>
-                </div>
+                <p class="fs12 dark_99"><span>{{ item.ResponsibleName }}</span><span>{{ item.EndTime }}</span></p>
               </div>
             </div>
           </div>
-          <div  class="light_bg padding-v padding15-h margin-bottom">
-            <p v-for="(item,index) in timeList" :key="index"><span class="dark_99">{{item.Name}}：</span><span>{{item.Content}}</span></p>
-          </div>
         </div>
-        <template v-if="!monitor">
-          <div v-if="detail.WorkOrdState === 'WOSta_Close'" class="page_ft light_bg weui-flex" >
-            <div class="fs16 padding-left15" style="line-height:42px;">已评价</div>
-            <div class="weui-flex__item padding-top5"><star v-model="score" :readonly="true"></star></div>
-          </div>
-          <div v-else class="page_ft light_bg text-right padding-right15 padding-top5">
-            <button :key="index" v-for="(buttonItem,index) in buttons" @click="btnAction(work, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
-          </div>
-        </template>
-        <transition name="page">
-          <router-view/>
-        </transition>
+        <div  class="light_bg padding-v padding15-h margin-bottom">
+          <p v-for="(item,index) in timeList" :key="index"><span class="dark_99">{{item.Name}}：</span><span>{{item.Content}}</span></p>
+        </div>
+      </div>
+      <template v-if="!monitor">
+        <div v-if="detail.WorkOrdState === 'WOSta_Close'" class="page_ft light_bg weui-flex" >
+          <div class="fs16 padding-left15" style="line-height:42px;">已评价</div>
+          <div class="weui-flex__item padding-top5"><star v-model="score" :readonly="true"></star></div>
+        </div>
+        <div v-else class="page_ft light_bg text-right padding-right15 padding-top5">
+          <button :key="index" v-for="(buttonItem,index) in buttons" @click="btnAction(work, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
+        </div>
+      </template>
+      <transition name="page">
+        <router-view/>
+      </transition>
     </div>
   </div>
 </template>
@@ -94,10 +95,12 @@
 import voiceIcon from '@/components/voiceIcon'
 import customerMixin from './customerMixin'
 import Star from './child/star'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'inspectionDetail',
   mixins: [customerMixin],
   components: {
+    navTitle,
     voiceIcon,
     Star
   },

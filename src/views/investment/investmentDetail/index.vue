@@ -362,7 +362,7 @@ export default {
       margin-bottom: .2rem;
       background: #fff;
       font-size: .34rem;
-      color: #0DC88C;
+      color: #3395ff;
       line-height: .8rem;
       text-align: center;
     }
@@ -394,7 +394,7 @@ export default {
         float: left;
         width: .5rem;
         height: .8rem;
-        color: #0DC88C;
+        color: #3395ff;
         font-size: .46rem;
         text-align: center;
         line-height: .8rem;

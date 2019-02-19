@@ -149,7 +149,7 @@ export default {
     width: 2rem;
     padding: .1rem;
     line-height: 1.5;
-    background: #0DC88C;
+    background: #3395ff;
     font-size: .24rem;
     text-align: center;
     color: #fff;
@@ -162,8 +162,8 @@ export default {
       display: block;
       width: 0;
       height: 0;
-      border-top: 5px solid #0DC88C;
-      border-right: 5px solid #0DC88C;
+      border-top: 5px solid #3395ff;
+      border-right: 5px solid #3395ff;
     }
 
   }
@@ -200,7 +200,7 @@ export default {
         padding: 0 .3rem;
         background: #FCFAFA;
         font-size: .3rem;
-        color: #0DC88C;
+        color: #3395ff;
         border-bottom: 1px solid #ededed;
         .icons{
           position: absolute;

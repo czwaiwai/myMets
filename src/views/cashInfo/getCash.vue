@@ -1,9 +1,10 @@
 <template>
 <div class="page">
-  <mt-header title="收款">
+  <!-- <mt-header title="收款">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      <!-- <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button> -->
-  </mt-header>
+      <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button>
+  </mt-header> -->
+  <nav-title title="收款"></nav-title>
   <div class="page_bd location">
     <h1 class="room-project_name">{{orgName}}</h1>
     <div v-if="list.length > 0" class="one" style="overflow:hidden;">
@@ -54,8 +55,10 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'getCash',
+  components: {navTitle},
   data () {
     return {
       orgId: '',

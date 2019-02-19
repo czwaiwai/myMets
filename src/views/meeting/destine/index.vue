@@ -295,7 +295,7 @@ export default {
                     height: .4rem;
                     line-height: .4rem;
                     text-align: left;
-                    color: #0DC88C;
+                    color: #3395ff;
                   }
                   span{
                     float: left;
@@ -313,7 +313,7 @@ export default {
                   float: left;
                   width: .4rem;
                   height: .4rem;
-                  color: #0DC88C;
+                  color: #3395ff;
                   font-size: .36rem;
                   text-align: center;
                   line-height: .4rem;
@@ -376,7 +376,7 @@ export default {
               text-align: center;
               line-height: .5rem;
               &.isSelect{
-                background: #0dc88c;
+                background: #3395ff;
               }
               &:last-child{
                 margin-right: 0;

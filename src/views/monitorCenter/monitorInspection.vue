@@ -1,54 +1,57 @@
 <template>
-    <div class="page">
-        <mt-header title="巡保工作监控">
-            <!-- <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button> -->
-            <mt-button slot="left" @click="$root.back()" icon="back">返回</mt-button>
-        </mt-header>
-        <div>
-          <navbar :list="typeList" v-model="currIndex"></navbar>
-        </div>
-        <component ref="pageList" :params="currConfig.params"  :is="currIndex" :config="currConfig" >
-            <template slot-scope="scope" >
-              <div class="weui-panel weui-panel_access margin-bottom">
-                <div @click="routeTo(scope.item)"   class="weui-panel__hd">
-                  <i class="iconfont icon-building-automation padding-right5 "></i>{{nav.orgName}}
-                  <span class="float_right">
-                    <span v-if="scope.item.WordType === 'Work_insp'" class="span_tag">巡</span>
-                    <span v-if="scope.item.WordType === 'Work_KeepFit'" class="span_tag">保</span>
-                  </span>
-                </div>
-                <div @click="routeTo(scope.item)"  class="weui-panel__bd">
-                    <div class="moni_ins_bg weui-media-box weui-media-box_text weui-flex" >
-                      <div class="light" style="width: 95px;padding-right: 15px;text-align: center;">
-                        <p class="fs18 padding-top padding-bottom5" >{{scope.item.Principal}}</p>
-                        <!-- <p >共{{scope.item.BillNum }}设备</p> -->
-                      </div>
-                      <div class="weui-flex__item">
-                        <h4 class="weui-media-box__title">{{scope.item.WORID}}</h4>
-                        <p v-if="currNav.state === '1'"><span class="dark_99">计划开始：</span> {{scope.item.PlanStartTime}}</p>
-                        <p v-if="currNav.state === '2' && scope.item.PlanEndTime"><span class="dark_99" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span> | <span :class="scope.item.StateType?'error_color':''">{{ scope.item.PlanEndTime }} 完成 </span></p>
-                        <p v-if="currNav.state === '2' && !scope.item.PlanEndTime"><span class="dark_99" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span></p>
-                      </div>
-                    </div>
-                </div>
-              </div>
-            </template>
-          </component>
-          <transition name="page">
-            <!-- <keep-alive > -->
-              <router-view/>
-            <!-- </keep-alive> -->
-          </transition>
+  <div class="page">
+    <!-- <mt-header title="巡保工作监控">
+      <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button>
+      <mt-button slot="left" @click="$root.back()" icon="back">返回</mt-button>
+    </mt-header> -->
+    <nav-title title="巡保工作监控"></nav-title>
+    <div>
+      <navbar :list="typeList" v-model="currIndex"></navbar>
     </div>
+    <component ref="pageList" :params="currConfig.params"  :is="currIndex" :config="currConfig" >
+        <template slot-scope="scope" >
+          <div class="weui-panel weui-panel_access margin-bottom">
+            <div @click="routeTo(scope.item)"   class="weui-panel__hd">
+              <i class="iconfont icon-building-automation padding-right5 "></i>{{nav.orgName}}
+              <span class="float_right">
+                <span v-if="scope.item.WordType === 'Work_insp'" class="span_tag">巡</span>
+                <span v-if="scope.item.WordType === 'Work_KeepFit'" class="span_tag">保</span>
+              </span>
+            </div>
+            <div @click="routeTo(scope.item)"  class="weui-panel__bd">
+                <div class="moni_ins_bg weui-media-box weui-media-box_text weui-flex" >
+                  <div class="light" style="width: 95px;padding-right: 15px;text-align: center;">
+                    <p class="fs18 padding-top padding-bottom5" >{{scope.item.Principal}}</p>
+                    <!-- <p >共{{scope.item.BillNum }}设备</p> -->
+                  </div>
+                  <div class="weui-flex__item">
+                    <h4 class="weui-media-box__title">{{scope.item.WORID}}</h4>
+                    <p v-if="currNav.state === '1'"><span class="dark_99">计划开始：</span> {{scope.item.PlanStartTime}}</p>
+                    <p v-if="currNav.state === '2' && scope.item.PlanEndTime"><span class="dark_99" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span> | <span :class="scope.item.StateType?'error_color':''">{{ scope.item.PlanEndTime }} 完成 </span></p>
+                    <p v-if="currNav.state === '2' && !scope.item.PlanEndTime"><span class="dark_99" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span></p>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </template>
+      </component>
+      <transition name="page">
+        <!-- <keep-alive > -->
+          <router-view/>
+        <!-- </keep-alive> -->
+      </transition>
+  </div>
 </template>
 <script>
 import {mapGetters} from 'Vuex'
 import navbar from '@/views/workOrder/child/navbar'
 import PageList from '@/components/pageList'
 import qs from 'qs'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'repairDetail',
   components: {
+    navTitle,
     navbar,
     wait: PageList,
     ready: PageList

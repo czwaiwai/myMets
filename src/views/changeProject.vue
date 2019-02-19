@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="切换项目">
+    <!-- <mt-header  title="切换项目">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="切换项目"></nav-title>
     <div class="page_bd" style="background:#f9f9f9;">
       <search v-model="search"></search>
       <div class="weui-cells weui-cells_radio" style="margin-top:0;">
@@ -22,6 +23,7 @@
 <script>
 import {mapGetters} from 'Vuex'
 import Search from '@/components/search'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'detail',
   data () {
@@ -37,6 +39,7 @@ export default {
     this.getPageDataNet()
   },
   components: {
+    navTitle,
     Search
   },
   computed: {

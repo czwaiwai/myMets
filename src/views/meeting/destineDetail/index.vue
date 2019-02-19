@@ -247,7 +247,7 @@ export default {
               width: .54rem;
               height: .4rem;
               font-size: .34rem;
-              color: #0DC88C;
+              color: #3395ff;
               line-height: .4rem;
               text-align: left;
             }
@@ -277,7 +277,7 @@ export default {
               width: .54rem;
               height: .4rem;
               font-size: .34rem;
-              color: #0DC88C;
+              color: #3395ff;
               line-height: .4rem;
               text-align: left;
             }
@@ -372,7 +372,7 @@ export default {
               float: left;
               width: .4rem;
               height: .4rem;
-              background: #0DC88C;
+              background: #3395ff;
             }
           }
         }
@@ -448,14 +448,14 @@ export default {
             line-height: .68rem;
             &._left{
               float: left;
-              color: #0DC88C;
-              border: 1px solid #0DC88C;
+              color: #3395ff;
+              border: 1px solid #3395ff;
               border-radius: 3px;
             }
             &._right{
               float: right;
               color: #fff;
-              background: #0DC88C;
+              background: #3395ff;
               border-radius: 3px;
             }
           }

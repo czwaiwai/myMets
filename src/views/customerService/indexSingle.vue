@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header :title="title + titleType">
+    <!-- <mt-header :title="title + titleType">
       <mt-button slot="left" @click="clickBack()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title :title="title + titleType"></nav-title>
     <div class="page_bd">
       <form ref="form">
         <div class="customer_service" >
@@ -56,7 +57,7 @@
               <div class="weui-cell__ft"></div>
             </a>
             <div class="weui-cell weui-cell_select">
-              <div class="weui-cell__hd padding-left15"><i class="iconfont icon-zonghechaxun" style="color:#0DC88C;"></i></div>
+              <div class="weui-cell__hd padding-left15"><i class="iconfont icon-zonghechaxun" style="color:#3395ff;"></i></div>
               <div class="weui-cell__bd">
                 <select v-model="formObj.rsWay" class="weui-select " :class="!formObj.rsWay?'dark_99':''">
                   <option v-for="(item, index) in options" :key="index" :value="item.showText">{{item.showText}}</option>
@@ -119,21 +120,24 @@
     </transition>
 
     <datetime-picker ref="picker" type="datetime" v-model="dateTime"
-                     @confirm="dateConfirm"
-                     @cancel="dateConfirm"
-                     :startDate="new Date()"
-                     year-format="{value}"
-                     month-format="{value}月"
-                     date-format="{value}日"
-                     cancelText = '重置'
-                     hour-format="{value}"></datetime-picker>
+      @confirm="dateConfirm"
+      @cancel="dateConfirm"
+      :startDate="new Date()"
+      year-format="{value}"
+      month-format="{value}月"
+      date-format="{value}日"
+      cancelText = '重置'
+      hour-format="{value}">
+    </datetime-picker>
   </div>
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui'
 import {mapGetters} from 'Vuex'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'customerService',
+  components: { DatetimePicker, navTitle },
   data () {
     return {
       isSendForm: false,
@@ -181,9 +185,6 @@ export default {
         rStartTime: ''
       }
     }
-  },
-  components: {
-    'DatetimePicker': DatetimePicker
   },
   computed: {
     ...mapGetters({

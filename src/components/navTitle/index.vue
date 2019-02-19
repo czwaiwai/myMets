@@ -1,7 +1,7 @@
 <template>
   <div class="headerTitle">
     <div class="_content">
-      <p class="btn clearfix" @click.stop="goBack">
+      <p class="btn clearfix" @click.stop="goBack" v-show="hasBtn">
         <i class="iconfont icon-fanhui11 icon"></i>
         <span class="name">返回</span>
       </p>
@@ -18,6 +18,10 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    hasBtn: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

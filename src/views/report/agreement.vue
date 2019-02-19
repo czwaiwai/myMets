@@ -1,9 +1,10 @@
 <template>
 <!-- 合同统计 -->
   <div class="page">
-    <mt-header title="合同统计">
+    <!-- <mt-header title="合同统计">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="合同统计"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
          <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入地块名称"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
@@ -73,9 +74,10 @@ import FilterModal from '@/components/filterModal'
 import FilterDate from '@/components/filter/date'
 import Search from '@/components/search'
 import PageList from '@/components/pageList'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'agreement',
-  components: {Search, PageList, FilterModal, FilterDate},
+  components: {Search, PageList, FilterModal, FilterDate, navTitle},
   data () {
     return {
       search: '',

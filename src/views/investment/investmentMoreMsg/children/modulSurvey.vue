@@ -164,7 +164,7 @@ export default {
         width: .56rem;
         height: .56rem;
         font-size: .4rem;
-        color: #0DC88C;
+        color: #3395ff;
         text-align: center;
         line-height: .56rem;
       }

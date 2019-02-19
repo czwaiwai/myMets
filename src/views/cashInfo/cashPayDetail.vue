@@ -1,9 +1,10 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <mt-header title="收款详情">
+        <!-- <mt-header title="收款详情">
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
+        </mt-header> -->
+        <nav-title title="收款详情"></nav-title>
         <div class="page_bd">
           <div class="weui-form-preview">
             <div class="weui-form-preview__bd">
@@ -59,8 +60,10 @@
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'cashPayDetail',
+  components: {navTitle},
   data () {
     return {
       detail: {}

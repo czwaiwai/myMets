@@ -177,7 +177,7 @@ export default {
             width: .54rem;
             height: .4rem;
             font-size: .34rem;
-            color: #0DC88C;
+            color: #3395ff;
             line-height: .4rem;
             text-align: left;
           }
@@ -207,7 +207,7 @@ export default {
             width: .54rem;
             height: .4rem;
             font-size: .34rem;
-            color: #0DC88C;
+            color: #3395ff;
             line-height: .4rem;
             text-align: left;
           }

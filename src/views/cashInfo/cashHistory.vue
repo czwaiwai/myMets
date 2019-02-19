@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="历史收款">
+    <!-- <mt-header  title="历史收款">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="历史收款"></nav-title>
     <div class="page_bd">
       <div class="green_top">
         <div class="green_bl text-center">
@@ -35,17 +36,20 @@
       <router-view/>
     </transition>
     <datetime-picker ref="picker" type="date" v-model="date"
-                     @confirm="dateConfirm"
-                     year-format="{value} 年"
-                     month-format="{value} 月"
-                     date-format="{value} 日"></datetime-picker>
+      @confirm="dateConfirm"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      date-format="{value} 日">
+    </datetime-picker>
   </div>
 </template>
 <script>
 import {mapGetters} from 'Vuex'
 import { DatetimePicker } from 'mint-ui'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'cashHistory',
+  components: {DatetimePicker, navTitle},
   data () {
     return {
       date: '',
@@ -77,9 +81,6 @@ export default {
     } else { // pos机
       this.getPageDataNet()
     }
-  },
-  components: {
-    'DatetimePicker': DatetimePicker
   },
   computed: {
     ...mapGetters({

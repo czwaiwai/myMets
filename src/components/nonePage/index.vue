@@ -1,7 +1,10 @@
 <template>
   <div class="nonePage" :style="'height:'+height+'%;'">
     <div class="_content">
-      <img class="pic" src="../../assets/img/meeting/meeting-wu.png">
+      <!-- <img class="pic" src="../../assets/img/meeting/meeting-wu.png"> -->
+      <p class="pic">
+        <i class="iconfont icon-zanwushuju icon"></i>
+      </p>
       <p class="title">{{title}}</p>
     </div>
   </div>
@@ -21,6 +24,9 @@ export default {
       type: String,
       default: '100'
     }
+  },
+  created () {
+    console.log(this.title)
   }
 }
 </script>
@@ -37,12 +43,21 @@ export default {
       white-space:nowrap;
       transform: translate(-50%,-60%);
       .pic{
-        width: 2.77rem;
+        width: 4rem;
         height: 2.4rem;
         margin: 0 auto;
+        .icon{
+          display: block;
+          width: 4rem;
+          height: 2.4rem;
+          margin: 0 auto;
+          font-size: 1.6rem;
+          text-align: center;
+          color: #999;
+          line-height: 2.4rem;
+        }
       }
       .title{
-        margin-top: .4rem;
         line-height: 1.5;
         font-size: .3rem;
         color: #999;

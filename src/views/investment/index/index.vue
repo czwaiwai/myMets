@@ -81,7 +81,7 @@ export default {
     .destine .pics{
       font-size: .5rem;
       line-height: 1rem;
-      background: #0DC88C;
+      background: #3395ff;
     }
     .myDestine .pics{
       font-size: .6rem;

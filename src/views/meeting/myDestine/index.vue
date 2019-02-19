@@ -256,7 +256,7 @@ export default {
             font-size: .3rem;
             line-height: .44rem;
             .time{
-              color: #0DC88C;
+              color: #3395ff;
             }
             .status{
               position: absolute;
@@ -310,9 +310,9 @@ export default {
               height: .6rem;
               line-height: .6rem;
               font-size: .28rem;
-              color: #0DC88C;
+              color: #3395ff;
               text-align: center;
-              border: 1px solid #0DC88C;
+              border: 1px solid #3395ff;
               border-radius: 3px;
             }
           }
@@ -394,7 +394,7 @@ export default {
               color: #999;
             }
             &._right{
-              color: #0DC88C;
+              color: #3395ff;
             }
           }
         }

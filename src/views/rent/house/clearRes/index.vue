@@ -92,7 +92,7 @@ export default {
         'Memo': this.remark,
         'EmployeeID': this.locationData.employeeData.employeeId
       })
-      // this.$vux.loading.hide()
+      this.$toast(res.msg)
       console.log(res)
       setTimeout(() => {
         this.isHttping = false

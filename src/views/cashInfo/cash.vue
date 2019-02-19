@@ -1,8 +1,9 @@
 <template>
     <div class="page">
-        <mt-header title="cash">
+        <!-- <mt-header title="cash">
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
+        </mt-header> -->
+        <nav-title title="cash"></nav-title>
         <div class="page_bd">
           <div class="weui-cells weui-cells_form">
             <div class="weui-cell ">
@@ -46,8 +47,10 @@
     </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'cash',
+  components: {navTitle},
   data () {
     return {
       formObj: {

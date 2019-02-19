@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="特色园分析">
+    <!-- <mt-header  title="特色园分析">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="特色园分析"></nav-title>
     <div class="page_bd report_wrap">
       <div @click="openPicker" class="date_choose">
         <span>{{chooseDate | dateChina}}<i class="iconfont icon-xiala" ></i></span>
@@ -76,9 +77,10 @@
 <script>
 import ready from '@/utils/getEchars'
 // import { Toast, Datetime, Popup } from 'vux'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'features',
-  // components: {Toast, Datetime, Popup},
+  components: {navTitle},
   data () {
     return {
       searchForm: {
@@ -242,7 +244,7 @@ export default {
               value: 90,
               name: '',
               itemStyle: {
-                color: '#0DC88C'
+                color: '#3395ff'
               }
             },
             {
@@ -444,7 +446,7 @@ export default {
         p{
           &:nth-child(1){
             font-size: 0.38rem;
-            color:#0DC88C;
+            color:#3395ff;
             margin-top: 0.48rem;
 
           }
@@ -981,16 +983,16 @@ export default {
       text-align:center;
       .btn_reset {
         width:2.5rem;
-        border:1px solid #0DC88C;
-        color:#0DC88C;
+        border:1px solid #3395ff;
+        color:#3395ff;
         border-radius:0.2rem;
         height:0.66rem;
       }
       .btn_sure{
         margin-left:20px;
         width:2.5rem;
-        background:#0DC88C;
-        border:1px solid #0DC88C;
+        background:#3395ff;
+        border:1px solid #3395ff;
         color:#FFF;
         border-radius:0.2rem;
         height:0.66rem;

@@ -278,7 +278,7 @@ export default {
           color: #333;
           &.isSelect{
             color: #fff;
-            background: #0DC88C;
+            background: #3395ff;
             border-radius: .44rem;
           }
           .name{
@@ -342,7 +342,7 @@ export default {
           border-bottom: none;
         }
         &.isSelect{
-          color: #0DC88C;
+          color: #3395ff;
         }
       }
     }

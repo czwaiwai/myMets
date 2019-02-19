@@ -1,9 +1,10 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <mt-header title="选择位置">
+        <!-- <mt-header title="选择位置">
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
+        </mt-header> -->
+        <nav-title title="选择位置"></nav-title>
         <div class="page_sub_hd">
           <ul class="sub_title_cb clearfix">
             <li @click="resetDevice">设备</li>
@@ -18,7 +19,7 @@
             <li v-for="(item, index) in list" :key="index">
               <div @click="itemClick(item, index)" class="title">
                 <i class="iconfont icon-wenjianjia padding-right"></i>{{item.Name}}
-                <i class="iconfont float_right " :class="index === activeIndex?'icon-shouqi':'icon-xiala'"></i>
+                <i class="iconfont float_right " :class="index === activeIndex?'icon-shouqi':'icon-xiala1'"></i>
               </div>
               <div  class="sub_bottom" style="background:#FFF;">
                 <ul v-if="activeIndex === index" class="sub_ul clearfix">
@@ -28,7 +29,7 @@
                   <template v-if="item.EquiList.length > 0">
                    <li v-for="(sub, subIndex ) in item.EquiList"  @click="setSelectDevice(item)" :key="'sub'+subIndex">
                      <i class="iconfont icon-qingdan padding-right"></i>{{sub.Name}}
-                     <i class="iconfont float_right icon-xiala"></i>
+                     <i class="iconfont float_right icon-xiala1"></i>
                    </li>
                   </template>
                 </ul>
@@ -40,8 +41,10 @@
   </div>
 </template>
 <script>
+import navTitle from '@/components/navTitle'
 export default {
   name: 'deviceChoose',
+  components: {navTitle},
   data () {
     return {
       navList: [],

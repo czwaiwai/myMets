@@ -1,63 +1,64 @@
 <template>
-    <div class="page">
-        <mt-header title="维修工单监控">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
-        <div>
-          <navbar :list="typeList" v-model="currIndex"></navbar>
-          <div class="weui-flex" style="background:#EFEFF4;">
-            <div class="weui-flex__item">
-               <search v-model="searchKey" placeholder="关键字、工单号或位置" :no-focus="true" @searchRes="searchHandle" @searchCancel="searchHandle"></search>
-            </div>
-            <div class="padding-h" @click="sheetVisible = true"><i  style="font-size: 23px;line-height: 43px;" class="main_color iconfont icon-shaixuan"></i></div>
-          </div>
+  <div class="page">
+    <!-- <mt-header title="维修工单监控">
+      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+    </mt-header> -->
+    <nav-title title="维修工单监控"></nav-title>
+    <div>
+      <navbar :list="typeList" v-model="currIndex"></navbar>
+      <div class="weui-flex" style="background:#EFEFF4;">
+        <div class="weui-flex__item">
+          <search v-model="searchKey" placeholder="关键字、工单号或位置" :no-focus="true" @searchRes="searchHandle" @searchCancel="searchHandle"></search>
         </div>
-        <component ref="pageList" :params="currConfig.params" :is="currIndex" :config="currConfig" @listDone="listDone" >
-          <template slot-scope="scope" >
-            <div class="weui-panel weui-panel_access margin-bottom">
-              <div @click="routeTo(scope.item)"   class="weui-panel__hd">
-                <i class="iconfont icon-gongdan padding-right5 "></i>{{ scope.item.WONo }}
-                <span class="float_right">
-                  <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Sub'">新服务需求</span>
-                  <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Proc'">工单已接收</span>
-                  <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Finish'">工单已处理</span>
-                  <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Visit'">工单已回访</span>
-                  <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Close'">服务成功</span>
-                </span>
-              </div>
-              <div @click="routeTo(scope.item)"  class="weui-panel__bd">
-                  <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px;">
-                      <h4 class="weui-media-box__title">{{scope.item.QuesDesc}}</h4>
-                      <div class="img_list_wrap">
-                        <ul class="clearfix">
-                          <li @click.stop  class="img_wrap" v-for="(item,index) in scope.item.ImageList" :key="index">
-                            <img :preview="'list'+scope.item.WONo" :src="item.Path">
-                          </li>
-                        </ul>
-                      </div>
-                      <p class="dark_99"><i class="iconfont icon-z-location"></i> {{scope.item.WorkPos}}</p>
-                      <p class="dark_99"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
-                  </div>
-              </div>
-              <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
-              <!-- <div class="weui-panel__ft text-right padding-right15 padding-bottom">
-
-                  <button :key="index" v-for="(buttonItem,index) in showButtons(scope.item.WorkOrdState, scope.item.bHandle, scope.item.IsFromSkill)" @click="btnAction(scope.item, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
-              </div> -->
-            </div>
-          </template>
-        </component>
-        <mt-actionsheet :actions="actions" cancelText='' v-model="sheetVisible"></mt-actionsheet>
-        <transition name="page">
-          <!-- <keep-alive > -->
-            <router-view/>
-          <!-- </keep-alive> -->
-        </transition>
-        <!-- <div class="page_bd">
-          {{currIndex}}
-          <div></div>
-        </div> -->
+        <div class="padding-h" @click="sheetVisible = true"><i  style="font-size: 23px;line-height: 43px;" class="main_color iconfont icon-shaixuan"></i></div>
+      </div>
     </div>
+    <component ref="pageList" :params="currConfig.params" :is="currIndex" :config="currConfig" @listDone="listDone" >
+      <template slot-scope="scope" >
+        <div class="weui-panel weui-panel_access margin-bottom">
+          <div @click="routeTo(scope.item)"   class="weui-panel__hd">
+            <i class="iconfont icon-gongdan padding-right5 "></i>{{ scope.item.WONo }}
+            <span class="float_right">
+              <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Sub'">新服务需求</span>
+              <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Proc'">工单已接收</span>
+              <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Finish'">工单已处理</span>
+              <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Visit'">工单已回访</span>
+              <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Close'">服务成功</span>
+            </span>
+          </div>
+          <div @click="routeTo(scope.item)"  class="weui-panel__bd">
+            <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px;">
+              <h4 class="weui-media-box__title">{{scope.item.QuesDesc}}</h4>
+              <div class="img_list_wrap">
+                <ul class="clearfix">
+                  <li @click.stop  class="img_wrap" v-for="(item,index) in scope.item.ImageList" :key="index">
+                    <img :preview="'list'+scope.item.WONo" :src="item.Path">
+                  </li>
+                </ul>
+              </div>
+              <p class="dark_99"><i class="iconfont icon-z-location"></i> {{scope.item.WorkPos}}</p>
+              <p class="dark_99"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
+            </div>
+          </div>
+          <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
+          <!-- <div class="weui-panel__ft text-right padding-right15 padding-bottom">
+
+              <button :key="index" v-for="(buttonItem,index) in showButtons(scope.item.WorkOrdState, scope.item.bHandle, scope.item.IsFromSkill)" @click="btnAction(scope.item, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
+          </div> -->
+        </div>
+      </template>
+    </component>
+    <mt-actionsheet :actions="actions" cancelText='' v-model="sheetVisible"></mt-actionsheet>
+    <transition name="page">
+      <!-- <keep-alive > -->
+        <router-view/>
+      <!-- </keep-alive> -->
+    </transition>
+    <!-- <div class="page_bd">
+      {{currIndex}}
+      <div></div>
+    </div> -->
+  </div>
 </template>
 <script>
 import {Actionsheet} from 'mint-ui'
@@ -65,12 +66,14 @@ import {mapGetters} from 'Vuex'
 import Search from '@/components/search'
 import navbar from '@/components/navbar'
 import PageList from '@/components/pageList'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'monitorRepair',
   components: {
     MtActionsheet: Actionsheet,
     navbar,
     Search,
+    navTitle,
     all: PageList,
     waiting: PageList,
     working: PageList,

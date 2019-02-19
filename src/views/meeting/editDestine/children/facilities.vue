@@ -85,8 +85,8 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
         &.isSelect{
-          border: 1px solid #0DC88C;
-          color: #0DC88C;
+          border: 1px solid #3395ff;
+          color: #3395ff;
         }
       }
     }

@@ -1,7 +1,8 @@
 <template>
   <div class="page">
     <div class="page_hd">
-      <mt-header  title="我的"></mt-header>
+      <!-- <mt-header  title="我的"></mt-header> -->
+      <nav-title title="我的" :hasBtn="hasBtn"></nav-title>
     </div>
     <div class="page_bd">
       <div class="weui-cells" style="margin-top:0;">
@@ -80,9 +81,16 @@
 </template>
 
 <script>
+import navTitle from '@/components/navTitle'
 import {mapGetters} from 'Vuex'
 export default {
   name: 'tabMy',
+  components: {navTitle},
+  data () {
+    return {
+      hasBtn: false
+    }
+  },
   created () {
     // this.$store.dispatch('getUserAction').then(res => {
     //   console.log(res, '--------------getUserAction')

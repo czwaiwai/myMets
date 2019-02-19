@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header title="租金">
+    <!-- <mt-header title="租金">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="租金"></nav-title>
     <div class="weui-flex fs16 padding5-v padding-h light_bg">
       <div class="weui-flex__item">截止：{{chooseDate | dateChina}}</div>
       <div class="padding5-h" @click="$refs.picker.open()"><i class="iconfont icon-calendar fs18"  style="font-size:18px;" ></i></div>
@@ -102,9 +103,10 @@
 import ready from '@/utils/getEchars'
 import {mapGetters} from 'Vuex'
 import qs from 'qs'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'rentCash',
-  // components: {Toast, Datetime, Popup},
+  components: {navTitle},
   data () {
     return {
       slideShow: false,
@@ -450,7 +452,7 @@ export default {
       p{
         &:nth-child(1){
           font-size: 0.38rem;
-          color:#0DC88C;
+          color:#3395ff;
           margin-top: 0.48rem;
 
         }
@@ -485,22 +487,22 @@ export default {
   }
   .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
     content: '\E631';
-    color: #0DC88C;
+    color: #3395ff;
   }
   .reset_btn {
     width: 44%;
     height: 36px;
-    color: #0DC88C;
+    color: #3395ff;
     background: #FFF;
-    border:1px solid  #0DC88C;
+    border:1px solid  #3395ff;
     border-radius: 5px;
   }
   .main_btn{
     width: 44%;
     height: 36px;
     color: #FFF;
-    background: #0DC88C;
-    border:1px solid#0DC88C;
+    background: #3395ff;
+    border:1px solid#3395ff;
     border-radius: 5px;
   }
 </style>

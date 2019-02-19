@@ -114,7 +114,7 @@ export default {
           float: left;
           height: .6rem;
           padding: 0 .05rem;
-          border: 1px solid #0DC88C;
+          border: 1px solid #3395ff;
           border-radius: 3px;
           margin-right: .3rem;
           margin-top: .3rem;
@@ -123,7 +123,7 @@ export default {
             min-width: 1.24rem;
             height: .6rem;
             max-width: 2rem;
-            color: #0DC88C;
+            color: #3395ff;
             font-size: .3rem;
             text-align: center;
             line-height: .6rem;
@@ -149,8 +149,8 @@ export default {
           float: left;
           width: 1.34rem;
           height: .6rem;
-          border: 1px dashed #0DC88C;
-          color: #0DC88C;
+          border: 1px dashed #3395ff;
+          color: #3395ff;
           font-size: .34rem;
           border-radius: 3px;
           margin-right: .3rem;

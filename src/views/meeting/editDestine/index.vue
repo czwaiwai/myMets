@@ -285,7 +285,7 @@ export default {
       height: .8rem;
       font-size: .34rem;
       color: #fff;
-      background: #0DC88C;
+      background: #3395ff;
       border-radius: 3px;
       text-align: center;
       line-height: .8rem;

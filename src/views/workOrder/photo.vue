@@ -1,16 +1,17 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <mt-header title="拍照确认">
-        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    <!-- <mt-header title="拍照确认">
+      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+    </mt-header> -->
+    <nav-title title="拍照确认"></nav-title>
     <div class="page_bd">
       <div v-if="!onlyPhoto" class="weui-cells weui-cells_form" style="margin-top:0;">
         <div class="weui-cell">
-            <div class="weui-cell__bd">
-                <textarea v-model="remark" class="weui-textarea" maxlength="200" placeholder="请描述巡检情况..." rows="3"></textarea>
-                <div class="weui-textarea-counter"><span>{{remark.length}}</span>/200</div>
-            </div>
+          <div class="weui-cell__bd">
+            <textarea v-model="remark" class="weui-textarea" maxlength="200" placeholder="请描述巡检情况..." rows="3"></textarea>
+            <div class="weui-textarea-counter"><span>{{remark.length}}</span>/200</div>
+          </div>
         </div>
       </div>
       <div class="light_bg padding-h padding-v">
@@ -19,7 +20,7 @@
        </ins-img-list>
       </div>
         <div class="padding15">
-            <button class="ins_submit_btn" @click="submit">确定</button>
+          <button class="ins_submit_btn" @click="submit">确定</button>
         </div>
     </div>
   </div>
@@ -27,6 +28,7 @@
 </template>
 <script>
 import InsImgList from './child/insImgList'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'photo',
   data () {
@@ -38,7 +40,7 @@ export default {
       detail: {}
     }
   },
-  components: {InsImgList},
+  components: {navTitle, InsImgList},
   created () {
     this.detail = this.$parent.detailItem
     console.log(this.detail)

@@ -165,7 +165,7 @@ export default {
             background: #FA8A2C;
           }
           &.statusColor1 {
-            background: #0DC88C;
+            background: #3395ff;
           }
           &.statusColor2 {
             background: #2CB4FA;

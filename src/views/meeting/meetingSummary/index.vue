@@ -136,7 +136,7 @@ export default {
           line-height: .48rem;
           text-align: center;
           font-size: .34rem;
-          color: #0DC88C;
+          color: #3395ff;
           &.grad{
             color: #999;
           }

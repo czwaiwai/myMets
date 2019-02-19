@@ -1,23 +1,26 @@
 <template>
-    <div class="page">
-        <mt-header title="测试地图">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
-        <div>
-          <select @change="changeCity">
-            <option>深圳</option>
-            <option>上海</option>
-          </select>
-        </div>
-        <div class="page_bd">
-          <div class="baidu_map" ref="baiduMap" style="width:100%;height:100%;"></div>
-        </div>
+  <div class="page">
+    <!-- <mt-header title="测试地图">
+      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+    </mt-header> -->
+    <nav-title title="测试地图"></nav-title>
+    <div>
+      <select @change="changeCity">
+        <option>深圳</option>
+        <option>上海</option>
+      </select>
     </div>
+    <div class="page_bd">
+      <div class="baidu_map" ref="baiduMap" style="width:100%;height:100%;"></div>
+    </div>
+  </div>
 </template>
 <script>
 import mapReady from '@/utils/getBaiduMap'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'test',
+  components: {navTitle},
   data () {
     return {
     }

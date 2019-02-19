@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header title="权证统计">
+    <!-- <mt-header title="权证统计">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="权证统计"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
         <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入地块名称" searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
@@ -66,12 +67,13 @@ import Search from '@/components/search'
 import mapReady from '@/utils/getEchars'
 import FilterModal from '@/components/filterModal'
 import FilterDate from '@/components/filter/date'
+import navTitle from '@/components/navTitle'
 // import FilterRadio from '@/components/filter/radio'
 // import FilterCheckbox from '@/components/filter/checkbox'
 // import FilterDateEnd from '@/components/filter/dateEnd'
 export default {
   name: 'warrant',
-  components: {Search, FilterModal, FilterDate},
+  components: {navTitle, Search, FilterModal, FilterDate},
   data () {
     return {
       mapShow: true,

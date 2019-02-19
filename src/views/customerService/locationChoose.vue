@@ -1,9 +1,10 @@
 <template>
   <div class="page_modal">
     <div class="page">
-      <mt-header title="报事位置">
+      <!-- <mt-header title="报事位置">
         <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      </mt-header>
+      </mt-header> -->
+      <nav-title title="报事位置"></nav-title>
       <div class="page_bd location">
         <h1 class="room-project_name">{{orgName}}</h1>
 
@@ -54,9 +55,10 @@
   </div>
 </template>
 <script>
-
+import navTitle from '@/components/navTitle'
 export default {
   name: 'locationChoose',
+  components: {navTitle},
   data () {
     return {
       orgId: '',
@@ -264,7 +266,7 @@ export default {
     -webkit-line-clamp: 1;
   }
   .list_ul li.active {
-    border: 1px solid  #0DC88C;
+    border: 1px solid  #3395ff;
   }
   .list_ul li.small {
     word-break: break-all;

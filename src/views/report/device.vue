@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="设备管理">
+    <!-- <mt-header  title="设备管理">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="设备管理"></nav-title>
     <div class="weui-cells" style="margin:0;">
       <a class="weui-cell weui-cell_access" @click="$router.push({name: 'report_device_change'})" href="javascript:;">
           <div class="weui-cell__bd">
@@ -183,8 +184,10 @@ import {mapGetters} from 'Vuex'
 import mapReady from '@/utils/getEchars'
 import {option1, option2, option3} from './child/deviceMap'
 import qs from 'qs'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'device',
+  components: {navTitle},
   data () {
     return {
       orgName: '',

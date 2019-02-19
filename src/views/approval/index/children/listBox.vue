@@ -1,6 +1,6 @@
 <template>
   <div class="_listWrap">
-    <div class="_listBox"
+    <div class="_listBox" v-show="list.length"
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10"
@@ -19,7 +19,7 @@
 </template>
 <script>
 import dateChange from '@/mixins/dateChange'
-import nonePage from '@/views/meeting/components/nonePage/index.vue'
+import nonePage from '@/components/nonePage/index.vue'
 export default {
   name: 'listBox',
   mixins: [dateChange],
@@ -66,11 +66,11 @@ export default {
       })
       console.log(res)
       if (this.page === 1) {
-        this.list = res.data.Syswin
+        this.list = res.data
       } else {
-        this.list = this.list.concat(res.data.Syswin)
+        this.list = this.list.concat(res.data)
       }
-      if (res.data.Syswin.length === this.pageSize) {
+      if (res.data.length === this.pageSize) {
         this.showTip = true
       } else {
         this.showTip = false

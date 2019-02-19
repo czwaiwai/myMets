@@ -1,9 +1,10 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <mt-header title="查找添加">
+    <!-- <mt-header title="查找添加">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="查找添加"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
         <search v-model="search" placeholder="输入物料名称、型号或规格"></search>
@@ -89,9 +90,10 @@
 <script>
 import Search from '@/components/search'
 import matNumber from '../child/matNumber'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'materialAdd',
-  components: {Search, matNumber},
+  components: {navTitle, Search, matNumber},
   data () {
     return {
       search: '',

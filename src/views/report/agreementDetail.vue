@@ -1,9 +1,10 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <mt-header :title="title">
+    <!-- <mt-header :title="title">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title :title="title"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
         <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入地块名称"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
@@ -16,35 +17,35 @@
     </filter-modal>
     <page-list ref="pageList" :params="pageConfig.params" ulClass="table_line light_bg"  :config="this.pageConfig" @listDone="listDone">
       <template slot-scope="scope" >
-          <div  @click="showDetailHandle(scope.item, scope.$index)" class="weui-flex table_item ">
-            <div class="col " style="width:1.8rem;">
-              <p class="dot_line">{{scope.item.cstName}}</p></div>
-            <div class="col weui-flex__item text-center">{{scope.item.stime | dateMonth}} ~ {{scope.item.etime | dateMonth}}</div>
-            <div class="col " style="width: 1.3rem;">{{scope.item.status}}</div>
-            <div   class="padding-right">
-              <div class="item_center direct_icon " :class="scope.item.show?'weui_icon_download':''" >
-                <i class="iconfont   icon-shouqi " ></i>
-              </div>
+        <div  @click="showDetailHandle(scope.item, scope.$index)" class="weui-flex table_item ">
+          <div class="col " style="width:1.8rem;">
+            <p class="dot_line">{{scope.item.cstName}}</p></div>
+          <div class="col weui-flex__item text-center">{{scope.item.stime | dateMonth}} ~ {{scope.item.etime | dateMonth}}</div>
+          <div class="col " style="width: 1.3rem;">{{scope.item.status}}</div>
+          <div   class="padding-right">
+            <div class="item_center direct_icon " :class="scope.item.show?'weui_icon_download':''" >
+              <i class="iconfont   icon-shouqi " ></i>
             </div>
           </div>
-          <div class="border-top-half">
-            <div v-if="scope.item.show"  class="table_item_info">
-                <div class="weui-flex padding-v">
-                  <dl class="weui-flex__item">
-                    <dt class="fs15">{{scope.item.budArea}}㎡</dt>
-                    <dd class="dark_99  fs12">租赁建筑面积</dd>
-                  </dl>
-                  <dl class="weui-flex__item border-left-half">
-                    <dt class="fs15">{{scope.item.yearsRent | float2}}<small>元</small></dt>
-                    <dd class="dark_99  fs12">合同年租金</dd>
-                  </dl>
-                  <dl class="weui-flex__item border-left-half">
-                    <dt class="fs15">{{scope.item.rentUse | float2}}<small>元</small></dt>
-                    <dd class="dark_99  fs12">平均单价</dd>
-                  </dl>
-                </div>
+        </div>
+        <div class="border-top-half">
+          <div v-if="scope.item.show"  class="table_item_info">
+            <div class="weui-flex padding-v">
+              <dl class="weui-flex__item">
+                <dt class="fs15">{{scope.item.budArea}}㎡</dt>
+                <dd class="dark_99  fs12">租赁建筑面积</dd>
+              </dl>
+              <dl class="weui-flex__item border-left-half">
+                <dt class="fs15">{{scope.item.yearsRent | float2}}<small>元</small></dt>
+                <dd class="dark_99  fs12">合同年租金</dd>
+              </dl>
+              <dl class="weui-flex__item border-left-half">
+                <dt class="fs15">{{scope.item.rentUse | float2}}<small>元</small></dt>
+                <dd class="dark_99  fs12">平均单价</dd>
+              </dl>
             </div>
           </div>
+        </div>
       </template>
     </page-list>
   </div>
@@ -56,9 +57,10 @@ import FilterDateEnd from '@/components/filter/dateEnd'
 import FilterRadio from '@/components/filter/radio'
 import Search from '@/components/search'
 import PageList from '@/components/pageList'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'agreementDetail',
-  components: {Search, PageList, FilterModal, FilterDateEnd, FilterRadio},
+  components: {Search, PageList, FilterModal, FilterDateEnd, FilterRadio, navTitle},
   data () {
     return {
       title: '合同统计详情',

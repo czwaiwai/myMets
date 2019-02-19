@@ -1,7 +1,8 @@
 <template>
 <div class="page">
   <div class="page_hd">
-    <mt-header  :title="$route.meta && $route.meta.title"></mt-header>
+    <!-- <mt-header  :title="$route.meta && $route.meta.title"></mt-header> -->
+    <nav-title :title="$route.meta && $route.meta.title" :hasBtn="hasBtn"></nav-title>
   </div>
   <div class="page_bd">
     <mt-loadmore :auto-fill="true" style="height:100%" :top-method="loadTop"  ref="loadmore">
@@ -49,13 +50,16 @@
 </template>
 
 <script>
+import navTitle from '@/components/navTitle'
 import {mapGetters} from 'Vuex'
 export default {
   name: 'tabHome',
+  components: {navTitle},
   data () {
     return {
       list: [],
-      currRand: 0
+      currRand: 0,
+      hasBtn: false
     }
   },
   created () {

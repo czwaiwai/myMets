@@ -474,7 +474,7 @@ export default {
     font-size: 0.6rem;
     line-height: 0.68rem;
     text-align: right;
-    color: #0dc88c;
+    color: #3395ff;
   }
 }
 ._dialog-enter-active, ._dialog-leave-active {
@@ -555,7 +555,7 @@ export default {
               white-space: nowrap;
               text-overflow: ellipsis;
               font-size: .28rem;
-              color: #0DC88C;
+              color: #3395ff;
             }
             .icon{
               float: left;
@@ -585,8 +585,8 @@ export default {
             white-space: nowrap;
             text-overflow: ellipsis;
             &.isSelect{
-              color: #0DC88C;
-              border: 1px solid #0DC88C;
+              color: #3395ff;
+              border: 1px solid #3395ff;
               background: #F1FEFA;
               box-sizing: border-box;
             }
@@ -608,7 +608,7 @@ export default {
         text-align: center;
         &:last-child{
           color: #fff;
-          background: #0DC88C;
+          background: #3395ff;
         }
       }
     }

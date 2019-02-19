@@ -1,8 +1,9 @@
 <template>
   <div class="page">
-    <mt-header  title="建筑面积">
+    <!-- <mt-header  title="建筑面积">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="建筑面积"></nav-title>
     <div class="page_bd report_wrap">
       <div class="setScroll">
         <div class="total-top margin-bottom">
@@ -46,8 +47,10 @@
 </template>
 <script>
 import ready from '@/utils/getEchars'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'building',
+  components: {navTitle},
   data () {
     return {
       BuildSummery: {},
@@ -466,7 +469,7 @@ export default {
         p{
           &:nth-child(1){
             font-size: 0.38rem;
-            color:#0DC88C;
+            color:#3395ff;
             margin-top: 0.48rem;
 
           }

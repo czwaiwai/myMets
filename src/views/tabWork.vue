@@ -1,7 +1,8 @@
 <template>
 <div class="page">
   <div class="page_hd">
-    <mt-header   :title="user && user.OrgName"></mt-header>
+    <!-- <mt-header   :title="user && user.OrgName"></mt-header> -->
+    <nav-title :title="user && user.OrgName" :hasBtn="hasBtn"></nav-title>
   </div>
   <div class="page_bd">
     <div class="scroll">
@@ -131,10 +132,13 @@
 <script>
 import {mapGetters} from 'Vuex'
 import CryptoJS from 'crypto-js'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'tabWork',
+  components: {navTitle},
   data () {
     return {
+      hasBtn: false,
       offBadge: 0,
       currRand: 0,
       otherList: []

@@ -164,11 +164,11 @@ export default {
         'PageSize': this.pageSize
       })
       console.log(res)
-      if (res.data.Syswin.length) {
+      if (res.data.length) {
         if (this.page === 1) {
-          this.dataList = res.data.Syswin
+          this.dataList = res.data
         } else {
-          this.dataList = this.dataList.concat(res.data.Syswin)
+          this.dataList = this.dataList.concat(res.data)
         }
       } else {
         if (this.page === 1) {
@@ -176,7 +176,7 @@ export default {
         }
       }
       this.hasHttp = true
-      if (res.data.Syswin.length < this.pageSize - 1) {
+      if (res.data.length < this.pageSize - 1) {
         this.showTip = false
       } else {
         this.showTip = true

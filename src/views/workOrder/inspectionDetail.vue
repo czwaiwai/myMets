@@ -1,97 +1,97 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <mt-header :title="typeTxt+'详情'">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header>
-
-        <div ref="pageBD" class="page_bd">
-          <search v-model="searchKey" placeholder="扫码或输设备号、设备名" :noFocus="true" @searchRes="searchRes">
-             <i slot="icon" @click="scanHandle" class="weui-icon-search iconfont icon-scancode"></i>
-          </search>
-          <div class="light_bg padding-v padding15-h margin-bottom">
-            <p><span class="dark_99">工 单 号：</span><span>{{work.WorkOrdNo}}</span></p>
-            <p><span class="dark_99">开始日期：</span><span>{{work.PlanStartTime}}</span></p>
-            <p><span class="dark_99">负 责 人：</span><span>{{work.Principal}}</span></p>
+      <!-- <mt-header :title="typeTxt+'详情'">
+        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
+      </mt-header> -->
+      <nav-title :title="typeTxt+'详情'"></nav-title>
+      <div ref="pageBD" class="page_bd">
+        <search v-model="searchKey" placeholder="扫码或输设备号、设备名" :noFocus="true" @searchRes="searchRes">
+          <i slot="icon" @click="scanHandle" class="weui-icon-search iconfont icon-scancode"></i>
+        </search>
+        <div class="light_bg padding-v padding15-h margin-bottom">
+          <p><span class="dark_99">工 单 号：</span><span>{{work.WorkOrdNo}}</span></p>
+          <p><span class="dark_99">开始日期：</span><span>{{work.PlanStartTime}}</span></p>
+          <p><span class="dark_99">负 责 人：</span><span>{{work.Principal}}</span></p>
+        </div>
+        <section :id="'ins_' + insItem.AddressID" v-for="(insItem, index) in filterList" :key="index">
+          <div v-if="work.IsCase === '1'" class="ins_title main_color padding-left15 padding-bottom5 padding-top5">
+            <i class="iconfont icon-zhilupai"></i><span>{{insItem.AddressName}}</span>
           </div>
-          <section :id="'ins_' + insItem.AddressID" v-for="(insItem, index) in filterList" :key="index">
-            <div v-if="work.IsCase === '1'" class="ins_title main_color padding-left15 padding-bottom5 padding-top5">
-              <i class="iconfont icon-zhilupai"></i><span>{{insItem.AddressName}}</span>
-            </div>
-            <div class="light_bg">
-              <ul>
-                <li v-for="(item, index) in insItem.EquiInfo" :key="index"  v-show="item.searchShow" style="border-bottom:1px solid #e3e3e3;">
-                  <div class="weui-flex padding15-h padding-v  relative">
-                    <div class="weui-flex__item">
-                      <p>{{item.EquiName}}</p>
-                      <p class="dark_99 fs13"><i class="iconfont icon-weizhi-tianchong"></i>{{item.InstallationSite}}</p>
-                    </div>
-                    <div class="ft item_center direct_icon " :class="item.show?'weui_icon_download':''" @click="detailShowHandle(item)">
-                      <i class="iconfont  icon-shouqi" ></i>
-                    </div>
-                    <button v-if="work.WorkState === '2'" class="photo_btn" @click="toPhoto(item)">
-                      <span v-if="item.ImageExsit === '0'"><i class="iconfont icon-paizhao"></i>拍照</span>
-                      <span v-if="item.ImageExsit === '1'">查看照片</span>
-                    </button>
+          <div class="light_bg">
+            <ul>
+              <li v-for="(item, index) in insItem.EquiInfo" :key="index"  v-show="item.searchShow" style="border-bottom:1px solid #e3e3e3;">
+                <div class="weui-flex padding15-h padding-v  relative">
+                  <div class="weui-flex__item">
+                    <p>{{item.EquiName}}</p>
+                    <p class="dark_99 fs13"><i class="iconfont icon-weizhi-tianchong"></i>{{item.InstallationSite}}</p>
                   </div>
-                  <div v-show="item.show" class="sub_item_content">
-                    <ul v-if="work.WorkState === '2'"  class="sub_ul_opera ">
-                      <li  v-for="(sub, key) in item.OptionsInfo" :key="key" class="border-top-half padding-v padding15-h">
-                        <div>{{sub.StepsName}} <span v-if="sub.IsInput === 'True'">(正常值: {{sub.ValueMin}}~{{sub.ValueMax}}{{sub.ValueUnit}})</span></div>
-                        <div class="weui-flex">
-                          <div class="weui-flex__item">
-                              <ins-number  v-if="sub.IsInput === 'True'" v-model="sub.InputResult" @input="optionChange" :min="sub.ValueMin" :max="sub.ValueMax" :unit="sub.ValueUnit" ></ins-number>
-                              <ins-radio v-else v-model="sub.InputResult" :default-val="sub.StandardOptions" @input="optionChange" :option-str="sub.OptionsInfo" ></ins-radio>
-                          </div>
-                          <a @click="remarkHandle(sub,item)" v-show="!sub.FeedContent" class="fs14 remark_color">反馈</a>
+                  <div class="ft item_center direct_icon " :class="item.show?'weui_icon_download':''" @click="detailShowHandle(item)">
+                    <i class="iconfont  icon-shouqi" ></i>
+                  </div>
+                  <button v-if="work.WorkState === '2'" class="photo_btn" @click="toPhoto(item)">
+                    <span v-if="item.ImageExsit === '0'"><i class="iconfont icon-paizhao"></i>拍照</span>
+                    <span v-if="item.ImageExsit === '1'">查看照片</span>
+                  </button>
+                </div>
+                <div v-show="item.show" class="sub_item_content">
+                  <ul v-if="work.WorkState === '2'"  class="sub_ul_opera ">
+                    <li  v-for="(sub, key) in item.OptionsInfo" :key="key" class="border-top-half padding-v padding15-h">
+                      <div>{{sub.StepsName}} <span v-if="sub.IsInput === 'True'">(正常值: {{sub.ValueMin}}~{{sub.ValueMax}}{{sub.ValueUnit}})</span></div>
+                      <div class="weui-flex">
+                        <div class="weui-flex__item">
+                          <ins-number  v-if="sub.IsInput === 'True'" v-model="sub.InputResult" @input="optionChange" :min="sub.ValueMin" :max="sub.ValueMax" :unit="sub.ValueUnit" ></ins-number>
+                          <ins-radio v-else v-model="sub.InputResult" :default-val="sub.StandardOptions" @input="optionChange" :option-str="sub.OptionsInfo" ></ins-radio>
                         </div>
-                        <p @click="remarkHandle(sub,item)" class="remark_color" v-show="sub.FeedContent">{{sub.FeedContent}}</p>
-                      </li>
-                    </ul>
-                    <ul v-else class="sub_ul_show ">
-                      <li v-for="(sub, key) in item.OptionsInfo" :key="key" class="border-top-half padding-v padding15-h">
-                        <div>{{sub.StepsName}} <span v-if="sub.IsInput === 'True'">(正常值: {{sub.ValueMin}}~{{sub.ValueMax}}{{sub.ValueUnit}})</span></div>
-                        <!-- 数值类型显示 -->
-                        <ins-number :readonly="true" v-if="sub.IsInput === 'True'" v-model="sub.InputResult"  :min="sub.ValueMin" :max="sub.ValueMax" :unit="sub.ValueUnit" ></ins-number>
-                        <!-- 选项内容展示 --><ins-radio :readonly="true" v-else v-model="sub.InputResult" :default-val="sub.StandardOptions" :option-str="sub.OptionsInfo" ></ins-radio>
-                        <p>{{sub.FeedContent}}</p>
-                      </li>
-                    </ul>
-                  </div>
-                  <div @click="routeToFix(item)" v-show="item.show && work.WorkState === '2'" class="sub_item_ft text-center " >
-                      <a href="javascript:void(0)" style="display:block;" class="main_color padding5 block">立即报修</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>
-        </div>
-        <div v-if="work.WorkState === '2'"  class="page_ft text-center light_bg padding-top5 padding15-h">
-          <button @click="submitIns" class="ins_submit_btn">提交{{typeTxt}}</button>
-        </div>
-        <div v-if="work.WorkState === '3'"  class="page_ft text-center light_bg padding-top5 padding15-h">
-          <button @click="closeIns" class="ins_submit_btn">关闭{{typeTxt}}</button>
-        </div>
-        <transition name="page">
-          <router-view/>
-        </transition>
-        <div v-if="work.IsCase === '1'" class="ins_aside" @click="asideShow = true"><i class="iconfont icon-qiehuan"></i></div>
-        <transition name="fade">
-          <div v-if="asideShow" @click="asideShow = false" class="ins_aside_mask">
-            <div @click.stop style="height: calc(100% - 40px);margin-top: 40px;width: 75%;margin-left: 25%;background: #FFF;">
-              <ul class="ins_aside_ul">
-                <li @click="scrollTo(item)" v-for="(item, index) in filterList" :key="index">
-                  <span>
-                    <i v-if="index===0" class="iconfont icon-youxuanluxian"></i>
-                    <i v-else-if="index === (insList.length-1)" class="iconfont icon-zhongdian"></i>
-                    <i v-else class="iconfont icon-weizhi"></i>
-                  </span>
-                  <p>{{item.AddressName}}</p>
-                </li>
-              </ul>
-            </div>
+                        <a @click="remarkHandle(sub,item)" v-show="!sub.FeedContent" class="fs14 remark_color">反馈</a>
+                      </div>
+                      <p @click="remarkHandle(sub,item)" class="remark_color" v-show="sub.FeedContent">{{sub.FeedContent}}</p>
+                    </li>
+                  </ul>
+                  <ul v-else class="sub_ul_show ">
+                    <li v-for="(sub, key) in item.OptionsInfo" :key="key" class="border-top-half padding-v padding15-h">
+                      <div>{{sub.StepsName}} <span v-if="sub.IsInput === 'True'">(正常值: {{sub.ValueMin}}~{{sub.ValueMax}}{{sub.ValueUnit}})</span></div>
+                      <!-- 数值类型显示 -->
+                      <ins-number :readonly="true" v-if="sub.IsInput === 'True'" v-model="sub.InputResult"  :min="sub.ValueMin" :max="sub.ValueMax" :unit="sub.ValueUnit" ></ins-number>
+                      <!-- 选项内容展示 --><ins-radio :readonly="true" v-else v-model="sub.InputResult" :default-val="sub.StandardOptions" :option-str="sub.OptionsInfo" ></ins-radio>
+                      <p>{{sub.FeedContent}}</p>
+                    </li>
+                  </ul>
+                </div>
+                <div @click="routeToFix(item)" v-show="item.show && work.WorkState === '2'" class="sub_item_ft text-center " >
+                    <a href="javascript:void(0)" style="display:block;" class="main_color padding5 block">立即报修</a>
+                </div>
+              </li>
+            </ul>
           </div>
-        </transition>
+        </section>
+      </div>
+      <div v-if="work.WorkState === '2'"  class="page_ft text-center light_bg padding-top5 padding15-h">
+        <button @click="submitIns" class="ins_submit_btn">提交{{typeTxt}}</button>
+      </div>
+      <div v-if="work.WorkState === '3'"  class="page_ft text-center light_bg padding-top5 padding15-h">
+        <button @click="closeIns" class="ins_submit_btn">关闭{{typeTxt}}</button>
+      </div>
+      <transition name="page">
+        <router-view/>
+      </transition>
+      <div v-if="work.IsCase === '1'" class="ins_aside" @click="asideShow = true"><i class="iconfont icon-qiehuan"></i></div>
+      <transition name="fade">
+        <div v-if="asideShow" @click="asideShow = false" class="ins_aside_mask">
+          <div @click.stop style="height: calc(100% - 40px);margin-top: 40px;width: 75%;margin-left: 25%;background: #FFF;">
+            <ul class="ins_aside_ul">
+              <li @click="scrollTo(item)" v-for="(item, index) in filterList" :key="index">
+                <span>
+                  <i v-if="index===0" class="iconfont icon-youxuanluxian"></i>
+                  <i v-else-if="index === (insList.length-1)" class="iconfont icon-zhongdian"></i>
+                  <i v-else class="iconfont icon-weizhi"></i>
+                </span>
+                <p>{{item.AddressName}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -101,6 +101,7 @@ import InsRadio from './child/insRadio'
 import InsNumber from './child/insNumber'
 import {mapGetters} from 'Vuex'
 import local from '@/utils/local'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'inspectionDetail',
   data () {
@@ -117,6 +118,7 @@ export default {
     }
   },
   components: {
+    navTitle,
     Search,
     InsRadio,
     InsNumber
@@ -410,7 +412,7 @@ export default {
   position:fixed
 }
 .right_text_color {
-  color:#0dc88c;
+  color:#3395ff;
 }
 .wrong_text_color {
   color: #f00404;

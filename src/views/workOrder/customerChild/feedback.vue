@@ -1,90 +1,91 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <mt-header title="工单反馈">
+    <!-- <mt-header title="工单反馈">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    </mt-header> -->
+    <nav-title title="工单反馈"></nav-title>
     <div class="page_bd">
-        <div class="weui-cells" style="margin-top:0;">
-            <div class="weui-cell weui-cell_select weui-cell_select-after">
-                <div class="weui-cell__hd">
-                    <label for="" class="weui-label">处理结果</label>
-                </div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" v-model="formObj.workState"  dir="rtl" name="select2">
-                        <option v-for="item in options" :key="item.id" :value="item.value">{{item.showText}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="weui-cell">
-              <div class="weui-cell__bd">
-                  <textarea class="weui-textarea" v-model="formObj.processDetaile" maxlength="300" placeholder="请输入文本" rows="2"></textarea>
-                  <!-- <div class="weui-textarea-counter"><span>0</span>/200</div> -->
-                  <div class=" padding-top">
-                    <ins-img-list :imgs.sync="imgs" :max="3">
-                        <p class="dark_99 padding-top5">
-                            <voice @putVoice="putVoice" @delVoice="delVoice"></voice>
-                        </p>
-                    </ins-img-list>
-                  </div>
-              </div>
-            </div>
+      <div class="weui-cells" style="margin-top:0;">
+        <div class="weui-cell weui-cell_select weui-cell_select-after">
+          <div class="weui-cell__hd">
+            <label for="" class="weui-label">处理结果</label>
+          </div>
+          <div class="weui-cell__bd">
+            <select class="weui-select" v-model="formObj.workState"  dir="rtl" name="select2">
+              <option v-for="item in options" :key="item.id" :value="item.value">{{item.showText}}</option>
+            </select>
+          </div>
         </div>
-        <div class="weui-cells" style="margin-top:10px;">
-            <a @click="beginStartTime" class="weui-cell weui-cell_access" href="javascript:;">
-                <div class="weui-cell__bd">
-                    <p>开工时间</p>
-                </div>
-                <div class="weui-cell__ft">
-                    {{formObj.startTime}}
-                </div>
-            </a>
-            <a @click="endDateOpen" class="weui-cell weui-cell_access" href="javascript:;">
-                <div class="weui-cell__bd">
-                    <p>完工时间</p>
-                </div>
-                <div class="weui-cell__ft">
-                    {{formObj.endTime}}
-                </div>
-            </a>
-            <div class="weui-cell ">
-                <div class="weui-cell__hd"><label class="weui-label">人工费</label></div>
-                <div class="weui-cell__bd">
-                    <money-input  maxlength="8"  v-model="formObj.labourCost" type="number"  class="weui-input text-right"  placeholder="请输入金额"></money-input>
-                    <!-- <input v-model="formObj.labourCost"   class="weui-input text-right" type="number"  placeholder=""> -->
-                </div>
+        <div class="weui-cell">
+          <div class="weui-cell__bd">
+            <textarea class="weui-textarea" v-model="formObj.processDetaile" maxlength="300" placeholder="请输入文本" rows="2"></textarea>
+            <!-- <div class="weui-textarea-counter"><span>0</span>/200</div> -->
+            <div class=" padding-top">
+              <ins-img-list :imgs.sync="imgs" :max="3">
+                <p class="dark_99 padding-top5">
+                  <voice @putVoice="putVoice" @delVoice="delVoice"></voice>
+                </p>
+              </ins-img-list>
             </div>
-            <div class="weui-cell ">
-                <div class="weui-cell__hd"><label class="weui-label">材料费</label></div>
-                <div class="weui-cell__bd">
-                     <money-input  maxlength="8"  v-model="formObj.materialCostSum" type="number"  class="weui-input text-right"  placeholder="请输入金额"></money-input>
-                    <!-- <input v-model="formObj.materialCostSum" class="weui-input text-right" type="number" placeholder=""> -->
-                </div>
-            </div>
+          </div>
         </div>
-        <div class="weui-cells__title text-right dark_33 fs16">合计: ￥ {{allPrice | formatMoney}}</div>
-        <div class="weui-cells weui-cells_form" style="margin-bottom:15px;">
-            <a @click="routeMaterial" class="weui-cell weui-cell_access" href="javascript:;">
-                <div class="weui-cell__bd">
-                    <p>材料清单</p>
-                </div>
-                <div class="weui-cell__ft">
-                </div>
-            </a>
+      </div>
+      <div class="weui-cells" style="margin-top:10px;">
+        <a @click="beginStartTime" class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__bd">
+            <p>开工时间</p>
+          </div>
+          <div class="weui-cell__ft">
+            {{formObj.startTime}}
+          </div>
+        </a>
+        <a @click="endDateOpen" class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__bd">
+            <p>完工时间</p>
+          </div>
+          <div class="weui-cell__ft">
+            {{formObj.endTime}}
+          </div>
+        </a>
+        <div class="weui-cell ">
+          <div class="weui-cell__hd"><label class="weui-label">人工费</label></div>
+          <div class="weui-cell__bd">
+            <money-input  maxlength="8"  v-model="formObj.labourCost" type="number"  class="weui-input text-right"  placeholder="请输入金额"></money-input>
+            <!-- <input v-model="formObj.labourCost"   class="weui-input text-right" type="number"  placeholder=""> -->
+          </div>
         </div>
-        <div v-if="canActionBtn" style="text-align: center;padding-bottom:15px;">
-            <div @click="workAction" class="cir_quan" :style="btnStatus===1?'padding-top:20px':''">
-                <span v-if="btnStatus===0">开工</span>
-                <span v-if="btnStatus===1">
-                    {{showTime}}<br/>
-                    点击完工
-                </span>
-                <span v-if="btnStatus===2">已完成</span>
-            </div>
+        <div class="weui-cell ">
+          <div class="weui-cell__hd"><label class="weui-label">材料费</label></div>
+          <div class="weui-cell__bd">
+              <money-input  maxlength="8"  v-model="formObj.materialCostSum" type="number"  class="weui-input text-right"  placeholder="请输入金额"></money-input>
+              <!-- <input v-model="formObj.materialCostSum" class="weui-input text-right" type="number" placeholder=""> -->
+          </div>
         </div>
+      </div>
+      <div class="weui-cells__title text-right dark_33 fs16">合计: ￥ {{allPrice | formatMoney}}</div>
+      <div class="weui-cells weui-cells_form" style="margin-bottom:15px;">
+        <a @click="routeMaterial" class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__bd">
+            <p>材料清单</p>
+          </div>
+          <div class="weui-cell__ft">
+          </div>
+        </a>
+      </div>
+      <div v-if="canActionBtn" style="text-align: center;padding-bottom:15px;">
+        <div @click="workAction" class="cir_quan" :style="btnStatus===1?'padding-top:20px':''">
+          <span v-if="btnStatus===0">开工</span>
+          <span v-if="btnStatus===1">
+            {{showTime}}<br/>
+            点击完工
+          </span>
+          <span v-if="btnStatus===2">已完成</span>
+        </div>
+      </div>
     </div>
     <div class="page_ft text-center light_bg padding-top5 padding15-h">
-        <button @click="submitHandle" class="ins_submit_btn">提交反馈</button>
+      <button @click="submitHandle" class="ins_submit_btn">提交反馈</button>
     </div>
     <mt-datetime-picker class="mydate"  @confirm="startDateConfirm" ref="picker1" type="datetime" :start-date="startReportTime" :end-date="new Date()" v-model="pickerValue1" year-format="{value}年"  month-format="{value}月"  date-format="{value}日" hour-format="{value}时" minute-format="{value}分" ></mt-datetime-picker>
     <mt-datetime-picker class="mydate"  @confirm="endDateConfirm" ref="picker2" type="datetime" :start-date="endStartTime" :end-date="new Date()" v-model="pickerValue2" year-format="{value}年"  month-format="{value}月"  date-format="{value}日" hour-format="{value}时" minute-format="{value}分" ></mt-datetime-picker>
@@ -100,9 +101,11 @@
 import InsImgList from '../child/insImgList'
 import Voice from '../child/voice'
 import MoneyInput from '../child/moneyInput'
+import navTitle from '@/components/navTitle'
 export default {
   name: 'feedback',
   components: {
+    navTitle,
     InsImgList,
     MoneyInput,
     Voice
