@@ -471,8 +471,8 @@ export default {
         this.$toast('提交成功')
         setTimeout(() => {
           this.isSendForm = false
-          // this.$root.back()
-          this.$app.back()
+          this.$root.back()
+          // this.$app.back()
         }, 1500)
       } catch (err) {
         console.log(err)

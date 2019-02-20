@@ -18,6 +18,7 @@ import FastClick from 'fastclick'
 import bus from './utils/pushMsg'
 import '@/utils/rem'
 import preview from 'vue-photo-preview'
+import NavTitle from '@/components/navTitle'
 console.log(bus)
 
 if (process.env.NODE_ENV === 'development') {
@@ -41,6 +42,7 @@ if (process.env.NODE_ENV === 'development') {
 FastClick.attach(document.body)
 dateForm()
 Vue.config.productionTip = false
+Vue.component(NavTitle.name, NavTitle)
 Vue.component(DatetimePicker.name, DatetimePicker)
 Vue.component(IndexList.name, IndexList)
 Vue.component(IndexSection.name, IndexSection)

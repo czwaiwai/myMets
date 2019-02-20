@@ -69,10 +69,10 @@ export default {
   created () {
     let obj = qs.parse(location.search)
     this.nav = {
-      orgId: obj.projectID || '11091315263400010000' || this.user.OrgID,
+      orgId: obj.projectID || this.user.OrgID,
       orgName: obj.projectName || this.user.OrgName,
-      userName: obj.UserId || this.user.userName,
-      memberId: obj.memberId || '30' || this.user.memberId
+      userName: obj.UserId || this.user.UserID,
+      memberId: obj.memberId || this.user.memberId
     }
     this.configList = this.typeList.map(item => {
       return this.createListConfig(item.id, {eventStateId: item.state})
@@ -98,7 +98,9 @@ export default {
     createListConfig (name, params) {
       return {
         name: name,
-        url: '/ets/table/list/equipBase_GetInspectionMonitorH5',
+        // url: '/ets/table/list/equipBase_GetInspectionMonitorH5',
+        url: 'EquipBase_GetInspectionMonitorH5',
+        xml: true,
         params: {
           strOrgID: this.nav.orgId,
           starTime: '1',
@@ -114,7 +116,8 @@ export default {
           // stid: '',
           ...params
         },
-        format: function (data) {
+        format: function (res) {
+          let data = res[0]
           return data.EquiInfo
         }
       }

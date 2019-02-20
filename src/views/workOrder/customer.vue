@@ -156,7 +156,7 @@ export default {
       return {
         name: name,
         // url: '/ets/syswin/smd/userCSGetWorkOrdSyswinH5',
-        url: 'UserCS_GetWorkOrdSyswinTestingH5',
+        url: 'UserCS_GetWorkOrdSyswinH5',
         xml: true,
         params: {
           projectId: this.nav.orgId,
@@ -233,6 +233,7 @@ export default {
         OrdersDepart: item.DeptName,
         PlusEmployeeName: ''
       }
+
       let p0 = 'UserService_SingleBill'
       let res = await this.$xml(p0, params)
       // let params = {
@@ -246,12 +247,16 @@ export default {
       // let url = '/ets/syswin/smd/userServiceSingleBill'
       // let res = await this.$http.post(url, params)
       console.log(res)
-      this.$toast('转单成功')
+
       this.refresh()
-      await this.sendMsg(this.workItem)
+      try {
+        await this.sendMsg(this.workItem, item)
+        this.$toast('转单成功并推送消息')
+      } catch (error) {
+        this.$toast('转单成功但消息推送失败')
+      }
     },
-    async sendMsg (work) {
-      let url = '/ets/message/getMessage'
+    async sendMsg (work, person) {
       let state = ''
       let title = this.title
       let type = 'CustomerService'
@@ -262,14 +267,26 @@ export default {
         case 'WOSta_Visit': state = '待接单'; break
       }
       let params = {
-        id: work.WorkOrdID,
-        type: type,
-        title: title,
-        content: this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
-        tag: work.UserId,
-        status: '1'
+        'ID': work.WorkOrdID,
+        'Type': type,
+        'Title': title,
+        'Content': this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
+        'Tag': person.UserId,
+        'Status': '1',
+        'FromTag': ''
       }
-      let res = await this.$http.post(url, params) // 暂无.net接口
+      let p0 = 'AppWeChat_JGWorkPush'
+      let res = await this.$xml(p0, params)
+      // let url = '/ets/message/getMessage'
+      // let params = {
+      //   id: work.WorkOrdID,
+      //   type: type,
+      //   title: title,
+      //   content: this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
+      //   tag: work.UserId,
+      //   status: '1'
+      // }
+      // let res = await this.$http.post(url, params) // 暂无.net接口
       this.$toast('消息推送成功')
       console.log(res)
     }

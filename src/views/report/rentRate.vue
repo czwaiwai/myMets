@@ -487,12 +487,17 @@ export default {
     background:#fff;
   }
   .weui-cells_checkbox .weui-icon-checked:before {
-    content: '\E630';
+    content: '\E633';
     color:#c9c9c9;
   }
   .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
+<<<<<<< Updated upstream
     content: '\E631';
     color: #3395ff;
+=======
+    content: '\E635';
+    color: #0DC88C;
+>>>>>>> Stashed changes
   }
   .reset_btn {
     width: 44%;

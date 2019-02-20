@@ -21,7 +21,12 @@ export default {
   created () {
   },
   methods: {
+    // async getPageData() {
+    //   // let p0 = 'UserCS_GetEquiRepairH5'
+    //   // let res = await this.$xml(p0, {
 
+    //   // })
+    // }
   }
 }
 </script>

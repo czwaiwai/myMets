@@ -134,6 +134,7 @@ export default {
     }
     this.nav = this.$parent.nav
     this.work = this.workItem = this.$parent.workItem
+    console.log(this.work, 'this.work')
     // this.showButtons = this.$parent.showButtons
     this.init()
   },

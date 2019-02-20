@@ -50,11 +50,9 @@
 </template>
 
 <script>
-import navTitle from '@/components/navTitle'
 import {mapGetters} from 'Vuex'
 export default {
   name: 'tabHome',
-  components: {navTitle},
   data () {
     return {
       list: [],
@@ -135,6 +133,7 @@ export default {
         {url: `/workOrder/customerService?workPosFrom=Equipment`, type: 'weixiugongdan'},
         {url: `/workOrder/inspection`, type: 'xunjian'},
         {url: `/workOrder/inspection?orderType=KeepFit`, type: 'baoyang'}
+
       ]
       this.list = res.data.filter((item, index) => {
         if (item.GDType !== '5') {
@@ -147,6 +146,16 @@ export default {
           return false
         }
       })
+      // this.list.push({
+      //   name: '客服工单池',
+      //   img: imgArr[0],
+      //   url: {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'}
+      // })
+      // this.list.push({
+      //   name: '巡检工单池',
+      //   img: imgArr[2],
+      //   url: {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'}
+      // })
     }
   }
 }

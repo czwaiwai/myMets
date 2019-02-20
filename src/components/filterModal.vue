@@ -88,6 +88,15 @@ export default {
       }
     }
   },
+  provide () {
+    return {
+      setList: this.setList,
+      dateStartOpen: this.dateStartOpen,
+      dateEndOpen: this.dateEndOpen,
+      dateOpen: this.dateOpen,
+      setCheckList: this.setCheckList
+    }
+  },
   data () {
     return {
       isList: false,

@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-  name: 'headerTitle',
+  name: 'navTitle',
   props: {
     title: {
       type: String,
