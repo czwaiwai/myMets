@@ -49,7 +49,7 @@
           </component>
       </keep-alive>
       <div class="page_ft light_bg text-center padding-top5">
-        <button  class=" weui-btn weui-btn_mini weui-btn_plain-primary">报修此设备</button>
+        <button  class=" weui-btn weui-btn_mini weui-btn_plain-primary" @click.stop="tocustomerService">报修此设备</button>
       </div>
       <transition name="page">
         <router-view></router-view>
