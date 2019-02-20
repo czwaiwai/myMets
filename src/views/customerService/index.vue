@@ -190,7 +190,9 @@ export default {
   computed: {
     ...mapGetters({
       'user': 'user',
-      'ip': 'ip'
+      'ip': 'ip',
+      'homePhoto': 'getHomePhoto',
+      'homeVoice': 'getHomeVoice'
     })
   },
   created () {
@@ -215,6 +217,10 @@ export default {
     this.formObj.orgName = this.nav.orgName
     this.formObj.orgId = this.nav.orgId
     this.formObj.userName = this.nav.userName
+
+    if (this.$route.query.quick) {
+      this.setInit()
+    }
     // this.setUserInfo ()
     if (this.type === 'baoxiu') {
       this.deviceInit()
@@ -223,6 +229,20 @@ export default {
     this.getPageData()
   },
   methods: {
+    // 设置初始值
+    setInit () {
+      if (this.homePhoto.hasData) {
+        this.imgs.push(this.homePhoto.path)
+      }
+      if (this.homeVoice.hasData) {
+        this.formObj.opUser = this.homeVoice.path
+        this.formObj.memo = this.homeVoice.duration
+        this.recTime = `${this.homeVoice.duration}''`
+      }
+      this.formObj.workPos = this.$route.query.workPos
+      this.formObj.woId = this.$route.query.woId
+    },
+
     // 获取报事保修快捷音频及图片
     getQuickChannel () {
       let img = sess.get('mainImg')
@@ -388,7 +408,11 @@ export default {
         return false
       }
       if (!this.formObj.workPos) {
-        this.$toast('请输入或选择地址')
+        if (this.$route.query.type === 'baoshi') {
+          this.$toast('请输入或选择地址')
+        } else {
+          this.$toast('请选择设备')
+        }
         return false
       }
       if (!this.formObj.woNoBasicId) {
@@ -471,8 +495,13 @@ export default {
         this.$toast('提交成功')
         setTimeout(() => {
           this.isSendForm = false
+          if (this.$route.query.quick) {
+            this.$router.go(-2)
+          } else {
+            this.$root.back()
+          }
           // this.$root.back()
-          this.$app.back()
+          // this.$app.back()
         }, 1500)
       } catch (err) {
         console.log(err)

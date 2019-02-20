@@ -41,17 +41,17 @@ export default {
       transform: translate(-50%,-60%);
       .pic{
         width: 4rem;
-        height: 2.4rem;
+        height: 2.2rem;
         margin: 0 auto;
         .icon{
           display: block;
           width: 4rem;
-          height: 2.4rem;
+          height: 2.2rem;
           margin: 0 auto;
           font-size: 1.6rem;
           text-align: center;
           color: #999;
-          line-height: 2.4rem;
+          line-height: 2.2rem;
         }
       }
       .title{

@@ -72,7 +72,7 @@ export default {
   border-left:none;
 }
 .mint-indexlist-navlist .mint-indexlist-navitem {
-  color:#27cb96;
+  color:#3395FF;
 }
 .mint-indexsection-index {
   padding: 2px 10px;

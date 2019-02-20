@@ -6,7 +6,7 @@
     <nav-title title="请选择功能"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin-top:0;">
-        <div @click="$router.forward('/customerService?quick=true')" class="weui-cell">
+        <div @click="toCustomerService('baoshi')" class="weui-cell">
           <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
             <img src="../../assets/img/btnFunc/ic_customer.png" style="width: 50px;display: block">
           </div>
@@ -14,7 +14,7 @@
             <p>客服报事</p>
           </div>
         </div>
-        <div @click="$router.forward('/customerService?quick=true')" class="weui-cell">
+        <div @click="toCustomerService('baoxiu')" class="weui-cell">
           <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
             <img src="../../assets/img/btnFunc/ic_maintain_pool.png"  style="width: 50px;display: block">
           </div>
@@ -36,7 +36,17 @@ export default {
     return {}
   },
   created () {},
-  methods: {}
+  methods: {
+    toCustomerService (type) {
+      this.$router.push({
+        name: 'customerService',
+        query: {
+          type: type,
+          quick: true
+        }
+      })
+    }
+  }
 }
 </script>
 

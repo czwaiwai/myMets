@@ -108,45 +108,53 @@ export default {
     //   console.log(res, '----哈哈哈--')
     // },
     async getPageData () {
-      let res = await this.$xml('User_Service_GetWorkordCount', '', {
-        p1: this.user.OrgID,
-        p2: this.user.memberId,
-        p3: this.user.PositionID
-      }, true)
-      // let res = await this.$http.post('/ets/syswin/smd/userServiceGetWorkordCount', {
-      //   projectId: this.user.OrgID,
-      //   memberId: this.user.memberId,
-      //   positionID: this.user.PositionID,
-      //   hideLoad: true
-      // })
-      let nameArr = ['客服工单池', '维修工单池', '巡检工单池', '保养工单池']
-      let imgArr = [
-        './static/tabHome/ic_service_pool.png',
-        './static/tabHome/ic_maintain_pool.png',
-        './static/tabHome/msg_list_icon_inspection.png',
-        './static/tabHome/msg_list_icon_maintain.png'
-      ]
-      let urlArr = [
-        // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'},
-        // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
-        // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
-        // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
-        {url: `/workOrder/customerService`, type: 'kefugongdan'},
-        {url: `/workOrder/customerService?workPosFrom=Equipment`, type: 'weixiugongdan'},
-        {url: `/workOrder/inspection`, type: 'xunjian'},
-        {url: `/workOrder/inspection?orderType=KeepFit`, type: 'baoyang'}
-      ]
-      this.list = res.data.filter((item, index) => {
-        if (item.GDType !== '5') {
-          item.name = nameArr[index]
-          item.img = imgArr[index]
-          item.num = parseInt(item.GDCount) > 99 ? '99+' : item.GDCount
-          item.url = urlArr[index]
-          return true
-        } else {
-          return false
-        }
-      })
+      try {
+        let res = await this.$xml('User_Service_GetWorkordCount', '', {
+          p1: this.user.OrgID,
+          p2: this.user.memberId,
+          p3: this.user.PositionID
+        }, true)
+        console.log('res:', res)
+        // let res = await this.$http.post('/ets/syswin/smd/userServiceGetWorkordCount', {
+        //   projectId: this.user.OrgID,
+        //   memberId: this.user.memberId,
+        //   positionID: this.user.PositionID,
+        //   hideLoad: true
+        // })
+        let nameArr = ['客服工单池', '维修工单池', '巡检工单池', '保养工单池']
+        let imgArr = [
+          './static/tabHome/ic_service_pool.png',
+          './static/tabHome/ic_maintain_pool.png',
+          './static/tabHome/msg_list_icon_inspection.png',
+          './static/tabHome/msg_list_icon_maintain.png'
+        ]
+        let urlArr = [
+          // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'},
+          // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
+          // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
+          // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
+          {url: `/workOrder/customerService`, type: 'kefugongdan'},
+          {url: `/workOrder/customerService?workPosFrom=Equipment`, type: 'weixiugongdan'},
+          {url: `/workOrder/inspection`, type: 'xunjian'},
+          {url: `/workOrder/inspection?orderType=KeepFit`, type: 'baoyang'}
+        ]
+        this.list = res.data.filter((item, index) => {
+          if (item.GDType !== '5') {
+            item.name = nameArr[index]
+            item.img = imgArr[index]
+            item.num = parseInt(item.GDCount) > 99 ? '99+' : item.GDCount
+            item.url = urlArr[index]
+            return true
+          } else {
+            return false
+          }
+        })
+        console.log('list:', this.list)
+        localStorage.tabHome = JSON.stringify(this.list)
+      } catch (e) {
+        console.log(e + 'catch')
+        this.list = localStorage.tabHome ? JSON.parse(localStorage.tabHome) : []
+      }
     }
   }
 }

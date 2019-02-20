@@ -80,7 +80,7 @@ export default {
   line-height: 34px;
   font-size: 16px;
   padding-left: 15px;
-  color: #0fc98d;
+  color: #3395ff;
   background: #FFF;
 }
 .search_list_wrap {

@@ -74,7 +74,7 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-import sess from '../utils/sess'
+// import sess from '../utils/sess'
 export default {
   name: 'index',
   data () {
@@ -122,15 +122,25 @@ export default {
     callPhoto () {
       this.$app.waterCamera().then(res => {
         this.quickOut()
-        sess.set('mainImg', res)
-        sess.remove('mainVoice')
+        // sess.set('mainImg', res)
+        // sess.remove('mainVoice')
+        if (typeof (res) === 'string') {
+          res = JSON.parse(res)
+        }
+        console.log(res)
+        let photo = {
+          hasData: true,
+          path: res
+        }
+        this.$store.commit('setHomePhoto', photo)
+        this.$store.commit('setHomeVoice', {hasData: false})
         this.$router.forward({path: '/btnFunc'})
       }).catch(err => {
         console.log(err)
         if (this.$dev) {
           this.quickOut()
-          sess.set('mainImg', 'hahahah')
-          sess.remove('mainVoice')
+          // sess.set('mainImg', 'hahahah')
+          // sess.remove('mainVoice')
           this.$router.forward({path: '/btnFunc'})
         }
       })
@@ -139,6 +149,7 @@ export default {
       this.$app.scan().then((res) => {
         console.log(res)
         // this.$router.forward({path: '/btnFunc', params:{data: res}})
+        this.quickOut()
         this.$app.loadView({url: `http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
       }).catch(err => {
         if (this.$dev) {
@@ -151,16 +162,19 @@ export default {
     callVoice () {
       this.$app.getRec().then((res) => {
         console.log('getRec_res:', res)
-        sess.set('mainVoice', res)
-        sess.remove('mainImg')
+        // sess.set('mainVoice', res)
+        // sess.remove('mainImg')
+        res.hasData = true
+        this.$store.commit('setHomeVoice', res)
+        this.$store.commit('setHomePhoto', {hasData: false})
         this.quickOut()
         this.$router.forward({path: '/btnFunc'})
       }).catch(err => {
         console.log(err)
         if (this.$dev) {
           this.quickOut()
-          sess.set('mainVoice', '设置语音')
-          sess.remove('mainImg')
+          // sess.set('mainVoice', '设置语音')
+          // sess.remove('mainImg')
           this.$router.forward({path: '/btnFunc'})
         }
       })

@@ -71,3 +71,10 @@
 
 // slider
 @import "widget/weui-slider/weui-slider";
+.weui-cells_radio .weui-check:checked + .weui-icon-checked:before {
+  color: #3395ff !important;
+}
+.weui-btn_plain-primary {
+  color: #3395ff !important;
+  border: 1px solid #3395ff !important;
+}

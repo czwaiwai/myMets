@@ -95,7 +95,7 @@ export default {
 .weui-cell_access.active  {
   background-color: #f8f8f8;
   & p {
-    color: #16ca8d;
+    color: #3395ff;
   }
 }
 .type_nav_bar {

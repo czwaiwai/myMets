@@ -42,13 +42,13 @@
           </div>
           <div class="weui-cell__ft"></div>
         </a>
-        <a @click="$router.forward('/status')"  class="weui-cell weui-cell_access" href="javascript:;">
+        <!-- <a @click="$router.forward('/status')"  class="weui-cell weui-cell_access" href="javascript:;">
           <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_icon_ztsz.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">
             <p>我的状态</p>
           </div>
           <div class="weui-cell__ft"></div>
-        </a>
+        </a> -->
         <a @click="$router.forward('/serverAddress')" class="weui-cell weui-cell_access" href="javascript:;">
           <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_icon_fwqdz.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">

@@ -49,7 +49,7 @@
         </component>
     </keep-alive>
     <div class="page_ft light_bg text-center padding-top5">
-      <button class=" weui-btn weui-btn_mini weui-btn_plain-primary">保修此设备</button>
+      <button class=" weui-btn weui-btn_mini weui-btn_plain-primary" @click.stop="tocustomerService">保修此设备</button>
     </div>
   </div>
 </template>
@@ -92,6 +92,17 @@ export default {
     MtNavbar: Navbar
   },
   methods: {
+    tocustomerService () {
+      this.$router.push({
+        name: 'customerService',
+        query: {
+          type: 'baoxiu',
+          workPos: this.scanObj.EquiName,
+          woId: this.scanObj.Id,
+          quick: true
+        }
+      })
+    },
     // 扫码后设备档案详情接口 [巡检 Inspection,保养 KeepFit]
     createPageConfig (name, workType = 'Inspection') {
       return {

@@ -178,13 +178,13 @@ export default {
       } else {
         this.isData3 = false
       }
-      if (this.isDataExist(arr[0])) {
+      if (this.isDataExist(arr[0]) && arr[0][0].status !== '0') {
         this.dataMap1(arr[0])
         this.isData1 = true
       } else {
         this.isData1 = false
       }
-      if (this.isDataExist(arr[1])) {
+      if (this.isDataExist(arr[1]) && arr[1][0].status !== '0') {
         this.dataMap2(arr[1])
         this.isData2 = true
       } else {

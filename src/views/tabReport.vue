@@ -118,23 +118,33 @@ export default {
   },
   methods: {
     async getPageData () {
-      let res = await this.getReportAuth()
-      if (!res) {
-        // 显示空
-        return
+      try {
+        let res = await this.getReportAuth()
+        if (!res) {
+          // 显示空
+          return
+        }
+        let arr = await Promise.all([this.rightInfo(), this.leftTopInfo(), this.leftbottomInfo()])
+        // arr[0]
+        this.rightList.forEach((item, index) => {
+          item.value = arr[0][index]
+        })
+        let leftValues = arr[1].concat(arr[2])
+        this.leftList.forEach((item, index) => {
+          item.value = leftValues[index]
+        })
+        console.log(this.rightList, this.leftList, 'wo qu')
+        localStorage.rightList = JSON.stringify(this.rightList)
+        localStorage.leftList = JSON.stringify(this.leftList)
+      } catch (e) {
+        this.rightList = localStorage.rightList ? JSON.parse(localStorage.rightList) : []
+        this.leftList = localStorage.leftList ? JSON.parse(localStorage.leftList) : []
+        if (this.leftList.length === 0) {
+          this.singleMode = true
+        } else {
+          this.singleMode = false
+        }
       }
-      let arr = await Promise.all([this.rightInfo(), this.leftTopInfo(), this.leftbottomInfo()])
-      // arr[0]
-      this.rightList.forEach((item, index) => {
-        item.value = arr[0][index]
-      })
-      let leftValues = arr[1].concat(arr[2])
-      this.leftList.forEach((item, index) => {
-        item.value = leftValues[index]
-      })
-      console.log(this.rightList, this.leftList, 'wo qu')
-      // this.leftList.forEach((item, index) => {
-      // })
     },
     routeTo (item) {
       this.$router.forward({name: item.urlName})
