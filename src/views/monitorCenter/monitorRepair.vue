@@ -182,7 +182,9 @@ export default {
       let ip = this.$store.getters.ip
       return {
         name: name,
-        url: '/ets/syswin/smd/userCSGetWorkOrdSyswinH5',
+        // url: '/ets/syswin/smd/userCSGetWorkOrdSyswinH5',
+        url: 'UserCS_GetWorkOrdSyswinH5',
+        xml: true,
         params: {
           projectId: this.nav.orgId,
           employeeId: this.currMember,
@@ -192,7 +194,8 @@ export default {
           workPos: this.searchKey, // search 筛选
           ...params
         },
-        format: function (data) {
+        format: function (res) {
+          let data = res[0]
           return data.WorkInfo.map(item => {
             if (ip) {
               item.ImageList.map(sub => {

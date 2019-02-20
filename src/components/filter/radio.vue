@@ -39,6 +39,7 @@ export default {
       ]
     }
   },
+  inject: ['setList'],
   data () {
     return {
     }
@@ -107,7 +108,7 @@ export default {
     },
     chooseClick (item, index) {
       if (item.value === 'more') {
-        this.$parent.setList(this.name, this.formatList, this.activeIndex)
+        this.setList(this.name, this.formatList, this.activeIndex)
       } else {
         // this.value = i
         this.$emit('input', item.value)

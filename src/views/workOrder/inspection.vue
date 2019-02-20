@@ -485,7 +485,7 @@ export default {
       try {
         await this.sendMsg(item, query.workId)
         // 提示
-        this.$toast('转单成功')
+        this.$toast('转单成功并推送消息')
       } catch (e) {
         console.log(e)
         this.$toast('转单成功但推送失败')
@@ -493,15 +493,27 @@ export default {
     },
     // 推送消息
     async sendMsg (data, workId) {
-      let url = '/ets/message/getMessage'
-      await this.$http.post(url, { // 暂无.net接口
-        id: workId,
-        type: 'E_' + this.orderType, // [E_Inspection, E_KeepFit]
-        title: this.typeTxt + '工单', // [巡检工单, 保养工单]
-        content: '您有一个新的转单工单，请及时处理',
-        tag: data.UserId,
-        status: '1'
-      })
+      let params = {
+        'ID': workId,
+        'Type': 'E_' + this.orderType,
+        'Title': this.typeTxt + '工单',
+        'Content': '您有一个新的转单工单，请及时处理',
+        'Tag': data.UserId,
+        'Status': '1',
+        'FromTag': ''
+      }
+      let p0 = 'AppWeChat_JGWorkPush'
+      let res = await this.$xml(p0, params)
+      return res
+      // let url = '/ets/message/getMessage'
+      // await this.$http.post(url, { // 暂无.net接口
+      //   id: workId,
+      //   type: 'E_' + this.orderType, // [E_Inspection, E_KeepFit]
+      //   title: this.typeTxt + '工单', // [巡检工单, 保养工单]
+      //   content: '您有一个新的转单工单，请及时处理',
+      //   tag: data.UserId,
+      //   status: '1'
+      // })
     },
     createListConfigNet (name, params) {
       return {

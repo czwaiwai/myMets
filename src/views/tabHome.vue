@@ -50,11 +50,9 @@
 </template>
 
 <script>
-import navTitle from '@/components/navTitle'
 import {mapGetters} from 'Vuex'
 export default {
   name: 'tabHome',
-  components: {navTitle},
   data () {
     return {
       list: [],

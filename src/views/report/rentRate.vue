@@ -487,11 +487,11 @@ export default {
     background:#fff;
   }
   .weui-cells_checkbox .weui-icon-checked:before {
-    content: '\E630';
+    content: '\E633';
     color:#c9c9c9;
   }
   .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
-    content: '\E631';
+    content: '\E635';
     color: #3395ff;
   }
   .reset_btn {
