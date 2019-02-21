@@ -23,6 +23,7 @@
                       <span class="dark_99 padding-left15 fs12">规格: {{sub.specification}}</span>
                     </p>
                     <span style="position: absolute;right: 15px;top: 28px;">{{sub.planNum}}</span>
+                    <!-- {{sub.materialNo}} -->
                 </div>
             </div>
             <div class="weui-panel__ft">

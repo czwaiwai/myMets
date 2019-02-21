@@ -132,10 +132,8 @@
 <script>
 import {mapGetters} from 'Vuex'
 import CryptoJS from 'crypto-js'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'tabWork',
-  components: {navTitle},
   data () {
     return {
       hasBtn: false,
@@ -148,11 +146,17 @@ export default {
     // this.$store.dispatch('getUserAction').then(res => {
     //   console.log(res, '--------------getUserAction')
     // })
+    // setTimeout(() => {
+    //   // 执行window
+    //   console.log('执行tabwork方法')
+    //   window.APP_pushMsg('{"fromTag":"","id":"20190220092648764888","status":"1","type":"CustomerService","url":""}')
+    // }, 5000)
     this.getPageData()
     this.shenliangTest()
     console.log(this.user, '--------user--------')
     console.log(this.encryptByDES('test20', 'SE83232U'), '----')
     console.log(this.encryptDES('test20', 'SE83232U'), '----')
+
     // console.log(this.shenlinagUrl)
   },
   activated () {

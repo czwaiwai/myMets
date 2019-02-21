@@ -29,8 +29,11 @@
               <span class="prop_bl dark_99">规格: {{item.specification}}</span>
             </p>
             <div class="weui-flex">
-              <p class="error_color weui-flex__item" style="line-height:32px;">￥ {{item.planPrice | formatMoney}}</p>
-              <mat-number v-model="item.num" @input="numChange" :max="item.storeAmount-0"></mat-number>
+              <div class="weui-flex__item">
+                <p class="error_color weui-flex__item" style="line-height:32px;">￥ {{item.planPrice | formatMoney}}</p>
+                <p class="dark_99">物料编码:{{item.materialNo}}</p>
+              </div>
+              <div><mat-number v-model="item.num" @input="numChange" :max="item.storeAmount-0"></mat-number></div>
             </div>
           </li>
         </ul>

@@ -149,8 +149,8 @@ export default {
       this.$app.scan().then((res) => {
         console.log(res)
         // this.$router.forward({path: '/btnFunc', params:{data: res}})
-        this.quickOut()
-        this.$app.loadView({url: `http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
+        this.$router.forward('/scan/ScanDetail/' + res)
+        // this.$app.loadView({url: `http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
       }).catch(err => {
         if (this.$dev) {
           this.quickOut()

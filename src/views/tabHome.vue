@@ -112,7 +112,6 @@ export default {
           p2: this.user.memberId,
           p3: this.user.PositionID
         }, true)
-        console.log('res:', res)
         // let res = await this.$http.post('/ets/syswin/smd/userServiceGetWorkordCount', {
         //   projectId: this.user.OrgID,
         //   memberId: this.user.memberId,
@@ -127,10 +126,10 @@ export default {
           './static/tabHome/msg_list_icon_maintain.png'
         ]
         let urlArr = [
-          // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'},
-          // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
-          // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
-          // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
+        // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'kefugongdan'},
+        // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
+        // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
+        // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
           {url: `/workOrder/customerService`, type: 'kefugongdan'},
           {url: `/workOrder/customerService?workPosFrom=Equipment`, type: 'weixiugongdan'},
           {url: `/workOrder/inspection`, type: 'xunjian'},

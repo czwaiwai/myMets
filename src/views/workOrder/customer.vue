@@ -116,11 +116,22 @@ export default {
       memberId: this.user.memberId || '1',
       workPosFrom: this.workPosFrom
     }
-    this.getStatus()
-    this.configList = this.typeList.map(item => {
-      return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
-    })
-    console.log(this.configList, 'configList')
+    if (this.$route.query.taskId) {
+      this.workItem = this.notice(this.$route.query.taskId)
+      this.nav.workPosFrom = this.workPosFrom = this.workItem.WorkPosFrom
+      this.title = this.workItem.WorkPosFrom ? '维修工单' : '客服工单'
+      this.routeTo(this.workItem)
+      this.getStatus()
+      this.configList = this.typeList.map(item => {
+        return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
+      })
+    } else {
+      this.getStatus()
+      this.configList = this.typeList.map(item => {
+        return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
+      })
+    }
+    // console.log(this.configList, 'configList')
   },
   computed: {
     ...mapGetters({
@@ -143,6 +154,19 @@ export default {
     },
     listDone () {
       this.$previewRefresh()
+    },
+    async notice (taskId) {
+      let p0 = 'UserCS_GetWorkOrdDetailSyswin'
+      let res = await this.$xml(p0, {
+        taskId: taskId,
+        orgid: this.nav.orgId,
+        employeeid: this.nav.memberId
+      })
+      if (res.data && res.data[0]) {
+        console.log(res.data, '----')
+        return res.data[0]
+        // this.workItem = res.data[0]
+      }
     },
     searchHandle () {
       this.currConfig.params.workPos = this.searchKey

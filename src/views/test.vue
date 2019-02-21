@@ -1,4 +1,5 @@
 <template>
+<div class="page_modal">
   <div class="page">
     <!-- <mt-header title="测试地图">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
@@ -14,6 +15,7 @@
       <div class="baidu_map" ref="baiduMap" style="width:100%;height:100%;"></div>
     </div>
   </div>
+</div>
 </template>
 <script>
 import mapReady from '@/utils/getBaiduMap'

@@ -37,7 +37,21 @@ export default {
     let that = this
     pushBus.$on('jPush', function (data) {
       console.log(data, 'pushMsg收到的数据---')
-      that.$app.loadView({url: 'http://' + that.ip + '/ETSmobileApproval/#page=0', type: 'shenpi'})
+      console.log(typeof data === 'string', 'string')
+      let obj = JSON.parse(data)
+      obj = obj.notice ? obj.notice : obj
+      let taskId = obj.id
+      switch (obj.type) {
+        case 'CustomerService':
+          if (that.$route.path === '/workOrder/customerService') {
+            window.location.hash = that.$route.path.indexOf('?') > -1 ? that.$route.path + '&taskId=' + taskId : that.$route.path + '?taskId=' + taskId
+          } else {
+            that.$router.push('/workOrder/customerService?taskId=' + taskId)
+          }
+          ; break
+        case 'E_inspection': that.$router.push('/workOrder/inspection?taskId=' + taskId); break
+      }
+      // that.$app.loadView({url: 'http://' + that.ip + '/ETSmobileApproval/#page=0', type: 'shenpi'})
     })
   },
   watch: {

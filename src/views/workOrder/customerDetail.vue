@@ -221,6 +221,8 @@ export default {
     },
     async getPageData () {
       // UserCS_GetWorkOrdDetailSyswinH5
+
+      // UserCS_GetWorkOrdDetailSyswinH5
       let p0 = 'UserCS_GetWorkOrdDetailSyswinH5'
       let res = await this.$xml(p0, {
         WorkOrdID: this.work.WorkOrdID,

@@ -5,7 +5,7 @@
     </mt-header> -->
     <nav-title title="切换项目"></nav-title>
     <div class="page_bd" style="background:#f9f9f9;">
-      <search v-model="search"></search>
+      <search v-model="search" :no-focus="true"></search>
       <div class="weui-cells weui-cells_radio" style="margin-top:0;">
         <label v-for="item in filterList" :key="item.projectId" class="weui-cell weui-check__label" :for="'x'+item.projectId">
           <div class="weui-cell__bd">
