@@ -8,11 +8,39 @@ function coverAuth (areaInfo) {
   })
   return auth
 }
+// 权限测试
+let initAuth = ''
+if (process.env.NODE_ENV === 'development') {
+  initAuth = {
+    APP_Service: true, // 客服
+    APP_Inspection: true, // 巡检
+    ETS_APPAudit: true, // 审批
+    APP_MeterRead: true, // 抄表
+    APP_FinancePay: true, // 收款
+    APP_Monitoring: true, // 监控中心
+    APP_Maintain: true, // 保养
+    APP_LLOA: true, // 蓝凌OA
+    APP_Lease: true, // 租赁
+    APP_Meeting: true, // 会议
+    APP_Property: true, // 投资性物业
+    APP_Rectification: true, // 整改对比
+
+    // 租赁
+    APP_LeaseCst: true,
+    APP_LeaseHouse: true,
+    APP_LeaseOpport: true,
+
+    // 监控中心
+    APP_KFWorkOrder: true,
+    APP_WXWorkOrder: true,
+    APP_XBWorkOrder: true
+  }
+}
 export default {
   state: {
     user: null,
     ip: '',
-    auth: '',
+    auth: initAuth,
     isPos: false,
     rand: 0
   },
@@ -123,7 +151,7 @@ export default {
           return Promise.reject(new Error('网络异常，请重新登录'))
         }
       } catch (err) {
-        console.log(err)
+        console.log(err, 'errIN.................')
       }
     }
   }

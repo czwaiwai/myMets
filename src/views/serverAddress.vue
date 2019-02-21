@@ -9,7 +9,6 @@
         <div class="weui-cell">
           <div class="weui-cell__bd">
             <!-- <p>你当前的服务器地址</p> -->
-            <p>服务器地址：</p>
           </div>
           <div class="weui-cell__ft">{{$store.getters.ip}}</div>
         </div>

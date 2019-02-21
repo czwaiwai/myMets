@@ -7,13 +7,13 @@
   <div class="page_bd">
     <div class="scroll">
       <div class="weui-grids">
-        <a @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['ETS_APPAudit']" @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_sp.png" alt="">
           </div>
           <p class="weui-grid__label">审批</p>
         </a>
-        <a @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_MeterRead']" @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_cb.png"  alt="">
           </div>
@@ -31,7 +31,7 @@
           </div>
           <p class="weui-grid__label">巡检</p>
         </a> -->
-        <a  @click="$router.forward('/workOrder/inspection')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_work_inspection.png"  alt="">
           </div>
@@ -49,43 +49,43 @@
           </div>
           <p class="weui-grid__label">保养</p>
         </a> -->
-        <a  @click="$router.forward('/workOrder/inspection?orderType=KeepFit')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Maintain']" @click="$router.forward('/workOrder/inspection?orderType=KeepFit')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_by.png"  alt="">
           </div>
           <p class="weui-grid__label">保养</p>
         </a>
-        <a  @click="$router.forward('/customerService?type=baoshi')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Service_PostIt']" @click="$router.forward('/customerService?type=baoshi')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_bs.png" alt="">
           </div>
           <p class="weui-grid__label">报事</p>
         </a>
-        <a  @click="$router.forward('/customerService?type=baoxiu')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Service_Repair']" @click="$router.forward('/customerService?type=baoxiu')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_wx.png" alt="">
           </div>
           <p class="weui-grid__label">报修</p>
         </a>
-        <a @click="$router.forward('/getCash')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_FinancePay']" @click="$router.forward('/getCash')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_sk.png" alt="">
           </div>
           <p class="weui-grid__label">收款</p>
         </a>
-        <a  @click="$router.forward('/rentIndex')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Lease']" @click="$router.forward('/rentIndex')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_work_zl.png" alt="">
           </div>
           <p class="weui-grid__label">租赁</p>
         </a>
-        <a @click="$app.loadView({url:shenlinagUrl, type: 'oa'})" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_LLOA']" @click="$app.loadView({url:shenlinagUrl, type: 'oa'})" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_oa.png" alt="">
           </div>
           <p class="weui-grid__label">OA</p>
         </a>
-        <a @click="jumpOffline" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_MeterRead']||auth['APP_Inspection']||auth['APP_Maintain']" @click="jumpOffline" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_off_download.png" alt="">
           </div>
@@ -99,19 +99,19 @@
           </div>
           <p class="weui-grid__label">收款测试</p>
         </a> -->
-        <a @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Meeting']" @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_meeting.png" alt="">
           </div>
           <p class="weui-grid__label">会议</p>
         </a>
-        <a @click="$router.forward('/investmentIndex')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Property']" @click="$router.forward('/investmentIndex')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_investment.png" alt="">
           </div>
           <p class="weui-grid__label">投资性物业</p>
         </a>
-        <a @click="$router.forward('/comparedBuild')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Rectification']" @click="$router.forward('/comparedBuild')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_compare.png" alt="">
           </div>
@@ -153,6 +153,7 @@ export default {
     // }, 5000)
     this.getPageData()
     this.shenliangTest()
+    console.log('auth:', this.auth)
     console.log(this.user, '--------user--------')
     console.log(this.encryptByDES('test20', 'SE83232U'), '----')
     console.log(this.encryptDES('test20', 'SE83232U'), '----')

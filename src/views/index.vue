@@ -127,7 +127,7 @@ export default {
         if (typeof (res) === 'string') {
           res = JSON.parse(res)
         }
-        console.log(res)
+        console.log('photo:', res)
         let photo = {
           hasData: true,
           path: res
@@ -136,7 +136,7 @@ export default {
         this.$store.commit('setHomeVoice', {hasData: false})
         this.$router.forward({path: '/btnFunc'})
       }).catch(err => {
-        console.log(err)
+        console.log('callPhoto-err:', err)
         if (this.$dev) {
           this.quickOut()
           // sess.set('mainImg', 'hahahah')
@@ -149,6 +149,8 @@ export default {
       this.$app.scan().then((res) => {
         console.log(res)
         // this.$router.forward({path: '/btnFunc', params:{data: res}})
+        this.$store.commit('setHomePhoto', {hasData: false})
+        this.$store.commit('setHomeVoice', {hasData: false})
         this.$router.forward('/scan/ScanDetail/' + res)
         // this.$app.loadView({url: `http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
       }).catch(err => {

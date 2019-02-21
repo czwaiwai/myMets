@@ -495,6 +495,8 @@ export default {
         this.$toast('提交成功')
         setTimeout(() => {
           this.isSendForm = false
+          this.$store.commit('setHomePhoto', {hasData: false})
+          this.$store.commit('setHomeVoice', {hasData: false})
           if (this.$route.query.quick) {
             this.$router.go(-2)
           } else {

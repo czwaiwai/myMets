@@ -28,7 +28,7 @@
           </div>
           <div class="weui-cell__ft"></div>
         </a>
-        <a @click="$router.forward('/monitor/index')" class="weui-cell weui-cell_access" href="javascript:;">
+        <a v-show="auth['APP_Monitoring']" @click="$router.forward('/monitor/index')" class="weui-cell weui-cell_access" href="javascript:;">
           <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_icon_jk.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">
             <p>监控中心</p>
@@ -98,6 +98,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      'auth': 'auth',
       'user': 'user'
     })
   },

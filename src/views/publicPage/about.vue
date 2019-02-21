@@ -9,7 +9,7 @@
         <img  class="small_logo" src="../../assets/img/publicPage/ic_about_logo.png" >
       </div>
       <div class="weui-form-preview">
-        <div class="weui-form-preview__bd">
+        <div class="box-wrap">
           <div class="selectItem clearfix noneBb">
             <span class="name">版本名称：</span>
             <span class="value textLeft">M-ETS</span>
@@ -101,7 +101,8 @@ export default {
   text-align: left;
   color:#131313;
 }
-.about{
+.box-wrap{
+  padding: .2rem .3rem;
   .selectItem{
     .name {
       width: 1.6rem;
