@@ -7,7 +7,7 @@
     <nav-title :title="title"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
-        <search v-model="search" url="UserCS_GetRectificationGrpInfo"  placeholder="请输入客户名称"  searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
+        <search v-model="search"  placeholder="请输入客户名称"  @searchRes="searchRes" @searchCancel="searchRes" :noFocus="true" ></search>
       </div>
       <div @click="filterVisible = true"   class="padding-right padding-left5"><i class="main_color iconfont icon-shaixuan" style="font-size: 23px; line-height: 43px;"></i></div>
     </div>
@@ -90,7 +90,8 @@ export default {
     },
     searchRes (item) {
       console.log(item, 'searchRes')
-      this.pageConfig.params['GrpID'] = item.ID
+      this.pageConfig.params['CstName'] = this.search
+      // this.pageConfig.params['GrpID'] = item.ID
       this.$refs.pageList.refresh()
     },
     searchCancel () {
