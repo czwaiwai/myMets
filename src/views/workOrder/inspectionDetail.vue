@@ -58,18 +58,18 @@
                     </li>
                   </ul>
                 </div>
-                <div @click="routeToFix(item)" v-show="item.show && work.WorkState === '2'" class="sub_item_ft text-center " >
-                    <a href="javascript:void(0)" style="display:block;" class="main_color padding5 block">立即报修</a>
+                <div v-show="item.show && work.WorkState === '2'" class="sub_item_ft text-center padding5" >
+                  <div @click="routeToFix(item)" class="main_color  block bbtn">立即报修</div>
                 </div>
               </li>
             </ul>
           </div>
         </section>
       </div>
-      <div v-if="work.WorkState === '2'"  class="page_ft text-center light_bg padding-top5 padding15-h">
+      <div v-if="work.WorkState === '2'"  class="page_ft text-center light_bg padding-top5 padding15-h _bt">
         <button @click="submitIns" class="ins_submit_btn">提交{{typeTxt}}</button>
       </div>
-      <div v-if="work.WorkState === '3'"  class="page_ft text-center light_bg padding-top5 padding15-h">
+      <div v-if="work.WorkState === '3'"  class="page_ft text-center light_bg padding-top5 padding15-h _bt">
         <button @click="closeIns" class="ins_submit_btn">关闭{{typeTxt}}</button>
       </div>
       <transition name="page">
@@ -503,5 +503,15 @@ export default {
   & li:last-child{
     border-left:1px solid #FFF;
   }
+}
+.bbtn{
+  width: 2rem;
+  height: .68rem;
+  margin: 0 auto;
+  border: 1px solid #3395FF;
+  border-radius: 3px;
+  color: #3395FF;
+  line-height: .68rem;
+  text-align: center;
 }
 </style>

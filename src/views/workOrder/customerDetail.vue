@@ -26,8 +26,8 @@
           </div>
         </div>
         <div  class="light_bg padding-v padding15-h margin-bottom">
-          <p><span class="dark_99">位  置：</span><span>{{detail.WorkPos}}</span></p>
-          <p><span class="dark_99">联系人：</span><span>{{detail.RSPeoName}}</span>
+          <p><span class="dark_99 width60">位  置：</span><span>{{detail.WorkPos}}</span></p>
+          <p><span class="dark_99 width60">联系人：</span><span>{{detail.RSPeoName}}</span>
           <a class="float_right" :href="'tel:'+detail.CallPhone">拨打电话</a></p>
         </div>
         <div class="weui-panel weui-panel_access padding-bottom  margin-bottom">
@@ -50,8 +50,8 @@
               </div>
             </div>
 
-            <p class="date dark_99">报事时间：{{ detail.RSDate }}</p>
-            <p class="date dark_99">预约时间：{{ (!detail.RStartTime || detail.RStartTime.indexOf('1900')> -1)? '无': detail.RStartTime }}</p>
+            <p class="date dark_99"><span class="width74">报事时间：</span>{{ detail.RSDate }}</p>
+            <p class="date dark_99"><span class="width74">预约时间：</span>{{ (!detail.RStartTime || detail.RStartTime.indexOf('1900')> -1)? '无': detail.RStartTime }}</p>
             <p class="dark_99">{{ detail.WONoBasicName }}</p>
             <!-- 反馈 -->
             <div v-if="feedbackList && feedbackList.length>0" class="feedback_wrap">
@@ -73,7 +73,7 @@
           </div>
         </div>
         <div  class="light_bg padding-v padding15-h margin-bottom">
-          <p v-for="(item,index) in timeList" :key="index"><span class="dark_99">{{item.Name}}：</span><span>{{item.Content}}</span></p>
+          <p v-for="(item,index) in timeList" :key="index"><span class="dark_99 width74">{{item.Name}}：</span><span>{{item.Content}}</span></p>
         </div>
       </div>
       <template v-if="!monitor">
@@ -81,7 +81,7 @@
           <div class="fs16 padding-left15" style="line-height:42px;">已评价</div>
           <div class="weui-flex__item padding-top5"><star v-model="score" :readonly="true"></star></div>
         </div>
-        <div v-else class="page_ft light_bg text-right padding-right15 padding-top5">
+        <div v-else class="page_ft light_bg text-right padding-right15 padding-top5 _bt">
           <button :key="index" v-for="(buttonItem,index) in buttons" @click="btnAction(work, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
         </div>
       </template>
@@ -107,7 +107,7 @@ export default {
   data () {
     return {
       score: 5,
-      title: '客服详情',
+      title: '',
       work: {},
       list: [],
       detail: {},
@@ -379,5 +379,13 @@ export default {
   & .feed_item + .feed_item {
     padding-top:10px;
   }
+}
+.width60{
+  display: inline-block;
+  width: 60px;
+}
+.width74{
+  display: inline-block;
+  width: 74px;
 }
 </style>

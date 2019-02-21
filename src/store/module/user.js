@@ -24,6 +24,8 @@ if (process.env.NODE_ENV === 'development') {
     APP_Meeting: true, // 会议
     APP_Property: true, // 投资性物业
     APP_Rectification: true, // 整改对比
+    APP_Service_PostIt: true, // 报事
+    APP_Service_Repair: true, // 报修
 
     // 租赁
     APP_LeaseCst: true,

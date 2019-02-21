@@ -4,7 +4,7 @@
       <!-- <mt-header title="巡检详情">
         <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
       </mt-header> -->
-      <nav-title title="巡检详情"></nav-title>
+      <nav-title :title="title"></nav-title>
       <div class="page_bd">
 
         <div class="light_bg padding-v padding15-h margin-bottom">
@@ -66,7 +66,8 @@ export default {
       test: '通过',
       test1: '不通过',
       work: {},
-      list: []
+      list: [],
+      title: ''
     }
   },
   components: {
@@ -75,6 +76,11 @@ export default {
     navTitle
   },
   created () {
+    if (this.$parent.workItem.WordType === 'Work_KeepFit') {
+      this.title = '保养详情'
+    } else {
+      this.title = '巡检详情'
+    }
     this.nav = this.$parent.nav
     this.currNav = this.$parent.currNav
     this.work = this.$parent.workItem

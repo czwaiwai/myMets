@@ -35,7 +35,7 @@
           </div>
           <div class="weui-cell__ft"></div>
         </a>
-        <a @click="$router.forward('/cashInfo')"  class="weui-cell weui-cell_access" href="javascript:;">
+        <a v-show="auth['APP_FinancePay']" @click="$router.forward('/cashInfo')"  class="weui-cell weui-cell_access" href="javascript:;">
           <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_sk.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
           <div class="weui-cell__bd">
             <p>我的收款</p>

@@ -155,7 +155,7 @@ export default {
         'ProjectId': this.locationData.orgData.orgId,
         'ImaCode': this.searchKey,
         'DataOfRead': this.dateTimes.thisTime,
-        'BudID': this.locationData.budItem.Id,
+        'BudID': '', // this.locationData.budItem.Id,
         'Page': this.page,
         'PageSize': this.pageSize
       }

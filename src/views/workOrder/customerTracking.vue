@@ -11,8 +11,8 @@
             <i class="iconfont icon-fuwuerji c-666 fs60" style="font-size:30px;"></i>
           </div>
           <div class="weui-flex__item">
-            <p>责任人：{{detail.Orders }} <span class="main_color padding-left">{{detail.OrdersMobile }}</span></p>
-            <p class="dark_99">辅助责任人:{{detail.PlusEmployeeName }} <span class="padding-left">{{detail.PlusEmployeeNameMobile }}</span></p>
+            <p>责任人：{{detail.Orders }} <a :href="'tel:'+detail.OrdersMobile" class="main_color padding-left">{{detail.OrdersMobile}}</a></p>
+            <p class="dark_99">辅助责任人:{{detail.PlusEmployeeName }} <a :href="'tel:'+detail.PlusEmployeeNameMobile" class="padding-left main_color">{{detail.PlusEmployeeNameMobile}}</a></p>
           </div>
         </div>
         <div class="light_bg">
