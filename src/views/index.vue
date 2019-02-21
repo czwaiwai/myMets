@@ -124,9 +124,9 @@ export default {
         this.quickOut()
         // sess.set('mainImg', res)
         // sess.remove('mainVoice')
-        if (typeof (res) === 'string') {
-          res = JSON.parse(res)
-        }
+        // if (typeof (res) === 'string') {
+        //   res = JSON.parse(res)
+        // }
         console.log('photo:', res)
         let photo = {
           hasData: true,

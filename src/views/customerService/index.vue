@@ -239,8 +239,8 @@ export default {
         this.formObj.memo = this.homeVoice.duration
         this.recTime = `${this.homeVoice.duration}''`
       }
-      this.formObj.workPos = this.$route.query.workPos
-      this.formObj.woId = this.$route.query.woId
+      this.formObj.workPos = this.$route.query.workPos || ''
+      this.formObj.woId = this.$route.query.woId || ''
     },
 
     // 获取报事保修快捷音频及图片
