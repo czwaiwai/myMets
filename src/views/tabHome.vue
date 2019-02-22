@@ -22,7 +22,7 @@
         </div>
       </div> -->
       <div class="weui-cells" style="margin-top:0;">
-        <div @click="routeTo(item)" v-for="item in list" :key="item.GDType" class="weui-cell">
+        <div @click.stop="routeTo(item)" v-for="item in list" :key="item.GDType" class="weui-cell">
           <div class="weui-cell__hd" style="position: relative;margin-right: 10px;width:50px;height:50px;">
             <img :src="item.img" style="width: 50px;display: block">
           </div>

@@ -39,7 +39,7 @@
     </div>
     <div class="page_ft weui-flex light_bg">
        <div class="padding-h" style="line-height:44px;">
-         共{{detail.materialList.length}}钟,{{detail.planAllNum}}件材料
+         共{{detail.materialList.length}}种,{{detail.planAllNum}}件材料
        </div>
        <div class="weui-flex__item text-right padding-right15">
          <p class="dark_33 fs16" style="line-height:44px;">

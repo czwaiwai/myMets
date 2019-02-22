@@ -33,7 +33,7 @@
         <div class="weui-panel weui-panel_access padding-bottom  margin-bottom">
           <div class="weui-panel__hd"><i class="iconfont icon-building-automation padding-right"></i>{{nav.orgName}}</div>
           <div class="weui-panel__bd padding15-h ">
-            <h3 class="fs16">{{detail.QuesDesc}}</h3>
+            <h3 style="line-height: 1.5;font-size: .3rem;">{{detail.QuesDesc}}</h3>
             <!-- 图片 -->
             <div class="img_list_wrap">
               <ul class="clearfix">
@@ -302,13 +302,22 @@ export default {
       //   wordQuertionID: this.work.WorkQuestionID
       // })
       if (res.data && res.data[0]) {
-        let ip = this.$store.getters.ip
-        this.feedbackList = res.data.map(item => {
-          if (ip) {
-            item.Path = 'http://' + ip + item.Path
-          }
-          return item
+        console.log('feedbackList:', res.data)
+        let ip = this.$store.getters.ip // || '172.31.118.205:8066'
+        res.data.forEach(arr => {
+          arr.ImageList.forEach(a => {
+            if (ip && a.Path) {
+              a.Path = 'http://' + ip + a.Path
+            }
+          })
         })
+        this.feedbackList = res.data
+        // this.feedbackList = res.data.map(item => {
+        //   if (ip) {
+        //     item.Path = 'http://' + ip + item.Path
+        //   }
+        //   return item
+        // })
       }
       this.$previewRefresh()
     },

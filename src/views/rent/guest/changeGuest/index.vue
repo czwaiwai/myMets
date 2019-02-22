@@ -272,6 +272,7 @@ export default {
       })
       // this.$vux.loading.hide()
       console.log(res)
+      this.$toast(res.msg)
       if (res.status === 200 || res.status === '200') {
         // this.$vux.toast.text('修改成功！')
         setTimeout(() => {
@@ -280,7 +281,6 @@ export default {
         }, 2000)
       } else {
         this.isHttping = false
-        this.$toast(res.msg)
       }
     },
     init () {

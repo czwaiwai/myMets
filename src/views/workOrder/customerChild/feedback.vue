@@ -19,7 +19,7 @@
         </div>
         <div class="weui-cell">
           <div class="weui-cell__bd">
-            <textarea class="weui-textarea" v-model="formObj.processDetaile" maxlength="300" placeholder="请输入文本" rows="2"></textarea>
+            <textarea class="weui-textarea" v-model="formObj.processDetaile" maxlength="300" placeholder="处理详情..." rows="2"></textarea>
             <!-- <div class="weui-textarea-counter"><span>0</span>/200</div> -->
             <div class=" padding-top">
               <ins-img-list :imgs.sync="imgs" :max="3">

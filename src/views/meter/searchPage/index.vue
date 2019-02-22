@@ -96,7 +96,8 @@ export default {
   computed: {
     ...mapGetters({
       locationData: 'getMeterLocation',
-      dateTimes: 'getMeterDateTime'
+      dateTimes: 'getMeterDateTime',
+      userData: 'user'
     })
   },
   methods: {
@@ -152,9 +153,9 @@ export default {
     },
     async getSearchData () {
       let data = {
-        'ProjectId': this.locationData.orgData.orgId,
+        'ProjectId': this.userData.OrgID,// this.locationData.orgData.orgId,
         'ImaCode': this.searchKey,
-        'DataOfRead': this.dateTimes.thisTime,
+        'DataOfRead': this.$route.query.quick ? '' : this.dateTimes.thisTime,
         'BudID': '', // this.locationData.budItem.Id,
         'Page': this.page,
         'PageSize': this.pageSize
@@ -376,6 +377,10 @@ export default {
     }
   },
   created () {
+    if (this.$route.query.quick) {
+      this.searchKey = this.$route.query.key
+      this.getSearchData()
+    }
   },
   mounted () {
     let _this = this

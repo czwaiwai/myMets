@@ -1,6 +1,6 @@
 <template>
 <div class="page location">
-    <nav-title title="搜索仪表"></nav-title>
+    <nav-title title="选择范围"></nav-title>
     <div class="page_bd _content">
       <div class="header clearfix">
         <span class="orgName">{{title}}</span>

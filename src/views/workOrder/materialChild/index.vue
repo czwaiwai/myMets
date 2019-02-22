@@ -4,7 +4,7 @@
     <!-- <mt-header title="设备详情">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header> -->
-    <nav-title title="设备详情"></nav-title>
+    <nav-title title="材料申请"></nav-title>
     <div class="page_bd">
       <div class="padding">
         <a @click="routeAdd" class="left_btn">新建申请</a>

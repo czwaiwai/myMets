@@ -498,7 +498,11 @@ export default {
           this.$store.commit('setHomePhoto', {hasData: false})
           this.$store.commit('setHomeVoice', {hasData: false})
           if (this.$route.query.quick) {
-            this.$router.go(-2)
+            if (this.$route.query.woId) {
+              this.$router.go(-3)
+            } else {
+              this.$router.go(-2)
+            }
           } else {
             this.$root.back()
           }

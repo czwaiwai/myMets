@@ -84,7 +84,7 @@
       </div>
     </transition>
     <transition name="filterList">
-      <div class="filterList" v-if="showFilterList">
+      <div class="filterList" v-show="showFilterList">
         <div class="mark" @click.stop="hideFilterList"></div>
         <div class="filterConten clearfix">
           <ul class="filterType">

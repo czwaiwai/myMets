@@ -151,12 +151,26 @@ export default {
         // this.$router.forward({path: '/btnFunc', params:{data: res}})
         this.$store.commit('setHomePhoto', {hasData: false})
         this.$store.commit('setHomeVoice', {hasData: false})
-        this.$router.forward('/scan/ScanDetail/' + res)
+        this.$router.push({
+          name: 'btnFunc',
+          query: {
+            code: res,
+            type: 'scan'
+          }
+        })
+        // this.$router.forward('/scan/ScanDetail/' + res)
         // this.$app.loadView({url: `http://${this.ip}/ETSScancode/?device_id=${res}#page=0`, type: 'shebeisaoma'})
       }).catch(err => {
         if (this.$dev) {
           this.quickOut()
-          this.$router.forward('/scan/ScanDetail/XM001RD-XF-CC001')
+          this.$router.push({
+            name: 'btnFunc',
+            query: {
+              code: 'XM001RD-XF-CC001',
+              type: 'scan'
+            }
+          })
+          // this.$router.forward('/scan/ScanDetail/XM001RD-XF-CC001')
         }
         console.log(err)
       })

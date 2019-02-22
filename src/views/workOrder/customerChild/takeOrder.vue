@@ -71,10 +71,15 @@ export default {
     }
   },
   created () {
+    console.log('parent:', this.$parent.nav)
     this.nav = this.$parent.nav
     this.work = this.$parent.workItem
     this.formObj.userName = this.nav.userName
     this.formObj.workOrdId = this.work.WorkOrdID
+
+    this.formObj.orders = this.nav.userName
+    this.formObj.ordersDepart = this.nav.positionId
+    this.formObj.EmployeeID = this.nav.memberId
     this.$root.$on('personMulti', list => {
       let arr = list.map(item => item.EmployeeName)
       console.log(arr)

@@ -26,7 +26,13 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.go(-1)
+      console.log('this.$route.name', this.$route.name)
+      if (this.$route.name === 'meterSearch' && this.$route.query.quick) {
+        this.$router.go(-2)
+      } else {
+        this.$router.go(-1)
+      }
+
       // if (['meeting', 'investmentIndex', 'monitorInspection'].indexOf(this.$route.name) > -1) {
       //   this.$app.back()
       // } else {
