@@ -18,7 +18,7 @@
     <component ref="pageList" :is="currIndex" :params="currConfig.params"  :config="currConfig" @listDone="listDone" >
       <template slot-scope="scope" >
         <div class="weui-panel weui-panel_access margin-bottom">
-          <div @click="routeTo(scope.item)"   class="weui-panel__hd">
+          <div @click="routeTo(scope.item)"   class="weui-panel__hd needsclick">
             <i class="iconfont icon-gongdan padding-right5 "></i>{{ scope.item.WONo }}
             <span class="float_right">
               <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Sub'">新服务需求</span>
@@ -28,7 +28,7 @@
               <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Close'">服务成功</span>
             </span>
           </div>
-          <div @click="routeTo(scope.item)"  class="weui-panel__bd">
+          <div @click="routeTo(scope.item)"  class="weui-panel__bd needsclick">
               <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px;">
                   <h4 class="weui-media-box__title">{{scope.item.QuesDesc}}</h4>
                   <div class="img_list_wrap">
@@ -105,8 +105,8 @@ export default {
   created () {
     console.log('$route:', this.$route)
     // 从原生来的数据
-    this.isTransferBtn = true // 是否显示转单按钮
-    this.isMaterial = true // 材料申请权限
+    this.isTransferBtn = this.auth['APP_Service_SwitchSingle'] // 是否显示转单按钮
+    this.isMaterial = this.auth['APP_Service_Picking'] // 材料申请权限
     // --------------
     // （Equipment设备（维修）、Resource资源(客服)
     this.workPosFrom = this.$route.query.workPosFrom || 'Resource'

@@ -129,7 +129,10 @@ export default {
         console.log('testHasData:', res)
       })
     },
-    logoutHandle () {
+    async logoutHandle () {
+      if (this.$app.isAndroid) {
+        await this.$message.confirm('确定要退出登录')
+      }
       this.$app.logout()
     },
     clearCache () {
