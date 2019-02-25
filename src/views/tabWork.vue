@@ -238,7 +238,7 @@ export default {
       // res.data
     },
     async authLogin () {
-      let url = '/roc/open/app/admin/login?userName=demo1&password=59adb24ef3cdbe0297f05b395827453f'
+      let url = '/roc/open/app/admin/login?userName=15810153479&password=59adb24ef3cdbe0297f05b395827453f'
       let res = await this.$http.post(url, {}, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'

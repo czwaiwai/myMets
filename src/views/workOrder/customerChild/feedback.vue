@@ -317,10 +317,16 @@ export default {
         ProcessDetaile: this.formObj.processDetaile,
         Voice1: this.mp3.path || ''
       }
-      this.imgs.forEach((item, index) => {
-        params['Image' + (index + 1)] = item
+      // this.imgs.forEach((item, index) => {
+      //   params['Image' + (index + 1)] = item
+      // })
+      let tmpArr = ['', '', '', '']
+      tmpArr.forEach((item, index) => {
+        params['Image' + (index + 1)] = this.imgs[index] || ''
       })
-      let res = await this.$xml(p0, params)
+      let res = await this.$xml(p0, params, {
+        p1: this.nav.userName
+      })
 
       // let params = {
       //   userName: this.nav.userName,
@@ -338,9 +344,9 @@ export default {
       //   processDetaile: this.formObj.processDetaile,
       //   voice1: this.mp3.path || ''
       // }
-      this.imgs.forEach((item, index) => {
-        params['image' + (index + 1)] = item
-      })
+      // this.imgs.forEach((item, index) => {
+      //   params['image' + (index + 1)] = item
+      // })
       // let url = '/ets/syswin/smd/userServiceSaveWorkOrdFeedbackMerge'
       // let res = await this.$http.post(url, params)
       this.$toast('反馈成功')

@@ -92,6 +92,7 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'Vuex'
 import voiceIcon from '@/components/voiceIcon'
 import customerMixin from './customerMixin'
 import Star from './child/star'
@@ -123,8 +124,8 @@ export default {
   },
   created () {
     // 从原生来的数据
-    this.isTransferBtn = true // 是否显示转单按钮
-    this.isMaterial = true // 材料申请权限
+    this.isTransferBtn = this.auth['APP_Service_SwitchSingle'] // 是否显示转单按钮
+    this.isMaterial = this.auth['APP_Service_Picking'] // 材料申请权限
     this.monitor = this.$route.query.monitor || false
     this.workPosFrom = this.$parent.workPosFrom
     if (this.workPosFrom === 'Resource') {
@@ -139,6 +140,9 @@ export default {
     this.init()
   },
   computed: {
+    ...mapGetters({
+      'auth': 'auth'
+    }),
     trackStr () {
       if (!this.newTracks.track) return ''
       let obj = this.newTracks.track

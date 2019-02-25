@@ -19,6 +19,8 @@ import bus from './utils/pushMsg'
 import '@/utils/rem'
 import preview from 'vue-photo-preview'
 import NavTitle from '@/components/navTitle'
+import iosFixed from '@/utils/iosfixed'
+iosFixed()
 console.log(bus)
 
 if (process.env.NODE_ENV === 'development') {
