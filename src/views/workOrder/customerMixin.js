@@ -14,7 +14,7 @@ export default {
           if (isFromSkill === '1') {
             return ['抢单']
           } else {
-            if (this.isTransferBtn) {
+            if (this.isTransferBtn && this.auth.APP_Service_SwitchSingle) {
               return ['转单', '接单']
             } else {
               return ['接单']
@@ -22,17 +22,31 @@ export default {
           }
         }
       } else if (workOrderState === 'WOSta_Proc') {
+        let arr = ['反馈']
         if (this.isMaterial && this.isTransferBtn) {
-          return ['转单', '材料申请', '反馈']
+          if (this.auth.APP_Service_Picking) {
+            arr.unshift('材料申请')
+          }
+          if (this.auth.APP_Service_SwitchSingle) {
+            arr.unshift('转单')
+          }
+          // return ['转单', '材料申请', '反馈']
         } else if (!this.isMaterial && this.isTransferBtn) {
-          return ['转单', '反馈']
+          if (this.auth.APP_Service_SwitchSingle) {
+            arr.unshift('转单')
+          }
+          // return ['转单', '反馈']
         } else if (this.isMaterial && !this.isTransferBtn) {
-          return ['材料申请', '反馈']
+          if (this.auth.APP_Service_Picking) {
+            arr.unshift('材料申请')
+          }
+          // return ['材料申请', '反馈']
         } else {
-          return ['反馈']
+          // return ['反馈']
         }
+        return arr
       } else if (workOrderState === 'WOSta_Finish') {
-        return this.isTransferBtn ? ['转单', '完成回访'] : ['完成回访']
+        return (this.isTransferBtn && this.auth.APP_Service_SwitchSingle) ? ['转单', '完成回访'] : ['完成回访']
       } else if (workOrderState === 'WOSta_Visit') {
         return ['回访详情', '关闭工单']
       } else {

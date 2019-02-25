@@ -55,7 +55,7 @@
               </div>
               <div class="weui-panel__ft text-right padding-right15 padding-bottom">
                 <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
-                <button @click="covertOrder(scope.item)" class="ins_btn ins_btn_plain_default"  v-if="scope.item.WorkState==='2'">转单</button>
+                <button @click="covertOrder(scope.item)" class="ins_btn ins_btn_plain_default"  v-if="com_status(scope.item.WorkState)">转单</button>
                 <button @click="routeTo(scope.item)"   class="ins_btn ins_btn_plain_primary" v-if="scope.item.WorkState==='2'">{{typeTxt}}</button>
                 <button @click="closeOrder(scope.item)"  class="ins_btn ins_btn_plain_primary"   v-if="scope.item.WorkState==='3'">关闭</button>
               </div>
@@ -201,6 +201,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      'auth': 'auth',
       'user': 'user'
     }),
     currNav () {
@@ -235,15 +236,28 @@ export default {
     }
   },
   methods: {
+    // 转单按钮
+    com_status (workState) {
+      if (workState === '2') {
+        if (this.$route.query.orderType && this.auth.APP_Maintain_SwitchSingle) {
+          return true
+        } else if (this.auth.APP_Inspection_SwitchSingle) {
+          return true
+        }
+      }
+      return false
+    },
     // 扫一扫
     async scanHandle () {
       let res = await this.$app.scan()
+      this.searchKey = res
+      this.searchRes()
       console.log(res)
     },
     searchRes () {
-      this.currConfig.params.code = this.searchKey
-      this.currConfig.params.queryStarTime = this.search.startTime
-      this.currConfig.params.queryEndTime = this.search.endTime
+      this.currConfig.params.PCode = this.searchKey
+      this.currConfig.params.QueryStarTime = this.search.startTime
+      this.currConfig.params.QueryEndTime = this.search.endTime
       this.configList = this.typeList.map(item => {
         return this.createListConfigNet(item.id, {
           // orderState: item.state,
@@ -657,9 +671,9 @@ export default {
       await this.$message.confirm('确定关闭该' + this.typeTxt + '工单？')
       let p0 = 'EquipBase_WorkCompletionColse'
       let res = await this.$xml(p0, {}, {
-        p1: this.work.WorkID,
-        p2: this.work.WordType,
-        p3: this.work.WorkState,
+        p1: obj.WorkID,
+        p2: obj.WordType,
+        p3: obj.WorkState,
         p4: this.nav.memberId
       })
       // let url = '/ets/syswin/smd/equipBaseWorkCompletionColse'

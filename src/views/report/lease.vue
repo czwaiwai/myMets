@@ -839,7 +839,7 @@ export default {
   }
   .modal {
     position: absolute;
-    top: 85px;
+    top: 88px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -908,13 +908,14 @@ export default {
     // -webkit-overflow-scrolling: touch;
     .header{
       position: relative;
-      height: 0.88rem;
+      height: 0.8rem;
       padding: 0 .3rem;
       font-size: .3rem;
-      line-height: 0.88rem;
+      line-height: 0.8rem;
       color: #333;
       background: #fff;
       border-bottom: 1px solid #ededed;
+      overflow: hidden;
       .icon-gengduo1{
         position: absolute;
         top: .2rem;

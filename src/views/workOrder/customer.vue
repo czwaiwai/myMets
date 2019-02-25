@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page customer">
     <!-- <mt-header :title="title">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header> -->
@@ -44,6 +44,8 @@
           </div>
           <div class="weui-panel__ft text-right padding-right15 padding-bottom15">
               <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
+              <a class="call" :href="'tel:'+scope.item.CallPhone" v-show="scope.item.CallPhone&&scope.item.showCall">{{scope.item.RSPeoName}}</a>
+              <i class="iconfont icon-dianhua1 iconPhone" v-show="scope.item.CallPhone" @click.stop="scope.item.showCall=!scope.item.showCall"></i>
               <button :key="index" v-for="(buttonItem,index) in showButtons(scope.item.WorkOrdState, scope.item.bHandle, scope.item.IsFromSkill)" @click="btnAction(scope.item, buttonItem)"  class="ins_btn ins_btn_plain_default">{{buttonItem}}</button>
           </div>
         </div>
@@ -101,6 +103,7 @@ export default {
     }
   },
   created () {
+    console.log('$route:', this.$route)
     // 从原生来的数据
     this.isTransferBtn = true // 是否显示转单按钮
     this.isMaterial = true // 材料申请权限
@@ -135,6 +138,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      'auth': 'auth',
       'user': 'user'
     }),
     currConfig () {
@@ -192,8 +196,10 @@ export default {
           ...params
         },
         format: function (res) {
+          console.log('aaaa:', res)
           let data = res[0]
           return data.WorkInfo.map(item => {
+            item.showCall = false
             if (ip) {
               item.ImageList.map(sub => {
                 sub.Path = 'http://' + ip + sub.Path
@@ -352,5 +358,45 @@ export default {
   border:1px solid #3395FF;
   padding:5px 10px;
   color:#3395FF;
+}
+.customer{
+  .iconPhone{
+    position: relative;
+    top: 4px;
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: right;
+    margin-right: 5px;
+    color:#3395FF;
+    font-size: 24px;
+  }
+  .call{
+    position: relative;
+    top:  0;
+    display: inline-block;
+    height: 30px;
+    min-width: 50px;
+    padding: 0 10px;
+    font-size: 14px;
+    line-height: 30px;
+    text-align: center;
+    background: #3395ff;
+    color: #fff;
+    border-radius: 3px;
+    &::after{
+      position: absolute;
+      top: 10px;
+      right: -5px;
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-right: 10px solid #3395FF;
+      border-bottom: 10px solid #3395FF;
+      transform:rotate(45deg);
+    }
+  }
 }
 </style>

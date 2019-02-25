@@ -26,6 +26,10 @@ if (process.env.NODE_ENV === 'development') {
     APP_Rectification: true, // 整改对比
     APP_Service_PostIt: true, // 报事
     APP_Service_Repair: true, // 报修
+    APP_Service_SwitchSingle: true, // 客服转单
+    APP_Service_Picking: true, // 客服领料
+    APP_Maintain_SwitchSingle: true, // 保养转单
+    APP_Inspection_SwitchSingle: true, // 巡检转单
 
     // 租赁
     APP_LeaseCst: true,

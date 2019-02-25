@@ -30,8 +30,8 @@
                     <i class="iconfont  icon-shouqi" ></i>
                   </div>
                   <button v-if="work.WorkState === '2'" class="photo_btn" @click="toPhoto(item)">
-                    <span v-if="item.ImageExsit === '0'"><i class="iconfont icon-paizhao"></i>拍照</span>
-                    <span v-if="item.ImageExsit === '1'">查看照片</span>
+                    <span v-if="item.ImageExsit === '0'"><i class="iconfont icon-paizhao"></i>&nbsp;拍照</span>
+                    <span v-if="item.ImageExsit === '1'">查看签到</span>
                   </button>
                 </div>
                 <div v-show="item.show" class="sub_item_content">
@@ -93,6 +93,15 @@
         </div>
       </transition>
     </div>
+    <dialog-Text
+      ref="dialogText"
+      title="反馈内容"
+      maxLength="300"
+      leftName="重置"
+      @clickLeftBtn="clickLeftBtn"
+      @clickRightBtn="clickRightBtn"
+      >
+    </dialog-Text>
   </div>
 </template>
 <script>
@@ -102,6 +111,7 @@ import InsNumber from './child/insNumber'
 import {mapGetters} from 'Vuex'
 import local from '@/utils/local'
 import navTitle from '@/components/navTitle'
+import dialogText from '@/components/dialogText'
 export default {
   name: 'inspectionDetail',
   data () {
@@ -114,11 +124,13 @@ export default {
       asideShow: false,
       detailItem: {},
       insList: [],
-      list: []
+      list: [],
+      dialogData: {}
     }
   },
   components: {
     navTitle,
+    dialogText,
     Search,
     InsRadio,
     InsNumber
@@ -172,6 +184,15 @@ export default {
     }
   },
   methods: {
+    // 反馈重置
+    clickLeftBtn () {
+      this.$refs.dialogText.reset()
+    },
+    // 反馈确定
+    clickRightBtn (val) {
+      this.dialogData.FeedContent = val
+      this.$refs.dialogText.hide()
+    },
     detailShowHandle (item) {
       // 权限开启
       if (this.isCtrlShow && this.work.WorkState === '2') {
@@ -218,7 +239,16 @@ export default {
       //   '&orgId=' + this.detailDatas.orgID +
       //   '&orgName=' + encodeURIComponent(this.detailDatas.orgName) +
       //   '&fromURL=' + encodeURIComponent(url);
-      this.$router.forward('/customerService?type=baoxiu')
+      // this.$router.forward('/customerService?type=baoxiu')
+      this.$router.push({
+        path: '/customerService',
+        query: {
+          type: 'baoxiu',
+          workPos: item.EquiName,
+          woId: item.EquiID,
+          quick: true
+        }
+      })
     },
     searchRes () {
 
@@ -320,10 +350,13 @@ export default {
     },
     // 反馈
     async remarkHandle (sub, item) {
-      let {value, action} = await this.$message.prompt(' ', {title: '反馈内容', inputPlaceholder: '请输入反馈内容', inputValue: sub.FeedContent})
-      if (action === 'confirm') {
-        sub.FeedContent = value
-      }
+      this.dialogData = sub
+      this.$refs.dialogText.text = sub.FeedContent
+      this.$refs.dialogText.show()
+      // let {value, action} = await this.$message.prompt(' ', {title: '反馈内容', inputPlaceholder: '请输入反馈内容', inputValue: sub.FeedContent})
+      // if (action === 'confirm') {
+      //   sub.FeedContent = value
+      // }
       local.set('ins_page_' + this.work.WorkID, this.insList)
     },
     // 提交参数生成

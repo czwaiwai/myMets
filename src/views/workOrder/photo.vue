@@ -36,7 +36,7 @@ export default {
       imgs: [],
       delImgs: [],
       remark: '',
-      maxImgNum: 3,
+      maxImgNum: 4,
       detail: {}
     }
   },

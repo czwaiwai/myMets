@@ -9,9 +9,9 @@
         <i class="iconfont icon-building-automation padding-right"></i>{{orgName}}
       </div>
       <search v-model="search"></search>
-      <div class="page_sub_hd " style="overflow-x:auto">
+      <div class="page_sub_hd " style="overflow-x:auto;height:44px;line-height:44px;">
         <p class="padding-left15" v-if="chooseList.length===0">暂未选择员工</p>
-        <ul class="choose_person_list" v-else>
+        <ul class="choose_person_list" style="padding: 9px 15px 9px 15px;height: 44px;" v-else>
           <li @click="delChoose(item)" class="dot_line" v-for="(item, index) in chooseList" :key="index">
             {{item.EmployeeName}}
             <i class="iconfont icon-iconzhuanqu23"></i>
