@@ -135,8 +135,8 @@ export default {
         }
         ._num{
           position: absolute;
-          bottom: .2rem;
-          right: .5rem;
+          bottom: 0;
+          right: .2rem;
           font-size: .28rem;
           color: #999;
         }
