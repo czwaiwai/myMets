@@ -192,7 +192,7 @@ export default {
         xml: true,
         params: {
           projectId: this.nav.orgId,
-          employeeId: this.nav.memberId,
+          employeeId: this.currMember,
           workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
           positionID: this.nav.positionId,
           sort: '-1', // 1为升序，其他为降序

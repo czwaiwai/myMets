@@ -44,10 +44,10 @@ export default {
       console.log(obj.type, 'obj.type')
       switch (obj.type) {
         case 'CustomerService': that.$router.push('/customerNotice/' + taskId); break
-        case 'E_Inspection': that.$router.push('/workOrder/inspection?taskId=' + taskId); break
+        case 'E_Inspection': that.$router.push('/inspectionNotice/' + taskId + '?type=Inspection'); break
+        case 'E_KeepFit': that.$router.push('/inspectionNotice/' + taskId + '?type=KeepFit'); break
         case 'SyswinMeet': that.$router.push(`/approvalDetailQuick/${taskId}`); break
       }
-      // that.$app.loadView({url: 'http://' + that.ip + '/ETSmobileApproval/#page=0', type: 'shenpi'})
     })
   },
   watch: {

@@ -6,6 +6,7 @@ const baseUrl = '/NetApp/CstService.asmx/GetService'
 export default {
   install (Vue, options) {
     console.log(options, 'axios--ip')
+    let store = options.store
     let ipAddr = options.ip ? 'http://' + options.ip : ''
     let instance = axios.create({
       baseURL: ipAddr,
@@ -56,6 +57,7 @@ export default {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         'X-Requested-With': 'XMLHttpRequest'
+        // 'Authorization': 'BasicAuth ' + ''
       },
       transformRequest: [function (data) {
         console.log('http://' + options.ip)
@@ -88,6 +90,16 @@ export default {
     instanceXml.interceptors.request.use(function (config) {
       console.log('http://' + options.ip, 'options.ip')
       console.log(config, 'config')
+      // console.log(config.headers['Authorization'])
+      if (!config.headers['Authorization']) {
+        // let p0 = 'UserAudit_GetTokenInfo'
+        // console.log(store.getters.user)
+        // instanceXml(p0, {
+        //   UserId: '',
+        //   Pwd: '',
+        // })
+      }
+      // instanceXml()
       return config
     }, function (error) {
       return Promise.reject(error)

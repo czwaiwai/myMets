@@ -124,36 +124,6 @@ export default {
     this.configList = this.typeList.map(item => {
       return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
     })
-    // this.$root.$on('customerNotice', (taskId) => {
-    //   console.log('$root', taskId)
-    //   this.notice(taskId).then(res => {
-    //     this.workItem = res
-    //     this.nav.workPosFrom = this.workPosFrom = this.workItem.WorkPosFrom
-    //     // this.title = this.workItem.WorkPosFrom ? '维修工单' : '客服工单'
-    //     this.routeTo(this.workItem)
-    //     // this.getStatus()
-    //     // this.configList = this.typeList.map(item => {
-    //     //   return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
-    //     // })
-    //   })
-    // })
-
-    // if (this.$route.query.taskId) {
-    //   this.notice(this.$route.query.taskId).then(res => {
-    //     this.workItem = res
-    //     this.nav.workPosFrom = this.workPosFrom = this.workItem.WorkPosFrom
-    //     this.title = this.workItem.WorkPosFrom ? '维修工单' : '客服工单'
-    //     this.getStatus()
-    //     this.configList = this.typeList.map(item => {
-    //       return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
-    //     })
-    //     console.log(this.configList, '----')
-    //     this.routeTo(this.workItem)
-    //   })
-    // } else {
-
-    // }
-    // console.log(this.configList, 'configList')
   },
   computed: {
     ...mapGetters({
@@ -168,11 +138,11 @@ export default {
       }
     }
   },
-  watch: {
-    $route (to, from) {
-      console.log(to, this.$route.query.taskId, 'tooooooooooooooooooooooooo')
-    }
-  },
+  // watch: {
+  //   $route (to, from) {
+  //     console.log(to, this.$route.query.taskId, 'tooooooooooooooooooooooooo')
+  //   }
+  // },
   methods: {
     // 刷新当前列表页
     refresh () {
@@ -268,12 +238,6 @@ export default {
         p2: obj.WorkOrdID,
         p3: new Date().format('yyyy-MM-dd hh:mm:ss')
       })
-      // let url = '/ets/syswin/smd/userServiceVisitManClose'
-      // let res = await this.$http.post(url, {
-      //   userName: this.nav.userName,
-      //   orderId: obj.WorkOrdID,
-      //   closeDate: new Date().format('yyyy-MM-dd hh:mm:ss')
-      // })
       this.refresh()
       this.$toast('工单关闭成功')
       console.log(res)
@@ -290,7 +254,6 @@ export default {
         OrdersDepart: item.DeptName,
         PlusEmployeeName: ''
       }
-
       let p0 = 'UserService_SingleBill'
       let res = await this.$xml(p0, params)
       console.log(res)
@@ -301,31 +264,32 @@ export default {
       } catch (error) {
         this.$toast('转单成功但消息推送失败')
       }
-    },
-    async sendMsg (work, person) {
-      let state = ''
-      let title = this.title
-      let type = 'CustomerService'
-      switch (work.WorkOrdState) {
-        case 'WOSta_Sub': state = '待接单'; break
-        case 'WOSta_Proc': state = '待接单'; break
-        case 'WOSta_Finish': state = '待接单'; break
-        case 'WOSta_Visit': state = '待接单'; break
-      }
-      let params = {
-        'ID': work.WorkOrdID,
-        'Type': type,
-        'Title': title,
-        'Content': this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
-        'Tag': person.UserId,
-        'Status': '1',
-        'FromTag': ''
-      }
-      let p0 = 'AppWeChat_JGWorkPush'
-      let res = await this.$xml(p0, params)
-      this.$toast('消息推送成功')
-      console.log(res)
     }
+    // 消息推送
+    // async sendMsg (work, person) {
+    //   let state = ''
+    //   let title = this.title
+    //   let type = 'CustomerService'
+    //   switch (work.WorkOrdState) {
+    //     case 'WOSta_Sub': state = '待接单'; break
+    //     case 'WOSta_Proc': state = '待接单'; break
+    //     case 'WOSta_Finish': state = '待接单'; break
+    //     case 'WOSta_Visit': state = '待接单'; break
+    //   }
+    //   let params = {
+    //     'ID': work.WorkOrdID,
+    //     'Type': type,
+    //     'Title': title,
+    //     'Content': this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
+    //     'Tag': person.UserId,
+    //     'Status': '1',
+    //     'FromTag': ''
+    //   }
+    //   let p0 = 'AppWeChat_JGWorkPush'
+    //   let res = await this.$xml(p0, params)
+    //   this.$toast('消息推送成功')
+    //   console.log(res)
+    // }
   }
 }
 </script>

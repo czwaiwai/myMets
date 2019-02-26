@@ -8,9 +8,9 @@
       <form @submit.prevent="submit">
         <div class="form_wrap">
           <div>
-            <label class="input_radius"><i class="iconfont icon-zhanghu"></i><input v-model="formObj.userName" placeholder="请输入账号"></label>
-            <label class="input_radius"><i class="iconfont icon-mima"></i><input v-model="formObj.password" type="password" placeholder="请输入密码"></label>
-            <label class="input_radius"><i class="iconfont icon-ip"></i><input v-model="formObj.ip" placeholder="请输入IP地址"></label>
+            <label class="input_radius"><i class="iconfont icon-yonghu" style="font-size:20px;"></i><input v-model="formObj.userName" placeholder="请输入账号"></label>
+            <label class="input_radius"><i class="iconfont icon-mima" style="font-size:20px;"></i><input v-model="formObj.password" type="password" placeholder="请输入密码"></label>
+            <label class="input_radius"><i class="iconfont icon-z-location" style="font-size:20px;"></i><input v-model="formObj.ip" placeholder="请输入IP地址"></label>
           </div>
           <div style="padding:15px;">
             <button class="weui-btn weui-btn_primary"  type="submit" href="javascript:" id="showTooltips">确定</button>
@@ -67,22 +67,25 @@ export default {
   .form_wrap {
     padding:55vw 10vw 0 10vw;
     margin:0 auto;
-    background: url('../assets/img/loginBanner.png') no-repeat;
+    background: url('../../assets/img/loginBanner.png') no-repeat;
     background-size:100%;
     & label.input_radius {
       border-bottom: 1px solid #e5e5e5;
       border-radius: 0;
+      padding-left:10px;
       height: 36px;
       margin-bottom: 10px;
+      background: #FFF;
       display: block;
       overflow: hidden;
     }
     & label.input_radius input {
       border:none;
-      background:#f9f9f9;
+      background:#FFF;
       height:34px;
       line-height:34px;
-      padding-left:15px;
+      padding-left:10px;
+      vertical-align: bottom;
     }
     .weui-btn {
       height:40px;

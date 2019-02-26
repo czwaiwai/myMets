@@ -184,7 +184,7 @@ export default [
     },
     children: [{
       path: 'changeProject',
-      name: 'report_countLease_change',
+      name: 'report_warrant_countLease_change',
       component: ChangeProject,
       meta: {
         title: '切换项目'

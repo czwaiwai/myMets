@@ -143,22 +143,17 @@ export default {
       userName: this.user.UserID,
       memberId: this.user.memberId
     }
-    this.currNav = this.$parent.currNav
-    this.work = this.$parent.workItem
-
-    console.log(this.work, this.$route.params, 'work------')
-    // 缓存
-    if (!this.work.WorkID) {
-      this.work = local.get('inspection_work_' + this.$route.params.workId)
+    // this.currNav = this.$parent.currNav
+    if (this.$route.params.taskId) {
+      this.notice(this.$route.params.taskId).then(res => {
+        console.log(res, 'ajjjjjsdf')
+        this.work = res.EquiInfo[0]
+        this.dataInit()
+      })
+    } else {
+      this.work = this.$parent.workItem
+      this.dataInit()
     }
-    if (this.work.WorkState === '2') {
-      local.set('inspection_work_' + this.work.WorkID, this.work)
-    }
-    this.typeTxt = this.work.WordType === 'Work_insp' ? '巡检' : '保养'
-    // 是否控制打开权限
-    this.isCtrlShow = this.work.BillStatu === '1'
-    // this.isCtrlShow = true
-    this.getPageData()
   },
   computed: {
     ...mapGetters({
@@ -185,6 +180,45 @@ export default {
     }
   },
   methods: {
+    // 数据初始化
+    dataInit () {
+      // 缓存
+      if (!this.work.WorkID) {
+        this.work = local.get('inspection_work_' + this.$route.params.workId)
+      }
+      if (this.work.WorkState === '2') {
+        local.set('inspection_work_' + this.work.WorkID, this.work)
+      }
+      this.typeTxt = this.work.WordType === 'Work_insp' ? '巡检' : '保养'
+      // 是否控制打开权限
+      this.isCtrlShow = this.work.BillStatu === '1'
+      // this.isCtrlShow = true
+      this.getPageData()
+    },
+    // 获取notice详情
+    async notice (taskId) {
+      let orderType = this.$route.query.type
+      let params = {
+        // projId: this.nav.orgId,
+        // memberId: this.nav.memberId,
+        // orderState: '2',
+        // orderType: orderType, // KeepFit
+        // endTime: taskId,
+        'strOrgID': this.nav.orgId,
+        'strCstID': this.nav.memberId,
+        'eventStateId': '2',
+        'strAppWordType': orderType,
+        'StarTime': '',
+        'EndTime': taskId,
+        'PCode': '',
+        'QueryStarTime': '1990-01-01 00:00:00',
+        'QueryEndTime': '2099-12-12 00:00:00',
+        'STID': ''
+      }
+      let p0 = 'EquipBase_GetInspectionInfoH5'
+      let res = await this.$xml(p0, params)
+      return res.data[0]
+    },
     // 反馈重置
     clickLeftBtn () {
       this.$refs.dialogText.reset()
@@ -255,6 +289,7 @@ export default {
 
     },
     optionChange () {
+      console.log('保存当前列表' + this.work.WorkID, this.insList)
       local.set('ins_page_' + this.work.WorkID, this.insList)
     },
     async getPageData () {
@@ -411,7 +446,7 @@ export default {
       // 返回主页面
       this.$root.back()
       // 刷新父页面的值
-      this.$parent.refresh()
+      this.$parent.refresh && this.$parent.refresh()
     },
     // 关闭巡检
     async closeIns () {
@@ -435,7 +470,7 @@ export default {
       // 返回主页面
       this.$root.back()
       // 刷新父页面的值
-      this.$parent.refresh()
+      this.$parent.refresh && this.$parent.refresh()
     }
   }
 }

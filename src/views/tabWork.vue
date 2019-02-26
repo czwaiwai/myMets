@@ -131,7 +131,7 @@
 
 <script>
 import {mapGetters} from 'Vuex'
-import CryptoJS from 'crypto-js'
+// import CryptoJS from 'crypto-js'
 export default {
   name: 'tabWork',
   data () {
@@ -152,11 +152,11 @@ export default {
     //   window.APP_pushMsg('{"fromTag":"","id":"20190220092648764888","status":"1","type":"CustomerService","url":""}')
     // }, 5000)
     this.getPageData()
-    this.shenliangTest()
-    console.log('auth:', this.auth)
-    console.log(this.user, '--------user--------')
-    console.log(this.encryptByDES('test20', 'SE83232U'), '----')
-    console.log(this.encryptDES('test20', 'SE83232U'), '----')
+    // this.shenliangTest()
+    // console.log('auth:', this.auth)
+    // console.log(this.user, '--------user--------')
+    // console.log(this.encryptByDES('test20', 'SE83232U'), '----')
+    // console.log(this.encryptDES('test20', 'SE83232U'), '----')
 
     // console.log(this.shenlinagUrl)
   },
@@ -177,58 +177,58 @@ export default {
       'ip': 'ip',
       'auth': 'auth',
       'rand': 'rand'
-    }),
-    shenlinagUrl () {
-      // http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES
-      let key = 'SE83232U'
-      let sso = '' + key
-      console.log(this.encryptByDES('test20', key), '结果---')
-      let returnUrl = decodeURIComponent('/mobileapp/home.aspx')
-      let baseUrl = 'http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES'
-      let paramStr = `&sso=${sso}&returnUrl=${returnUrl}`
-      console.log(baseUrl)
-      return baseUrl + paramStr
-    },
-    chaoBiaoUrl () {
-      let orgName = encodeURIComponent(this.user.OrgName)
-      return `http://${this.ip}/ETSMeterList/#/?orgId=${this.user.OrgID}&orgName=${orgName}`
-    },
-    etsRentUrl () {
-      // let app_cst = ''
-      // let app_house = ''
-      // if (this.auth['APP_Cst']) {
-      //   app_cst = 'APP_Cst'
-      // }
-      // if (this.auth['APP_House']) {
-      //   app_house = 'APP_House'
-      // }
-      // let orgName = encodeURIComponent(this.user.OrgName)
-      // return `http://${this.ip}/ETSRent/#/?mode=${app_cst},${app_house}&orgId=${this.user.OrgID}&orgName=${orgName}&employeeId=${this.user.memberId}&employeeJobId=${this.user.PositionID}`
-      return ''
-    }
+    })
+    // shenlinagUrl () {
+    //   // http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES
+    //   let key = 'SE83232U'
+    //   let sso = '' + key
+    //   console.log(this.encryptByDES('test20', key), '结果---')
+    //   let returnUrl = decodeURIComponent('/mobileapp/home.aspx')
+    //   let baseUrl = 'http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES'
+    //   let paramStr = `&sso=${sso}&returnUrl=${returnUrl}`
+    //   console.log(baseUrl)
+    //   return baseUrl + paramStr
+    // },
+    // chaoBiaoUrl () {
+    //   let orgName = encodeURIComponent(this.user.OrgName)
+    //   return `http://${this.ip}/ETSMeterList/#/?orgId=${this.user.OrgID}&orgName=${orgName}`
+    // },
+    // etsRentUrl () {
+    //   // let app_cst = ''
+    //   // let app_house = ''
+    //   // if (this.auth['APP_Cst']) {
+    //   //   app_cst = 'APP_Cst'
+    //   // }
+    //   // if (this.auth['APP_House']) {
+    //   //   app_house = 'APP_House'
+    //   // }
+    //   // let orgName = encodeURIComponent(this.user.OrgName)
+    //   // return `http://${this.ip}/ETSRent/#/?mode=${app_cst},${app_house}&orgId=${this.user.OrgID}&orgName=${orgName}&employeeId=${this.user.memberId}&employeeJobId=${this.user.PositionID}`
+    //   return ''
+    // }
   },
   methods: {
-    encryptByDES (message, key) {
-      const keyHex = CryptoJS.enc.Utf8.parse(key)
-      // var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
-      const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
-      })
-      return encrypted.toString()
-    },
-    encryptDES (psw, key) {
-      var iv = [1, 2, 3, 4, 5, 6, 7, 8]
-      var ivHex = CryptoJS.enc.Latin1.parse(this.byteToString(iv))// 原java使用的是iv = [1,2,3,4,5,6,7,8]
-      var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
-      var encrypted = CryptoJS.DES.encrypt(psw, keyHex,
-        { iv: ivHex,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-        }
-      )
-      return encrypted.toString()
-    },
+    // encryptByDES (message, key) {
+    //   const keyHex = CryptoJS.enc.Utf8.parse(key)
+    //   // var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
+    //   const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+    //     mode: CryptoJS.mode.ECB,
+    //     padding: CryptoJS.pad.Pkcs7
+    //   })
+    //   return encrypted.toString()
+    // },
+    // encryptDES (psw, key) {
+    //   var iv = [1, 2, 3, 4, 5, 6, 7, 8]
+    //   var ivHex = CryptoJS.enc.Latin1.parse(this.byteToString(iv))// 原java使用的是iv = [1,2,3,4,5,6,7,8]
+    //   var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
+    //   var encrypted = CryptoJS.DES.encrypt(psw, keyHex,
+    //     { iv: ivHex,
+    //       mode: CryptoJS.mode.CBC,
+    //       padding: CryptoJS.pad.Pkcs7
+    //     }
+    //   )
+    //   return encrypted.toString()
+    // },
     async getPageData () {
       window.md5 = this.md5
       let res = await this.authLogin()
@@ -262,23 +262,23 @@ export default {
       console.log(res)
       return res
     },
-    md5 (word) {
-      return CryptoJS.MD5(word).toString()
-    },
-    shenliangTest () {
-      var key = CryptoJS.enc.Base64.parse('SE83232U')
-      var message = CryptoJS.enc.Base64.parse('test20')
-      var encrypted = CryptoJS.DES.encrypt(message, key, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
-      })
-      // AZ+wtAtBLpk=
-      // qahmXfF8euU=
-      // 0stzyYStVxs=
-      console.log(encrypted.ciphertext.toString(), 'encrypted.ciphertext.toString-------------')
-      console.log(CryptoJS.enc.Base64.stringify(encrypted.ciphertext))
-      return CryptoJS.enc.Base64.stringify(encrypted.ciphertext)
-    },
+    // md5 (word) {
+    //   return CryptoJS.MD5(word).toString()
+    // },
+    // shenliangTest () {
+    //   var key = CryptoJS.enc.Base64.parse('SE83232U')
+    //   var message = CryptoJS.enc.Base64.parse('test20')
+    //   var encrypted = CryptoJS.DES.encrypt(message, key, {
+    //     mode: CryptoJS.mode.ECB,
+    //     padding: CryptoJS.pad.Pkcs7
+    //   })
+    //   // AZ+wtAtBLpk=
+    //   // qahmXfF8euU=
+    //   // 0stzyYStVxs=
+    //   console.log(encrypted.ciphertext.toString(), 'encrypted.ciphertext.toString-------------')
+    //   console.log(CryptoJS.enc.Base64.stringify(encrypted.ciphertext))
+    //   return CryptoJS.enc.Base64.stringify(encrypted.ciphertext)
+    // },
     jumpOffline () {
       this.$app.jumpOffline()
     },
