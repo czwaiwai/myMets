@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <nav-title title="选择范围"></nav-title>
+    <nav-title title="搜索仪表"></nav-title>
     <div class="searchBox clearfix">
       <form class="searchWrap clearfix" action="" onsubmit="return false;">
           <i class="iconfont icon-saoyisao" @click.stop="callCamera"></i>

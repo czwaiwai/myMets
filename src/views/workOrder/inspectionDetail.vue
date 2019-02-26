@@ -65,6 +65,7 @@
             </ul>
           </div>
         </section>
+        <div style="height:50px;"></div>
       </div>
       <div v-if="work.WorkState === '2'"  class="page_ft text-center light_bg padding-top5 padding15-h _bt">
         <button @click="submitIns" class="ins_submit_btn">提交{{typeTxt}}</button>
@@ -490,12 +491,11 @@ export default {
 }
 .ins_aside {
     position: fixed;
-    bottom: 60px;
+    bottom: 56px;
     height: 50px;
     width: 50px;
     background: #3395FF;
     text-align: center;
-    height: 50px;
     border-radius: 100%;
     line-height: 50px;
     right: 15px;

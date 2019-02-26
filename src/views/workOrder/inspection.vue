@@ -229,6 +229,11 @@ export default {
     }
   },
   watch: {
+    searchKey (val) {
+      if (!val.length) {
+        this.searchRes()
+      }
+    },
     currNav (val) {
       if (val) {
         this.downloadEdit = false

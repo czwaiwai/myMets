@@ -9,7 +9,7 @@
           <p class="_num">{{text.length}}/{{maxLength}}</p>
         </div>
         <div class="_btns clearfix">
-          <div class="_cancel" @click.stop="clickLeftBtn">{{leftName}}</div>
+          <div class="_cancel" @click.stop="clickLeftBtn">{{text.length?leftName:'取消'}}</div>
           <div class="_sure" @click.stop="clickRightBtn">{{rightName}}</div>
         </div>
       </div>
@@ -62,6 +62,9 @@ export default {
       this.$emit('clickMark')
     },
     clickLeftBtn () {
+      if (!this.text.length) {
+        this.hide()
+      }
       this.$emit('clickLeftBtn')
     },
     clickRightBtn () {

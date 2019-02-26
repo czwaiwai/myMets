@@ -94,7 +94,7 @@
             <div class="setDate" v-show="filterType.type===0">
               <p class="tip">请选择</p>
               <div class="date-wrap" @click.stop="openPicker"><span class="date">{{filterType.list[0].data}}</span><i class="iconfont icon-rili"></i></div>
-              <datetime-picker
+              <!-- <datetime-picker
                 ref="picker"
                 type="date"
                 year-format="{value} 年"
@@ -102,7 +102,7 @@
                 date-format="{value} 日"
                 @confirm="filterDateChange"
                 v-model="pickerValue">
-              </datetime-picker>
+              </datetime-picker> -->
               <!-- <datetime v-model="filterType.list[0].data" @on-change="filterDateChange" format="YYYY-MM" :max-year=3000 :min-year=1900>
                 <div class="date-wrap"><span class="date">{{filterType.list[0].data}}</span><i class="iconfont icon-rili"></i></div>
               </datetime> -->
@@ -118,6 +118,15 @@
         </div>
       </div>
     </transition>
+    <datetime-picker
+      ref="picker"
+      type="date"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      date-format="{value} 日"
+      @confirm="filterDateChange"
+      v-model="pickerValue">
+    </datetime-picker>
     <dialog-confire
       :title="dialogData.title"
       :leftName="dialogData.leftName"

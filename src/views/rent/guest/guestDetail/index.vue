@@ -267,13 +267,14 @@ export default {
         }
       }
       .remark{
-        padding: .3rem;
+        padding: .26rem .3rem .3rem;
         min-height: 1rem;
         background: #fff;
         .tip{
           float: left;
           width: 1rem;
           height: .4rem;
+          margin-top: .03rem;
           font-size: .3rem;
           color: #333;
           line-height: .4rem;

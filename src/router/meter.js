@@ -3,7 +3,7 @@ export default [
     name: 'meterLocation',
     path: '/meterLocation',
     meta: {
-      title: '搜索仪表'
+      title: '选择范围'
     },
     component: () => import('@/views/meter/location')
   },

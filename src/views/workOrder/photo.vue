@@ -9,7 +9,7 @@
       <div v-if="!onlyPhoto" class="weui-cells weui-cells_form" style="margin-top:0;">
         <div class="weui-cell">
           <div class="weui-cell__bd">
-            <textarea v-model="remark" class="weui-textarea" maxlength="200" placeholder="请描述巡检情况..." rows="3"></textarea>
+            <textarea v-model="remark" class="weui-textarea" maxlength="200" :placeholder="'请描述'+$parent.typeTxt+'情况...'" rows="3"></textarea>
             <div class="weui-textarea-counter"><span>{{remark.length}}</span>/200</div>
           </div>
         </div>
