@@ -92,8 +92,12 @@ export default {
     },
     // 详情动作
     toAction (type) {
+      let name = 'approvalAction'
+      if (this.$route.name === 'approvalDetailQuick') {
+        name = 'approvalActionQuick'
+      }
       this.$router.push({
-        name: 'approvalAction',
+        name: name,
         // params: {
         //   id: this.$route.params.id
         // },

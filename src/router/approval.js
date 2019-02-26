@@ -31,8 +31,35 @@ export default [
             component: () => import('@/views/approval/action'),
             children: [
               {
-                name: 'approvalResponsibleChoose',
-                path: 'approvalResponsibleChoose',
+                name: 'approvalChoose',
+                path: 'approvalChoose',
+                component: () => import('@/views/customerService/responsibleChoose'),
+                meta: {
+                  title: '责任人'
+                }
+              }
+            ]
+          }
+        ]
+      }, {
+        name: 'approvalDetailQuick',
+        path: '/approvalDetailQuick/:id',
+        meta: {
+          title: '详情'
+        },
+        component: () => import('@/views/approval/detail'),
+        children: [
+          {
+            name: 'approvalActionQuick',
+            path: 'approvalActionQuick',
+            meta: {
+              title: ''
+            },
+            component: () => import('@/views/approval/action'),
+            children: [
+              {
+                name: 'approvalChooseQuick',
+                path: 'approvalChooseQuick',
                 component: () => import('@/views/customerService/responsibleChoose'),
                 meta: {
                   title: '责任人'

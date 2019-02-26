@@ -51,6 +51,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import navTitle from '@/components/navTitle'
 import dialogConfire from '@/components/dialogConfire.vue'
 export default {
@@ -71,10 +72,19 @@ export default {
       isHttp: false
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'user'
+    })
+  },
   methods: {
     // 选择下一执行人
     toChoisePerson () {
-      this.$router.push({name: 'approvalResponsibleChoose'})
+      let name = 'approvalChoose'
+      if (this.$route.name === 'approvalActionQuick') {
+        name = 'approvalChooseQuick'
+      }
+      this.$router.push({name: name})
     },
     // 设置执行人
     setPerson (item) {
@@ -111,7 +121,7 @@ export default {
     // 提交
     async upData () {
       let obj = {
-        'EmployeeId': this.$parent.$parent.userId,
+        'EmployeeId': this.user.UserID,
         'TaskId': this.$parent.detailId,
         'Result': this.$route.query.type,
         'Reason': this.value
@@ -152,6 +162,13 @@ export default {
           }, 2000)
         } else {
           this.$toast(res.msg)
+          if (this.$route.name === 'approvalActionQuick') {
+            setTimeout(() => {
+              this.isHttp = false
+              this.$router.push(`/tab/work`)
+            }, 2000)
+            return
+          }
           this.$parent.$parent.getAllData()
           setTimeout(() => {
             this.isHttp = false
@@ -189,8 +206,8 @@ export default {
   },
   created () {
     this.setInit()
-    this.nav.orgId = this.$parent.$parent.orgId
-    this.nav.orgName = this.$parent.$parent.orgName
+    this.nav.orgId = this.user.OrgID
+    this.nav.orgName = this.user.OrgName
     var u = navigator.userAgent
     this.isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
   }
