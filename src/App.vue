@@ -41,15 +41,10 @@ export default {
       let obj = JSON.parse(data)
       obj = obj.notice ? obj.notice : obj
       let taskId = obj.id
+      console.log(obj.type, 'obj.type')
       switch (obj.type) {
-        case 'CustomerService':
-          if (that.$route.path === '/workOrder/customerService') {
-            window.location.hash = that.$route.path.indexOf('?') > -1 ? that.$route.path + '&taskId=' + taskId : that.$route.path + '?taskId=' + taskId
-          } else {
-            that.$router.push('/workOrder/customerService?taskId=' + taskId)
-          }
-          ; break
-        case 'E_inspection': that.$router.push('/workOrder/inspection?taskId=' + taskId); break
+        case 'CustomerService': that.$router.push('/customerNotice/' + taskId); break
+        case 'E_Inspection': that.$router.push('/workOrder/inspection?taskId=' + taskId); break
       }
       // that.$app.loadView({url: 'http://' + that.ip + '/ETSmobileApproval/#page=0', type: 'shenpi'})
     })

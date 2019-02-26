@@ -36,8 +36,8 @@
         </div>
         <component ref="inslist" :params="currConfig.params" @listDone="listDone"  :is="currIndex" :config="currConfig" >
           <template slot-scope="scope" >
-            <div class="weui-panel weui-panel_access margin-bottom">
-              <div @click="routeTo(scope.item)"   class="weui-panel__hd">
+            <div class="weui-panel weui-panel_access margin-bottom needsclick">
+              <div @click="routeTo(scope.item)"   class="weui-panel__hd needsclick">
                 <a v-if="currNav.state==='2' && downloadEdit" @click.stop="checkItem(scope.item)" class="padding-right main_color" href="javascript:void(0)"><i class="iconfont" style="font-size:20px;line-height:16px;" :class="scope.item.check?'icon-select-copy':'icon-Ellipse'"></i></a>
                 <i class="iconfont icon-building-automation padding-right5 "></i>{{nav.orgName}}
                 <span class="float_right">
@@ -46,11 +46,11 @@
                   <span class="dark_99" v-if="scope.item.WorkState === '4'">完成</span>
                 </span>
               </div>
-              <div @click="routeTo(scope.item)"  class="weui-panel__bd" >
-                <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px">
-                  <h4 class="weui-media-box__title">{{scope.item.PlanName}}</h4>
-                  <p><span class="dark_99">巡 检 人:</span> {{scope.item.Principal}}</p>
-                  <p><span class="dark_99">开始时间:</span> {{scope.item.PlanStartTime}}</p>
+              <div @click="routeTo(scope.item)"  class="weui-panel__bd needsclick" >
+                <div class="weui-media-box weui-media-box_text needsclick" style="padding-bottom:5px">
+                  <h4 class="weui-media-box__title needsclick">{{scope.item.PlanName}}</h4>
+                  <p class="needsclick"><span class="dark_99">巡 检 人:</span> {{scope.item.Principal}}</p>
+                  <p class="needsclick"><span class="dark_99">开始时间:</span> {{scope.item.PlanStartTime}}</p>
                 </div>
               </div>
               <div class="weui-panel__ft text-right padding-right15 padding-bottom">

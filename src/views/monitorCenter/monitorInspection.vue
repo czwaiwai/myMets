@@ -10,25 +10,25 @@
     </div>
     <component ref="pageList" :params="currConfig.params"  :is="currIndex" :config="currConfig" >
         <template slot-scope="scope" >
-          <div class="weui-panel weui-panel_access margin-bottom">
-            <div @click="routeTo(scope.item)"   class="weui-panel__hd">
+          <div class="weui-panel weui-panel_access margin-bottom needsclick">
+            <div @click="routeTo(scope.item)"   class="weui-panel__hd needsclick">
               <i class="iconfont icon-building-automation padding-right5 "></i>{{nav.orgName}}
               <span class="float_right">
                 <span v-if="scope.item.WordType === 'Work_insp'" class="span_tag">巡</span>
                 <span v-if="scope.item.WordType === 'Work_KeepFit'" class="span_tag">保</span>
               </span>
             </div>
-            <div @click="routeTo(scope.item)"  class="weui-panel__bd">
-                <div class="moni_ins_bg weui-media-box weui-media-box_text weui-flex" >
-                  <div class="light" style="width: 95px;padding-right: 15px;text-align: center;">
+            <div @click="routeTo(scope.item)"  class="weui-panel__bd needsclick">
+                <div class="moni_ins_bg weui-media-box weui-media-box_text weui-flex needsclick" >
+                  <div class="light needsclick" style="width: 95px;padding-right: 15px;text-align: center;">
                     <p class="fs18 padding-top padding-bottom5" >{{scope.item.Principal}}</p>
                     <!-- <p >共{{scope.item.BillNum }}设备</p> -->
                   </div>
-                  <div class="weui-flex__item">
-                    <h4 class="weui-media-box__title">{{scope.item.WORID}}</h4>
-                    <p v-if="currNav.state === '1'"><span class="dark_99">计划开始：</span> {{scope.item.PlanStartTime}}</p>
-                    <p v-if="currNav.state === '2' && scope.item.PlanEndTime"><span class="dark_99" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span> | <span :class="scope.item.StateType?'error_color':''">{{ scope.item.PlanEndTime }} 完成 </span></p>
-                    <p v-if="currNav.state === '2' && !scope.item.PlanEndTime"><span class="dark_99" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span></p>
+                  <div class="weui-flex__item needsclick">
+                    <h4 class="weui-media-box__title needsclick">{{scope.item.WORID}}</h4>
+                    <p class="needsclick" v-if="currNav.state === '1'"><span class="dark_99 needsclick">计划开始：</span> {{scope.item.PlanStartTime}}</p>
+                    <p class="needsclick" v-if="currNav.state === '2' && scope.item.PlanEndTime"><span class="dark_99 needsclick" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span> | <span class="needsclick" :class="scope.item.StateType?'error_color':''">{{ scope.item.PlanEndTime }} 完成 </span></p>
+                    <p class="needsclick" v-if="currNav.state === '2' && !scope.item.PlanEndTime"><span class="dark_99 needsclick" :class="scope.item.StateType !== '已关闭'?'span_orange':''">{{scope.item.StateType }}</span></p>
                   </div>
                 </div>
             </div>

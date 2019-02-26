@@ -15,9 +15,9 @@
         </div>
       </div>
     </div>
-    <component ref="pageList" :is="currIndex" :params="currConfig.params"  :config="currConfig" @listDone="listDone" >
+    <component v-if="currConfig" ref="pageList" :is="currIndex" :params="currConfig.params"  :config="currConfig" @listDone="listDone" >
       <template slot-scope="scope" >
-        <div class="weui-panel weui-panel_access margin-bottom">
+        <div class="weui-panel weui-panel_access margin-bottom needsclick">
           <div @click="routeTo(scope.item)"   class="weui-panel__hd needsclick">
             <i class="iconfont icon-gongdan padding-right5 "></i>{{ scope.item.WONo }}
             <span class="float_right">
@@ -29,17 +29,17 @@
             </span>
           </div>
           <div @click="routeTo(scope.item)"  class="weui-panel__bd needsclick">
-              <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px;">
-                  <h4 class="weui-media-box__title">{{scope.item.QuesDesc}}</h4>
-                  <div class="img_list_wrap">
+              <div class="weui-media-box weui-media-box_text needsclick" style="padding-bottom:5px;">
+                  <h4 class="weui-media-box__title needsclick">{{scope.item.QuesDesc}}</h4>
+                  <div class="img_list_wrap needsclick">
                     <ul class="clearfix">
                       <li @click.stop  class="img_wrap" v-for="(item,index) in scope.item.ImageList" :key="index">
                         <img :preview="'list'+scope.item.WONo" :src="item.Path">
                       </li>
                     </ul>
                   </div>
-                  <p class="dark_99"><i class="iconfont icon-z-location"></i> {{scope.item.WorkPos}}</p>
-                  <p class="dark_99"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
+                  <p class="dark_99 needsclick"><i class="iconfont icon-z-location"></i> {{scope.item.WorkPos}}</p>
+                  <p class="dark_99 needsclick"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
               </div>
           </div>
           <div class="weui-panel__ft text-right padding-right15 padding-bottom15">
@@ -111,6 +111,7 @@ export default {
     // （Equipment设备（维修）、Resource资源(客服)
     this.workPosFrom = this.$route.query.workPosFrom || 'Resource'
     this.title = this.$route.query.workPosFrom ? '维修工单' : '客服工单'
+    // this.configList = []
     this.nav = {
       orgId: this.user.OrgID,
       orgName: this.user.OrgName,
@@ -119,21 +120,39 @@ export default {
       memberId: this.user.memberId || '1',
       workPosFrom: this.workPosFrom
     }
-    if (this.$route.query.taskId) {
-      this.workItem = this.notice(this.$route.query.taskId)
-      this.nav.workPosFrom = this.workPosFrom = this.workItem.WorkPosFrom
-      this.title = this.workItem.WorkPosFrom ? '维修工单' : '客服工单'
-      this.routeTo(this.workItem)
-      this.getStatus()
-      this.configList = this.typeList.map(item => {
-        return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
-      })
-    } else {
-      this.getStatus()
-      this.configList = this.typeList.map(item => {
-        return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
-      })
-    }
+    this.getStatus()
+    this.configList = this.typeList.map(item => {
+      return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
+    })
+    // this.$root.$on('customerNotice', (taskId) => {
+    //   console.log('$root', taskId)
+    //   this.notice(taskId).then(res => {
+    //     this.workItem = res
+    //     this.nav.workPosFrom = this.workPosFrom = this.workItem.WorkPosFrom
+    //     // this.title = this.workItem.WorkPosFrom ? '维修工单' : '客服工单'
+    //     this.routeTo(this.workItem)
+    //     // this.getStatus()
+    //     // this.configList = this.typeList.map(item => {
+    //     //   return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
+    //     // })
+    //   })
+    // })
+
+    // if (this.$route.query.taskId) {
+    //   this.notice(this.$route.query.taskId).then(res => {
+    //     this.workItem = res
+    //     this.nav.workPosFrom = this.workPosFrom = this.workItem.WorkPosFrom
+    //     this.title = this.workItem.WorkPosFrom ? '维修工单' : '客服工单'
+    //     this.getStatus()
+    //     this.configList = this.typeList.map(item => {
+    //       return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
+    //     })
+    //     console.log(this.configList, '----')
+    //     this.routeTo(this.workItem)
+    //   })
+    // } else {
+
+    // }
     // console.log(this.configList, 'configList')
   },
   computed: {
@@ -142,7 +161,16 @@ export default {
       'user': 'user'
     }),
     currConfig () {
-      return this.configList.find(item => item.name === this.currIndex) || {}
+      if (this.configList) {
+        return this.configList.find(item => item.name === this.currIndex) || {}
+      } else {
+        return ''
+      }
+    }
+  },
+  watch: {
+    $route (to, from) {
+      console.log(to, this.$route.query.taskId, 'tooooooooooooooooooooooooo')
     }
   },
   methods: {
@@ -154,7 +182,7 @@ export default {
     routeTo (item) {
       console.log(item)
       this.workItem = item
-      this.$router.push({path: this.$route.path + '/detail'})
+      this.$router.push({path: this.$route.path + '/detail/' + item.WorkOrdID})
     },
     listDone () {
       this.$previewRefresh()
@@ -196,7 +224,6 @@ export default {
           ...params
         },
         format: function (res) {
-          console.log('aaaa:', res)
           let data = res[0]
           return data.WorkInfo.map(item => {
             item.showCall = false
@@ -266,18 +293,7 @@ export default {
 
       let p0 = 'UserService_SingleBill'
       let res = await this.$xml(p0, params)
-      // let params = {
-      //   strWorkOrdID: this.workItem.WorkOrdID,
-      //   positionId: item.PositionID,
-      //   positionName: item.PositionName,
-      //   ordersID: item.EmployeeID,
-      //   orders: item.EmployeeName,
-      //   ordersDepart: item.DeptName
-      // }
-      // let url = '/ets/syswin/smd/userServiceSingleBill'
-      // let res = await this.$http.post(url, params)
       console.log(res)
-
       this.refresh()
       try {
         await this.sendMsg(this.workItem, item)
@@ -307,16 +323,6 @@ export default {
       }
       let p0 = 'AppWeChat_JGWorkPush'
       let res = await this.$xml(p0, params)
-      // let url = '/ets/message/getMessage'
-      // let params = {
-      //   id: work.WorkOrdID,
-      //   type: type,
-      //   title: title,
-      //   content: this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
-      //   tag: work.UserId,
-      //   status: '1'
-      // }
-      // let res = await this.$http.post(url, params) // 暂无.net接口
       this.$toast('消息推送成功')
       console.log(res)
     }
@@ -340,25 +346,7 @@ export default {
   max-width:100%;
   // max-height:100%;
 }
-.ins_btn + .ins_btn {
-  margin-left:5px;
-}
-.ins_btn_plain_default{
-  border-radius:5px;
-  border:1px solid #999;
-  padding:5px 10px;
-  color:#999;
-}
-.ins_btn:last-child{
-   border:1px solid #3395FF;
-   color:#3395FF;
-}
-.ins_btn_plain_primary {
-  border-radius:5px;
-  border:1px solid #3395FF;
-  padding:5px 10px;
-  color:#3395FF;
-}
+
 .customer{
   .iconPhone{
     position: relative;

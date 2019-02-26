@@ -94,7 +94,7 @@ export default {
     let searchObj = qs.parse(location.search.replace('?', ''))
     this.nav = {
       orgId: searchObj.projectID || this.user.OrgID,
-      orgName: searchObj.projectName,
+      orgName: searchObj.projectName || this.user.OrgName,
       userId: searchObj.UserId || this.user.UserID,
       positionId: searchObj.PositionId || this.user.PositionID
     }
@@ -122,27 +122,30 @@ export default {
         let res = await this.getReportAuth()
         if (!res) {
           // 显示空
+          this.singleMode = true
           return
         }
         let arr = await Promise.all([this.rightInfo(), this.leftTopInfo(), this.leftbottomInfo()])
-        // arr[0]
         this.rightList.forEach((item, index) => {
           item.value = arr[0][index]
         })
-        let leftValues = arr[1].concat(arr[2])
-        this.leftList.forEach((item, index) => {
-          item.value = leftValues[index]
-        })
-        console.log(this.rightList, this.leftList, 'wo qu')
         localStorage.rightList = JSON.stringify(this.rightList)
-        localStorage.leftList = JSON.stringify(this.leftList)
+        if (arr[1].length !== 0 && arr[2].length !== 0) {
+          let leftValues = arr[1].concat(arr[2])
+          this.leftList.forEach((item, index) => {
+            item.value = leftValues[index]
+          })
+          localStorage.leftList = JSON.stringify(this.leftList)
+        } else {
+          localStorage.leftList = JSON.stringify([])
+        }
       } catch (e) {
         this.rightList = localStorage.rightList ? JSON.parse(localStorage.rightList) : []
         this.leftList = localStorage.leftList ? JSON.parse(localStorage.leftList) : []
-        if (this.leftList.length === 0) {
-          this.singleMode = true
-        } else {
+        if (this.leftArr.some(item => item.show)) {
           this.singleMode = false
+        } else {
+          this.singleMode = true
         }
       }
     },
@@ -183,14 +186,15 @@ export default {
       rightArr.forEach(item => {
         item.show = resData.some(sub => sub.Content === item.auth)
       })
-      if (leftArr.length === 0) {
-        this.singleMode = true
-      } else {
+      // console.log(leftArr, '-------------------')
+      if (leftArr.some(item => item.show)) {
         this.singleMode = false
+        this.leftList = leftArr
+      } else {
+        this.singleMode = true
+        this.leftList = []
       }
-      this.leftList = leftArr
       this.rightList = rightArr
-      console.log('权限结果', this.rightList, this.leftList)
       return true
     },
     // 右侧的内容
@@ -210,10 +214,9 @@ export default {
     },
     // 左侧上方的内容
     async leftTopInfo () {
+      if (this.singleMode) return []
       let res = await this.$xml('UserSL_Summery', {})
-      console.log(res, '----')
       let resData = res.data.Summery[0]
-      console.log(resData, 'Summery')
       let values = [
         [{name: '管理面积', value: this.formatNum(resData['BudArea']), unit: '<span class="unit_text">㎡</span>'}],
         [{name: '当月应收', value: this.formatNum(resData['PriPaid']), color: '#FA4E2C', unit: ''}],
@@ -238,6 +241,7 @@ export default {
     },
     // 左侧下方的内容
     async leftbottomInfo () {
+      if (this.singleMode) return []
       let resArr = await Promise.all([this.$xml('UserCS_ReportLeaseSituation', {
         OrgID: this.user.OrgID,
         Etime: (new Date()).format('yyyy-MM-dd')

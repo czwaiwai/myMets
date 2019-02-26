@@ -16,7 +16,7 @@
     <component ref="pageList" :params="currConfig.params" :is="currIndex" :config="currConfig" @listDone="listDone" >
       <template slot-scope="scope" >
         <div class="weui-panel weui-panel_access margin-bottom">
-          <div @click="routeTo(scope.item)"   class="weui-panel__hd">
+          <div @click="routeTo(scope.item)"   class="weui-panel__hd needsclick">
             <i class="iconfont icon-gongdan padding-right5 "></i>{{ scope.item.WONo }}
             <span class="float_right">
               <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Sub'">新服务需求</span>
@@ -26,18 +26,18 @@
               <span class="main_color" v-if="scope.item.WorkOrdState === 'WOSta_Close'">服务成功</span>
             </span>
           </div>
-          <div @click="routeTo(scope.item)"  class="weui-panel__bd">
+          <div @click="routeTo(scope.item)"  class="weui-panel__bd needsclick">
             <div class="weui-media-box weui-media-box_text" style="padding-bottom:5px;">
-              <h4 class="weui-media-box__title">{{scope.item.QuesDesc}}</h4>
-              <div class="img_list_wrap">
+              <h4 class="weui-media-box__title needsclick">{{scope.item.QuesDesc}}</h4>
+              <div class="img_list_wrap needsclick">
                 <ul class="clearfix">
                   <li @click.stop  class="img_wrap" v-for="(item,index) in scope.item.ImageList" :key="index">
                     <img :preview="'list'+scope.item.WONo" :src="item.Path">
                   </li>
                 </ul>
               </div>
-              <p class="dark_99"><i class="iconfont icon-z-location"></i> {{scope.item.WorkPos}}</p>
-              <p class="dark_99"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
+              <p class="dark_99 needsclick"><i class="iconfont icon-z-location"></i> {{scope.item.WorkPos}}</p>
+              <p class="dark_99 needsclick"><i class="iconfont icon-icon"></i> {{scope.item.WONoBasicName}} {{ scope.item.RSDate }}</p>
             </div>
           </div>
           <!--hasTransferOrder//不知道怎么来的 item.WorkState==='2' && hasTransferOrder==='true' -->
@@ -131,6 +131,11 @@ export default {
       return this.configList.find(item => item.name === this.currIndex) || {}
     }
   },
+  watch: {
+    $route (to, from) {
+      console.log(to, '??/')
+    }
+  },
   methods: {
     setActions () {
       this.actions = [
@@ -183,7 +188,7 @@ export default {
       return {
         name: name,
         // url: '/ets/syswin/smd/userCSGetWorkOrdSyswinH5',
-        url: 'UserCS_GetWorkOrdSyswinH5',
+        url: 'UserCS_GetWorkOrdSyswinTestingH5',
         xml: true,
         params: {
           projectId: this.nav.orgId,
@@ -217,7 +222,7 @@ export default {
       //   positionID: this.nav.positionId
       // })
 
-      let p0 = 'UserCS_GetWorkOrdCountInfoH5'
+      let p0 = 'UserCS_GetWorkOrdCountInfoTestingH5'
       let res = await this.$xml(p0, {
         projectID: this.nav.orgId,
         EmployeeID: this.currMember,

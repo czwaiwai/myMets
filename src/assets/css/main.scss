@@ -97,3 +97,23 @@ padding:0 5px;
 ._bt{
   border-top: 1px solid #ededed;
 }
+
+.ins_btn + .ins_btn {
+  margin-left:5px;
+}
+.ins_btn_plain_default{
+  border-radius:5px;
+  border:1px solid #999;
+  padding:5px 10px;
+  color:#999;
+}
+.ins_btn:last-child{
+   border:1px solid #3395FF;
+   color:#3395FF;
+}
+.ins_btn_plain_primary {
+  border-radius:5px;
+  border:1px solid #3395FF;
+  padding:5px 10px;
+  color:#3395FF;
+}

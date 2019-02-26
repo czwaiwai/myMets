@@ -53,6 +53,112 @@ export default [
     ]
   },
   {
+    path: '/customerNotice/:taskId',
+    name: 'customerNotice',
+    component: CustomerServiceDetail,
+    children: [{
+      path: 'customerTracking',
+      name: 'customerTracking',
+      component: CustomerTracking,
+      meta: {
+        title: '服务跟踪'
+      }
+    },
+    {
+      path: 'personSelector',
+      name: 'detailCusPersonSelector',
+      component: PersonSelector,
+      meta: {
+        title: '转单'
+      }
+    },
+    {
+      path: 'visit',
+      name: 'detailVisit',
+      component: Visit,
+      meta: {
+        title: '填报回访'
+      }
+    },
+    {
+      path: 'visitDetail',
+      name: 'detailVisitDetail',
+      component: VisitDetail,
+      meta: {
+        title: '回访详情'
+      }
+    },
+    {
+      path: 'takeOrder',
+      name: 'detailTakeOrder',
+      component: TakeOrder,
+      meta: {
+        title: '接单'
+      },
+      children: [
+        {
+          path: 'personSelector',
+          name: 'detailTakeOrderPersonSelector',
+          component: PersonSelector,
+          meta: {
+            title: '选择人员'
+          }
+        },
+        {
+          path: 'personSelectorMulti',
+          name: 'detailTakeOrderPersonSelectorMulti',
+          component: PersonSelectorMulti,
+          meta: {
+            title: '选择人员'
+          }
+        }
+      ]
+    },
+    {
+      path: 'feedback',
+      name: 'detailFeedback',
+      component: Feedback,
+      meta: {
+        title: '工单反馈'
+      },
+      children: [{
+        path: 'materialDetail',
+        name: 'detailfeedMaterialDetail',
+        component: FeedbackMaterial,
+        meta: {
+          title: '材料申请详情'
+        }
+      }]
+    },
+    {
+      path: 'material',
+      name: 'detailMaterial',
+      component: Material,
+      meta: {
+        title: '材料申请'
+      },
+      children: [
+        {
+          path: 'materialAdd',
+          name: 'detailMaterialAdd',
+          component: MaterialAdd,
+          meta: {
+            title: '查找添加'
+          }
+        },
+        {
+          path: 'materialDetail',
+          name: 'detailMaterialDetail',
+          component: MaterialDetail,
+          meta: {
+            title: '材料申请详情'
+          }
+        }
+      ]
+    }
+    ]
+  },
+  {
     path: '/workOrder/customerService',
     name: 'customerService',
     component: CustomerService,
@@ -61,7 +167,7 @@ export default [
     },
     children: [
       {
-        path: 'detail',
+        path: 'detail/:taskId',
         name: 'customerServiceDetail',
         component: CustomerServiceDetail,
         meta: {

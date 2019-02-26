@@ -65,6 +65,19 @@ export default {
       transformResponse: [function (data, config) {
         // Do whatever you want to transform the data
         let jsonData = xml(data)
+        if (typeof jsonData === 'string') {
+          try {
+            // 尝试重新格式化数据一次
+            jsonData = JSON.parse(jsonData.replace(/[\n\r]/g, ''))
+          } catch (err) {
+            return {
+              Result: [ {
+                'InfoKey': '_ERROR',
+                '_Detail': '数据格式有错误'
+              }]
+            }
+          }
+        }
         return jsonData[Object.keys(jsonData)[0]][0]
       }]
       // paramsSerializer: function (params) {

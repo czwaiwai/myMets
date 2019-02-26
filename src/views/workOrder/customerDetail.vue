@@ -127,21 +127,45 @@ export default {
     this.isTransferBtn = this.auth['APP_Service_SwitchSingle'] // 是否显示转单按钮
     this.isMaterial = this.auth['APP_Service_Picking'] // 材料申请权限
     this.monitor = this.$route.query.monitor || false
-    this.workPosFrom = this.$parent.workPosFrom
-    if (this.workPosFrom === 'Resource') {
-      this.title = '客服详情'
+    let taskId = this.$route.params.taskId
+    if (!this.$parent.workItem || (this.$parent.workItem && !this.$parent.workItem.WorkOrdID)) {
+      console.log('重新设置')
+      this.nav = {
+        orgId: this.user.OrgID,
+        orgName: this.user.OrgName,
+        userName: this.user.UserID,
+        positionId: this.user.PositionID,
+        memberId: this.user.memberId,
+        workPosFrom: ''
+      }
+      this.notice(taskId).then(res => {
+        this.work = this.workItem = res
+        this.nav.workPosFrom = this.workItem.workPosFrom
+        console.log(this.workItem, 'this.workItem--------------------')
+        if (this.nav.workPosFrom === 'Resource') {
+          this.title = '客服详情'
+        } else {
+          this.title = '维修详情'
+        }
+        this.init()
+      })
     } else {
-      this.title = '维修详情'
+      console.log('d111', this.$parent.workItem)
+      this.workPosFrom = this.$parent.workPosFrom
+      if (this.workPosFrom === 'Resource') {
+        this.title = '客服详情'
+      } else {
+        this.title = '维修详情'
+      }
+      this.nav = this.$parent.nav
+      this.work = this.workItem = this.$parent.workItem
+      this.init()
     }
-    this.nav = this.$parent.nav
-    this.work = this.workItem = this.$parent.workItem
-    console.log(this.work, 'this.work')
-    // this.showButtons = this.$parent.showButtons
-    this.init()
   },
   computed: {
     ...mapGetters({
-      'auth': 'auth'
+      'auth': 'auth',
+      'user': 'user'
     }),
     trackStr () {
       if (!this.newTracks.track) return ''
@@ -223,9 +247,31 @@ export default {
     reload () {
       this.init()
     },
+    async notice (taskId) {
+      let p0 = 'UserCS_GetWorkOrdDetailSyswin'
+      let res = await this.$xml(p0, {
+        taskId: taskId,
+        orgid: this.nav.orgId,
+        employeeid: this.nav.memberId
+      })
+      if (res.data && res.data[0]) {
+        console.log(res.data, '----')
+        return res.data[0]
+        // this.workItem = res.data[0]
+      }
+    },
+    setScore (totalScore) {
+      switch (parseInt(totalScore)) {
+        case 0 : this.score = 0; break
+        case 10 : this.score = 1; break
+        case 30 : this.score = 2; break
+        case 70 : this.score = 3; break
+        case 80 : this.score = 4; break
+        case 90 :
+        case 100: this.score = 5; break
+      }
+    },
     async getPageData () {
-      // UserCS_GetWorkOrdDetailSyswinH5
-
       // UserCS_GetWorkOrdDetailSyswinH5
       let p0 = 'UserCS_GetWorkOrdDetailSyswinH5'
       let res = await this.$xml(p0, {
@@ -234,6 +280,7 @@ export default {
         EmployeeID: this.nav.userName,
         PositionID: this.work.nativeDict
       })
+
       // let url = '/ets/syswin/smd/userCSGetWorkOrdDetailSyswinH5'
       // let res = await this.$http.post(url, {
       //   workOrdID: this.work.WorkOrdID,
@@ -244,6 +291,7 @@ export default {
       if (res.data && res.data[0]) {
         let ip = this.$store.getters.ip
         let detail = res.data[0]
+        this.setScore(detail.TotalScore)
         if (detail.Voice && ip) {
           detail.Voice = 'http://' + ip + detail.Voice
         }

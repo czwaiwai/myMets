@@ -63,9 +63,9 @@ export default new Router({
         if (Vue.isPos) {
           return '/home'
         } else {
-          return '/tab/work'
+          // return '/tab/work'
           // 报表
-          // return '/tab/report'
+          return '/tab/report'
           // // 投资性物业
           // return '/investmentIndex'
           // 整改对比

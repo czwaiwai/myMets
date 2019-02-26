@@ -71,7 +71,6 @@ export default {
   },
   activated () {
     // 当切换职位或项目之后重新调用更新数据
-    console.log(this.currRand, this.rand, '--rand--')
     if (this.currRand !== 0 && this.currRand !== this.rand) {
       this.getPageData()
       this.currRand = this.rand
@@ -85,6 +84,13 @@ export default {
       'ip': 'ip',
       'rand': 'rand'
     })
+  },
+  watch: {
+    $route (to, from) {
+      if (from.path.indexOf('/workOrder') > -1) {
+        this.getPageData()
+      }
+    }
   },
   methods: {
     loadTop () {

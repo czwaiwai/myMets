@@ -36,14 +36,14 @@
       <keep-alive>
           <component :is="selected" :params="currConfig.params"  :config="currConfig" :obj="scanObj">
             <template slot-scope="scope" >
-              <div @click="routeTo(scope.item)" v-if="['list0','list1'].indexOf(selected) > -1" class="light_bg weui-flex padding15-h padding-v border-bottom-half">
-                <div class="weui-flex__item">{{scope.item.PlanStartTime}}</div>
+              <div @click="routeTo(scope.item)" v-if="['list0','list1'].indexOf(selected) > -1" class="needsclick light_bg weui-flex padding15-h padding-v border-bottom-half">
+                <div class="weui-flex__item needsclick">{{scope.item.PlanStartTime}}</div>
                 <div :class="scope.item.Normal === '正常'?'normal_color':'error_color'">{{scope.item.Normal}}</div>
               </div>
-              <div v-else @click="routeTo(scope.item)" class=" light_bg padding15-h padding-v border-bottom-half">
-                <p>{{scope.item.QuesDesc}}</p>
-                <p class="dark_99 fs13">报事人：{{scope.item.RSPeoName}}</p>
-                <p class="dark_99 fs13">{{scope.item.RSDate}}</p>
+              <div v-else @click="routeTo(scope.item)" class="needsclick light_bg padding15-h padding-v border-bottom-half">
+                <p class="needsclick">{{scope.item.QuesDesc}}</p>
+                <p class="dark_99 fs13 needsclick">报事人：{{scope.item.RSPeoName}}</p>
+                <p class="dark_99 fs13 needsclick">{{scope.item.RSDate}}</p>
               </div>
             </template>
           </component>

@@ -38,7 +38,7 @@ export default {
       if (!this.audio) {
         this.audio = this.$refs.audio
         console.log(this.url)
-        this.audio.src = this.url
+        this.audio.src = 'http://172.31.118.201:8092' + this.url
         this.audio.onended = () => {
           this.$emit('update:isVoice', false)
           clearInterval(this.timer)
