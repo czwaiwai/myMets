@@ -129,7 +129,6 @@ export default {
     this.monitor = this.$route.query.monitor || false
     let taskId = this.$route.params.taskId
     if (!this.$parent.workItem || (this.$parent.workItem && !this.$parent.workItem.WorkOrdID)) {
-      console.log('重新设置')
       this.nav = {
         orgId: this.user.OrgID,
         orgName: this.user.OrgName,
@@ -140,8 +139,7 @@ export default {
       }
       this.notice(taskId).then(res => {
         this.work = this.workItem = res
-        this.nav.workPosFrom = this.workItem.workPosFrom
-        console.log(this.workItem, 'this.workItem--------------------')
+        this.nav.workPosFrom = this.workItem.WorkPosFrom
         if (this.nav.workPosFrom === 'Resource') {
           this.title = '客服详情'
         } else {
@@ -150,7 +148,6 @@ export default {
         this.init()
       })
     } else {
-      console.log('d111', this.$parent.workItem)
       this.workPosFrom = this.$parent.workPosFrom
       if (this.workPosFrom === 'Resource') {
         this.title = '客服详情'
@@ -354,7 +351,6 @@ export default {
       //   wordQuertionID: this.work.WorkQuestionID
       // })
       if (res.data && res.data[0]) {
-        console.log('feedbackList:', res.data)
         let ip = this.$store.getters.ip // || '172.31.118.205:8066'
         res.data.forEach(arr => {
           arr.ImageList.forEach(a => {
@@ -377,16 +373,47 @@ export default {
       this.$router.push({path: this.$route.path + '/customerTracking'})
     },
     async closeOrder (item) {
-      await this.$parent.closeOrder(item)
+      await this.$message.confirm('确认关闭此' + this.title + '？')
+      let p0 = 'UserService_VisitManClose'
+      let res = await this.$xml(p0, {}, {
+        p1: this.nav.userName,
+        p2: item.WorkOrdID,
+        p3: new Date().format('yyyy-MM-dd hh:mm:ss')
+      })
+      this.$parent && this.$parent.refresh()
+      this.$toast('工单关闭成功')
+      console.log(res)
+      // await this.$parent.closeOrder(item)
       this.init()
     },
-    setPerson (item) {
-      this.$parent.setPerson(item)
-      this.$root.back()
-    },
-    // 最新服务跟踪
-    newTrack () {
+    // setPerson (item) {
+    //   this.$parent.setPerson(item)
+    //   this.$root.back()
+    // },
+    // 转单
+    async setPerson (item) {
+      console.log(this.workItem, item)
+      let params = {
+        strWorkOrdID: this.workItem.WorkOrdID,
+        PositionId: item.PositionID,
+        PositionName: item.PositionName,
+        OrdersID: item.EmployeeID,
+        Orders: item.EmployeeName,
+        OrdersDepart: item.DeptName,
+        PlusEmployeeName: ''
+      }
 
+      let p0 = 'UserService_SingleBill'
+      let res = await this.$xml(p0, params)
+      console.log(res)
+      this.$parent.refresh && this.$parent.refresh()
+      this.$root.back()
+      try {
+        await this.sendMsg(this.workItem, item)
+        this.$toast('转单成功并推送消息')
+      } catch (error) {
+        this.$toast('转单成功但消息推送失败')
+      }
     },
     showVoice () {
       this.isVoice = !this.isVoice

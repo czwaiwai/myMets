@@ -64,7 +64,7 @@ export default {
 <style lang="scss"  scoped >
 .home_wrap {
   height: 70vw;
-  background: url('../assets/img/banner.png') no-repeat;
+  background: url('../../assets/img/banner.png') no-repeat;
   background-size: 100%;
 }
 .home_wrap .img_header{

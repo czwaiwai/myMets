@@ -1,3 +1,4 @@
+// 会议室相关模块
 export default [
   {
     name: 'meeting',

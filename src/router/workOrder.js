@@ -35,7 +35,7 @@ export default [
         },
         children: [{
           path: 'photo/:type',
-          name: 'photo',
+          name: 'insPhoto',
           component: Photo,
           meta: {
             title: '拍照确认'
@@ -53,12 +53,28 @@ export default [
     ]
   },
   {
+    path: '/inspectionNotice/:taskId',
+    name: 'inspectionNotice',
+    component: InspectionDetail,
+    meta: {
+      title: '巡检详情'
+    },
+    children: [{
+      path: 'photo/:type',
+      name: 'noticePhoto',
+      component: Photo,
+      meta: {
+        title: '拍照确认'
+      }
+    }]
+  },
+  {
     path: '/customerNotice/:taskId',
     name: 'customerNotice',
     component: CustomerServiceDetail,
     children: [{
       path: 'customerTracking',
-      name: 'customerTracking',
+      name: 'noticeCustomerTracking',
       component: CustomerTracking,
       meta: {
         title: '服务跟踪'
@@ -66,7 +82,7 @@ export default [
     },
     {
       path: 'personSelector',
-      name: 'detailCusPersonSelector',
+      name: 'noticeDetailCusPersonSelector',
       component: PersonSelector,
       meta: {
         title: '转单'
@@ -74,7 +90,7 @@ export default [
     },
     {
       path: 'visit',
-      name: 'detailVisit',
+      name: 'noticeDetailVisit',
       component: Visit,
       meta: {
         title: '填报回访'
@@ -82,7 +98,7 @@ export default [
     },
     {
       path: 'visitDetail',
-      name: 'detailVisitDetail',
+      name: 'noticeDetailVisitDetail',
       component: VisitDetail,
       meta: {
         title: '回访详情'
@@ -90,7 +106,7 @@ export default [
     },
     {
       path: 'takeOrder',
-      name: 'detailTakeOrder',
+      name: 'noticeDetailTakeOrder',
       component: TakeOrder,
       meta: {
         title: '接单'
@@ -98,7 +114,7 @@ export default [
       children: [
         {
           path: 'personSelector',
-          name: 'detailTakeOrderPersonSelector',
+          name: 'noticeDetailTakeOrderPersonSelector',
           component: PersonSelector,
           meta: {
             title: '选择人员'
@@ -106,7 +122,7 @@ export default [
         },
         {
           path: 'personSelectorMulti',
-          name: 'detailTakeOrderPersonSelectorMulti',
+          name: 'noticeDetailTakeOrderPersonSelectorMulti',
           component: PersonSelectorMulti,
           meta: {
             title: '选择人员'
@@ -116,14 +132,14 @@ export default [
     },
     {
       path: 'feedback',
-      name: 'detailFeedback',
+      name: 'noticeDetailFeedback',
       component: Feedback,
       meta: {
         title: '工单反馈'
       },
       children: [{
         path: 'materialDetail',
-        name: 'detailfeedMaterialDetail',
+        name: 'noticeDetailfeedMaterialDetail',
         component: FeedbackMaterial,
         meta: {
           title: '材料申请详情'
@@ -132,7 +148,7 @@ export default [
     },
     {
       path: 'material',
-      name: 'detailMaterial',
+      name: 'noticeDetailMaterial',
       component: Material,
       meta: {
         title: '材料申请'
@@ -140,7 +156,7 @@ export default [
       children: [
         {
           path: 'materialAdd',
-          name: 'detailMaterialAdd',
+          name: 'noticeDetailMaterialAdd',
           component: MaterialAdd,
           meta: {
             title: '查找添加'
@@ -148,7 +164,7 @@ export default [
         },
         {
           path: 'materialDetail',
-          name: 'detailMaterialDetail',
+          name: 'noticeDetailMaterialDetail',
           component: MaterialDetail,
           meta: {
             title: '材料申请详情'
@@ -160,7 +176,7 @@ export default [
   },
   {
     path: '/workOrder/customerService',
-    name: 'customerService',
+    name: 'workCustomerService',
     component: CustomerService,
     meta: {
       title: '客服工单'

@@ -90,6 +90,31 @@ export default {
     // 回访详情
     routeVisitDetail (obj) {
       this.$router.push({path: this.$route.path + '/visitDetail'})
+    },
+    // 消息推送
+    async sendMsg (work, person) {
+      let state = ''
+      let title = this.nav.workPosFrom === 'Resource' ? '客服工单' : '维修工单'
+      let type = 'CustomerService'
+      switch (work.WorkOrdState) {
+        case 'WOSta_Sub': state = '待接单'; break
+        case 'WOSta_Proc': state = '待接单'; break
+        case 'WOSta_Finish': state = '待接单'; break
+        case 'WOSta_Visit': state = '待接单'; break
+      }
+      let params = {
+        'ID': work.WorkOrdID,
+        'Type': type,
+        'Title': title,
+        'Content': this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
+        'Tag': person.UserId,
+        'Status': '1',
+        'FromTag': ''
+      }
+      let p0 = 'AppWeChat_JGWorkPush'
+      let res = await this.$xml(p0, params)
+      this.$toast('消息推送成功')
+      console.log(res)
     }
   }
 }

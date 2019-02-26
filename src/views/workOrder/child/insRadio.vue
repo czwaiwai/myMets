@@ -53,14 +53,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped >
-.ins_radio_group .right_text_color {
-  color:#3395FF;
-}
-.ins_radio_group .wrong_text_color {
-  color: #f00404;
-}
+// .ins_radio_group .right_text_color {
+//   color:#3395FF;
+// }
+// .ins_radio_group .wrong_text_color {
+//   color: #f00404;
+// }
 .ins_radio {
-  color:#999;
   display:inline-block;
   padding-right:10px;
   font-size:16px;

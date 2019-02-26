@@ -1,4 +1,5 @@
 import sess from './sess'
+import { Indicator } from 'mint-ui'
 const nextDirection = function (appId) {
   return function (direction) {
     let el = document.getElementById(appId)
@@ -83,7 +84,7 @@ export default {
       // const from = fromRoute.path
       // [Custom Business] Never use history scrollTop when '/' => '/home'
       // if (from === '/' && to === '/home') return
-
+      Indicator.close()
       const h = sess.get(to)
       if (h && h.scrollTop) {
         Vue.nextTick(() => {

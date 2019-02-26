@@ -98,7 +98,8 @@ store.dispatch('getUserAction').then(user => {
     Vue.prototype.$isPos = true
   }
   Vue.use(axiosHelper, {
-    ip: store.getters.ip
+    ip: store.getters.ip,
+    store
   })
   let vue = new Vue({
     store,
@@ -116,7 +117,8 @@ store.dispatch('getUserAction').then(user => {
       Vue.prototype.$isPos = true
     }
     Vue.use(axiosHelper, {
-      ip: ''
+      ip: '',
+      store
     })
     let vue = new Vue({
       store,

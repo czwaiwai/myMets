@@ -28,14 +28,14 @@ export default [
     children: [
       {
         path: 'detail',
-        name: 'customerServiceDetail',
+        name: 'monitorCustomerServiceDetail',
         component: MonitorCustomerServiceDetail,
         meta: {
           title: '客服详情'
         },
         children: [{
           path: 'customerTracking',
-          name: 'customerTracking',
+          name: 'monitorCustomerTracking',
           component: MonitorCustomerTracking,
           meta: {
             title: '服务跟踪'
@@ -54,14 +54,14 @@ export default [
     children: [
       {
         path: 'detail',
-        name: 'customerServiceDetail',
+        name: 'monitorRepairCustomerServiceDetail',
         component: MonitorCustomerServiceDetail,
         meta: {
           title: '客服详情'
         },
         children: [{
           path: 'customerTracking',
-          name: 'customerTracking',
+          name: 'monitorRepairCustomerTracking',
           component: MonitorCustomerTracking,
           meta: {
             title: '服务跟踪'

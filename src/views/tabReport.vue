@@ -155,8 +155,8 @@ export default {
     // 获取报表权限
     async getReportAuth () {
       let p7 = {
-        UserId: this.user.UserID,
-        PositionId: this.user.PositionID
+        UserId: this.nav.userId || this.user.UserID,
+        PositionId: this.nav.positionId || this.user.PositionID
       }
       console.log(p7)
       let res = await this.$xml('UserSL_ReportRight', p7)
@@ -200,7 +200,7 @@ export default {
     // 右侧的内容
     async rightInfo () {
       let res = await this.$xml('UserCS_ReportGlobalReport', {
-        orgID: this.user.OrgID,
+        orgID: this.nav.orgId || this.user.OrgID,
         financeDate: (new Date()).format('yyyy-MM')
       })
       let arr = res.data
@@ -243,15 +243,11 @@ export default {
     async leftbottomInfo () {
       if (this.singleMode) return []
       let resArr = await Promise.all([this.$xml('UserCS_ReportLeaseSituation', {
-        OrgID: this.user.OrgID,
+        OrgID: this.nav.orgId || this.user.OrgID,
         Etime: (new Date()).format('yyyy-MM-dd')
       }), this.$xml('UserCS_ReportGrpStatistics', {
         Etime: (new Date()).format('yyyy-MM')
       })])
-      // let res = await this.$xml('UserCS_ReportLeaseSituation', {
-      //   OrgID: this.user.OrgID,
-      //   Etime: (new Date()).format('yyyy-MM-dd')
-      // })
       let res = resArr[0]
       let obj = resArr[1].data[0]
       let data = res.data.pop()
