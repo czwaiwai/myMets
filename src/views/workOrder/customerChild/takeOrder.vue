@@ -74,10 +74,10 @@ export default {
     console.log('parent:', this.$parent.nav)
     this.nav = this.$parent.nav
     this.work = this.$parent.workItem
-    this.formObj.userName = this.nav.userName
+    this.formObj.userName = this.nav.memberName
     this.formObj.workOrdId = this.work.WorkOrdID
 
-    this.formObj.orders = this.nav.userName
+    this.formObj.orders = this.nav.memberName
     this.formObj.ordersDepart = this.nav.positionId
     this.formObj.EmployeeID = this.nav.memberId
     this.$root.$on('personMulti', list => {

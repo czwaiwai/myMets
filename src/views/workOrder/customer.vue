@@ -118,7 +118,8 @@ export default {
       userName: this.user.UserID,
       positionId: this.user.PositionID,
       memberId: this.user.memberId || '1',
-      workPosFrom: this.workPosFrom
+      workPosFrom: this.workPosFrom,
+      memberName: this.user.memberName
     }
     this.getStatus()
     this.configList = this.typeList.map(item => {

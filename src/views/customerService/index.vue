@@ -202,13 +202,13 @@ export default {
       this.title = '设备'
       this.titleType = '报修'
       this.type = 'baoxiu'
-      this.formObj.workPosFrom = 'Resource'
+      this.formObj.workPosFrom = 'Equipment'
     }
     if (this.$route.query.type === 'baoshi') {
       this.title = '客服'
       this.titleType = '报事'
       this.type = 'baoshi'
-      this.formObj.workPosFrom = 'Equipment'
+      this.formObj.workPosFrom = 'Resource'
     }
 
     this.nav = {
