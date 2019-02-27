@@ -10,11 +10,11 @@
           <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
             <!--<img src="images/pic_160.png" style="width: 50px;display: block">-->
             <div  class="img_wrap main_bg">
-              {{user && user.UserID.slice(-2)}}
+              {{user && user.memberName.slice(-2)}}
             </div>
           </div>
           <div class="weui-cell__bd">
-            <p>{{user.UserID}}</p>
+            <p>{{user.memberName}}</p>
             <p style="font-size: 13px;color: #888888;">{{user && user.PositionName}}</p>
           </div>
           <div class="weui-cell__ft"></div>
@@ -92,6 +92,7 @@ export default {
     }
   },
   created () {
+    console.log('user:', this.user)
     // this.$store.dispatch('getUserAction').then(res => {
     //   console.log(res, '--------------getUserAction')
     // })
@@ -136,7 +137,7 @@ export default {
       this.$app.logout()
     },
     clearCache () {
-      this.$message.confirm('确定要清楚缓存数据?<br />您将会退出登录').then(action => {
+      this.$message.confirm('确定要清除缓存数据?<br />您将会退出登录').then(action => {
         localStorage.clear()
         this.$app.clearCache()
       })
@@ -154,7 +155,7 @@ export default {
     border-radius:100%;
     text-align: center;
     line-height: 50px;
-    font-size: 20px;
+    font-size: 18px;
   }
   .logout_btn {
     text-align:center;display:block;color:#333;font-size:16px;height:40px;line-height:40px;background:#FFF;margin-top:15px;border:none;

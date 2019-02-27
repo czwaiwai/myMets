@@ -46,7 +46,7 @@
             <!-- 语音  -->
             <div  v-if="detail.Voice"  class="padding-bottom">
               <div @click="showVoice" class="voice_wrap ">
-                <voice-icon :isVoice.sync="isVoice" :url="detail.Voice"  ></voice-icon>
+                <voice-icon :isVoice.sync="isVoice" :length="detail.Memo" :url="detail.Voice"  ></voice-icon>
               </div>
             </div>
 

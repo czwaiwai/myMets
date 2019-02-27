@@ -1,12 +1,15 @@
 <template>
-  <div class="voice_icon_wrap">
-    <div class="voice_icon">
-      <div class="voice_dot"></div>
-      <div class="voice_radius_1"></div>
-      <div class="voice_radius_2"></div>
-      <div class="voice_icon_mask " :class="isVoice?'voice_animate':''"></div>
+  <div class="voiceIcon">
+    <div class="voice_icon_wrap">
+      <div class="voice_icon">
+        <div class="voice_dot"></div>
+        <div class="voice_radius_1"></div>
+        <div class="voice_radius_2"></div>
+        <div class="voice_icon_mask " :class="isVoice?'voice_animate':''"></div>
+      </div>
+      <audio ref="audio" :src="com_url()" v-if="url"></audio>
     </div>
-    <audio ref="audio"></audio>
+    <p class="num">{{audioLength}}</p>
   </div>
 </template>
 <script>
@@ -18,10 +21,25 @@ export default {
       type: Boolean,
       default: false
     },
+    length: {
+      type: String,
+      default: '0'
+    },
     url: String
   },
+  data () {
+    return {
+      audio: '',
+      audioSrc: '',
+      audioLength: 0,
+      time: ''
+    }
+  },
   created () {
-
+    this.audioLength = this.length - 0
+  },
+  mounted () {
+    this.audio = this.$refs.audio
   },
   watch: {
     isVoice (val, old) {
@@ -38,7 +56,7 @@ export default {
       if (!this.audio) {
         this.audio = this.$refs.audio
         console.log(this.url)
-        this.audio.src = 'http://172.31.118.201:8092' + this.url
+        // this.audio.src = 'http://172.31.118.201:8092' + this.url
         this.audio.onended = () => {
           this.$emit('update:isVoice', false)
           clearInterval(this.timer)
@@ -46,10 +64,34 @@ export default {
       }
       this.audio.load()
       this.audio.play()
+      this.audioLength = this.length - 0
+      this.time = setInterval(() => {
+        this.audioLength -= 1
+        console.log(this.audioLength)
+        if (!this.audioLength) {
+          this.$emit('update:isVoice', false)
+          clearInterval(this.time)
+          setTimeout(() => {
+            this.audioLength = this.length - 0
+          }, 500)
+        }
+      }, 1000)
     },
     stop () {
       if (this.audio) {
         this.audio.pause()
+        clearInterval(this.time)
+        setTimeout(() => {
+          this.audioLength = this.length - 0
+        }, 500)
+      }
+    },
+    com_url () {
+      let ip = this.$store.getters.ip
+      if (ip) {
+        return 'http://' + ip + this.url
+      } else {
+        return this.url
       }
     }
   }
@@ -124,5 +166,18 @@ export default {
     margin-left: 50%;
     transform: translate3d(-50%,-50%,0);
   }
+}
+.voiceIcon{
+  position: relative;
+}
+.num{
+  position: absolute;
+  right: 5px;
+  top: 0;
+  height: 34px;
+  line-height: 34px;
+  font-size: 13px;
+  line-height: 34px;
+  color: #fff;
 }
 </style>

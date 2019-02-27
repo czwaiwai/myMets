@@ -142,13 +142,19 @@ export default {
       //   employeeID: this.nav.memberId,
       //   materialQuery: this.search
       // })
+      console.log('resData:', res.data)
+      console.log('chooseList:', this.chooseList)
       if (res.data && res.data[0]) {
         this.list = this.$toLower(res.data).map(item => {
           item.num = 0
+          this.chooseList.forEach(arr => {
+            if (arr.id === item.id) {
+              item.num = arr.num
+            }
+          })
           return item
         })
       }
-      console.log(res.data)
     },
     clearChoose () {
       this.list.forEach(item => {
