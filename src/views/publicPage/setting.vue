@@ -11,8 +11,8 @@
             <p>头像</p>
           </div>
           <div class="weui-cell__ft">
-            <div class="img_wrap main_bg">
-              {{user && user.UserID.slice(-2)}}
+            <div class="img_wrap main_bg" style="font-size:18px;">
+              {{user && user.memberName.slice(-2)}}
             </div>
           </div>
         </div>

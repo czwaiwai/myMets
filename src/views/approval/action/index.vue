@@ -156,7 +156,7 @@ export default {
       console.log(res)
       if (res.status === 200 || res.status === '200') {
         if (res.data) {
-          this.$toast(res.data.Syswin[0].msg)
+          this.$toast(res.data[0].msg)
           setTimeout(() => {
             this.isHttp = false
           }, 2000)

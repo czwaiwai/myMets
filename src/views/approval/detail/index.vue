@@ -8,10 +8,14 @@
         <enclosure-list :enclosureList="detailData.Attachments" v-if="detailData.Attachments.length"></enclosure-list>
         <tech-process :techProcessList="techProcessList"></tech-process>
       </div>
-      <div class="_btns" v-if="itemData.WorkflowStatus=='Executing'">
+      <!-- <div class="_btns" v-if="itemData.WorkflowStatus=='Executing'notify"> -->
+      <div class="_btns" v-if="detailData.ActivityName=='Executing'||detailData.ActivityName=='check'">
         <div class="btn" @click.stop="toAction(2)">打回</div>
         <div class="btn" @click.stop="toAction(0)">否决</div>
         <div class="btn" @click.stop="toAction(1)">同意</div>
+      </div>
+      <div class="_btns" v-else-if="detailData.ActivityName=='notify'">
+        <div class="btn" @click.stop="toAction(3)">确定</div>
       </div>
     </div>
     <transition name="page">
@@ -37,12 +41,14 @@ export default {
         Attachments: []
       },
       techProcessList: [],
-      detailId: ''
+      detailId: '',
+      isHttp: false
     }
   },
   computed: {
     ...mapGetters({
-      itemData: 'getSelectItemData'
+      itemData: 'getSelectItemData',
+      user: 'user'
     })
   },
   methods: {
@@ -100,6 +106,12 @@ export default {
     },
     // 详情动作
     toAction (type) {
+      if (type === 3) {
+        if (!this.isHttp) {
+          this.upData()
+        }
+        return
+      }
       let name = 'approvalAction'
       if (this.$route.name === 'approvalDetailQuick') {
         name = 'approvalActionQuick'
@@ -114,6 +126,30 @@ export default {
           appointNext: this.detailData.IsAppointNext
         }
       })
+    },
+    // 确定
+    async upData () {
+      let obj = {
+        'EmployeeId': this.user.UserID,
+        'TaskId': this.detailId,
+        'Result': '4'
+      }
+      this.isHttp = true
+      let res = await this.$xml('UserAudit_SubmitAuditTaskResult', obj)
+      console.log(res)
+      if (res.status === 200 || res.status === '200') {
+        if (res.data) {
+          this.$toast(res.data[0].msg)
+          this.isHttp = false
+        } else {
+          this.$toast(res.msg)
+          this.$parent.getAllData()
+          setTimeout(() => {
+            this.isHttp = false
+            this.$router.go(-1)
+          }, 2000)
+        }
+      }
     }
   },
   created () {
