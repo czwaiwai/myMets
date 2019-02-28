@@ -29,10 +29,11 @@
                   <div class="ft item_center direct_icon " :class="item.show?'weui_icon_download':''" @click="detailShowHandle(item)">
                     <i class="iconfont  icon-shouqi" ></i>
                   </div>
-                  <button v-if="work.WorkState === '2'" class="photo_btn" @click="toPhoto(item)">
+                  <button v-if="work.WorkState === '2' " class="photo_btn" @click="toPhoto(item)">
                     <span v-if="item.ImageExsit === '0'"><i class="iconfont icon-paizhao"></i>&nbsp;拍照</span>
                     <span v-if="item.ImageExsit === '1'">查看签到</span>
                   </button>
+                  <button class="photo_btn" @click="toPhotoShow(item)" v-if="work.WorkState ==='3' && item.ImageExsit === '1'"><span>查看签到</span></button>
                 </div>
                 <div v-show="item.show" class="sub_item_content">
                   <ul v-if="work.WorkState === '2'"  class="sub_ul_opera ">
@@ -146,7 +147,6 @@ export default {
     // this.currNav = this.$parent.currNav
     if (this.$route.params.taskId) {
       this.notice(this.$route.params.taskId).then(res => {
-        console.log(res, 'ajjjjjsdf')
         this.work = res.EquiInfo[0]
         this.dataInit()
       })
@@ -356,9 +356,12 @@ export default {
         })
       }
       let storeStr = local.get('ins_page_' + this.work.WorkID)
+      console.log(storeStr, '------')
       if (storeStr) {
+        console.log('走缓存')
         this.insList = JSON.parse(storeStr)
       } else {
+        console.log('走请求')
         this.insList = insList
       }
       console.log(res)
@@ -371,19 +374,27 @@ export default {
         this.$router.push({path: this.$route.path + '/photo/keepFit'})
       }
     },
-    // 数值类型显示颜色
-    fnIsNumNormal (item) {
-      if (item.IsInput !== 'False') {
-        let min = parseFloat(item.ValueMin)
-        let max = parseFloat(item.ValueMax)
-        let num = parseFloat(item.InputResult)
-        if (num < min || num > max) {
-          return 'wrong_text_color'
-        } else {
-          return 'right_text_color'
-        }
+    toPhotoShow (item) {
+      this.detailItem = item
+      if (this.work.WordType === 'Work_insp') {
+        this.$router.push({path: this.$route.path + '/photo/inspection?show=true'})
+      } else {
+        this.$router.push({path: this.$route.path + '/photo/keepFit?show=true'})
       }
     },
+    // 数值类型显示颜色
+    // fnIsNumNormal (item) {
+    //   if (item.IsInput !== 'False') {
+    //     let min = parseFloat(item.ValueMin)
+    //     let max = parseFloat(item.ValueMax)
+    //     let num = parseFloat(item.InputResult)
+    //     if (num < min || num > max) {
+    //       return 'wrong_text_color'
+    //     } else {
+    //       return 'right_text_color'
+    //     }
+    //   }
+    // },
     // 反馈
     async remarkHandle (sub, item) {
       this.dialogData = sub
@@ -445,6 +456,7 @@ export default {
       this.$toast('提交' + this.typeTxt + '成功')
       // 返回主页面
       this.$root.back()
+      this.$store.commit('setHomeRand', Date.now())
       // 刷新父页面的值
       this.$parent.refresh && this.$parent.refresh()
     },
@@ -469,6 +481,7 @@ export default {
       this.$toast('关闭' + this.typeTxt + '成功')
       // 返回主页面
       this.$root.back()
+      this.$store.commit('setHomeRand', Date.now())
       // 刷新父页面的值
       this.$parent.refresh && this.$parent.refresh()
     }
@@ -479,12 +492,6 @@ export default {
 <style lang="scss">
 .ins_line_mask {
   position:fixed
-}
-.right_text_color {
-  color:#3395ff;
-}
-.wrong_text_color {
-  color: #f00404;
 }
 .remark_color {
   color:#fa8a2c;

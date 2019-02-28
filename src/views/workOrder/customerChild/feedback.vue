@@ -327,7 +327,9 @@ export default {
       let res = await this.$xml(p0, params, {
         p1: this.nav.userName
       })
-
+      if (this.canActionBtn) {
+        localStorage.removeItem('startAndEnd_' + this.work.WorkOrdID)
+      }
       // let params = {
       //   userName: this.nav.userName,
       //   workOrdId: this.work.WorkOrdID,
@@ -349,8 +351,10 @@ export default {
       // })
       // let url = '/ets/syswin/smd/userServiceSaveWorkOrdFeedbackMerge'
       // let res = await this.$http.post(url, params)
+
       this.$toast('反馈成功')
       this.$root.back()
+      this.$store.commit('setHomeRand', Date.now())
       if (!this.isDetail) {
         this.$parent.refresh()
       }

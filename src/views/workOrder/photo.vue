@@ -8,18 +8,21 @@
     <div class="page_bd">
       <div v-if="!onlyPhoto" class="weui-cells weui-cells_form" style="margin-top:0;">
         <div class="weui-cell">
-          <div class="weui-cell__bd">
+          <div v-if="!readonly" class="weui-cell__bd">
             <textarea v-model="remark" class="weui-textarea" maxlength="200" :placeholder="'请描述'+$parent.typeTxt+'情况...'" rows="3"></textarea>
             <div class="weui-textarea-counter"><span>{{remark.length}}</span>/200</div>
+          </div>
+          <div v-else class="weui-cell__bd">
+            {{remark}}
           </div>
         </div>
       </div>
       <div class="light_bg padding-h padding-v">
-        <ins-img-list :imgs.sync="imgs" :max="maxImgNum" @del="delItems" :only-water="true" >
+        <ins-img-list :readonly="readonly" :imgs.sync="imgs" :max="maxImgNum" @del="delItems" :only-water="true" >
           <p class="dark_99"><i class="iconfont icon-weizhi-tianchong padding-right5"></i> {{detail.InstallationSite}}</p>
        </ins-img-list>
       </div>
-        <div class="padding15">
+        <div v-if="!readonly" class="padding15">
           <button class="ins_submit_btn" @click="submit">确定</button>
         </div>
     </div>
@@ -34,6 +37,7 @@ export default {
   data () {
     return {
       imgs: [],
+      readonly: false,
       delImgs: [],
       remark: '',
       maxImgNum: 4,
@@ -42,6 +46,7 @@ export default {
   },
   components: {navTitle, InsImgList},
   created () {
+    this.readonly = !!this.$route.query.show
     this.detail = this.$parent.detailItem
     console.log(this.detail)
     this.onlyPhoto = this.$route.params.type === 'inspection'
@@ -71,8 +76,8 @@ export default {
       }
     },
     delItems (img) {
-      this.delImgs.push(img)
-      console.log(img)
+      this.delImgs.push(img.replace(/\/.*\/([^\\.]+)\..*/, '$1'))
+      // console.log(img.replace(/\/.*\/([^\\.]+)\..*/, '$1'))
     },
     formatParam () {
       let param = {

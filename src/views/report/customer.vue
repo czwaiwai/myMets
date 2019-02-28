@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="weui-form-preview margin-bottom">
-          <div class="weui-form-preview__hd">
+          <div v-show="isData1" class="weui-form-preview__hd">
             <div class="weui-form-preview__item">
                 <label class="weui-form-preview__label">满意度 <a @click="map1show=!map1show"><i class="iconfont" :class="map1show? 'icon-kaiguanguan1':'icon-kaiguanguan'"></i></a></label>
                 <label class="weui-form-preview__value">{{currentRate}}分</label>
@@ -306,6 +306,10 @@ export default {
       let temp1 = []
       let temp2 = []
       let temp3 = []
+      if (data[0].status === '0') {
+        this.isData1 = false
+        return
+      }
       for (var i = 0; i < data.length; i++) {
         var visitRate = data[i].VisitRate
         var visitDate = data[i].ReturnVisitDate
@@ -372,7 +376,10 @@ export default {
       await mapReady()
       let temp1 = []
       let temp2 = []
-      console.log(this.map4, 'this.map4')
+      if (data[0].status === '0') {
+        this.isData4 = false
+        return
+      }
       for (var i = 0; i < data.length; i++) {
         var name = data[i].WONoBasicName
         var rate = data[i].WONoBasicRate

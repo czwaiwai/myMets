@@ -57,6 +57,7 @@ export default {
     return {
       list: [],
       currRand: 0,
+      currHomeRand: 0,
       hasBtn: false
     }
   },
@@ -66,7 +67,10 @@ export default {
     // })
     console.log(this.user)
     console.log(this.ip, '---------------------')
-    this.getPageData()
+    this.getPageData().then(() => {
+      this.currHomeRand = Date.now()
+      this.$store.commit('setHomeRand', this.currHomeRand)
+    })
     // this.getPageData1()
   },
   activated () {
@@ -76,21 +80,26 @@ export default {
       this.currRand = this.rand
     } else {
       this.currRand = this.rand
+      if (this.currHomeRand !== 0 || this.currHomeRand !== this.homeRand) {
+        this.getPageData()
+        this.currHomeRand = this.homeRand
+      }
     }
   },
   computed: {
     ...mapGetters({
       'user': 'user',
       'ip': 'ip',
-      'rand': 'rand'
+      'rand': 'rand',
+      'homeRand': 'homeRand'
     })
   },
   watch: {
-    $route (to, from) {
-      if (from.path.indexOf('/workOrder') > -1) {
-        this.getPageData()
-      }
-    }
+    // $route (to, from) {
+    //   if (from.path.indexOf('/workOrder') > -1) {
+    //     this.getPageData()
+    //   }
+    // }
   },
   methods: {
     loadTop () {
@@ -152,7 +161,6 @@ export default {
             return false
           }
         })
-        console.log('list:', this.list)
         localStorage.tabHome = JSON.stringify(this.list)
       } catch (e) {
         console.log(e + 'catch')

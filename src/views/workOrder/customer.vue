@@ -209,7 +209,7 @@ export default {
       }
     },
     async getStatus () {
-      let p0 = 'UserCS_GetWorkOrdCountInfoTestingH5'
+      let p0 = 'UserCS_GetWorkOrdCountInfoH5'
       let res = await this.$xml(p0, {
         projectID: this.nav.orgId,
         EmployeeID: this.nav.memberId,
@@ -239,6 +239,7 @@ export default {
         p3: new Date().format('yyyy-MM-dd hh:mm:ss')
       })
       this.refresh()
+      this.$store.commit('setHomeRand', Date.now())
       this.$toast('工单关闭成功')
       console.log(res)
     },
@@ -258,6 +259,7 @@ export default {
       let res = await this.$xml(p0, params)
       console.log(res)
       this.refresh()
+      this.$store.commit('setHomeRand', Date.now())
       try {
         await this.sendMsg(this.workItem, item)
         this.$toast('转单成功并推送消息')

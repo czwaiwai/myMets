@@ -1,11 +1,15 @@
 <template>
 <div class="ins_radio_group">
   <div v-if="!readonly">
-    <label class="ins_radio clearfix" :class="checkClass(item)" v-for="(item, key) in list" :key="key">
-      <input v-model="radio" @input="$emit('input',$event.target.value)" :name="name" type="radio" :value="item">
+    <!-- <label class="ins_radio clearfix" :class="checkClass(item)" v-for="(item, key) in list" :key="key">
+      <input :bind="value" :checked="item===value" @input="$emit('input', $event.target.value)" :name="name" type="radio" :value="item">
       <i class="iconfont   icon-ico2 float_left" style="font-size:20px;"></i>
       <span class="vertical-middle" >{{item}}</span>
-    </label>
+    </label> -->
+    <span  class="radio_item padding-right" :class="checkClass(item)" @click="clickHandle(item)"  v-for="(item, key) in list" :key="key">
+      <i class="iconfont" style="font-size:20px;vertical-align:middle;" :class="item === value?'icon-xuanzeanniu':'icon-yuancircle46'"></i>
+      <span>{{item}}</span>
+    </span>
   </div>
   <div v-else >
     <span :class="value === defaultVal?'right_text_color':'wrong_text_color'">{{value}}</span>
@@ -42,6 +46,9 @@ export default {
     }
   },
   methods: {
+    clickHandle (item) {
+      this.$emit('input', item)
+    },
     checkClass (item) {
       if (item === this.defaultVal) {
         if (this.value === item) return 'right_text_color'
@@ -52,13 +59,16 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 // .ins_radio_group .right_text_color {
 //   color:#3395FF;
 // }
 // .ins_radio_group .wrong_text_color {
 //   color: #f00404;
 // }
+.ins_radio_group .radio_item{
+  font-size:16px;
+}
 .ins_radio {
   display:inline-block;
   padding-right:10px;
