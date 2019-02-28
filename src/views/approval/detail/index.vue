@@ -58,6 +58,13 @@ export default {
             a.show = false
           })
         })
+        let ip = this.$store.getters.ip
+        res.data[0].Attachments.forEach((item) => {
+          if (ip && item.FilePath) {
+            item.FilePath = 'http://' + ip + item.FilePath
+          }
+          // item.FilePath = 'http://172.31.118.162:8081' + item.FilePath
+        })
         this.detailData = res.data[0]
         this.setTechProcessList()
       }
@@ -86,7 +93,8 @@ export default {
           Result: 'none',
           ActivityText: arr.ActivityText
         }
-        list.unshift(item)
+        // list.unshift(item)
+        list.push(item)
       })
       this.techProcessList = this.techProcessList.concat(list)
     },

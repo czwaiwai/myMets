@@ -47,6 +47,7 @@ export default {
         case 'E_Inspection': that.$router.push('/inspectionNotice/' + taskId + '?type=Inspection'); break
         case 'E_KeepFit': that.$router.push('/inspectionNotice/' + taskId + '?type=KeepFit'); break
         case 'SyswinMeet': that.$router.push(`/approvalDetailQuick/${taskId}`); break
+        case 'Contract': that.$router.push(`/approvalDetailQuick/${taskId}`); break
       }
     })
   },
