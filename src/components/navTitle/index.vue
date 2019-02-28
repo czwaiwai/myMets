@@ -8,10 +8,14 @@
       <p class="title">
         <span>{{title}}</span>
       </p>
+      <div class="to-debug" @click="covertDeveloper"></div>
     </div>
   </div>
 </template>
 <script>
+import toDebug from '@/utils/toDebug'
+let showConsole = 0
+let isConsole = false
 export default {
   name: 'navTitle',
   props: {
@@ -25,6 +29,23 @@ export default {
     }
   },
   methods: {
+    covertDeveloper () {
+      if (isConsole) {
+        return this.$toast('调试工具已经打开')
+      }
+      clearTimeout(this.timer)
+      if (showConsole === 10) {
+        this.$toast('调试工具已经打开')
+        isConsole = true
+        return toDebug()
+      } else if (showConsole > 5) {
+        this.$toast(`还要${10 - showConsole}歩开启调试工具`)
+      }
+      showConsole++
+      this.timer = setTimeout(() => {
+        showConsole = 0
+      }, 1500)
+    },
     goBack () {
       console.log('this.$route.name', this.$route.name)
       if (this.$route.name === 'meterSearch' && this.$route.query.quick) {
@@ -43,6 +64,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .to-debug {
+    position: absolute;
+    width:40px;
+    height:40px;
+    top:0;
+    right:15px;
+  }
   .headerTitle{
     position: relative;
     height: .88rem;

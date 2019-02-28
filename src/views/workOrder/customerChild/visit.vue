@@ -162,6 +162,7 @@ export default {
       //   memo: this.formObj.content
       // })
       this.$toast('回访成功')
+      this.$store.commit('setHomeRand', Date.now())
       this.$root.back()
       if (!this.isDetail) {
         this.$parent.refresh()

@@ -176,15 +176,6 @@ export default new Router({
     // },
     // 测试页面 start
     // {
-    //   path: '/detail',
-    //   name: 'detail',
-    //   component: () => import('@/views/detail')
-    // },
-    // {
-    //   path: '/subDetail',
-    //   name: 'subDetail',
-    //   component: () => import('@/views/subDetail')
-    // {
     //   path: '/test1',
     //   name: 'test1',
     //   component: () => import('@/views/test1'),
@@ -194,11 +185,11 @@ export default new Router({
     //     component: Test
     //   }]
     // },
-    // {
-    //   path: '/test',
-    //   name: 'test',
-    //   component: Test
-    // },
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('@/views/test')
+    },
     // 测试用 end
     ...Cash,
     ...Pos,

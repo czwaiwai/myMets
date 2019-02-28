@@ -1,15 +1,17 @@
 <template>
 <div class="ins_number_group">
-  <div v-if="!readonly">
+  <template v-if="!readonly">
     <a class="mul" @click="mul">
       <i class="iconfont icon-jian1"></i>
-    </a><input class="ins_input" :name="name" :class="defaultClass" :value="value"  @input="input" type="text"><a class="add" @click="add">
+    </a><div class="input_wrap">
+      <input class="ins_input" :name="name" :class="defaultClass" :value="value"  @input="input" type="text">
+      </div><a class="add" @click="add">
       <i class="iconfont icon-jia"></i>
     </a>
-  </div>
-  <div v-else >
+  </template>
+  <template v-else >
     <span :class="defaultClass">{{value}} {{unit}}</span>
-  </div>
+  </template>
 </div>
 </template>
 <script>
@@ -64,14 +66,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped >
-.right_text_color {
-  color:#3395FF;
-}
-.wrong_text_color {
-  color: #f00404;
-}
+
 .ins_number_group {
-  padding-top:5px;
+  padding-top: 5px;
+  height: 30px;
+  padding-bottom: 5px;
 }
 .ins_number_group .mul,.ins_number_group .add{
   background:#eaeaea;
@@ -79,15 +78,24 @@ export default {
   padding:5px;
   height:30px;
   width:30px;
-  vertical-align: middle;
+  line-height:30px;
+  vertical-align: top;
+}
+.input_wrap {
+  display:inline-block;
+    vertical-align: top;
+    height: 30px;
+    overflow: hidden;
 }
 .ins_number_group .ins_input{
   width:60px;
   height:30px;
   background:#FFF;
+  border:none;
   line-height:30px;
   font-size:16px;
   text-align:center;
-  vertical-align: middle;
+  outline: none;
+  // vertical-align: middle;
 }
 </style>

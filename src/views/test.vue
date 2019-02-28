@@ -12,30 +12,39 @@
       </select>
     </div>
     <div class="page_bd">
-      <div class="baidu_map" ref="baiduMap" style="width:100%;height:100%;"></div>
+      <ins-radio  v-model="formObj.input" :default-val="defaultValue" @input="optionChange" option-str="高|中|低" ></ins-radio>
+      <!-- <div class="baidu_map" ref="baiduMap" style="width:100%;height:100%;"></div> -->
     </div>
   </div>
 </div>
 </template>
 <script>
-import mapReady from '@/utils/getBaiduMap'
+// import mapReady from '@/utils/getBaiduMap'
+import insRadio from './workOrder/child/insRadio'
 import navTitle from '@/components/navTitle'
 export default {
   name: 'test',
-  components: {navTitle},
+  components: {navTitle, insRadio},
   data () {
     return {
+      defaultValue: '高',
+      formObj: {
+        input: '中'
+      }
     }
   },
   created () {
-    mapReady().then(BMap => {
-      console.log(BMap)
-      this.$nextTick(() => {
-        this.initMap(BMap)
-      })
-    })
+    // mapReady().then(BMap => {
+    //   console.log(BMap)
+    //   this.$nextTick(() => {
+    //     this.initMap(BMap)
+    //   })
+    // })
   },
   methods: {
+    optionChange () {
+      console.log(this.formObj)
+    },
     changeCity (e) {
       console.log(e.target.value)
       this.map.clearOverlays()

@@ -269,7 +269,7 @@ export default {
           trigger: 'axis'
         },
         grid: {
-          top: '10%',
+          top: '15%',
           left: '0%',
           right: '0%',
           bottom: '10%',
@@ -387,7 +387,7 @@ export default {
     font-size:16px;
   }
   .map_bl {
-    height:240px;
+    height:280px;
   }
 
   .dot {

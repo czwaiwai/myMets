@@ -97,6 +97,7 @@ export default (function () {
     back: 'backView',
     getUser: 'getUser|1',
     loadView: 'APP_loadView', // 加载webview
+    routeOA: 'APP_routeOA',
     outApp: 'APP_outApp',
     offlineBadge: 'APP_offlineBadge|1', // 调用offline角标
     setOptions: 'APP_setOptions',

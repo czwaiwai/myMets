@@ -382,6 +382,7 @@ export default {
       })
       this.$parent && this.$parent.refresh()
       this.$toast('工单关闭成功')
+      this.$store.commit('setHomeRand', Date.now())
       console.log(res)
       // await this.$parent.closeOrder(item)
       this.init()
@@ -408,6 +409,7 @@ export default {
       console.log(res)
       this.$parent.refresh && this.$parent.refresh()
       this.$root.back()
+      this.$store.commit('setHomeRand', Date.now())
       try {
         await this.sendMsg(this.workItem, item)
         this.$toast('转单成功并推送消息')

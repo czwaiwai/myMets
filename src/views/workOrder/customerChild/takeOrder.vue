@@ -140,6 +140,7 @@ export default {
       // let res = await this.$http.post(url, this.formObj)
       console.log(res, 'res')
       this.$toast('接单成功')
+      this.$store.commit('setHomeRand', Date.now())
       this.$root.back()
       if (!this.isDetail) {
         this.$parent.refresh()

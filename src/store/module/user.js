@@ -48,13 +48,15 @@ export default {
     ip: '',
     auth: initAuth,
     isPos: false,
-    rand: 0
+    rand: 0,
+    homeRand: 0
   },
   getters: {
     rand: state => state.rand,
     ip: state => state.ip,
     isPos: state => state.isPos,
     auth: state => state.auth,
+    homeRand: state => state.homeRand, // 消息页面更新值
     user: state => {
       if (!state.user) {
         state.user = sess.get('user')
@@ -71,6 +73,16 @@ export default {
           // memberId: '1604271708130001001E',
           // memberName: '糖新村'
           // --------------------------
+          UserID: 'LiaoJiangWei',
+          PositionName: '财务经理',
+          // OrgName: '思源大厦',
+          // OrgID: 10000,
+          OrgName: '银河世纪花园',
+          OrgID: '11091315263400010000', // 项目id
+          PositionID: '11091316310300010000', // 职位id
+          memberId: '18102416111400010024',
+          memberName: '廖江伟'
+          // --------------------------
           // UserID: 'LiaoJiangWei',
           // PositionName: '财务经理',
           // // OrgName: '思源大厦',
@@ -81,19 +93,22 @@ export default {
           // memberId: '18102416111400010024',
           // memberName: '廖江伟'
           // --------------------------
-          UserID: 'test1',
-          PositionName: '财务经理',
-          OrgName: '测试项目名',
-          OrgID: '11091315263400010000', // 项目id
-          PositionID: '11091316310300010000', // 职位id
-          memberId: '30',
-          memberName: '廖江伟'
+          // UserID: 'test1',
+          // PositionName: '财务经理',
+          // OrgName: '测试项目名',
+          // OrgID: '11091315263400010000', // 项目id
+          // PositionID: '11091316310300010000', // 职位id
+          // memberId: '30',
+          // memberName: '廖江伟'
         }
       }
       return state.user
     }
   },
   mutations: {
+    setHomeRand (state, date) {
+      state.rand = date
+    },
     setPos (state, bool) {
       state.isPos = bool
     },

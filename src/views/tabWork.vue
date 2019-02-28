@@ -79,7 +79,7 @@
           </div>
           <p class="weui-grid__label">租赁</p>
         </a>
-        <a v-show="auth['APP_LLOA']" @click="$app.loadView({url:shenlinagUrl, type: 'oa'})" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_LLOA']" @click="routeToOA" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_oa.png" alt="">
           </div>
@@ -117,7 +117,7 @@
           </div>
           <p class="weui-grid__label">整改对比</p>
         </a>
-        <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'other', isTitle: item.appName})" href="javascript:;" class="weui-grid light_bg">
+        <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'chaobiao', isTitle: item.appName})" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img :src="item.h5Icon" alt="">
           </div>
@@ -230,12 +230,28 @@ export default {
     //   return encrypted.toString()
     // },
     async getPageData () {
-      window.md5 = this.md5
-      let res = await this.authLogin()
-      let info = await this.authGetInfo()
-      console.log(res, info, 'res & info')
-      this.otherList = info.data
+      try {
+        let p0 = 'UserCS_ConnectionQuality'
+        let res = await this.$xml(p0, {
+          OrgID: this.user.OrgID,
+          UserName: this.user.UserID,
+          PassWord: ''
+        })
+        this.otherList = res.data
+      } catch (e) {
+        console.log(e)
+      }
+
+      // console.log(res.data)
+      // window.md5 = this.md5
+      // let res = await this.authLogin()
+      // let info = await this.authGetInfo()
+      // console.log(res, info, 'res & info')
+      // this.otherList = info.data
       // res.data
+    },
+    routeToOA () {
+      this.$app.loadView({url: '', type: 'oa'})
     },
     async authLogin () {
       let url = '/roc/open/app/admin/login?userName=15810153479&password=59adb24ef3cdbe0297f05b395827453f'

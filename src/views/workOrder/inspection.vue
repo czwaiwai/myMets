@@ -500,6 +500,7 @@ export default {
       // })
       // 刷新当前列表
       this.refresh()
+      this.$store.commit('setHomeRand', Date.now())
       // 发送消息
       try {
         await this.sendMsg(item, query.workId)
@@ -546,6 +547,7 @@ export default {
           'strAppWordType': this.orderType,
           'PCode': this.searchKey,
           pageSize: 15,
+          // StartTime: '1',
           'QueryStarTime': this.search.startTime,
           'QueryEndTime': this.search.endTime,
           'STID': '',
@@ -690,6 +692,7 @@ export default {
       // })
       this.refresh()
       this.$toast('关闭' + this.typeTxt + '成功')
+      this.$store.commit('setHomeRand', Date.now())
       console.log(res)
     }
   }

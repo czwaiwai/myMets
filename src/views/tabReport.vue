@@ -104,6 +104,12 @@ export default {
     console.log(this.user, 'user')
     // 当切换职位或项目之后重新调用更新数据
     if (this.currRand !== 0 && this.currRand !== this.rand) {
+      this.nav = {
+        orgId: this.user.OrgID,
+        orgName: this.user.OrgName,
+        userId: this.user.UserID,
+        positionId: this.user.PositionID
+      }
       this.getPageData && this.getPageData()
       this.currRand = this.rand
     } else {
@@ -126,9 +132,11 @@ export default {
           return
         }
         let arr = await Promise.all([this.rightInfo(), this.leftTopInfo(), this.leftbottomInfo()])
+        console.log(arr, 'getPageData')
         this.rightList.forEach((item, index) => {
           item.value = arr[0][index]
         })
+        // throw new Error('ddd')
         localStorage.rightList = JSON.stringify(this.rightList)
         if (arr[1].length !== 0 && arr[2].length !== 0) {
           let leftValues = arr[1].concat(arr[2])
@@ -139,14 +147,15 @@ export default {
         } else {
           localStorage.leftList = JSON.stringify([])
         }
-      } catch (e) {
+      } catch (err) {
+        console.log(err)
         this.rightList = localStorage.rightList ? JSON.parse(localStorage.rightList) : []
         this.leftList = localStorage.leftList ? JSON.parse(localStorage.leftList) : []
-        if (this.leftArr.some(item => item.show)) {
-          this.singleMode = false
-        } else {
-          this.singleMode = true
-        }
+        // if (this.leftArr.some(item => item.show)) {
+        //   this.singleMode = false
+        // } else {
+        //   this.singleMode = true
+        // }
       }
     },
     routeTo (item) {
@@ -160,9 +169,13 @@ export default {
       }
       console.log(p7)
       let res = await this.$xml('UserSL_ReportRight', p7)
-      console.log(res)
+      console.log(res, 'getReportAuth')
       if (!res.data) return
       let resData = res.data.ReportRight
+      // let resData = [{'PositionId': '17122511085600010000', 'ReportName': '客户服务', 'TypeName': '项目统计', 'Content': 'APP_ReportWork'},
+      //   {'PositionId': '17122511085600010000', 'ReportName': '设备管理', 'TypeName': '项目统计', 'Content': 'APP_ReportEquip'},
+      //   {'PositionId': '17122511085600010000', 'ReportName': '项目收款', 'TypeName': '项目统计', 'Content': 'APP_ReportCollection'},
+      //   {'PositionId': '17122511085600010000', 'ReportName': '项目出租', 'TypeName': '项目统计', 'Content': 'APP_ReportRent'}]
       let leftArr = [
         {name: '建筑面积', urlName: 'report_building', color: '#41BFE9', icon: 'icon-jianzhu', auth: 'SL_APP_ReportBudArea', value: []},
         {name: '收入分析', urlName: 'report_income', color: '#FA7466', icon: 'icon-shouru', auth: 'SL_APP_ReportFee', value: []},
@@ -186,6 +199,7 @@ export default {
       rightArr.forEach(item => {
         item.show = resData.some(sub => sub.Content === item.auth)
       })
+      console.log(rightArr, leftArr, '怎么回事')
       // console.log(leftArr, '-------------------')
       if (leftArr.some(item => item.show)) {
         this.singleMode = false
@@ -204,6 +218,13 @@ export default {
         financeDate: (new Date()).format('yyyy-MM')
       })
       let arr = res.data
+      // console.log(arr, 'rightInfo')
+      // let arr = [
+      //   {'Name': '客服', 'VisitRate': '', 'CloseRate': '', 'EquiRate': '0.0000', 'PaidMoney': '0.0000', 'PaidRate': '0.0000', 'FinanceDate': '2019-02', 'HouseCount': '0', 'CZRate': '0.0000'},
+      //   {'Name': '设备', 'VisitRate': '0.0000', 'CloseRate': '0.0000', 'EquiRate': '100.0000', 'PaidMoney': '0.0000', 'PaidRate': '0.0000', 'FinanceDate': '2019-02', 'HouseCount': '0', 'CZRate': '0.0000'},
+      //   {'Name': '收款', 'VisitRate': '0.0000', 'CloseRate': '0.0000', 'EquiRate': '0.0000', 'PaidMoney': '0.0000', 'PaidRate': '0.0000', 'FinanceDate': '2019-02', 'HouseCount': '0', 'CZRate': '0.0000'},
+      //   {'Name': '租赁', 'VisitRate': '0.0000', 'CloseRate': '0.0000', 'EquiRate': '0.0000', 'PaidMoney': '0.0000', 'PaidRate': '0.0000', 'FinanceDate': '', 'HouseCount': '0', 'CZRate': '0.0000'}
+      // ]
       let values = [
         [{name: '满意度', value: this.formatInt(arr[0].VisitRate), color: '#FA4E2C', unit: '<span class="unit_text">分</span>'}, {name: '关闭率', value: this.formatInt(arr[0].CloseRate), unit: '%'}],
         [{name: '设备完好率', value: this.formatNum(arr[1].EquiRate), unit: '%'}],
