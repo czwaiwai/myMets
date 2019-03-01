@@ -15,7 +15,7 @@
               <i class="iconfont" :class="(item.Result=='none')?'icon-zhizhen fs':'icon-wancheng'"></i>
             </div>
             <div class="point"></div>
-            <p class="time">{{setDateTime(item.ExecuteTime)}}</p>
+            <p class="time">{{item.Result=='first'?com_setDate(item.ExecuteTime):setDateTime(item.ExecuteTime)}}</p>
             <div class="desc clearfix">
               <div class="_left" :class="com_bg(index)">{{item.EmployeeName?item.EmployeeName.slice(-2):'暂无'}}</div>
               <div class="_right">

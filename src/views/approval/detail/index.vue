@@ -9,12 +9,16 @@
         <tech-process :techProcessList="techProcessList"></tech-process>
       </div>
       <!-- <div class="_btns" v-if="itemData.WorkflowStatus=='Executing'notify"> -->
-      <div class="_btns" v-if="detailData.ActivityName=='Executing'||detailData.ActivityName=='check'">
+      <div class="_btns" v-if="com_allBtn()==3">
         <div class="btn" @click.stop="toAction(2)">打回</div>
         <div class="btn" @click.stop="toAction(0)">否决</div>
         <div class="btn" @click.stop="toAction(1)">同意</div>
       </div>
-      <div class="_btns" v-else-if="detailData.ActivityName=='notify'">
+      <div class="_btns" v-else-if="com_allBtn()==2">
+        <div class="btn" @click.stop="toAction(0)">否决</div>
+        <div class="btn" @click.stop="toAction(1)">同意</div>
+      </div>
+      <div class="_btns" v-else-if="com_allBtn()==1">
         <div class="btn" @click.stop="toAction(3)">确定</div>
       </div>
     </div>
@@ -60,6 +64,26 @@ export default {
     })
   },
   methods: {
+    com_allBtn () {
+      if (this.$route.name === 'approvalDetail') {
+        if (this.itemData.WorkflowStatus === 'Executing') {
+          if (this.detailData.ActivityName === 'check' && this.detailData.IsAllowBack === 1) {
+            return 3
+          } else if (this.detailData.ActivityName === 'check' && this.detailData.IsAllowBack === 0) {
+            return 2
+          } else if (this.detailData.ActivityName === 'notify') {
+            return 1
+          }
+        }
+      } else if (this.$route.name === 'approvalDetailQuick') {
+        if (this.detailData.ActivityName === 'notify') {
+          return 1
+        } else {
+          return 3
+        }
+      }
+      // return this.detailData.ActivityName === 'Executing' || this.detailData.ActivityName === 'check'
+    },
     // 获取详情数据
     async getData () {
       let res = await this.$xml('UserAudit_GetAuditTaskDetail', {
@@ -86,11 +110,12 @@ export default {
     },
     // 拼接审批流程列表
     setTechProcessList () {
+      console.log('data:', this.detailData)
       let firstObj = {
-        ExecuteTime: this.itemData.AskTime || '',
-        EmployeeName: this.itemData.AskerName || '',
-        JobName: this.itemData.AskerJobName || '',
-        Idea: this.itemData.Subject || '',
+        ExecuteTime: this.detailData.AskTime || '',
+        EmployeeName: this.detailData.AskerName || '',
+        JobName: this.detailData.AskerJobName || '',
+        Idea: (this.$route.name === 'approvalDetail' ? (this.itemData.Subject || '') : ''),
         Result: 'first'
       }
       this.techProcessList.push(firstObj)
