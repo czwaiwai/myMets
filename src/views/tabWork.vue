@@ -251,7 +251,7 @@ export default {
       // res.data
     },
     routeToOA () {
-      this.$app.loadView({url: '', type: 'oa'})
+      this.$app.loadView({url: '', type: 'oa', isTitle: 'OA'})
     },
     async authLogin () {
       let url = '/roc/open/app/admin/login?userName=15810153479&password=59adb24ef3cdbe0297f05b395827453f'

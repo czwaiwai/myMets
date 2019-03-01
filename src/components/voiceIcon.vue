@@ -1,5 +1,5 @@
 <template>
-  <div class="voiceIcon">
+  <div  class="voiceIcon">
     <div class="voice_icon_wrap">
       <div class="voice_icon">
         <div class="voice_dot"></div>
@@ -7,7 +7,7 @@
         <div class="voice_radius_2"></div>
         <div class="voice_icon_mask " :class="isVoice?'voice_animate':''"></div>
       </div>
-      <audio ref="audio" :src="com_url()" v-if="url"></audio>
+      <!-- <audio ref="audio" :src="com_url()" v-if="url"></audio> -->
     </div>
     <p class="num">{{audioLength}}</p>
   </div>
@@ -52,18 +52,31 @@ export default {
     }
   },
   methods: {
-    play () {
-      if (!this.audio) {
-        this.audio = this.$refs.audio
-        console.log(this.url)
-        // this.audio.src = 'http://172.31.118.201:8092' + this.url
-        this.audio.onended = () => {
-          this.$emit('update:isVoice', false)
-          clearInterval(this.timer)
-        }
+    async getVoiceData (id) {
+      console.log(id.replace(/^.*\/([^\\.]+).mp3$/, '$1'))
+      let p0 = 'UserCS_GetVoiceInfo'
+      let res = await this.$xml(p0, {
+        ImageID: id.replace(/^.*\/([^\\.]+).mp3$/, '$1')
+      })
+      return res.data[0].MP3
+    },
+    async play () {
+      if (!this.mp3) {
+        this.mp3 = await this.getVoiceData(this.url)
       }
-      this.audio.load()
-      this.audio.play()
+      // console.log(this.mp3)
+      this.$app.playAudio(this.mp3)
+      // if (!this.audio) {
+      //   this.audio = this.$refs.audio
+      //   console.log(this.url)
+      //   // this.audio.src = 'http://172.31.118.201:8092' + this.url
+      //   this.audio.onended = () => {
+      //     this.$emit('update:isVoice', false)
+      //     clearInterval(this.timer)
+      //   }
+      // }
+      // this.audio.load()
+      // this.audio.play()
       this.audioLength = this.length - 0
       this.time = setInterval(() => {
         this.audioLength -= 1
@@ -78,13 +91,16 @@ export default {
       }, 1000)
     },
     stop () {
-      if (this.audio) {
-        this.audio.pause()
-        clearInterval(this.time)
-        setTimeout(() => {
-          this.audioLength = this.length - 0
-        }, 500)
+      if (this.mp3) {
+        this.$app.playAudio(this.mp3)
       }
+      // if (this.audio) {
+      //   this.audio.pause()
+      clearInterval(this.time)
+      setTimeout(() => {
+        this.audioLength = this.length - 0
+      }, 500)
+      // }
     },
     com_url () {
       let ip = this.$store.getters.ip

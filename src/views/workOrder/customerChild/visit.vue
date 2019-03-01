@@ -90,7 +90,7 @@ export default {
   },
   computed: {
     isDetail () {
-      return this.$route.path.indexOf('/customerService/detail') > -1
+      return this.$route.path.indexOf('/customerService/detail') > -1 || this.$route.path.indexOf('/customerNotice') > -1
     }
   },
   methods: {
@@ -176,7 +176,7 @@ export default {
   destroyed () {
     if (this.isDetail) {
       this.$parent.reload && this.$parent.reload() // 在详情页时reload
-      this.$parent.$parent.refresh()
+      this.$parent.$parent.refresh && this.$parent.$parent.refresh()
     }
   }
 }
