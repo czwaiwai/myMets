@@ -2,7 +2,9 @@
 <div class="ins_number_group">
   <a class="mul" @click="mul">
     <i class="iconfont icon-jian1"></i>
-  </a><input class="ins_input" :name="name" :value="value" :readonly="readonly"  @input="input" type="text"><a class="add" @click="add">
+  </a>
+  <input class="ins_input" :name="name" :value="value" :readonly="readonly"  @input="input" type="text">
+  <a class="add" @click="add">
     <i class="iconfont icon-jia"></i>
   </a>
 </div>

@@ -42,12 +42,18 @@ export default {
       obj = obj.notice ? obj.notice : obj
       let taskId = obj.id
       console.log(obj.type, 'obj.type')
+      // 客户工单转单：CustomerService
+      // 设备保养转单：E_KeeFit
+      // 设备巡检转单：E_Inspection
+      // 预警：JPush
+
+      // 其他都是流程的
       switch (obj.type) {
         case 'CustomerService': that.$router.push('/customerNotice/' + taskId); break
         case 'E_Inspection': that.$router.push('/inspectionNotice/' + taskId + '?type=Inspection'); break
         case 'E_KeepFit': that.$router.push('/inspectionNotice/' + taskId + '?type=KeepFit'); break
-        case 'SyswinMeet': that.$router.push(`/approvalDetailQuick/${taskId}`); break
-        case 'Contract': that.$router.push(`/approvalDetailQuick/${taskId}`); break
+        case 'JPush': that.$router.push('/tab/work'); break
+        default: that.$router.push(`/approvalDetailQuick/${taskId}`); break // 其余默认跳审批
       }
     })
   },

@@ -18,6 +18,13 @@
         <div class="btn" @click.stop="toAction(3)">确定</div>
       </div>
     </div>
+    <dialog-confire
+        title="确认了解该审批"
+        ref="dialog"
+        textAlign='center'
+        @clickLeftBtn="clickLeftBtn"
+        @clickRightBtn="clickRightBtn"
+      ></dialog-confire>
     <transition name="page">
       <router-view/>
     </transition>
@@ -29,10 +36,11 @@ import baseMsg from './children/baseMsg.vue'
 import otherMsg from './children/otherMsg.vue'
 import techProcess from './children/techProcess.vue'
 import enclosureList from './children/enclosureList.vue'
+import dialogConfire from '@/components/dialogConfire.vue'
 import { mapGetters } from 'vuex'
 export default {
   name: 'approvalDetail',
-  components: {navTitle, baseMsg, otherMsg, techProcess, enclosureList},
+  components: {navTitle, baseMsg, otherMsg, techProcess, enclosureList, dialogConfire},
   data () {
     return {
       detailData: {
@@ -94,7 +102,7 @@ export default {
         let item = {
           ExecuteTime: '',
           EmployeeName: arr.EmployeeName || '',
-          JobName: this.itemData.AskerJobName || '',
+          JobName: arr.PositionName || '',
           Idea: arr.Idea || '',
           Result: 'none',
           ActivityText: arr.ActivityText
@@ -108,7 +116,7 @@ export default {
     toAction (type) {
       if (type === 3) {
         if (!this.isHttp) {
-          this.upData()
+          this.$refs.dialog.show()
         }
         return
       }
@@ -126,6 +134,15 @@ export default {
           appointNext: this.detailData.IsAppointNext
         }
       })
+    },
+    // 点击左边按钮
+    clickLeftBtn () {
+      this.$refs.dialog.hide()
+    },
+    // 点击右边按钮
+    clickRightBtn () {
+      this.$refs.dialog.hide()
+      this.upData()
     },
     // 确定
     async upData () {

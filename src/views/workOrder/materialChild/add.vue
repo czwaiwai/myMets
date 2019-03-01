@@ -7,7 +7,7 @@
     <nav-title title="查找添加"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
-        <search v-model="search" placeholder="输入物料名称、型号或规格"></search>
+        <search v-model="search" @searchRes="getPageData" placeholder="输入物料名称、型号或规格"></search>
       </div>
       <div @click="searchClick" class=" weui-search-bar" style="background:#EFEFF4;padding:0 10px 0 0 ;">
         <i class="main_color icon-sousuo iconfont" style="font-size: 18px; line-height: 43px;"></i>
@@ -17,6 +17,8 @@
         <p>查找结果:  {{list.length}}条</p>
     </div>
     <div class="page_bd">
+      <div class="none_tip" v-if="!list.length && isFirst">通过查找，添加你要申请的材料</div>
+      <div class="none_tip" v-else-if="!list.length && !isFirst">暂无数据</div>
       <div class="light_bg">
         <ul>
           <li class="padding15-h padding-v border-top-half" v-for="(item,key) in list" :key="key" >
@@ -102,7 +104,9 @@ export default {
       search: '',
       popupShow: false,
       chooseList: [],
-      list: []
+      tempList: [],
+      list: [],
+      isFirst: true
     }
   },
   created () {
@@ -144,6 +148,8 @@ export default {
       // })
       console.log('resData:', res.data)
       console.log('chooseList:', this.chooseList)
+      this.isFirst = false
+      this.tempList = [...this.chooseShowList, ...[]]
       if (res.data && res.data[0]) {
         this.list = this.$toLower(res.data).map(item => {
           item.num = 0
@@ -154,15 +160,17 @@ export default {
           })
           return item
         })
+      } else {
+        this.list = []
       }
     },
     clearChoose () {
-      this.list.forEach(item => {
+      this.chooseList.forEach(item => {
         item.num = 0
       })
     },
     numChange () {
-      this.chooseList = this.list.filter(item => item.num > 0)
+      this.chooseList = [...this.tempList, ...this.list.filter(item => item.num > 0)]
     },
     popupToggle () {
       if (this.chooseShowList.length <= 0) return
@@ -257,5 +265,12 @@ export default {
 }
 .popup-bottom-enter, .popup-bottom-leave-to {
   transform: translate3d(0, 100%, 0)
+}
+.none_tip{
+  height: 60px;
+  line-height: 60px;
+  font-size: 14px;
+  color: #999;
+  text-align: center;
 }
 </style>
