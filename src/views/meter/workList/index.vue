@@ -150,7 +150,7 @@ import navTitle from '@/components/navTitle'
 import dialogConfire from '@/components/dialogConfire.vue'
 import { mapGetters } from 'vuex'
 import Myref from '@/components/ref/ref.vue'
-import { DatetimePicker, Indicator } from 'mint-ui'
+import { DatetimePicker, Indicator, Toast } from 'mint-ui'
 import dateChange from '@/mixins/dateChange'
 // import { Toast, Datetime } from 'vux'
 export default {
@@ -240,7 +240,7 @@ export default {
     // },
     // 点击离线
     downLoadBtn () {
-      console.log('dateTimes', this.dateTimes)
+      // console.log('dateTimes', this.dateTimes)
       let date = this.dateTimes.thisTime.replace('-', '年') + '月'
       this.dialogData = {
         type: 6,
@@ -293,13 +293,19 @@ export default {
       //   let json = JSON.stringify(message)
       //   window.callData.Native_Js_addData(json)
       // }
-      Indicator.open({
-        text: '离线成功，可在离线中心查看',
-        spinnerType: 'fading-circle'
+      Indicator.close()
+      Toast({
+        message: '离线成功，可在离线中心查看',
+        className: 'icon-success',
+        iconClass: 'icon iconfont icon-xuanze'
       })
-      setTimeout(() => {
-        this.$indicator.close()
-      }, 1000)
+      // Indicator.open({
+      //   text: '离线成功，可在离线中心查看',
+      //   spinnerType: 'fading-circle'
+      // })
+      // setTimeout(() => {
+      //   this.$indicator.close()
+      // }, 1000)
     },
     toSearch () {
       let arr = []
