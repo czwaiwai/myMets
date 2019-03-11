@@ -69,7 +69,8 @@
         <div style="height:50px;"></div>
       </div>
       <div v-if="work.WorkState === '2'"  class="page_ft text-center light_bg padding-top5 padding15-h _bt">
-        <button @click="submitIns" class="ins_submit_btn">提交{{typeTxt}}</button>
+        <button v-if="!isBtnDisabled" @click="submitIns" class="ins_submit_btn">提交{{typeTxt}}</button>
+        <button v-else class="ins_submit_btn" @click="$toast('请所有项目完成拍照检查')" style="opacity: 0.5;">提交{{typeTxt}}</button>
       </div>
       <div v-if="work.WorkState === '3'"  class="page_ft text-center light_bg padding-top5 padding15-h _bt">
         <button @click="closeIns" class="ins_submit_btn">关闭{{typeTxt}}</button>
@@ -159,6 +160,14 @@ export default {
     ...mapGetters({
       'user': 'user'
     }),
+    isBtnDisabled () {
+      if (this.isCtrlShow) {
+        let bool = !this.insList.every(item => item.EquiInfo.every(sub => sub.ImageExsit === '1'))
+        console.log('bool', bool)
+        return bool
+      }
+      return false
+    },
     filterList () {
       let search = this.searchKey
       let list = []
@@ -191,8 +200,8 @@ export default {
       }
       this.typeTxt = this.work.WordType === 'Work_insp' ? '巡检' : '保养'
       // 是否控制打开权限
-      this.isCtrlShow = this.work.BillStatu === '1'
-      // this.isCtrlShow = true
+      // this.isCtrlShow = this.work.BillStatu === '1'
+      this.isCtrlShow = true
       this.getPageData()
     },
     // 获取notice详情
@@ -312,7 +321,7 @@ export default {
         let list = res.data
         list.forEach((item, index) => {
           item.show = false
-          if (index === 0) {
+          if (!this.isCtrlShow && index === 0) {
             item.show = true
           }
           item.OptionsInfo.forEach(sub => {

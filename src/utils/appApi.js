@@ -98,7 +98,9 @@ export default (function () {
     getUser: 'getUser|1',
     loadView: 'APP_loadView', // 加载webview
     routeOA: 'APP_routeOA',
+    topView: 'App_topView',
     outApp: 'APP_outApp',
+    network: 'APP_network|1',
     offlineBadge: 'APP_offlineBadge|1', // 调用offline角标
     setOptions: 'APP_setOptions',
     scan: 'Native_Js_ScanPayment|1', // 调用相机扫码
@@ -315,7 +317,7 @@ export default (function () {
   if (!window.callData && !window.webkit) {
     Object.keys(obj).forEach((name) => {
       let loop = function (res) {
-        console.log('传入的参数为：', res)
+        console.log('传入的参数为：', JSON.stringify(res))
         console.warn('当前不在app环境 正在调用方法:' + name)
         return Promise.reject('当前不在app环境 正在调用方法:' + name)
       }

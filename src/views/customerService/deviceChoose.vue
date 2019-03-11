@@ -5,6 +5,9 @@
             <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
         </mt-header> -->
         <nav-title title="选择位置"></nav-title>
+        <search v-model="searchKey"  placeholder="扫码或输设备号"  :noFocus="true" @searchCancel="searchRes" @searchRes="searchRes" >
+          <i slot="icon" @click="scanHandle" class="weui-icon-search iconfont icon-scancode"></i>
+        </search>
         <div class="page_sub_hd">
           <ul class="sub_title_cb clearfix">
             <li @click="resetDevice">设备</li>
@@ -15,7 +18,6 @@
         </div>
         <div class="page_bd">
           <ul class="type_ul">
-
             <li v-for="(item, index) in list" :key="index">
               <div @click="itemClick(item, index)" class="title">
                 <i class="iconfont icon-wenjianjia padding-right"></i>{{item.Name}}
@@ -35,6 +37,10 @@
                 </ul>
               </div>
             </li>
+            <li class="text-center padding15" style="padding-top:30%;" v-if="list.length === 0 ">
+              <i class="iconfont icon-zanwushuju icon dark_99" style="font-size: 1.6rem;"></i>
+              <p class="dark_99 fs14">没有查询到数据</p>
+            </li>
           </ul>
         </div>
     </div>
@@ -42,13 +48,15 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import Search from '@/components/search'
 export default {
   name: 'deviceChoose',
-  components: {navTitle},
+  components: {navTitle, Search},
   data () {
     return {
       navList: [],
       list: [],
+      searchKey: '',
       activeIndex: -1
     }
   },
@@ -59,6 +67,52 @@ export default {
     this.getPageData()
   },
   methods: {
+    async scanHandle () {
+      let res = await this.$app.scan()
+      this.searchKey = res
+      this.searchRes()
+      // this.searchRes()
+      // console.log(res)
+    },
+    searchRes () {
+      if (!this.searchKey) {
+        this.activeIndex = -1
+        this.navList = []
+        this.list = [...this.tmpData]
+        return
+      }
+      let findObj = this.getSub(this.tmpData)
+      this.activeIndex = 0
+      findObj.arr.reverse()
+      this.navList = findObj.arr
+      this.list = [findObj.item]
+    },
+    // 递归获取进入的层级
+    getSub (list, arr = []) {
+      let find
+      for (let i = 0; i < list.length; i++) {
+        let item = list[i]
+        if (item.PID === '-1') {
+          arr = []
+        }
+        find = item.ArchivesList.find(arItem => {
+          return arItem.EquiCode === this.searchKey
+        })
+        if (!find) {
+          if (item.EquiList && item.EquiList.length > 0) {
+            for (let j = 0; j < item.EquiList.length; j++) {
+              let obj = this.getSub(item.EquiList, arr)
+              if (obj) {
+                arr.push(item)
+                return obj
+              }
+            }
+          }
+        } else {
+          return { arr, item, find }
+        }
+      }
+    },
     async getPageData () {
       // let res = await this.$http.post('/ets/syswin/smd/userCSGetEquiArchives', {
       //   orgId: this.orgId
@@ -72,11 +126,13 @@ export default {
       console.log(res.data)
     },
     resetDevice () {
+      this.searchKey = ''
       this.list = this.tmpData
       this.activeIndex = -1
       this.navList = []
     },
     selectSubClick (sub) {
+      console.log(sub, 'sub')
       this.$parent.setDevice(sub)
       this.$root.back()
     },
@@ -87,6 +143,7 @@ export default {
     },
     subDeviceSelect (item, index) {
       this.navList = Array.prototype.slice.call(this.navList, 0, index + 1)
+      this.list = item.EquiList
       this.activeIndex = -1
     },
     itemClick (item, index) {
@@ -105,9 +162,13 @@ export default {
 <style lang="scss" scoped>
 .sub_title_cb {
   padding:0 15px;
+  word-wrap: break-word;
+  display: block;
+  overflow-y: auto;
+  white-space: nowrap;
 }
 .sub_title_cb li{
-  float:left;
+  display:inline-block;
   font-size:15px;
 }
 .type_ul {

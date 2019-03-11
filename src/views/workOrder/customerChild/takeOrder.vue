@@ -4,7 +4,7 @@
     <!-- <mt-header title="接单">
       <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
     </mt-header> -->
-    <nav-title title="接单"></nav-title>
+    <nav-title :title="title"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin:0;">
         <div class="weui-cell padding15 " href="javascript:;">
@@ -30,7 +30,7 @@
         </a>
       </div>
       <div class="padding15">
-        <button @click="submit" class="ins_submit_btn">接单</button>
+        <button @click="submit" class="ins_submit_btn">{{title}}</button>
       </div>
     </div>
     <transition name="page">
@@ -56,6 +56,7 @@ export default {
   components: {navTitle},
   data () {
     return {
+      title: '接单',
       formObj: {
         userName: '',
         workOrdId: '',
@@ -72,6 +73,8 @@ export default {
   },
   created () {
     console.log('parent:', this.$parent.nav)
+    this.title = this.$route.query.title || '接单'
+
     this.nav = this.$parent.nav
     this.work = this.$parent.workItem
     this.formObj.userName = this.nav.memberName
@@ -124,7 +127,13 @@ export default {
     async submit () {
       let err = this.validateForm()
       if (err) return this.$toast(err)
-      let p0 = 'User_Service_WorkOrdAcceptAndroid'
+      let p0
+      if (this.title === '接单') {
+        p0 = 'User_Service_WorkOrdAcceptAndroid'
+      } else {
+        p0 = 'UserCS_WorkOrdAccept'
+      }
+
       let res = await this.$xml(p0, {
         'Idea': this.formObj.Idea,
         'Orders': this.formObj.orders,
@@ -139,7 +148,7 @@ export default {
       // let url = '/ets/syswin/smd/userServiceWorkOrdAccept'
       // let res = await this.$http.post(url, this.formObj)
       console.log(res, 'res')
-      this.$toast('接单成功')
+      this.$toast(this.title + '成功')
       this.$store.commit('setHomeRand', Date.now())
       this.$root.back()
       if (!this.isDetail) {

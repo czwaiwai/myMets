@@ -12,7 +12,60 @@
       </select>
     </div>
     <div class="page_bd">
-      <ins-radio  v-model="formObj.input" :default-val="defaultValue" @input="optionChange" option-str="高|中|低" ></ins-radio>
+      <div ref="cashImg"></div>
+      <div  class=""  style="width: 1024px;height: 100px;overflow: auto;position: absolute;left: -99999px;">
+        <div  ref="pageBD"  style="width:1024px" class="padding15 light_bg">
+          <p>收据编码: 11132421</p>
+          <p class="text-center"><span class="fs18 " style="line-height: 44px;" >银河世纪花园</span></p>
+          <p><span class="inline-block" style="width:220px;">客户名称: 曹正</span><span>缴费日期: 2019-03-11 12:12:12</span></p>
+          <table class="cash_table">
+            <thead>
+              <tr>
+                <th>收费项目</th>
+                <th>资源编码</th>
+                <th>应收胀期</th>
+                <th>实收胀气</th>
+                <th>实收金额</th>
+                <th>税率</th>
+                <th>税额</th>
+                <th>收费方式</th>
+                <th>实收摘要</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+                <td>什么鬼</td>
+              </tr>
+              <tr>
+                <td>什么鬼什么鬼什么鬼</td>
+                <td>什么鬼什么鬼什么鬼</td>
+                <td>什么鬼什么鬼什么鬼</td>
+                <td>什么鬼什么鬼</td>
+                <td>什什么鬼什么鬼什么鬼么鬼</td>
+                <td>什么鬼什么鬼什么鬼</td>
+                <td>什么鬼什么鬼什么鬼</td>
+                <td>什么鬼什么鬼什么鬼</td>
+                <td>什什么鬼什么鬼么鬼</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>合计金额:100000</p>
+          <p><span class="inline-block" style="width:220px;">开户行: </span><span >开户账号:</span></p>
+          <div class="padding15">
+            <p>摘要</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- <ins-radio  v-model="formObj.input" :default-val="defaultValue" @input="optionChange" option-str="高|中|低" ></ins-radio> -->
       <!-- <div class="baidu_map" ref="baiduMap" style="width:100%;height:100%;"></div> -->
     </div>
   </div>
@@ -22,6 +75,8 @@
 // import mapReady from '@/utils/getBaiduMap'
 import insRadio from './workOrder/child/insRadio'
 import navTitle from '@/components/navTitle'
+import domtoimage from 'dom-to-image'
+// import drawReceipt from '@/utils/drawReceipt.js'
 export default {
   name: 'test',
   components: {navTitle, insRadio},
@@ -34,6 +89,16 @@ export default {
     }
   },
   created () {
+    this.$nextTick(() => {
+      // drawReceipt(this.$refs.pageBD)
+      domtoimage.toBlob(this.$refs.pageBD).then(blob => {
+        let genImg = new Image()
+        let windowURL = window.URL || window.webkitURL
+        genImg.src = windowURL.createObjectURL(blob)
+        this.$refs.cashImg.append(genImg)
+      })
+    })
+
     // mapReady().then(BMap => {
     //   console.log(BMap)
     //   this.$nextTick(() => {
@@ -257,4 +322,6 @@ export default {
 .baidu_map img {
   max-width:inherit;
 }
+.cash_table  tr th, .cash_table  tr td { border:1px solid #000; }
+.cash_table { width: 100%; min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse;}
 </style>

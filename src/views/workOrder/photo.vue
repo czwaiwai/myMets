@@ -112,10 +112,16 @@ export default {
     },
     async submit () {
       let p0 = 'UserCS_GetEquipmentIamge'
-      let res = await this.$xml(p0, this.formatParam())
+      let param = this.formatParam()
+      let res = await this.$xml(p0, param)
       // let url = '/ets/syswin/smd/userCSGetEquipmentIamge'
       // let res = await this.$http.post(url, this.formatParam())
-      this.$parent.detailItem.ImageExsit = '1'
+      if ([1, 2, 3, 4].every(item => param['Iamge' + item] === '')) {
+        this.$parent.detailItem.ImageExsit = '0'
+      } else {
+        this.$parent.detailItem.ImageExsit = '1'
+      }
+      this.$parent.optionChange()
       this.$root.back()
       console.log(res)
     }

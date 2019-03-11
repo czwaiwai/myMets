@@ -1,11 +1,10 @@
 <template>
   <div class="page_bd">
-    <mt-loadmore :auto-fill="true"  :top-method="refresh"  ref="loadmore">
+    <mt-loadmore :auto-fill="true" :top-method="refresh"  ref="loadmore">
       <slot name="header"></slot>
-      <ul :class="ulClass"
-        v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="loading"
-        infinite-scroll-distance="10">
+      <ul v-infinite-scroll="loadMore"
+        :infinite-scroll-disabled="loading"
+        :infinite-scroll-distance="10" :class="ulClass">
         <li :class="liClass" v-for="(item, index) in list" :key="index">
           <slot :item="item" :$index="index" ></slot>
         </li>

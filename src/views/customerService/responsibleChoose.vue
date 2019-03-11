@@ -39,9 +39,14 @@ export default {
     }
   },
   created () {
-    this.orgId = this.$parent.nav.orgId
-    this.orgName = this.$parent.nav.orgName
     this.isMeeting = this.$parent.isMeeting || false
+    if (this.isMeeting) {
+      this.orgId = ''
+      this.orgName = ''
+    } else {
+      this.orgId = this.$parent.nav.orgId
+      this.orgName = this.$parent.nav.orgName
+    }
   },
   components: {
     Search,

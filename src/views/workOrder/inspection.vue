@@ -6,7 +6,7 @@
       <nav-title :title="typeTxt+'工单'"></nav-title>
       <div class="weui-flex">
         <div class="weui-flex__item">
-          <search v-model="searchKey"  placeholder="扫码或输设备号、设备名"  :noFocus="true" @searchRes="searchRes" >
+          <search v-model="searchKey"  placeholder="扫码或输设备号、设备名"  :noFocus="true" @searchCancel="searchRes" @searchRes="searchRes" >
             <i slot="icon" @click="scanHandle" class="weui-icon-search iconfont icon-scancode"></i>
           </search>
         </div>

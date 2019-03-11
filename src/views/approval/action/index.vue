@@ -69,6 +69,7 @@ export default {
       person: {},
       isAndroid: false,
       imgs: [],
+      isMeeting: true, // 执行人无orgId
       isHttp: false
     }
   },

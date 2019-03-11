@@ -55,6 +55,10 @@ export default {
         case 'JPush': that.$router.push('/tab/work'); break
         default: that.$router.push(`/approvalDetailQuick/${taskId}`); break // 其余默认跳审批
       }
+      // if (this.$app.isAndroid) {
+      //   console.log('调用app_topView了')
+      //   this.$app.topView()
+      // }
     })
   },
   watch: {

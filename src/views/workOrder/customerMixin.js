@@ -56,8 +56,8 @@ export default {
     btnAction (item, btnName) {
       this.workItem = item
       switch (btnName) {
-        case '抢单': this.routeTakeOrder(item); break
-        case '接单': this.routeTakeOrder(item); break
+        case '抢单': this.routeTakeOrder(item, '抢单'); break
+        case '接单': this.routeTakeOrder(item, '接单'); break
         case '转单': this.covertOrder(item); break
         case '反馈': this.routeFeedback(item); break
         case '材料申请': this.routeMaterial(item); break
@@ -68,8 +68,8 @@ export default {
     },
     // 抢单
     // 接单
-    routeTakeOrder (obj) {
-      this.$router.push({path: this.$route.path + '/takeOrder'})
+    routeTakeOrder (obj, title) {
+      this.$router.push({path: this.$route.path + '/takeOrder?title=' + title})
     },
     // 转单
     covertOrder (obj) {
@@ -106,7 +106,7 @@ export default {
         'ID': work.WorkOrdID,
         'Type': type,
         'Title': title,
-        'Content': this.nav.userName + '给您转发一个新的' + state + '工单，请及时处理',
+        'Content': this.nav.memberName + '给您转发一个新的' + state + '工单，请及时处理',
         'Tag': person.UserId,
         'Status': '1',
         'FromTag': ''

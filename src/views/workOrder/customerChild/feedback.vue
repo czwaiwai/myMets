@@ -24,7 +24,7 @@
             <div class=" padding-top">
               <ins-img-list :imgs.sync="imgs" :max="3">
                 <p class="dark_99 padding-top5">
-                  <voice @putVoice="putVoice" @delVoice="delVoice"></voice>
+                  <voice @mp3Voice="putVoice" @delVoice="delVoice"></voice>
                 </p>
               </ins-img-list>
             </div>

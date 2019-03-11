@@ -135,6 +135,7 @@ export default {
         userName: this.user.UserID,
         positionId: this.user.PositionID,
         memberId: this.user.memberId,
+        memberName: this.user.memberName,
         workPosFrom: ''
       }
       this.notice(taskId).then(res => {

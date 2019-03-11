@@ -123,6 +123,7 @@
           </div>
           <p class="weui-grid__label">{{item.appName}}</p>
         </a>
+        <!-- <button @click="routeTest" style="width:100px;height:100px;">test</button> -->
       </div>
     </div>
   </div>
@@ -152,13 +153,6 @@ export default {
     //   window.APP_pushMsg('{"fromTag":"","id":"20190220092648764888","status":"1","type":"CustomerService","url":""}')
     // }, 5000)
     this.getPageData()
-    // this.shenliangTest()
-    // console.log('auth:', this.auth)
-    // console.log(this.user, '--------user--------')
-    // console.log(this.encryptByDES('test20', 'SE83232U'), '----')
-    // console.log(this.encryptDES('test20', 'SE83232U'), '----')
-
-    // console.log(this.shenlinagUrl)
   },
   activated () {
     console.log('调用offlineBadge')
@@ -178,57 +172,8 @@ export default {
       'auth': 'auth',
       'rand': 'rand'
     })
-    // shenlinagUrl () {
-    //   // http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES
-    //   let key = 'SE83232U'
-    //   let sso = '' + key
-    //   console.log(this.encryptByDES('test20', key), '结果---')
-    //   let returnUrl = decodeURIComponent('/mobileapp/home.aspx')
-    //   let baseUrl = 'http://183.62.210.175:888/Global/KK/SSO.aspx?encrypt=CommonDES'
-    //   let paramStr = `&sso=${sso}&returnUrl=${returnUrl}`
-    //   console.log(baseUrl)
-    //   return baseUrl + paramStr
-    // },
-    // chaoBiaoUrl () {
-    //   let orgName = encodeURIComponent(this.user.OrgName)
-    //   return `http://${this.ip}/ETSMeterList/#/?orgId=${this.user.OrgID}&orgName=${orgName}`
-    // },
-    // etsRentUrl () {
-    //   // let app_cst = ''
-    //   // let app_house = ''
-    //   // if (this.auth['APP_Cst']) {
-    //   //   app_cst = 'APP_Cst'
-    //   // }
-    //   // if (this.auth['APP_House']) {
-    //   //   app_house = 'APP_House'
-    //   // }
-    //   // let orgName = encodeURIComponent(this.user.OrgName)
-    //   // return `http://${this.ip}/ETSRent/#/?mode=${app_cst},${app_house}&orgId=${this.user.OrgID}&orgName=${orgName}&employeeId=${this.user.memberId}&employeeJobId=${this.user.PositionID}`
-    //   return ''
-    // }
   },
   methods: {
-    // encryptByDES (message, key) {
-    //   const keyHex = CryptoJS.enc.Utf8.parse(key)
-    //   // var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
-    //   const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-    //     mode: CryptoJS.mode.ECB,
-    //     padding: CryptoJS.pad.Pkcs7
-    //   })
-    //   return encrypted.toString()
-    // },
-    // encryptDES (psw, key) {
-    //   var iv = [1, 2, 3, 4, 5, 6, 7, 8]
-    //   var ivHex = CryptoJS.enc.Latin1.parse(this.byteToString(iv))// 原java使用的是iv = [1,2,3,4,5,6,7,8]
-    //   var keyHex = CryptoJS.enc.Hex.parse(CryptoJS.enc.Utf8.parse(key).toString(CryptoJS.enc.Hex))
-    //   var encrypted = CryptoJS.DES.encrypt(psw, keyHex,
-    //     { iv: ivHex,
-    //       mode: CryptoJS.mode.CBC,
-    //       padding: CryptoJS.pad.Pkcs7
-    //     }
-    //   )
-    //   return encrypted.toString()
-    // },
     async getPageData () {
       try {
         let p0 = 'UserCS_ConnectionQuality'
@@ -251,10 +196,24 @@ export default {
       // res.data
     },
     routeToOA () {
-      this.$app.loadView({url: '', type: 'oa', isTitle: 'OA'})
+      if (this.$app.isIOS) {
+        // this.$app.network().then(res => {
+        //   console.log('当前网络环境:', res)
+        // })
+        // this.$app.routeOA() // 测试OA接口
+        this.$xml('UserCS_ConnectionOA', {
+          UserName: this.user.UserID,
+          URL: ''
+        }).then(res => {
+          let url = res.data[0].OAUrl
+          this.$app.loadView({url: url, type: 'oa', isTitle: 'OA'})
+        })
+      } else {
+        this.$app.loadView({url: '', type: 'oa', isTitle: 'OA'})
+      }
     },
     async authLogin () {
-      let url = '/roc/open/app/admin/login?userName=15810153479&password=59adb24ef3cdbe0297f05b395827453f'
+      let url = '/roc/open/app/admin/login?userNam=liaojiangwei&password=59adb24ef3cdbe0297f05b395827453f'
       let res = await this.$http.post(url, {}, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'

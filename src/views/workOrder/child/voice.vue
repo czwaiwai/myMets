@@ -3,7 +3,7 @@
     <button type="button" @click="voiceClick" class="voice_btn" :class="recTime?'voice_btn_show':''">
       <i class="icon-yuyin iconfont"></i>
       {{recTime || '语音'}}
-    </button><button v-show="recTime" class="voice_btn_del" type="button" @click="delVoice"><i class="iconfont icon-icon-"></i></button>
+    </button><button v-show="recTime" class="voice_btn_del" type="button" @click="delVoice"><i class="iconfont icon-icon-1"></i></button>
   </div>
 </template>
 <script>
@@ -20,9 +20,17 @@ export default {
   methods: {
     async voiceClick () {
       if (!this.recTime) {
-        this.mp3 = await this.$app.getRec()
-        this.recTime = `${this.mp3.duration}''`
-        this.$emit('mp3Voice', this.mp3)
+        if (this.$dev) {
+          this.mp3 = {
+            path: 'fdsfdfjdsklfjdksljflkdsjfkldsfkldsl',
+            duration: '3'
+          }
+          this.recTime = `${this.mp3.duration}''`
+        } else {
+          this.mp3 = await this.$app.getRec()
+          this.recTime = `${this.mp3.duration}''`
+        }
+        this.$emit('mp3Voice', {...this.mp3})
       } else {
         await this.$app.playAudio(this.mp3.path)
       }
