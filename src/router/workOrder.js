@@ -19,7 +19,7 @@ const MaterialDetail = () => import(/* webpackChunkName:'customerOrder' */ '@/vi
 const PersonSelectorMulti = () => import(/* webpackChunkName:'customerOrder' */ '@/views/workOrder/person') // 人员选择多选
 export default [
   {
-    path: '/workOrder/inspection',
+    path: '/workOrder/inspection/:orderType',
     name: 'inspection',
     component: Inspection,
     meta: {
@@ -175,7 +175,7 @@ export default [
     ]
   },
   {
-    path: '/workOrder/customerService',
+    path: '/workOrder/customerService/:workPosFrom',
     name: 'workCustomerService',
     component: CustomerService,
     meta: {

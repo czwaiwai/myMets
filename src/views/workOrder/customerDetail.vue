@@ -123,6 +123,7 @@ export default {
     }
   },
   created () {
+    console.log(this.$route.params, 'this.$route.params')
     // 从原生来的数据
     this.isTransferBtn = this.auth['APP_Service_SwitchSingle'] // 是否显示转单按钮
     this.isMaterial = this.auth['APP_Service_Picking'] // 材料申请权限
@@ -140,7 +141,7 @@ export default {
       }
       this.notice(taskId).then(res => {
         this.work = this.workItem = res
-        this.nav.workPosFrom = this.workItem.WorkPosFrom
+        this.nav.workPosFrom = this.workPosFrom = this.workItem.WorkPosFrom
         if (this.nav.workPosFrom === 'Resource') {
           this.title = '客服详情'
         } else {
@@ -149,7 +150,7 @@ export default {
         this.init()
       })
     } else {
-      this.workPosFrom = this.$parent.workPosFrom
+      this.workPosFrom = this.$route.params.workPosFrom
       if (this.workPosFrom === 'Resource') {
         this.title = '客服详情'
       } else {

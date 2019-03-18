@@ -47,14 +47,14 @@ export default {
       }, 1500)
     },
     goBack () {
-      console.log('this.$route.name', this.$route.name)
+      // console.log('this.$route.name', this.$route.name)
       if (this.$route.name === 'meterSearch' && this.$route.query.quick) {
         this.$router.go(-2)
       } else {
         this.$router.go(-1)
       }
 
-      // if (['meeting', 'investmentIndex', 'monitorInspection'].indexOf(this.$route.name) > -1) {
+      // if (['compared_comparedBuild', 'meeting', 'investmentIndex', 'monitorInspection'].indexOf(this.$route.name) > -1) {
       //   this.$app.back()
       // } else {
       //   this.$router.go(-1)

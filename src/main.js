@@ -78,9 +78,9 @@ Vue.prototype.$app = appApi
 Vue.prototype.$toLower = toLower
 Vue.prototype.$indicator = Indicator
 
-// Vue.use(axiosHelper, {
-//   ip: ''
-// })
+Vue.use(axiosHelper, {
+  ip: ''
+})
 // let vue = new Vue({
 //   store,
 //   router,
@@ -93,6 +93,9 @@ store.dispatch('getUserAction').then(user => {
   store.commit('setRandNum', Date.now())
   /* eslint-disable no-new */
   console.log(user)
+  // if (Vue.dev) {
+  //   Vue.isPos = true
+  // }
   if (store.getters.isPos) {
     Vue.isPos = true
     Vue.prototype.$isPos = true

@@ -22,7 +22,7 @@
             <ul>
               <li v-for="(item, index) in insItem.EquiInfo" :key="index"  v-show="item.searchShow" style="border-bottom:1px solid #e3e3e3;">
                 <div class="weui-flex padding15-h padding-v  relative">
-                  <div class="weui-flex__item">
+                  <div class="weui-flex__item" style="padding-right:100px;">
                     <p>{{item.EquiName}}</p>
                     <p class="dark_99 fs13"><i class="iconfont icon-weizhi-tianchong"></i>{{item.InstallationSite}}</p>
                   </div>
@@ -33,7 +33,7 @@
                     <span v-if="item.ImageExsit === '0'"><i class="iconfont icon-paizhao"></i>&nbsp;拍照</span>
                     <span v-if="item.ImageExsit === '1'">查看签到</span>
                   </button>
-                  <button class="photo_btn" @click="toPhotoShow(item)" v-if="work.WorkState ==='3' && item.ImageExsit === '1'"><span>查看签到</span></button>
+                  <button class="photo_btn" @click="toPhotoShow(item)" v-if="['3','4'].includes(work.WorkState) && item.ImageExsit === '1'"><span>查看签到</span></button>
                 </div>
                 <div v-show="item.show" class="sub_item_content">
                   <ul v-if="work.WorkState === '2'"  class="sub_ul_opera ">
@@ -200,8 +200,8 @@ export default {
       }
       this.typeTxt = this.work.WordType === 'Work_insp' ? '巡检' : '保养'
       // 是否控制打开权限
-      // this.isCtrlShow = this.work.BillStatu === '1'
-      this.isCtrlShow = true
+      this.isCtrlShow = this.work.BillStatu === '1'
+      // this.isCtrlShow = true
       this.getPageData()
     },
     // 获取notice详情
@@ -236,6 +236,7 @@ export default {
     clickRightBtn (val) {
       this.dialogData.FeedContent = val
       this.$refs.dialogText.hide()
+      local.set('ins_page_' + this.work.WorkID, this.insList)
     },
     detailShowHandle (item) {
       // 权限开启
@@ -407,13 +408,13 @@ export default {
     // 反馈
     async remarkHandle (sub, item) {
       this.dialogData = sub
+      console.log(sub.FeedContent)
       this.$refs.dialogText.text = sub.FeedContent
       this.$refs.dialogText.show()
       // let {value, action} = await this.$message.prompt(' ', {title: '反馈内容', inputPlaceholder: '请输入反馈内容', inputValue: sub.FeedContent})
       // if (action === 'confirm') {
       //   sub.FeedContent = value
       // }
-      local.set('ins_page_' + this.work.WorkID, this.insList)
     },
     // 提交参数生成
     getSubmitParams () {

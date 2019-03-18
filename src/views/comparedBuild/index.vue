@@ -48,7 +48,7 @@ import Navbar from '@/components/navbar'
 import FilterModal from '@/components/filterModal'
 import FilterRadio from '@/components/filter/radio'
 import navTitle from '@/components/navTitle'
-// import qs from 'qs'
+import qs from 'qs'
 export default {
   name: 'repairDetail',
   components: {Navbar, FilterModal, FilterRadio, navTitle},
@@ -75,9 +75,10 @@ export default {
     // orgName: this.$route.query.orgName,
     // employeeId: this.$route.query.employeeId,
     // employeeJobId: this.$route.query.employeeJobId
+    let searchObj = qs.parse(location.search.replace('?', ''))
     this.nav = {
-      orgId: this.$route.query.orgId || this.user.OrgID,
-      orgName: this.$route.query.orgName || this.user.OrgName
+      orgId: searchObj.orgId || this.user.OrgID,
+      orgName: searchObj.orgName || this.user.OrgName
     }
     Object.assign(this, this.getGolb)
     this.getPageDataNet()

@@ -145,10 +145,10 @@ export default {
         // {url: `http://${this.ip}/ETSServiceList/#page=0`, type: 'weixiugongdan'},
         // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'xunjian'},
         // {url: `http://${this.ip}/ETSInspection/#page=0`, type: 'baoyang'}
-          {url: `/workOrder/customerService`, type: 'kefugongdan'},
-          {url: `/workOrder/customerService?workPosFrom=Equipment`, type: 'weixiugongdan'},
-          {url: `/workOrder/inspection`, type: 'xunjian'},
-          {url: `/workOrder/inspection?orderType=KeepFit`, type: 'baoyang'}
+          {url: `/workOrder/customerService/Resource`, type: 'kefugongdan'},
+          {url: `/workOrder/customerService/Equipment`, type: 'weixiugongdan'},
+          {url: `/workOrder/inspection/Inspection`, type: 'xunjian'},
+          {url: `/workOrder/inspection/KeepFit`, type: 'baoyang'}
         ]
         this.list = res.data.filter((item, index) => {
           if (item.GDType !== '5') {

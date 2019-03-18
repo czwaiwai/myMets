@@ -31,7 +31,7 @@
           </div>
           <p class="weui-grid__label">巡检</p>
         </a> -->
-        <a v-show="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection/Inspection')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_work_inspection.png"  alt="">
           </div>
@@ -49,7 +49,7 @@
           </div>
           <p class="weui-grid__label">保养</p>
         </a> -->
-        <a v-show="auth['APP_Maintain']" @click="$router.forward('/workOrder/inspection?orderType=KeepFit')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Maintain']" @click="$router.forward('/workOrder/inspection/KeepFit')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_by.png"  alt="">
           </div>

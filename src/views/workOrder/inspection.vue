@@ -178,7 +178,7 @@ export default {
   },
   created () {
     // Inspection：巡检 KeepFit：保养
-    this.orderType = this.$route.query.orderType || 'Inspection'
+    this.orderType = this.$route.params.orderType
     if (this.orderType === 'KeepFit') {
       this.typeTxt = '保养'
       this.typeList[1].name = '待' + this.typeTxt

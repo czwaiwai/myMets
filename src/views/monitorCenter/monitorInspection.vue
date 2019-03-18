@@ -67,9 +67,9 @@ export default {
     }
   },
   created () {
-    let obj = qs.parse(location.search)
+    let obj = qs.parse(location.search.replace('?', ''))
     this.nav = {
-      orgId: obj.projectID || this.user.OrgID,
+      orgId: obj.projectId || this.user.OrgID,
       orgName: obj.projectName || this.user.OrgName,
       userName: obj.UserId || this.user.UserID,
       memberId: obj.memberId || this.user.memberId

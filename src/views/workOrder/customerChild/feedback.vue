@@ -219,8 +219,9 @@ export default {
         this.formObj.endTime = (new Date(this.roundEndTime)).format('yyyy-MM-dd hh:mm')
       }
     },
-    workAction () {
+    async workAction () {
       if (this.btnStatus === 0) {
+        await this.$message.confirm('确定填写开工时间?')
         this.roundStartTime = (new Date()).valueOf()
         localStorage.setItem('action_' + this.work.WorkOrdID, this.roundStartTime)
         this.btnStatus = 1
@@ -228,6 +229,7 @@ export default {
         return this.countTime()
       }
       if (this.btnStatus === 1) {
+        await this.$message.confirm('确定填写完工时间?')
         this.btnStatus = 2
         localStorage.removeItem('action_' + this.work.WorkOrdID)
         this.roundEndTime = (new Date()).valueOf()

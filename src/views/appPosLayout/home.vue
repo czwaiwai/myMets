@@ -14,7 +14,7 @@
           <div class="weui-flex__item" style="text-align:right;padding-top:30px;padding-right:15px;">
             <button class="pro_btn" @click="$router.forward('/changeProject')">
               {{user && user.OrgName}}
-              <i class="iconfont icon-xiala-" style="font-size:14px;"></i>
+              <i class="iconfont  icon-zhankai" style="font-size:14px;"></i>
             </button>
           </div>
         </div>

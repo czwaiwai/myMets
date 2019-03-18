@@ -109,15 +109,15 @@ export default {
     this.isMaterial = this.auth['APP_Service_Picking'] // 材料申请权限
     // --------------
     // （Equipment设备（维修）、Resource资源(客服)
-    this.workPosFrom = this.$route.query.workPosFrom || 'Resource'
-    this.title = this.$route.query.workPosFrom ? '维修工单' : '客服工单'
+    this.workPosFrom = this.$route.params.workPosFrom
+    this.title = this.workPosFrom === 'Equipment' ? '维修工单' : '客服工单'
     // this.configList = []
     this.nav = {
       orgId: this.user.OrgID,
       orgName: this.user.OrgName,
       userName: this.user.UserID,
       positionId: this.user.PositionID,
-      memberId: this.user.memberId || '1',
+      memberId: this.user.memberId,
       workPosFrom: this.workPosFrom,
       memberName: this.user.memberName
     }
@@ -216,7 +216,7 @@ export default {
         EmployeeID: this.nav.memberId,
         WorkPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
         PositionID: this.nav.positionId
-      })
+      }, {}, true)
       // let url = '/ets/syswin/smd/userCSGetWorkOrdCountInfoH5'
       // let res = await this.$http.post(url, {
       //   projectId: this.nav.orgId,
@@ -257,15 +257,17 @@ export default {
         PlusEmployeeName: ''
       }
       let p0 = 'UserService_SingleBill'
-      let res = await this.$xml(p0, params)
+      let res = await this.$xml(p0, params, {}, true)
+      // this.refresh()
       console.log(res)
-      this.refresh()
       this.$store.commit('setHomeRand', Date.now())
       try {
         await this.sendMsg(this.workItem, item)
         this.$toast('转单成功并推送消息')
       } catch (error) {
         this.$toast('转单成功但消息推送失败')
+      } finally {
+        this.refresh()
       }
     }
     // 消息推送

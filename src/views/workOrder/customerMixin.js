@@ -112,8 +112,8 @@ export default {
         'FromTag': ''
       }
       let p0 = 'AppWeChat_JGWorkPush'
-      let res = await this.$xml(p0, params)
-      this.$toast('消息推送成功')
+      let res = await this.$xml(p0, params, {}, true)
+      // this.$toast('消息推送成功')
       console.log(res)
     }
   }

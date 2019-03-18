@@ -85,13 +85,13 @@ export default {
         }
         .value{
           flex: 1;
-          height: .4rem;
+          // height: .4rem;
           font-size: .28rem;
           line-height: .4rem;
           color: #333;
           overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
+          // white-space: nowrap;
+          // text-overflow: ellipsis;
         }
       }
     }
