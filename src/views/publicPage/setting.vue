@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header title="个人信息">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="个人信息"></nav-title>
     <div class="page_bd">
       <div class="weui-cells">
@@ -50,10 +47,9 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'setting',
-  components: {navTitle},
+  components: {},
   data () {
     return {}
   },

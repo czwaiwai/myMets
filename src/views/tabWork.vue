@@ -1,7 +1,6 @@
 <template>
 <div class="page">
   <div class="page_hd">
-    <!-- <mt-header   :title="user && user.OrgName"></mt-header> -->
     <nav-title :title="user && user.OrgName" :hasBtn="hasBtn"></nav-title>
   </div>
   <div class="page_bd">

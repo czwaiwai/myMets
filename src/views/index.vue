@@ -74,9 +74,13 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-// import sess from '../utils/sess'
+import {Tabbar, TabItem} from 'mint-ui'
 export default {
   name: 'index',
+  components: {
+    MtTabbar: Tabbar,
+    MtTabItem: TabItem
+  },
   data () {
     return {
       isTool: false,
@@ -215,7 +219,7 @@ export default {
 // }
 // 兼容报表发版-----end
   .mint-tabbar {
-    background-color: #FFF;
+    background-color: #fafafa;
     padding-top: 1px;
   }
   .mint-tab-item {
@@ -223,7 +227,7 @@ export default {
   }
   .mint-tabbar > .mint-tab-item.is-selected {
     color:#3395FF;
-    background-color:#FFF;
+    background-color:#fafafa !important;
   }
   .tool_warp {
     position:absolute;

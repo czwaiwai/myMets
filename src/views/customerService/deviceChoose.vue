@@ -1,9 +1,6 @@
 <template>
   <div class="page_modal">
     <div class="page">
-        <!-- <mt-header title="选择位置">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header> -->
         <nav-title title="选择位置"></nav-title>
         <search v-model="searchKey"  placeholder="扫码或输设备号"  :noFocus="true" @searchCancel="searchRes" @searchRes="searchRes" >
           <i slot="icon" @click="scanHandle" class="weui-icon-search iconfont icon-scancode"></i>
@@ -47,11 +44,10 @@
   </div>
 </template>
 <script>
-import navTitle from '@/components/navTitle'
 import Search from '@/components/search'
 export default {
   name: 'deviceChoose',
-  components: {navTitle, Search},
+  components: {Search},
   data () {
     return {
       navList: [],

@@ -36,7 +36,7 @@ import { TabContainer, TabContainerItem } from 'mint-ui'
 import dateChange from '@/mixins/dateChange'
 export default {
   name: 'investmentMoreMsg',
-  components: {navTitle, TabContainer, TabContainerItem, modulSurvey, modulMatch, modulProgress, modulResult},
+  components: {navTitle, MtTabContainer: TabContainer, MtTabContainerItem: TabContainerItem, modulSurvey, modulMatch, modulProgress, modulResult},
   mixins: [dateChange],
   data () {
     return {

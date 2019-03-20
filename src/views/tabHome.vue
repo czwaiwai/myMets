@@ -1,7 +1,6 @@
 <template>
 <div class="page">
   <div class="page_hd">
-    <!-- <mt-header  :title="$route.meta && $route.meta.title"></mt-header> -->
     <nav-title :title="$route.meta && $route.meta.title" :hasBtn="hasBtn"></nav-title>
   </div>
   <div class="page_bd">

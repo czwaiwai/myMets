@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="项目收款">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="项目收款"></nav-title>
     <div class="weui-cells" style="margin:0;">
       <a class="weui-cell weui-cell_access" @click="$router.push({name: 'report_cash_change'})" href="javascript:;">
@@ -100,10 +97,9 @@ import {mapGetters} from 'Vuex'
 import mapReady from '@/utils/getEchars'
 import {option1, option2} from './child/cashMap'
 import qs from 'qs'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'cash',
-  components: {navTitle},
+  components: {},
   data () {
     return {
       orgName: '',

@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="设备管理">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="设备管理"></nav-title>
     <div class="weui-cells" style="margin:0;">
       <a class="weui-cell weui-cell_access" @click="$router.push({name: 'report_device_change'})" href="javascript:;">

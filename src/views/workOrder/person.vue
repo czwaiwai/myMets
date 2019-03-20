@@ -1,9 +1,6 @@
 <template>
   <div class="page_modal">
     <div class="page">
-      <!-- <mt-header title="选择人员">
-        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      </mt-header> -->
       <nav-title title="选择人员"></nav-title>
       <div class="pro_title" v-show="!isMeeting">
         <i class="iconfont icon-building-automation padding-right"></i>{{orgName}}

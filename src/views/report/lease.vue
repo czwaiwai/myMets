@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="租赁报表">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="租赁报表"></nav-title>
     <div class="weui-cells" style="margin:0;">
       <a class="weui-cell weui-cell_access" @click="$router.push({name: 'report_lease_change'})" href="javascript:;">

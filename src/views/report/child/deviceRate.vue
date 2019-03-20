@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header  title="设备运行状态">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="设备运行状态"></nav-title>
     <div class="page_bd" style="background:#f9f9f9;">
       <div class="weui-cells margin-bottom" style="margin-top:0;">
@@ -63,10 +60,9 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'detail',
-  components: {navTitle},
+  components: {},
   data () {
     return {
       search: '',

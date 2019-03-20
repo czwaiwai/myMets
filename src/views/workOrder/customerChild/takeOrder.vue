@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header title="接单">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title :title="title"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin:0;">
@@ -92,7 +89,8 @@ export default {
   },
   computed: {
     isDetail () {
-      return this.$route.path.indexOf('/customerService/detail') > -1 || this.$route.path.indexOf('/customerNotice') > -1
+      let arr = this.$route.path.match(/\/customerService\/(Resource|Equipment)\/detail/)
+      return arr || this.$route.path.indexOf('/customerNotice') > -1
     }
   },
   methods: {
@@ -150,19 +148,22 @@ export default {
       console.log(res, 'res')
       this.$toast(this.title + '成功')
       this.$store.commit('setHomeRand', Date.now())
-      this.$root.back()
       if (!this.isDetail) {
+        this.$root.back()
         this.$parent.refresh()
+      } else {
+        this.$parent.$parent && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
+        this.$router.go(-2)
       }
       // this.$parent.refresh && this.$parent.refresh()
     }
   },
   destroyed () {
     this.$root.$off('personMulti')
-    if (this.isDetail) {
-      this.$parent.reload && this.$parent.reload() // 在详情页时reload
-      this.$parent.$parent.refresh && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
-    }
+    // if (this.isDetail) {
+    //   this.$parent.reload && this.$parent.reload() // 在详情页时reload
+    //   this.$parent.$parent && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
+    // }
   }
 }
 </script>

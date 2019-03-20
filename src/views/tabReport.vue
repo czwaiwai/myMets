@@ -1,7 +1,6 @@
 <template>
   <div class="page report">
     <div class="page_hd">
-      <!-- <mt-header   :title="$route.meta && $route.meta.title"></mt-header> -->
       <nav-title :title="$route.meta && $route.meta.title" :hasBtn="hasBtn"></nav-title>
     </div>
     <div v-if="!singleMode" class="page_sub_hd" style="height:50px;line-height:50px;">
@@ -77,9 +76,10 @@
 import {mapGetters} from 'Vuex'
 import qs from 'qs'
 import navTitle from '@/components/navTitle'
+import {Navbar, TabItem, TabContainer, TabContainerItem} from 'mint-ui'
 export default {
   name: 'tabReport',
-  components: {navTitle},
+  components: {navTitle, MtNavbar: Navbar, MtTabItem: TabItem, MtTabContainer: TabContainer, MtTabContainerItem: TabContainerItem},
   data () {
     return {
       hasBtn: false,

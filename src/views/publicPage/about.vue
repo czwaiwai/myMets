@@ -1,8 +1,5 @@
 <template>
   <div class="page about">
-    <!-- <mt-header title="关于">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="关于"></nav-title>
     <div class="page_bd about_wrap">
       <div @click="covertDeveloper" class="text-center" style="padding:20px 0 25px;">
@@ -16,7 +13,7 @@
           </div>
           <div class="selectItem clearfix noneBb">
             <span class="name">版本：</span>
-            <span class="value textLeft">2.3.3</span>
+            <span class="value textLeft">3.0.0</span>
           </div>
           <div class="selectItem clearfix noneBb">
             <span class="name">版权所有：</span>
@@ -57,12 +54,11 @@
 </template>
 <script>
 import toDebug from '@/utils/toDebug'
-import navTitle from '@/components/navTitle'
 let showConsole = 0
 let isConsole = false
 export default {
   name: 'about',
-  components: {navTitle},
+  components: {},
   data () {
     return {
       showConsole: 0,

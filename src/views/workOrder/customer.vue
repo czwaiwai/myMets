@@ -1,8 +1,5 @@
 <template>
   <div class="page customer">
-    <!-- <mt-header :title="title">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title :title="title"></nav-title>
     <div>
       <navbar :list="typeList" v-model="currIndex"></navbar>
@@ -163,7 +160,8 @@ export default {
       let res = await this.$xml(p0, {
         taskId: taskId,
         orgid: this.nav.orgId,
-        employeeid: this.nav.memberId
+        employeeid: this.nav.memberId,
+        PositionID: this.nav.positionId
       })
       if (res.data && res.data[0]) {
         console.log(res.data, '----')

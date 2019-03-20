@@ -1,8 +1,5 @@
 <template>
 <div class="page" style='background-color: #F0F2F4;'>
-  <!-- <mt-header title="设备详情">
-    <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-  </mt-header> -->
   <nav-title title="设备详情"></nav-title>
       <div class="weui-panel weui-panel_access margin-bottom " style="margin-top:0;">
           <!-- <div class="weui-panel__hd">图文组合列表</div> -->

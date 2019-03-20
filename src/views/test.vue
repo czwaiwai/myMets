@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header title="测试地图">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="测试地图"></nav-title>
     <div>
       <select @change="changeCity">

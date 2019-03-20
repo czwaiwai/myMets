@@ -1,8 +1,5 @@
 <template>
     <div class="page">
-        <!-- <mt-header :title="title + titleType">
-            <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-        </mt-header> -->
         <nav-title :title="title + titleType"></nav-title>
         <div class="page_bd">
           <form ref="form">
@@ -134,12 +131,11 @@
 <script>
 import { DatetimePicker } from 'mint-ui'
 import {mapGetters} from 'Vuex'
-import navTitle from '@/components/navTitle'
 // import Vue from 'vue'
 import sess from '../../utils/sess'
 export default {
   name: 'customerService',
-  components: { DatetimePicker, navTitle },
+  components: { DatetimePicker },
   data () {
     return {
       isSendForm: false,

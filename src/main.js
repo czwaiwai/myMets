@@ -13,7 +13,8 @@ import routerDirect from './utils/routerDirect'
 import appApi from './utils/appApi' // app 的 调用api
 import filter from './utils/filter'
 import toLower from './utils/toLower'
-import { DatetimePicker, MessageBox, Toast, IndexList, IndexSection, Header, Button, Cell, Tabbar, TabItem, Navbar, TabContainer, TabContainerItem, InfiniteScroll, Loadmore, Indicator } from 'mint-ui'
+// Navbar, TabContainer, TabContainerItem, Cell, Button,
+import { DatetimePicker, MessageBox, Toast, InfiniteScroll, Loadmore, Indicator } from 'mint-ui'
 import FastClick from 'fastclick'
 import bus from './utils/pushMsg'
 import '@/utils/rem'
@@ -46,17 +47,16 @@ dateForm()
 Vue.config.productionTip = false
 Vue.component(NavTitle.name, NavTitle)
 Vue.component(DatetimePicker.name, DatetimePicker)
-Vue.component(IndexList.name, IndexList)
-Vue.component(IndexSection.name, IndexSection)
-Vue.component(Button.name, Button)
-Vue.component(Cell.name, Cell)
-Vue.component(Header.name, Header)
-Vue.component(Tabbar.name, Tabbar)
-Vue.component(TabItem.name, TabItem)
-Vue.component(Navbar.name, Navbar)
-Vue.component(TabContainer.name, TabContainer)
+// Vue.component(IndexList.name, IndexList)
+// Vue.component(IndexSection.name, IndexSection)
+// Vue.component(Button.name, Button)
+// Vue.component(Cell.name, Cell)
+// Vue.component(Tabbar.name, Tabbar)
+// Vue.component(TabItem.name, TabItem)
+// Vue.component(Navbar.name, Navbar)
+// Vue.component(TabContainer.name, TabContainer)
+// Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.component(Loadmore.name, Loadmore)
-Vue.component(TabContainerItem.name, TabContainerItem)
 Vue.use(preview, {fullscreenEl: false})
 Vue.use(InfiniteScroll)
 Vue.use(routerDirect, {
@@ -78,9 +78,9 @@ Vue.prototype.$app = appApi
 Vue.prototype.$toLower = toLower
 Vue.prototype.$indicator = Indicator
 
-Vue.use(axiosHelper, {
-  ip: ''
-})
+// Vue.use(axiosHelper, {
+//   ip: ''
+// })
 // let vue = new Vue({
 //   store,
 //   router,

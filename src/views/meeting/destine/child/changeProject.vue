@@ -1,9 +1,7 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <mt-header  title="切换项目">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    <nav-title title="切换项目"></nav-title>
     <search v-model="search"></search>
     <div class="page_bd" style="background:#f9f9f9;">
       <div class="weui-cells weui-cells_radio" style="margin-top:0;">

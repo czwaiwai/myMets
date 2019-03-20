@@ -1,9 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header title="巡保工作监控">
-      <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button>
-      <mt-button slot="left" @click="$root.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="巡保工作监控"></nav-title>
     <div>
       <navbar :list="typeList" v-model="currIndex"></navbar>
@@ -47,11 +43,9 @@ import {mapGetters} from 'Vuex'
 import navbar from '@/views/workOrder/child/navbar'
 import PageList from '@/components/pageList'
 import qs from 'qs'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'repairDetail',
   components: {
-    navTitle,
     navbar,
     wait: PageList,
     ready: PageList

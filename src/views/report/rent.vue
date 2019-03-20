@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="租赁分析">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="租赁分析"></nav-title>
     <div class="page_bd">
       <div class="weui-flex  text-center padding-v padding15-h">

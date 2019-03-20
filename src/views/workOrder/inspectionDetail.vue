@@ -1,9 +1,6 @@
 <template>
   <div class="page_modal">
     <div class="page">
-      <!-- <mt-header :title="typeTxt+'详情'">
-        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      </mt-header> -->
       <nav-title :title="typeTxt+'详情'"></nav-title>
       <div ref="pageBD" class="page_bd">
         <search v-model="searchKey" placeholder="扫码或输设备号、设备名" :noFocus="true" @searchRes="searchRes">

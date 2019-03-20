@@ -98,9 +98,9 @@ export default {
       let type = 'CustomerService'
       switch (work.WorkOrdState) {
         case 'WOSta_Sub': state = '待接单'; break
-        case 'WOSta_Proc': state = '待接单'; break
-        case 'WOSta_Finish': state = '待接单'; break
-        case 'WOSta_Visit': state = '待接单'; break
+        case 'WOSta_Proc': state = '待完工'; break
+        case 'WOSta_Finish': state = '待回访'; break
+        case 'WOSta_Visit': state = '待关闭'; break
       }
       let params = {
         'ID': work.WorkOrdID,

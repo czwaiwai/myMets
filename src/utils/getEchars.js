@@ -3,22 +3,22 @@ export default function () {
   if (!echarts) {
     return new Promise((resolve, reject) => {
       require.ensure([], function (require) {
-        echarts = require('echarts/lib/echarts')
+        echarts = require(/* webpackChunkName:'echarts' */'echarts/lib/echarts')
         // 引入饼图
-        require('echarts/lib/chart/pie')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/chart/pie')
         // 引入仪表盘
-        require('echarts/lib/chart/gauge')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/chart/gauge')
         // 引入滚动
-        require('echarts/lib/component/dataZoom')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/component/dataZoom')
         // 引入柱状图
-        require('echarts/lib/chart/bar')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/chart/bar')
         // 引入折线图
-        require('echarts/lib/chart/line')
-        require('echarts/lib/component/graphic')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/chart/line')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/component/graphic')
         // 引入提示框和标题组件
         // require('echarts/lib/component/tooltip')
-        require('echarts/lib/component/title')
-        require('echarts/lib/component/legendScroll')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/component/title')
+        require(/* webpackChunkName:'echarts' */'echarts/lib/component/legendScroll')
         resolve(echarts)
       })
     })

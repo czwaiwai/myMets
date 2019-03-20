@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="服务器地址">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="服务器地址"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin-top:10px;">
@@ -18,10 +15,9 @@
   </div>
 </template>
 <script>
-import navTitle from '@/components/navTitle'
 export default {
   name: 'serverAddress',
-  components: {navTitle},
+  components: {},
   created () {
   },
   methods: {

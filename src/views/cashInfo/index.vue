@@ -1,9 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="我的收款">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      <mt-button slot="left" @click="$app.close()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="我的收款"></nav-title>
     <div class="page_bd">
       <div class="green_top">

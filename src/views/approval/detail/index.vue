@@ -9,17 +9,19 @@
         <tech-process :techProcessList="techProcessList"></tech-process>
       </div>
       <!-- <div class="_btns" v-if="itemData.WorkflowStatus=='Executing'notify"> -->
-      <div class="_btns" v-if="com_allBtn()==3">
-        <div class="btn" @click.stop="toAction(2)">打回</div>
-        <div class="btn" @click.stop="toAction(0)">否决</div>
-        <div class="btn" @click.stop="toAction(1)">同意</div>
-      </div>
-      <div class="_btns" v-else-if="com_allBtn()==2">
-        <div class="btn" @click.stop="toAction(0)">否决</div>
-        <div class="btn" @click.stop="toAction(1)">同意</div>
-      </div>
-      <div class="_btns" v-else-if="com_allBtn()==1">
-        <div class="btn" @click.stop="toAction(3)">确定</div>
+      <div v-if="detailData.TaskEnd!==1">
+        <div class="_btns" v-if="com_allBtn()==3">
+          <div class="btn" @click.stop="toAction(2)">打回</div>
+          <div class="btn" @click.stop="toAction(0)">否决</div>
+          <div class="btn" @click.stop="toAction(1)">同意</div>
+        </div>
+        <div class="_btns" v-else-if="com_allBtn()==2">
+          <div class="btn" @click.stop="toAction(0)">否决</div>
+          <div class="btn" @click.stop="toAction(1)">同意</div>
+        </div>
+        <div class="_btns" v-else-if="com_allBtn()==1">
+          <div class="btn" @click.stop="toAction(3)">确定</div>
+        </div>
       </div>
     </div>
     <dialog-confire

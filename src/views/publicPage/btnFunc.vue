@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header title="请选择功能">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="请选择功能"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin-top:0;" v-if="status">
@@ -47,10 +44,9 @@
   </div>
 </template>
 <script>
-import navTitle from '@/components/navTitle'
 export default {
   name: 'btnFunc',
-  components: {navTitle},
+  components: {},
   data () {
     return {
       status: true

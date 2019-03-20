@@ -1,7 +1,6 @@
 <template>
   <div class="page">
     <div class="page_hd">
-      <!-- <mt-header  title="我的"></mt-header> -->
       <nav-title title="我的" :hasBtn="hasBtn"></nav-title>
     </div>
     <div class="page_bd">
@@ -131,9 +130,7 @@ export default {
       })
     },
     async logoutHandle () {
-      if (this.$app.isAndroid) {
-        await this.$message.confirm('确定要退出登录')
-      }
+      await this.$message.confirm('确定要退出登录')
       this.$app.logout()
     },
     clearCache () {

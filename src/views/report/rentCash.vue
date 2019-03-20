@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header title="租金">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="租金"></nav-title>
     <div class="weui-flex fs16 padding5-v padding-h light_bg">
       <div class="weui-flex__item">截止：{{chooseDate | dateChina}}</div>

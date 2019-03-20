@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header title="状态设置">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="状态设置"></nav-title>
     <div class="page_bd">
       <div class="weui-cells weui-cells_radio">
@@ -38,10 +35,9 @@
   </div>
 </template>
 <script>
-import navTitle from '@/components/navTitle'
 export default {
   name: 'status',
-  components: {navTitle},
+  components: {},
   data () {
     return {
       status: '0'

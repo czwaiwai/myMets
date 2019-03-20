@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header title="工单反馈">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="工单反馈"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin-top:0;">
@@ -161,7 +158,8 @@ export default {
       return Math.round((a + b) * 100) / 100
     },
     isDetail () {
-      return this.$route.path.indexOf('/customerService/detail') > -1 || this.$route.path.indexOf('/customerNotice') > -1
+      let arr = this.$route.path.match(/\/customerService\/(Resource|Equipment)\/detail/)
+      return arr || this.$route.path.indexOf('/customerNotice') > -1
     }
   },
   methods: {
@@ -317,7 +315,8 @@ export default {
         MaterialCostSum: this.formObj.materialCostSum,
         CompResult: this.formObj.workState,
         ProcessDetaile: this.formObj.processDetaile,
-        Voice1: this.mp3.path || ''
+        Voice1: this.mp3.path || '',
+        Memo: this.mp3.duration || ''
       }
       // this.imgs.forEach((item, index) => {
       //   params['Image' + (index + 1)] = item
@@ -355,10 +354,17 @@ export default {
       // let res = await this.$http.post(url, params)
 
       this.$toast('反馈成功')
-      this.$root.back()
+      // this.$root.back()
       this.$store.commit('setHomeRand', Date.now())
+      // if (!this.isDetail) {
+      //   this.$parent.refresh()
+      // }
       if (!this.isDetail) {
+        this.$root.back()
         this.$parent.refresh()
+      } else {
+        this.$parent.$parent && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
+        this.$router.go(-2)
       }
       //   this.$parent.refresh && this.$parent.refresh()
       console.log(res)
@@ -369,10 +375,10 @@ export default {
     if (this.roundTime) {
       clearTimeout(this.roundTime)
     }
-    if (this.isDetail) {
-      this.$parent.reload && this.$parent.reload() // 在详情页时reload
-      this.$parent.$parent.refresh && this.$parent.$parent.refresh()
-    }
+    // if (this.isDetail) {
+    //   this.$parent.reload && this.$parent.reload() // 在详情页时reload
+    //   this.$parent.$parent.refresh && this.$parent.$parent.refresh()
+    // }
   }
 }
 </script>

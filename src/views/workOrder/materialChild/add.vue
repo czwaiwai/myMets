@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header title="查找添加">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="查找添加"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">

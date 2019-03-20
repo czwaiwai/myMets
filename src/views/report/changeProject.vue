@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header  title="切换项目">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="切换项目"></nav-title>
     <div class="page_bd" style="background:#f9f9f9;">
       <search v-model="search"></search>
@@ -26,10 +23,9 @@
 import {mapGetters} from 'Vuex'
 import Search from '@/components/search'
 import qs from 'qs'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'detail',
-  components: {navTitle, Search},
+  components: {Search},
   data () {
     return {
       search: '',

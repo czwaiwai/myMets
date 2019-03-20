@@ -1,8 +1,5 @@
 <template>
   <div class="page report_customer">
-    <!-- <mt-header  title="客服报表">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="客服报表"></nav-title>
     <div class="weui-cells" style="margin:0;">
       <a class="weui-cell weui-cell_access" @click="$router.push({name: 'report_changeProject'})" href="javascript:;">

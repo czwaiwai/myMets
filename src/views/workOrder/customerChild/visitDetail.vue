@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header title="回访详情">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="回访详情"></nav-title>
     <div class="page_bd">
       <div class="weui-panel weui-panel_access">

@@ -1,8 +1,6 @@
 <template>
   <div class="page">
-    <mt-header title="设备详情">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header>
+    <nav-title title="设备详情"></nav-title>
     <div style="height:80px">fdsdsfds</div>
     <div class="page_bd">
       <a @click="routeTo">跳转</a>

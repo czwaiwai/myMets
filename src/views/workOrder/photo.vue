@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header title="拍照确认">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="拍照确认"></nav-title>
     <div class="page_bd">
       <div v-if="!onlyPhoto" class="weui-cells weui-cells_form" style="margin-top:0;">

@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header title="填报回访">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="填报回访"></nav-title>
     <div class="page_bd">
       <div class="weui-cells " style="margin-top:0;">
@@ -90,7 +87,8 @@ export default {
   },
   computed: {
     isDetail () {
-      return this.$route.path.indexOf('/customerService/detail') > -1 || this.$route.path.indexOf('/customerNotice') > -1
+      let arr = this.$route.path.match(/\/customerService\/(Resource|Equipment)\/detail/)
+      return arr || this.$route.path.indexOf('/customerNotice') > -1
     }
   },
   methods: {
@@ -144,28 +142,18 @@ export default {
       }, {
         p1: this.nav.userName
       })
-      // let url = '/ets/syswin/smd/userServiceInsertReturnVisit'
-      // let res = await this.$http.post(url, {
-      //   userName: this.nav.userName,
-      //   object: '',
-      //   objectName: this.nav.userName,
-      //   returnVisitWay: this.formObj.way,
-      //   totalScore: scoreArr[this.formObj.star - 1],
-      //   failureCause: this.formObj.isValid ? '' : this.formObj.failContent, // 无效原因
-      //   returnVisitType: 'WorkVisit',
-      //   returnSatisfaction: satisfactionArr[this.formObj.star - 1],
-      //   satisfiedVisit: this.formObj.isValid ? 1 : 2,
-      //   workOrdID: this.work.WorkOrdID,
-      //   visitState: this.formObj.isValid ? 1 : 2,
-      //   returnVisitDate: this.formObj.datetime,
-      //   opUser: this.nav.memberId,
-      //   memo: this.formObj.content
-      // })
       this.$toast('回访成功')
       this.$store.commit('setHomeRand', Date.now())
-      this.$root.back()
+      // this.$root.back()
+      // if (!this.isDetail) {
+      //   this.$parent.refresh()
+      // }
       if (!this.isDetail) {
+        this.$root.back()
         this.$parent.refresh()
+      } else {
+        this.$parent.$parent && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
+        this.$router.go(-2)
       }
       console.log(res)
     },
@@ -174,10 +162,10 @@ export default {
     }
   },
   destroyed () {
-    if (this.isDetail) {
-      this.$parent.reload && this.$parent.reload() // 在详情页时reload
-      this.$parent.$parent.refresh && this.$parent.$parent.refresh()
-    }
+    // if (this.isDetail) {
+    //   this.$parent.reload && this.$parent.reload() // 在详情页时reload
+    //   this.$parent.$parent.refresh && this.$parent.$parent.refresh()
+    // }
   }
 }
 </script>

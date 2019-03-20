@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header title="整改对比">
-      <mt-button slot="left" @click="$root.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="整改对比"></nav-title>
     <template v-if="groupId">
       <div class="weui-flex">
@@ -47,11 +44,10 @@ import {mapGetters} from 'Vuex'
 import Navbar from '@/components/navbar'
 import FilterModal from '@/components/filterModal'
 import FilterRadio from '@/components/filter/radio'
-import navTitle from '@/components/navTitle'
 import qs from 'qs'
 export default {
   name: 'repairDetail',
-  components: {Navbar, FilterModal, FilterRadio, navTitle},
+  components: {Navbar, FilterModal, FilterRadio},
   data () {
     return {
       filterForm: {

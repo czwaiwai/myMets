@@ -9,9 +9,11 @@
 </template>
 
 <script>
+import {IndexList, IndexSection, Cell} from 'mint-ui'
 import sleep from '@/utils/sleep'
 export default {
   name: 'indexList',
+  components: {MtIndexList: IndexList, MtIndexSection: IndexSection, MtCell: Cell},
   props: {
     proId: {
       type: String
@@ -28,7 +30,12 @@ export default {
   },
   methods: {
     async getPageDateNet () {
-      let res = await this.$xml('UserCS_MeetingEmployeeInfo', {OrgID: this.proId}) // UserCS_GetEmployeeInfo
+      let res
+      if (this.proId) {
+        res = await this.$xml('UserCS_GetEmployeeInfo', {OrgID: this.proId}) // UserCS_GetEmployeeInfo
+      } else {
+        res = await this.$xml('UserCS_MeetingEmployeeInfo', {OrgID: this.proId}) // UserCS_MeetingEmployeeInfo
+      }
       await sleep() // 优化大量元素构建导致转场动画卡顿
       let obj = {'#': []}
       this.$emit('setList', res.data)

@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="我的">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="我的"></nav-title>
     <div class="page_bd">
       <div class="my_header_wrap weui-flex ">

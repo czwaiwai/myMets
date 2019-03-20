@@ -1,9 +1,6 @@
 <template>
   <div class="page_modal">
     <div class="page">
-      <!-- <mt-header title="巡检详情">
-        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      </mt-header> -->
       <nav-title :title="title"></nav-title>
       <div class="page_bd">
 
@@ -58,7 +55,6 @@
 <script>
 import InsRadio from '@/views/workOrder/child/insRadio'
 import InsNumber from '@/views/workOrder/child/insNumber'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'inspectionDetail',
   data () {
@@ -72,8 +68,7 @@ export default {
   },
   components: {
     InsRadio,
-    InsNumber,
-    navTitle
+    InsNumber
   },
   created () {
     if (this.$parent.workItem.WordType === 'Work_KeepFit') {

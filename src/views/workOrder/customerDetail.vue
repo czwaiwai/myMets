@@ -1,9 +1,6 @@
 <template>
   <div class="page_modal">
     <div class="page">
-      <!-- <mt-header :title="title">
-        <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-      </mt-header> -->
       <nav-title :title="title"></nav-title>
       <div class="page_bd">
 
@@ -59,6 +56,12 @@
                 {{'处理反馈' + (index + 1) + '：' + item.ProcessDetaile }}
                 <p class="cost">人工费:<span class="error_color">{{ '￥' + item.LabourCost }}</span> </p>
                 <p class="cost">材料费:<span class="error_color">{{ '￥' + item.MaterialCostSum }}</span></p>
+                <!-- {{item}} -->
+                <div  v-if="item.Voice"  class="padding-bottom">
+                  <div @click="showItemVoice(item)" class="voice_wrap ">
+                    <voice-icon :isVoice.sync="item.isVoice" :length="item.Memo" :url="item.Voice"  ></voice-icon>
+                  </div>
+                </div>
                 <!-- 图片 -->
                 <div class="img_list_wrap no-padding">
                   <ul class="clearfix">
@@ -251,7 +254,8 @@ export default {
       let res = await this.$xml(p0, {
         taskId: taskId,
         orgid: this.nav.orgId,
-        employeeid: this.nav.memberId
+        employeeid: this.nav.memberId,
+        PositionID: this.nav.positionId
       })
       if (res.data && res.data[0]) {
         console.log(res.data, '----')
@@ -355,6 +359,7 @@ export default {
       if (res.data && res.data[0]) {
         let ip = this.$store.getters.ip // || '172.31.118.205:8066'
         res.data.forEach(arr => {
+          arr.isVoice = false
           arr.ImageList.forEach(a => {
             if (ip && a.Path) {
               a.Path = 'http://' + ip + a.Path
@@ -418,6 +423,9 @@ export default {
       } catch (error) {
         this.$toast('转单成功但消息推送失败')
       }
+    },
+    showItemVoice (item) {
+      item.isVoice = !item.isVoice
     },
     showVoice () {
       this.isVoice = !this.isVoice

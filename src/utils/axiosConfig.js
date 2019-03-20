@@ -116,7 +116,7 @@ export default {
         return Promise.reject(res[0])
       }
       let syswin = response.data.Syswin
-      if (syswin && syswin.length && syswin[0].status === 0) {
+      if (syswin && syswin.length && (syswin[0].status === 0 || syswin[0].status === '0')) {
         Vue.toast(syswin[0].msg)
         return Promise.reject(syswin[0])
       }

@@ -1,9 +1,6 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <!-- <mt-header :title="title">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title :title="title"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
@@ -57,10 +54,9 @@ import FilterDateEnd from '@/components/filter/dateEnd'
 import FilterRadio from '@/components/filter/radio'
 import Search from '@/components/search'
 import PageList from '@/components/pageList'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'agreementDetail',
-  components: {Search, PageList, FilterModal, FilterDateEnd, FilterRadio, navTitle},
+  components: {Search, PageList, FilterModal, FilterDateEnd, FilterRadio},
   data () {
     return {
       title: '合同统计详情',

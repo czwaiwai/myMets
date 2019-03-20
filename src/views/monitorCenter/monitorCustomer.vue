@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header title="客服工单监控">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="客服工单监控"></nav-title>
     <div>
       <navbar :list="typeList" v-model="currIndex"></navbar>
@@ -66,14 +63,12 @@ import {mapGetters} from 'Vuex'
 import Search from '@/components/search'
 import navbar from '@/components/navbar'
 import PageList from '@/components/pageList'
-import navTitle from '@/components/navTitle'
 export default {
   name: 'monitorCustomer',
   components: {
     MtActionsheet: Actionsheet,
     navbar,
     Search,
-    navTitle,
     all: PageList,
     waiting: PageList,
     working: PageList,

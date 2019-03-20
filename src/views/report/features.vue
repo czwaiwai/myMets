@@ -1,8 +1,5 @@
 <template>
   <div class="page">
-    <!-- <mt-header  title="特色园分析">
-      <mt-button slot="left" @click="$router.back()" icon="back">返回</mt-button>
-    </mt-header> -->
     <nav-title title="特色园分析"></nav-title>
     <div class="page_bd report_wrap">
       <div @click="openPicker" class="date_choose">
