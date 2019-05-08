@@ -43,6 +43,18 @@
           <h3 class="title">更多信息 <span>(选填)</span></h3>
           <div class="msg">
             <div class="selectItem clearfix" @click.stop="selectType('CstCategory')">
+              <span class="name">中介公司：</span>
+              <span class="value textLeft" v-if="cstCategory.hasSelect">{{cstCategory.showText}}</span>
+              <span class="value" v-else>请选择</span>
+              <i class="iconfont icon-tubiao- icon"></i>
+            </div>
+            <div class="selectItem clearfix" @click.stop="selectType('BySector')">
+              <span class="name">所属行业：</span>
+              <span class="value textLeft" v-if="cstBySector.hasSelect">{{cstBySector.showText}}</span>
+              <span class="value" v-else>请选择</span>
+              <i class="iconfont icon-tubiao- icon"></i>
+            </div>
+            <div class="selectItem clearfix" @click.stop="selectType('CstCategory')">
               <span class="name">客源类别：</span>
               <span class="value textLeft" v-if="cstCategory.hasSelect">{{cstCategory.showText}}</span>
               <span class="value" v-else>请选择</span>
@@ -50,12 +62,12 @@
             </div>
             <div class="selectItem clearfix" @click.stop="selectType('CstLevel')">
               <span class="name">客源等级：</span>
-              <span class="value textLeft" v-if="cstLevel.hasSelect">{{cstLevel.showText}}</span>
+              <span class="value textLeft" v-if="cstLevel.hasSelect">{{getCstLevel}}</span>
               <span class="value" v-else>请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
             <div class="selectItem clearfix" @click.stop="selectType('CognitiveWay')">
-              <span class="name">认知途径：</span>
+              <span class="name">客户来源：</span>
               <span class="value textLeft" v-if="cognitiveWay.hasSelect">{{cognitiveWay.showText}}</span>
               <span class="value" v-else>请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
@@ -101,9 +113,16 @@ export default {
       itemType: '',
       cstType: {hasSelect: false, value: 'P'},
       cstCategory: {hasSelect: false},
-      cstLevel: {hasSelect: false},
+      cstLevel: {hasSelect: false, value: '', showText: ''},
       cognitiveWay: {hasSelect: false},
+      cstBySector: {hasSelect: false},
+      conduitCompanyName: {hasSelect: false, value: '', showText: ''},
       isHttping: false
+    }
+  },
+  computed: {
+    getCstLevel () {
+      return this.cstLevel.showText
     }
   },
   watch: {
@@ -140,6 +159,19 @@ export default {
     }
   },
   methods: {
+    async initCstLevel () {
+      let res = await this.$xml('UserRent_GetOptionList', {
+        'TypeName': 'CstLevel'
+      })
+      res.data.forEach(arr => {
+        if (arr.value === 'P') {
+          console.log('tag', arr)
+          this.cstLevel.hasSelect = true
+          this.cstLevel.value = arr.value
+          this.cstLevel.showText = arr.showText
+        }
+      })
+    },
     async selectType (type) {
       // let obj = {
       //   p0: 'UserRent_GetOptionList',
@@ -181,9 +213,18 @@ export default {
           }
         })
       } else if (type === 'CognitiveWay') {
-        this.selectData.title = '认知途径'
+        this.selectData.title = '客户来源'
         res.data.forEach(arr => {
           if (this.cognitiveWay.hasSelect && this.cognitiveWay.value === arr.value) {
+            arr.isSelect = true
+          } else {
+            arr.isSelect = false
+          }
+        })
+      } else if (type === 'BySector') {
+        this.selectData.title = '所属行业'
+        res.data.forEach(arr => {
+          if (this.cstBySector.hasSelect && this.cstBySector.value === arr.value) {
             arr.isSelect = true
           } else {
             arr.isSelect = false
@@ -195,7 +236,7 @@ export default {
       this.$refs.selectList.show()
     },
     selectItem (item) {
-      console.log(item)
+      // console.log(item)
       if (this.itemType === 'CstType') {
         this.cstType = item
       } else if (this.itemType === 'CstCategory') {
@@ -204,6 +245,8 @@ export default {
         this.cstLevel = item
       } else if (this.itemType === 'CognitiveWay') {
         this.cognitiveWay = item
+      } else if (this.itemType === 'BySector') {
+        this.cstBySector = item
       }
     },
     async submit () {
@@ -263,6 +306,8 @@ export default {
         'Fax': this.fax,
         'Memo': this.remark,
         'SaveType': 'RO',
+        'BySector': this.cstBySector.value || '', // 所属行业
+        'ConduitCompany': this.conduitCompanyName.value || '', // 中介公司
         'EmployeeID': this.locationData.employeeData.employeeId,
         'EmployeeJobID': this.locationData.employeeData.employeeJobId
       })
@@ -281,6 +326,7 @@ export default {
     }
   },
   created () {
+    this.initCstLevel()
     if (localStorage.locationData) {
       this.locationData = JSON.parse(localStorage.locationData)
     }

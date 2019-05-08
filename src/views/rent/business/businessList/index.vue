@@ -108,6 +108,7 @@ export default {
         'STime': '',
         'Theme': '',
         'ETime': '',
+        'Source': '',
         'CognitiveWay': '',
         'CstType': '',
         'CstLevel': '',

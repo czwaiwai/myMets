@@ -4,10 +4,10 @@
     <div class="page_bd houseList">
       <div class="header">
         <p class="orgMsg" @click.stop="toSelectLocation">{{locationData.orgData.orgName}}<span v-if="locationData.grpItem">>{{locationData.grpItem.GrpName}}>{{locationData.budItem.BudName}}</span></p>
-        <i class="iconfont pageIcon" :class="pageStatus.pageType?'icon-xiangmu1':'icon-xiangmu'" @click.stop="tabChange"></i>
+        <i class="iconfont pageIcon" :class="pageStatus.pageType===1?'icon-loupan1':(pageStatus.pageType===0?'icon-xiangmu':'icon-xiangmu1')" @click.stop="tabChange"></i>
       </div>
       <transition name="gridsc">
-      <div class="grids-content clearfix" v-show="!pageStatus.pageType">
+      <div class="grids-content clearfix" v-show="pageStatus.pageType===0">
         <div class="items" @click.stop="changeList(0)">
           <i class="iconfont icon-loupan icon"></i>
           <p class="nums color1">{{gridsData.Total}}</p>
@@ -46,7 +46,7 @@
       </div>
       </transition>
       <transition name="listc">
-      <div class="list-content" v-show="pageStatus.pageType">
+      <div class="list-content" v-show="pageStatus.pageType===1">
         <div class="searchBox clearfix">
           <div class="header-wrap clearfix">
             <div class="search clearfix" @click.stop="toSearchHouse">
@@ -102,6 +102,32 @@
           </load-view>
         </div>
       </div>
+      </transition>
+      <transition name="housepropertylist">
+        <div class="propertycontent" v-show="pageStatus.pageType===2">
+          <load-view ref="list">
+            <none-page title="无数据~" v-show="propertylist.length==0"></none-page>
+            <ul class="c-list" v-show="propertylist.length">
+              <li class="c-items" v-for="(item,index) in propertylist" :key="index">
+
+                <div class="top clearfix">
+                  <div class="_left">
+                    <p class="desc">{{item.FloorNum}}层</p>
+                  </div>
+                  <ul class="area_item_list clearfix">
+                    <li v-for="(houseItem,index) in item.DetaList" :key="index"><span @click="toHouseDetail(houseItem,index)" :class="com_color(houseItem.RentStatus)">{{houseItem.ResNo}}</span></li>
+                    <!-- <li><span @click="$router.push('/houseDetail')">102</span></li>
+                    <li><span @click="$router.push('/houseDetail')">103</span></li>
+                    <li><span @click="$router.push('/houseDetail')">104</span></li>
+                    <li><span @click="$router.push('/houseDetail')">105</span></li>
+                    <li><span @click="$router.push('/houseDetail')">106</span></li>
+                    <li><span>107</span></li> -->
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </load-view>
+        </div>
       </transition>
     </div>
     <transition name="filerType">
@@ -162,6 +188,7 @@ export default {
         {name: '已出租', type: 6, isSelect: false}
       ],
       dataList: [],
+      propertylist: {},
       searchKey: '',
       showFilter: false,
       floors: '',
@@ -261,13 +288,33 @@ export default {
       this.$router.push(`/selectLocation`)
     },
     tabChange () {
-      if (this.pageStatus.pageType) {
-        this.$store.commit('updatePageStatus', {pageType: 0, listType: this.pageStatus.listType, listTypeNum: this.pageStatus.listTypeNum})
-        this.getGridsData()
-      } else {
-        this.$store.commit('updatePageStatus', {pageType: 1, listType: this.pageStatus.listType, listTypeNum: this.pageStatus.listTypeNum})
-        this.init()
+      
+      switch (this.pageStatus.pageType){
+        case 0:
+          this.$store.commit('updatePageStatus', {pageType: 1, listType: this.pageStatus.listType, listTypeNum: this.pageStatus.listTypeNum})
+          this.init()
+          break;
+        case 1:
+          this.$store.commit('updatePageStatus', {pageType: 2, listType: this.pageStatus.listType, listTypeNum: this.pageStatus.listTypeNum})
+          if (!this.locationData.grpItem){
+            this.toSelectLocation()
+          }
+          else{
+            this.initPropertyList()
+          }
+          break;
+        case 2:
+          this.$store.commit('updatePageStatus', {pageType: 0, listType: this.pageStatus.listType, listTypeNum: this.pageStatus.listTypeNum})
+          this.getGridsData()
+          break;
       }
+      // if (this.pageStatus.pageType) {
+      //   this.$store.commit('updatePageStatus', {pageType: 0, listType: this.pageStatus.listType, listTypeNum: this.pageStatus.listTypeNum})
+      //   this.getGridsData()
+      // } else {
+      //   this.$store.commit('updatePageStatus', {pageType: 1, listType: this.pageStatus.listType, listTypeNum: this.pageStatus.listTypeNum})
+      //   this.init()
+      // }
     },
     // 点击图形项
     async changeList (type) {
@@ -313,6 +360,20 @@ export default {
           this.$refs.listType.scrollLeft = 1
         }
       })
+    },
+    async initPropertyList(){
+      let res = await this.$xml('UserCS_GetHouseView', {
+        'OrgId': this.locationData.orgData.orgId,
+        'BudId': this.locationData.budItem ? this.locationData.budItem.Id : ''
+      })
+      console.log(res)
+      // this.$vux.loading.hide()
+      if (res.status === 200 || res.status === '200') {
+        this.propertylist = res.data
+      } else {
+        this.$toast(res.msg)
+      }
+
     },
     com_type (type) {
       if (type === 0) {
@@ -506,10 +567,15 @@ export default {
       this.locationData = JSON.parse(localStorage.locationData)
     }
     console.log(this.pageStatus)
-    if (this.pageStatus.pageType) {
+    if (this.pageStatus.pageType===1) {
       this.init()
     } else {
-      this.getGridsData()
+      if (this.pageStatus.pageType===0) {
+        this.getGridsData()
+      }
+      else {
+        this.initPropertyList()
+      }
     }
     // this.$root.$emit('keepAlive', {isKeep: true, name: 'houseList'})
   },
@@ -522,7 +588,7 @@ export default {
     // 上拉加载更多
     this.$refs.list.IsLast(50, (direction, scrollTop, h) => {
       if (h) {
-        if (this.showLoadTip && !this.isLoading) {
+        if (this.showLoadTip && !this.isLoading && this.pageStatus.pageType!==2) {
           this.isLoading = true
           this.page++
           this.getListData()
@@ -781,6 +847,183 @@ export default {
             text-align: center;
             border: 1px solid #3395FF;
             border-radius: 3px;
+          }
+        }
+      }
+    }    
+    .propertycontent{
+      position: absolute;
+      top: 0.9rem;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      -webkit-overflow-scrolling: touch;
+      .area_item_list {
+        float: right;
+        width: 85%;
+        padding: 2px 3px 1px 8px;
+      }
+      .area_item_list  li{
+        float:left;
+        width:20%;
+        height:40px;
+        overflow: hidden;
+        padding-right:5px;
+        padding-bottom:5px;
+      }
+      .area_item_list  li.un_sale span{
+        background:#E7EBF1;
+        color:#CCCCCC;
+      }
+      .area_item_list  li span {        
+        border:1px solid #DADADA;
+        display:block;
+        // background:#EAF2FD;
+        color: #fff;
+        width:100%;
+        height: 30px;
+        line-height:30px;
+        font-size:10px;
+        text-align:center;
+        &.color0{
+          background: #FD4254;
+        }
+        &.color1{
+          background: #FD8815;
+        }
+        &.color2{
+          background: #3395FF;
+        }
+        &.color3{
+          background: #F3C113;
+        }
+        &.color4{
+          background: #5789FC;
+        }
+        &.color5{
+          background: #AD70F9;
+        }
+      }
+      .none{
+        img{
+          display: block;
+          width: 1.6rem;
+          height: 1.5rem;
+          margin: 2.5rem auto .5rem;
+        }
+        .tip{
+          font-size: .28rem;
+          color: #999;
+          line-height: 1.2;
+          text-align: center;
+        }
+      }
+      .c-list{
+        .c-items{
+          border-top: 1px solid #ededed;
+          position: relative;
+          // margin-bottom: .2rem;
+          background: #fff;
+          &:last-child{
+            margin-bottom: 0;
+          }
+          // border-bottom: 1px solid #ededed;
+          .tip{
+            position: absolute;
+            top: 0;
+            right: .3rem;
+            height: .46rem;
+            width: 1.15rem;
+            font-size: .28rem;
+            color: #fff;
+            text-align: center;
+            line-height: .46rem;
+            border-bottom-right-radius: .2rem;
+            &.color0{
+              background: #FD4254;
+            }
+            &.color1{
+              background: #FD8815;
+            }
+            &.color2{
+              background: #3395FF;
+            }
+            &.color3{
+              background: #F3C113;
+            }
+            &.color4{
+              background: #5789FC;
+            }
+            &.color5{
+              background: #AD70F9;
+            }
+          }
+          .top{
+            padding-left: .1rem;
+            padding-right: .1rem;
+            padding-top: .2rem;
+            ._left{
+              float: left;
+              // height: 2rem;
+              position: absolute;
+              text-align: center;
+              width: 15%;
+              top:30%;
+              line-height: 100%;
+              text-align: center;
+              .desc,.name{
+                margin-top: .1rem;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.2;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+            }
+            // ._right{
+            //   float: right;
+            //   width: 1.9rem;
+            //   height: 2rem;
+            // }
+          }
+          .bottom{
+            height: .88rem;
+            padding: 0 .3rem;
+            &.bt{
+              border-top: 1px solid #ededed;
+            }
+            .btns{
+              padding: .16rem 0;
+              .btn{
+                height: .56rem;
+                min-width: 1.25rem;
+                padding: 0 .2rem;
+                line-height: .523rem;
+                text-align: center;
+                margin-left: .2rem;
+                border-radius: 3px;
+                font-size: .28rem;
+                border-radius: 3px;
+              }
+            }
+            .b_right{
+              float: right;
+            }
+            .orange{
+              color: #FB8A2C;
+              border: 1px solid #FB8A2C;
+            }
+            .green{
+              color: #3395FF;
+              border: 1px solid #3395FF;
+            }
+            .red{
+              color: #F00017;
+              font-size: .28rem;
+              line-height: .88rem;
+              text-align: right;
+            }
           }
         }
       }

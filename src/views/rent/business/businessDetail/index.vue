@@ -33,8 +33,8 @@
               <span class="value" :class="com_degree_color(detailData.UrgentDegree)">{{com_degree(detailData.UrgentDegree)}}</span>
             </div>
             <div class="b-items clearfix">
-              <span class="key">客户来源：</span>
-              <span class="value" :class="{'grad':!detailData.CognitiveWayName}">{{detailData.CognitiveWayName || '暂无'}}</span>
+              <span class="key">商机来源：</span>
+              <span class="value" :class="{'grad':!detailData.SourceName}">{{detailData.SourceName || '暂无'}}</span>
             </div>
             <div class="b-items clearfix">
               <span class="key">预定房间：</span>

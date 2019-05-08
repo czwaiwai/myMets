@@ -23,8 +23,8 @@
       <div class="content" :class="{'hasGuest':hasGuest}">
         <div class="top">
           <div class="selectItem clearfix" @click.stop="getSelectType">
-            <span class="name">客户来源：</span>
-            <span class="value textLeft" v-if="detailData.CognitiveWay">{{detailData.CognitiveWayName}}</span>
+            <span class="name">商机来源：</span>
+            <span class="value textLeft" v-if="detailData.Source">{{detailData.SourceName}}</span>
             <span class="value" v-else>请选择(必填)</span>
             <i class="iconfont icon-tubiao- icon"></i>
           </div>
@@ -230,7 +230,7 @@ export default {
     },
     // 提交按钮状态
     com_btnStatus () {
-      if (this.business.hasDetail && this.detailData.CognitiveWay && this.detailData.ReservedHouse && this.detailData.ReserveArea && this.detailData.UrgentDegree && this.detailData.STime && this.detailData.ETime) {
+      if (this.business.hasDetail && this.detailData.Source && this.detailData.ReservedHouse && this.detailData.ReserveArea && this.detailData.UrgentDegree && this.detailData.STime && this.detailData.ETime) {
         return true
       } else {
         return false
@@ -309,23 +309,24 @@ export default {
       // }
       // let res = await this.$http.post(obj)
       let res = await this.$xml('UserRent_GetOptionList', {
-        'TypeName': 'CognitiveWay'
+        'TypeName': 'OptSource'
       })
       res.data.forEach(arr => {
-        if (this.detailData.CognitiveWay === arr.value) {
+        if (this.detailData.Source === arr.value) {
           arr.isSelect = true
         } else {
           arr.isSelect = false
         }
       })
-      this.selectData.title = '客户来源'
+      this.selectData.title = '商机来源'
       this.selectData.list = res.data
       this.$refs.selectList.show()
     },
     selectItem (item) {
+      console.log('tagitem', item)
       this.detailData.isChange = true
-      this.detailData.CognitiveWay = item.value
-      this.detailData.CognitiveWayName = item.showText
+      this.detailData.Source = item.value
+      this.detailData.SourceName = item.showText
     },
     setInitData () {
       // this.$store.commit('updateBusiness', {data: this.business.data, houseCodes: this.business.houseCodes})
@@ -380,7 +381,7 @@ export default {
             'ReserveArea': this.detailData.ReserveArea || '0.00',            
             'STime': this.detailData.STime,            
             'ETime': this.detailData.ETime,
-            'CognitiveWay': this.detailData.CognitiveWay,            
+            'Source': this.detailData.Source,            
             'UrgentDegree': this.detailData.UrgentDegree,
             'TradChance': this.detailData.TradChance,            
             'Memo': this.detailData.Memo,
@@ -406,6 +407,7 @@ export default {
             'LinkMan': this.detailData.LinkMan,
             'TradMoney': '0.00',
             'ContactType': '',
+            'Source': this.detailData.Source,    
             'ContactManner': this.detailData.ContactManner,
             'EmployeeJobID': this.locationData.employeeData.employeeJobId,
             'EmployeeID': this.locationData.employeeData.employeeId,

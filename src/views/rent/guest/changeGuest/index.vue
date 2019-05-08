@@ -43,6 +43,18 @@
           <h3 class="title">更多信息 <span>(选填)</span></h3>
           <div class="msg">
             <div class="selectItem clearfix" @click.stop="selectType('CstCategory')">
+              <span class="name">中介公司：</span>
+              <span class="value textLeft" v-if="cstCategory.hasSelect">{{cstCategory.showText}}</span>
+              <span class="value" v-else>请选择</span>
+              <i class="iconfont icon-tubiao- icon"></i>
+            </div>
+            <div class="selectItem clearfix" @click.stop="selectType('BySector')">
+              <span class="name">所属行业：</span>
+              <span class="value textLeft" v-if="cstBySector.hasSelect">{{cstBySector.showText}}</span>
+              <span class="value" v-else>请选择</span>
+              <i class="iconfont icon-tubiao- icon"></i>
+            </div>
+            <div class="selectItem clearfix" @click.stop="selectType('CstCategory')">
               <span class="name">客源类别：</span>
               <span class="value textLeft" v-if="cstCategory.hasSelect">{{cstCategory.showText}}</span>
               <span class="value" v-else>请选择</span>
@@ -55,7 +67,7 @@
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
             <div class="selectItem clearfix" @click.stop="selectType('CognitiveWay')">
-              <span class="name">认知途径：</span>
+              <span class="name">客户来源：</span>
               <span class="value textLeft" v-if="cognitiveWay.hasSelect">{{cognitiveWay.showText}}</span>
               <span class="value" v-else>请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
@@ -104,6 +116,8 @@ export default {
       cstCategory: {hasSelect: false},
       cstLevel: {hasSelect: false},
       cognitiveWay: {hasSelect: false},
+      cstBySector: {hasSelect: false},
+      conduitCompanyName: {hasSelect: false, value: '', showText: ''},
       isHttping: false
     }
   },
@@ -195,6 +209,15 @@ export default {
             arr.isSelect = false
           }
         })
+      } else if (type === 'BySector') {
+        this.selectData.title = '所属行业'
+        res.data.forEach(arr => {
+          if (this.cstBySector.hasSelect && this.cstBySector.value === arr.value) {
+            arr.isSelect = true
+          } else {
+            arr.isSelect = false
+          }
+        })
       }
       this.selectData.type = type
       this.selectData.list = res.data
@@ -210,6 +233,8 @@ export default {
         this.cstLevel = item
       } else if (this.itemType === 'CognitiveWay') {
         this.cognitiveWay = item
+      } else if (this.itemType === 'BySector') {
+        this.cstBySector = item
       }
     },
     async submit () {
@@ -266,6 +291,8 @@ export default {
         'Category': this.cstCategory.value || '',
         'CstLevel': this.cstLevel.value || '',
         'CognitiveWay': this.cognitiveWay.value || '',
+        'BySector': this.cstBySector.value || '', // 所属行业
+        'ConduitCompany': this.conduitCompanyName.value || '', // 中介公司
         'Fax': this.fax,
         'Memo': this.remark,
         'SaveType': 'RO'
@@ -316,6 +343,13 @@ export default {
           hasSelect: true,
           value: this.guestDetail.CognitiveWay,
           showText: this.guestDetail.CognitiveWayName
+        }
+      }
+      if (this.guestDetail.BySector) {
+        this.cstBySector = {
+          hasSelect: true,
+          value: this.guestDetail.BySector,
+          showText: this.guestDetail.BySectorName
         }
       }
     },
