@@ -105,7 +105,6 @@
       </transition>
       <transition name="housepropertylist">
         <div class="propertycontent" v-show="pageStatus.pageType===2">
-          <load-view ref="list">
             <none-page title="无数据~" v-show="propertylist.length==0"></none-page>
             <ul class="c-list" v-show="propertylist.length">
               <li class="c-items" v-for="(item,index) in propertylist" :key="index">
@@ -126,7 +125,6 @@
                 </div>
               </li>
             </ul>
-          </load-view>
         </div>
       </transition>
     </div>

@@ -246,14 +246,16 @@ export default {
       }
     },
     setStatus () {
-      if (this.detailData.UrgentDegree.indexOf('Height') > -1) {
-        this.statusData.type = 2
-      } else if (this.detailData.UrgentDegree.indexOf('Middle') > -1) {
-        this.statusData.type = 1
-      } else if (this.detailData.UrgentDegree.indexOf('Lower') > -1) {
-        this.statusData.type = 0
-      } else {
-        this.statusData.type = ''
+      if (this.detailData.UrgentDegree){
+        if (this.detailData.UrgentDegree.indexOf('Height') > -1) {
+          this.statusData.type = 2
+        } else if (this.detailData.UrgentDegree.indexOf('Middle') > -1) {
+          this.statusData.type = 1
+        } else if (this.detailData.UrgentDegree.indexOf('Lower') > -1) {
+          this.statusData.type = 0
+        } else {
+          this.statusData.type = ''
+        }
       }
     },
     getStatus () {
@@ -283,6 +285,15 @@ export default {
     },
     toSelectResHouse () {
       // this.setInitData()
+      // let businessSelectHouse={houseId:this.detailData.ReservedHouse,houseCode:this.detailData.ReservedHouseCode}
+      // localStorage.businessSelectHouse=JSON.stringify(businessSelectHouse)
+      let businessData = {
+        hasDetail: this.business.hasDetail,
+        detail: this.business.detail,
+        msg: this.detailData
+      }
+      this.$store.commit('updateBusiness', businessData)
+      console.log('tag', businessData)
       this.$router.push('/selectResHouse')
     },
     selectStatus (item) {

@@ -42,9 +42,9 @@
         <div class="moreMsg">
           <h3 class="title">更多信息 <span>(选填)</span></h3>
           <div class="msg">
-            <div class="selectItem clearfix" @click.stop="selectType('CstCategory')">
+            <div class="selectItem clearfix" @click.stop="selectType('conduitCompany')">
               <span class="name">中介公司：</span>
-              <span class="value textLeft" v-if="cstCategory.hasSelect">{{cstCategory.showText}}</span>
+              <span class="value textLeft" v-if="conduitCompanyName.hasSelect">{{conduitCompanyName.showText}}</span>
               <span class="value" v-else>请选择</span>
               <i class="iconfont icon-tubiao- icon"></i>
             </div>
@@ -181,9 +181,22 @@ export default {
       // }
       this.itemType = type
       // let res = await this.$http.post(obj)
-      let res = await this.$xml('UserRent_GetOptionList', {
-        'TypeName': type
-      })
+      let res = {}
+      if (type === 'conduitCompany') {
+        let companyInfo = await this.$xml('UserCS_CustomerIntermediary', {
+          'OrgId': this.locationData.orgData.orgId
+        })
+        if (companyInfo.data) {
+          res.data = []
+          companyInfo.data.forEach(ele => {
+            res.data.push({value: ele.ID, showText: ele.CstName, isSelect: false})
+          })
+        }
+      } else {
+        res = await this.$xml('UserRent_GetOptionList', {
+          'TypeName': type
+        })
+      }
       console.log(res)
       if (type === 'CstType') {
         this.selectData.title = '客源类型'
@@ -230,6 +243,15 @@ export default {
             arr.isSelect = false
           }
         })
+      } else if (type === 'conduitCompany') {
+        this.selectData.title = '中介公司'
+        res.data.forEach(arr => {
+          if (this.conduitCompanyName.hasSelect && this.conduitCompanyName.value === arr.value) {
+            arr.isSelect = true
+          } else {
+            arr.isSelect = false
+          }
+        })
       }
       this.selectData.type = type
       this.selectData.list = res.data
@@ -247,6 +269,8 @@ export default {
         this.cognitiveWay = item
       } else if (this.itemType === 'BySector') {
         this.cstBySector = item
+      } else if (this.itemType === 'conduitCompany') {
+        this.conduitCompanyName = item
       }
     },
     async submit () {

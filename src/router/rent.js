@@ -232,6 +232,14 @@ export default [
     component: () => import('@/views/rent/business/selectSearchHouse')
   },
   {
+    name: 'selectSearchHouseV2',
+    path: '/selectSearchHouseV2',
+    meta: {
+      title: '选择预定房屋'
+    },
+    component: () => import('@/views/rent/business/selectSearchHouse/indexV2')
+  },
+  {
     name: 'selectHouse',
     path: '/selectHouse',
     meta: {

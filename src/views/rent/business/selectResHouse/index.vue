@@ -53,6 +53,7 @@ export default {
       itemData: [],
       dans: [],
       codes: [],
+      grpData: {},
       clickBack: false
     }
   },
@@ -94,7 +95,13 @@ export default {
       // this.$vux.loading.hide()
       console.log(res)
       res.data.forEach(arr => {
-        arr.isSelect = false
+        if (this.locationData.grpItem && this.locationData.grpItem.Id === arr.Id) {
+          arr.isSelect = true
+          this.grpData = arr
+          this.getBudInfo(arr)
+        } else {
+          arr.isSelect = false
+        }
       })
       this.listData = res.data
     },
@@ -111,6 +118,7 @@ export default {
         }
       })
       this.getBudInfo(item)
+      this.grpData = item
     },
     // 获取楼栋列表
     async getBudInfo (item) {
@@ -128,7 +136,11 @@ export default {
       // this.$vux.loading.hide()
       console.log(res)
       res.data.forEach(arr => {
-        arr.isSelect = false
+        if (this.locationData.budItem && this.locationData.budItem.Id === arr.Id) {
+          arr.isSelect = true
+        } else {
+          arr.isSelect = false
+        }
       })
       this.itemData = res.data
     },
@@ -140,8 +152,11 @@ export default {
           arr.isSelect = false
         }
       })
+      this.locationData.grpItem = this.grpData
+      this.locationData.budItem = item
+      localStorage.locationData = JSON.stringify(this.locationData)
       this.$router.push({
-        name: 'selectSearchHouse',
+        name: 'selectSearchHouseV2',
         query: {
           BudID: item.Id
         }
@@ -160,6 +175,9 @@ export default {
         msg: msg
       }
       this.$store.commit('updateBusiness', business)
+
+      let businessSelectHouse = {houseId: msg.ReservedHouse, houseCode: msg.ReservedHouseCode}
+      localStorage.businessSelectHouse = JSON.stringify(businessSelectHouse)
     },
     // 新增房屋
     selectHouseCode (item, index) {
@@ -200,12 +218,18 @@ export default {
     }
   },
   created () {
+    // if (localStorage.businessSelectHouse) {
+    //   let businessSelectHouse = JSON.parse(localStorage.businessSelectHouse)
+    //   this.houseList = businessSelectHouse.houseCode
+    //   this.houseId = businessSelectHouse.houseId
+    // }
     if (this.business.msg.ReservedHouseCode) {
       this.houseList = this.business.msg.ReservedHouseCode.split(',')
     }
     if (this.business.msg.ReservedHouse) {
       this.houseId = this.business.msg.ReservedHouse.split(',')
     }
+    console.log('tag', this.business.msg)
     if (localStorage.locationData) {
       this.locationData = JSON.parse(localStorage.locationData)
     }
