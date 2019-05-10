@@ -1,41 +1,57 @@
 <template>
-  <div class="page">
+  <div class="page massif">
     <nav-title title="地块统计"></nav-title>
     <div class="weui-flex">
-      <div class="weui-flex__item">
-        <search v-model="search" url="UserCS_GetRectificationGrpInfo" placeholder="请输入地块名称" searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
+      <div class="weui-flex__item search">
+        <search v-model="search" url="UserCS_GetRectificationGrpInfo" placeholder="搜索地块" searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
       </div>
       <!-- <div @click="filterVisible = true" class="padding-right padding-left5"><i class="main_color iconfont icon-shaixuan" style="font-size: 23px; line-height: 43px;"></i></div> -->
     </div>
-    <div class="page_bd massif">
-        <div class="weui-flex__item">
+    <div class="page_bd">
+        <!-- <div class="weui-flex__item">
             <div class="btn" :class="{'deepColor':search!==''}"  @click.stop="toSearch">查询</div>
-        </div>
-        <div class="weui-flex__item">
-          <div class="history-key">历史搜索</div>
-          <div class="history-list">
-            <ul>
-              <li v-for="(item,index) in searchHistory" :key="index" @click="selectHistoryItem(item)">{{item.OrgName + '-' + item.GrpName}}</li>
-            </ul>
+        </div> -->
+        <div class="weui-flex__item history-list" v-if="searchHistory.length">
+          <div class="header">
+            <span>历史搜索</span>
+            <p class="clear" @click.stop="clearHistoryList">全部清除</p>
           </div>
+          <ul class="list clearfix">
+            <li class="item" v-for="(item,index) in searchHistory" :key="index" @click="selectHistoryItem(item)">
+              <span>{{item.GrpName}}</span>
+              <i class="iconfont icon-quxiao1" @click.stop="clearitem(item,index)"></i>
+            </li>
+          </ul>
         </div>
       </div>
+      <dialog-confire
+        :title="dialogData.title"
+        ref="dialog"
+        @clickLeftBtn="clickLeftBtn"
+        @clickRightBtn="clickRightBtn"
+      ></dialog-confire>
   </div>
 </template>
 <script>
 import {mapGetters} from 'Vuex'
 import Search from '@/components/search'
+import dialogConfire from '@/components/dialogConfire.vue'
 import mapReady from '@/utils/getEchars'
 // import qs from 'qs'
 export default {
   name: 'massifStatics',
-  components: {Search},
+  components: {Search, dialogConfire},
   data () {
     return {
       search: '',
       filterVisible: false,
       currentItem: {},
-      searchHistory: []
+      searchHistory: [],
+      dialogData: {
+        type: 0,
+        title: '',
+        data: {}
+      }
     }
   },
   created () {
@@ -68,10 +84,39 @@ export default {
         this.searchHistory.push(this.currentItem)
         localStorage.searchHistory = JSON.stringify(this.searchHistory)
       }
+      this.$router.push('/massifStatisticsReport')
     },
     selectHistoryItem (item) {
       this.currentItem = item
       this.search = item.OrgName + '-' + item.GrpName
+    },
+    clearHistoryList () {
+      this.dialogData = {
+        type: 2,
+        title: '请确认是否删除所有历史记录？',
+        data: {}
+      }
+      this.$refs.dialog.show()
+    },
+    clearitem (item, index) {
+      this.searchHistory.splice(index, 1)
+      if (this.searchHistory.length) {
+        localStorage.searchHistory = this.searchHistory.join(',')
+      } else {
+        localStorage.removeItem('searchHistory')
+      }
+    },
+    // 点击左边按钮
+    clickLeftBtn () {
+      this.$refs.dialog.hide()
+    },
+    // 点击右边按钮
+    clickRightBtn () {
+      this.$refs.dialog.hide()
+      if (this.dialogData.type === 2) {
+        this.searchHistory = []
+        localStorage.removeItem('searchHistory')
+      }
     },
     async getPageData () {
       let p0 = 'UserCS_ReportPropertyRightCard'
@@ -118,17 +163,95 @@ export default {
       background:#fff;
     }
   }
+  .search{
+    height: 2.22rem;;
+    background-color: #2A5EB3;
+  }
   .history-key{
     margin: 10px 10px;
     font-size: 12px;
   }
   .history-list{
-    margin: 0px 10px;
-    >ul>li{
-      float: left;
-      margin: 3px 5px;
-      border: 1px solid #999;
+    position: relative;
+      z-index: 10;
+      padding: 0 0 .3rem .3rem;
+      .header{
+        position: relative;
+        height: .88rem;
+        line-height: .88rem;
+        font-size: .28rem;
+        span{
+          color: #333;
+        }
+        .clear{
+          position: absolute;
+          right: .3rem;
+          top: 0;
+          height: .88rem;
+          line-height: .88rem;
+          font-size: .28rem;
+          color: #1B9BFE;
+        }
+      }
+      .list{
+        .item{
+          position: relative;
+          float: left;
+          // width: 1.5rem;
+          padding: 0 .08rem;
+          height: .56rem;
+          background: #fff;
+          border-radius: .1rem;
+          margin-right: .2rem;
+          margin-top: .3rem;
+          span{
+            display: block;
+            width: 1.415rem;
+            height: .56rem;
+            font-size: .3rem;
+            color: #333;
+            line-height: .56rem;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          &:nth-child(4n){
+            margin-right: 0;
+          }
+          .icon-quxiao1{
+            position: absolute;
+            right: -.15rem;
+            top: -.15rem;
+            width: .4rem;
+            height: .4rem;
+            display: block;
+            font-size: .34rem;
+            color: #999;
+            text-align: center;
+            line-height: .4rem;
+          }
+        }
+      }
     }
-  }
+    .tip-name{
+      position: absolute;
+      top: 4.5rem;
+      left: 0;
+      z-index: 9;
+      width: 100vw;
+      img{
+        display: block;
+        width: 1.6rem;
+        height: 1.5rem;
+        margin: 0 auto .5rem;
+      }
+      p{
+        color: #4a4a4a;
+        font-size: .3rem;
+        text-align: center;
+        line-height: 1.2;
+      }
+    }
 }
 </style>
