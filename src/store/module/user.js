@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'development') {
     APP_Service_Picking: true, // 客服领料
     APP_Maintain_SwitchSingle: true, // 保养转单
     APP_Inspection_SwitchSingle: true, // 巡检转单
-
+    APP_Quality: true,
     // 租赁
     APP_LeaseCst: true,
     APP_LeaseHouse: true,
@@ -62,7 +62,7 @@ export default {
         state.user = sess.get('user')
       }
       if (!state.user) {
-        return {
+        state.user = {
           // UserID: 'tangxc',
           // PositionName: '财务经理',
           // // OrgName: '思源大厦',
@@ -73,15 +73,35 @@ export default {
           // memberId: '1604271708130001001E',
           // memberName: '糖新村'
           // --------------------------
-          UserID: 'LiaoJiangWei',
+          UserID: 'Demo1',
           PositionName: '财务经理',
           // OrgName: '思源大厦',
           // OrgID: 10000,
           OrgName: '银河世纪花园',
           OrgID: '11091315263400010000', // 项目id
           PositionID: '11091316310300010000', // 职位id
-          memberId: '18102416111400010024',
-          memberName: '廖江伟'
+          memberId: '4AA397BC156920F58334',
+          memberName: '陈闵'
+          // --------------------------
+          // UserID: 'LiaoJiangWei',
+          // PositionName: '财务经理',
+          // // OrgName: '思源大厦',
+          // // OrgID: 10000,
+          // OrgName: '银河世纪花园',
+          // OrgID: '11091315263400010000', // 项目id
+          // PositionID: '11091316310300010000', // 职位id
+          // memberId: '18102416111400010024',
+          // memberName: '廖江伟'
+          // --------------------------
+          // UserID: 'DaiRongHua',
+          // PositionName: '财务经理',
+          // // OrgName: '思源大厦',
+          // // OrgID: 10000,
+          // OrgName: '昆明祥鹏航空基地',
+          // OrgID: '10033', // 项目id
+          // PositionID: '1803231613030001006J', // 职位id
+          // memberId: '1809170902280001006J',
+          // memberName: '代荣华'
           // --------------------------
           // UserID: 'test1',
           // PositionName: '财务经理',
@@ -110,6 +130,13 @@ export default {
     },
     setIp (state, ip) {
       state.ip = ip
+    },
+    setOrg (state, obj) {
+      if (state.user) {
+        let user = state.user
+        user.OrgID = obj.projectId
+        user.OrgName = obj.projectName
+      }
     },
     login (state, user) {
       state.user = user

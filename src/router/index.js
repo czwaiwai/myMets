@@ -29,6 +29,9 @@ import Pos from './pos'
 // 收款模块
 import Cash from './cash'
 
+// 能耗抄表app部分模块
+import Energy from './energy'
+
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
 import TabWork from '@/views/tabWork'
@@ -51,6 +54,9 @@ export default new Router({
     {
       path: '/',
       redirect: to => {
+        if (Vue.isEnergy) {
+          return '/energyIndex'
+        }
         if (Vue.isPos) {
           return '/home'
         } else {
@@ -177,16 +183,21 @@ export default new Router({
     //   }
     // },
     // 测试页面 start
-    // {
-    //   path: '/test1',
-    //   name: 'test1',
-    //   component: () => import('@/views/test1'),
-    //   children: [{
-    //     path: 'test',
-    //     name: 'test',
-    //     component: Test
-    //   }]
-    // },
+    {
+      path: '/test1',
+      name: 'test1',
+      component: () => import('@/views/test1'),
+      children: [{
+        path: 'test',
+        name: 'test',
+        component: () => import('@/views/test'),
+        children: [{
+          path: 'test2',
+          name: 'test2',
+          component: () => import('@/views/test')
+        }]
+      }]
+    },
     {
       path: '/test',
       name: 'test',
@@ -207,6 +218,7 @@ export default new Router({
     ...approval,
     ...comparedBuild,
     ...massifStatistics,
+    ...Energy,
     {
       path: '*',
       redirect: to => {

@@ -116,6 +116,7 @@ export default {
       positionId: this.user.PositionID,
       memberId: this.user.memberId,
       workPosFrom: this.workPosFrom,
+      positionName: this.user.PositionName,
       memberName: this.user.memberName
     }
     this.getStatus()
@@ -129,11 +130,13 @@ export default {
       'user': 'user'
     }),
     currConfig () {
-      if (this.configList) {
-        return this.configList.find(item => item.name === this.currIndex) || {}
-      } else {
-        return ''
+      if (this.configList && this.configList.length > 0) {
+        let item = this.configList.find(item => item.name === this.currIndex)
+        if (item) {
+          return item
+        }
       }
+      return ''
     }
   },
   // watch: {

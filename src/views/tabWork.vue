@@ -128,6 +128,12 @@
           </div>
           <p class="weui-grid__label">{{item.appName}}</p>
         </a>
+        <a  @click="$app.loadView({url:'http://' + ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid light_bg">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_by.png"  alt="">
+          </div>
+          <p class="weui-grid__label">保养</p>
+        </a>
         <!-- <button @click="routeTest" style="width:100px;height:100px;">test</button> -->
       </div>
     </div>
@@ -157,13 +163,17 @@ export default {
     //   console.log('执行tabwork方法')
     //   window.APP_pushMsg('{"fromTag":"","id":"20190220092648764888","status":"1","type":"CustomerService","url":""}')
     // }, 5000)
-    this.getPageData()
+    if (this.auth['APP_Quality']) {
+      this.getPageData()
+    }
   },
   activated () {
     console.log('调用offlineBadge')
     // 当切换职位或项目之后重新调用更新数据
     if (this.currRand !== 0 && this.currRand !== this.rand) {
-      this.getPageData()
+      if (this.auth['APP_Quality']) {
+        this.getPageData()
+      }
       this.currRand = this.rand
     } else {
       this.currRand = this.rand
@@ -187,7 +197,7 @@ export default {
           UserName: this.user.UserID,
           PassWord: ''
         })
-        this.otherList = res.data
+        this.otherList = res.data.filter(item => item.h5Url)
       } catch (e) {
         console.log(e)
       }

@@ -71,7 +71,7 @@ export default {
         if (typeof jsonData === 'string') {
           try {
             // 尝试重新格式化数据一次
-            jsonData = JSON.parse(jsonData.replace(/[\n\r]/g, ''))
+            jsonData = JSON.parse(jsonData.replace(/[\n\r|\t]/g, ''))
           } catch (err) {
             return {
               Result: [ {

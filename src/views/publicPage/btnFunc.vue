@@ -68,7 +68,7 @@ export default {
       })
     },
     toScanDetail () {
-      this.$router.forward('/scan/ScanDetail/' + this.$route.query.code)
+      this.$router.forward('/scan/ScanDetail/' + encodeURIComponent(this.$route.query.code))
     },
     toMeterSearch () {
       this.$router.push({

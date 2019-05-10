@@ -1,7 +1,7 @@
 <template>
   <mt-index-list>
-    <mt-index-section v-for="(item,index) in charList" :key="index"  :index="item.name">
-      <mt-cell @click.native="itemClick(sub)" v-for="(sub,index) in item.value" :key="index" :title="sub.EmployeeName" :value="sub.PositionName" >
+    <mt-index-section v-for="(item) in charList" :key="item.name"  :index="item.name">
+      <mt-cell @click.native="itemClick(sub)" v-for="sub in item.value" track-by="$index" :key="sub.id" :title="sub.EmployeeName" :value="sub.PositionName" >
         <span class="icon_color" slot="icon" >{{sub.char}}</span>
       </mt-cell>
     </mt-index-section>
@@ -41,6 +41,7 @@ export default {
       this.$emit('setList', res.data)
       let charStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
       res.data.forEach(item => {
+        item.id = item.DeptID + '-' + item.PositionID + '-' + item.EmployeeID
         item.char = item.EmployeeName.slice(0, 1)
         item.PositionName = item.PositionName.replace(/^.*-/, '')
         let char = item.EmployeeNamePY.charAt(0).toLocaleUpperCase()

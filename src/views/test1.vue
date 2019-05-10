@@ -21,6 +21,10 @@ export default {
   name: 'repairDetail',
   data () {
     return {
+      myData: {
+        a: '我是父类的方法',
+        b: '子组件你能看到我么'
+      }
     }
   },
   created () {

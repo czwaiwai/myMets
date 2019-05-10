@@ -78,8 +78,10 @@ export default {
     this.formObj.workOrdId = this.work.WorkOrdID
 
     this.formObj.orders = this.nav.memberName
-    this.formObj.ordersDepart = this.nav.positionId
-    this.formObj.EmployeeID = this.nav.memberId
+    this.formObj.ordersDepart = this.nav.positionName
+    this.formObj.ordersPositionId = this.nav.positionId
+    this.formObj.ordersId = this.nav.memberId
+    this.formObj.UserId = this.nav.userName
     this.$root.$on('personMulti', list => {
       let arr = list.map(item => item.EmployeeName)
       console.log(arr)
@@ -136,8 +138,8 @@ export default {
         'Idea': this.formObj.Idea,
         'Orders': this.formObj.orders,
         'OrdersDepart': this.formObj.ordersDepart,
-        'OrdersID': this.formObj.EmployeeID,
-        'OrdersPositionID': this.formObj.PositionID,
+        'OrdersID': this.formObj.ordersId,
+        'OrdersPositionID': this.formObj.ordersPositionId,
         'PlusEmployeeName': this.formObj.plusEmployeeName,
         'WorkOrdID': this.formObj.workOrdId
       }, {

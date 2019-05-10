@@ -30,6 +30,7 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import local from '@/utils/local'
 export default {
   name: 'customerList',
   components: {navTitle},
@@ -38,6 +39,7 @@ export default {
       orgId: '',
       roomName: '',
       noCash: '',
+      orderBy: '0',
       userList: []
     }
   },
@@ -45,6 +47,10 @@ export default {
     this.orgId = this.$parent.orgId
     this.roomName = this.$parent.roomName
     // this.getPageData()
+    let orderBy = local.get('cash_orderby')
+    if (orderBy) {
+      this.orderBy = orderBy
+    }
     this.getPageDataNet()
   },
   methods: {
@@ -66,7 +72,8 @@ export default {
       let p0 = 'UserAppFn_GetArrearsCost'
       let res = await this.$xml(p0, {
         orgID: this.orgId,
-        resID: this.$route.params.roomId
+        resID: this.$route.params.roomId,
+        OrderBy: this.orderBy
       })
       if (res.data) {
         let data = this.$toLower(res.data)

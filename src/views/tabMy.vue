@@ -134,7 +134,7 @@ export default {
       this.$app.logout()
     },
     clearCache () {
-      this.$message.confirm('确定要清除缓存数据?<br />您将会退出登录').then(action => {
+      this.$message.confirm('<p class="error_color fs13">确定清除吗？<br/>抄表、巡检、保养的缓存数据将被清除，如有完成一部分的工单，<br/>请先完成提交后再清除缓存</p>').then(action => {
         localStorage.clear()
         this.$app.clearCache()
       })

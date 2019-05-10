@@ -3,6 +3,8 @@
 import './assets/css/main.scss'
 import './assets/font/iconfont.css'
 import 'vue-photo-preview/dist/skin.css'
+// import 'babel-polyfill'
+import 'core-js/es6/array'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -45,6 +47,13 @@ if (process.env.NODE_ENV === 'development') {
 FastClick.attach(document.body)
 dateForm()
 Vue.config.productionTip = false
+Vue.config.errorHandler = function (error, vm) {
+  console.log('出现错误----')
+  console.error(error)
+  console.error(error.message)
+  console.log(error.stack)
+  console.log(vm.name)
+}
 Vue.component(NavTitle.name, NavTitle)
 Vue.component(DatetimePicker.name, DatetimePicker)
 // Vue.component(IndexList.name, IndexList)
@@ -96,6 +105,9 @@ store.dispatch('getUserAction').then(user => {
   // if (Vue.dev) {
   //   Vue.isPos = true
   // }
+  if (user && user.isEnergy) {
+    Vue.isEnergy = true
+  }
   if (store.getters.isPos) {
     Vue.isPos = true
     Vue.prototype.$isPos = true
@@ -115,6 +127,7 @@ store.dispatch('getUserAction').then(user => {
   console.log(err)
   // 开发环境虚假登录
   if (Vue.dev) {
+    Vue.isEnergy = true
     if (store.getters.isPos) {
       Vue.isPos = true
       Vue.prototype.$isPos = true

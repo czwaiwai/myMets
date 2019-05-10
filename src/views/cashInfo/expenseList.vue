@@ -2,8 +2,11 @@
   <div class="page_modal">
     <div class="page">
       <nav-title title="收款"></nav-title>
-      <div class="page_sub_hd padding15-h light_bg" style="background: #FFF;">
-        <i class="iconfont icon-shouye-copy main_color padding-right"></i>{{roomName}}
+      <div class="page_sub_hd padding15-h light_bg weui-flex" style="background: #FFF;">
+        <div class="weui-flex__item">
+          <i class="iconfont icon-shouye-copy main_color padding-right"></i>{{roomName}}
+        </div>
+        <div @click="handleChangeMode" class="padding-left15"><i class="iconfont icon-xiangmu1"></i></div>
       </div>
       <div class="page_bd expense_list">
           <div class="weui-cells__title">
@@ -15,7 +18,7 @@
               <div class="title_line weui-flex">
                 <div @click="selectClick(item)" class="weui-flex__item">
                   <i class="iconfont" style="color: #3395FF;" :class="item.isCheck?'icon-select-copy':'icon-Ellipse'"></i>
-                  {{item.repYears}}
+                  {{item.repYears || item.ipItemName}}
                 </div>
                 <div @click="showSubClick(item)">
                   <span style="color: #e40101;">￥{{item.moneyTotal}}</span>
@@ -24,8 +27,9 @@
               </div>
               <div v-if="item.subShow" style="padding: 10px 15px 10px 30px;color:#999;">
                 <ul>
-                  <li class="sub_item weui-flex" :key="index"  v-for="(sub, index) in item.dateData" >
-                    <div class="weui-flex__item">{{sub.ipItemName}}</div>
+                  <li class="sub_item weui-flex" @click="selectClickSub(sub, item)" :key="index"  v-for="(sub, index) in item.dateData" >
+                    <i v-if="payMode===2" class="iconfont padding-right5" style="color: #3395FF;" :class="sub.isCheck?'icon-select-copy':'icon-Ellipse'"></i>
+                    <div class="weui-flex__item ">{{sub.ipItemName || sub.repYears}}</div>
                     <div>￥{{sub.priFailures}}</div>
                   </li>
                 </ul>
@@ -59,6 +63,7 @@
 <script>
 import { Popup, Actionsheet } from 'mint-ui'
 import navTitle from '@/components/navTitle'
+import local from '@/utils/local'
 export default {
   name: 'customerList',
   components: {
@@ -68,6 +73,7 @@ export default {
   },
   data () {
     return {
+      payMode: 2,
       paying: false,
       payConfirmVisible: false,
       choosePayId: '',
@@ -79,6 +85,7 @@ export default {
       personCash: {},
       btnTxt: '确定收款',
       list: [],
+      isOrder: false, // false按账期排序, true按项目排序
       actions: []
     }
   },
@@ -87,15 +94,24 @@ export default {
     this.orgId = this.$parent.orgId
     this.roomName = this.$parent.roomName
     this.personCash = this.$parent.choosePersonCash
-    let list = this.$parent.choosePersonCash.costData.map((item, index) => {
-      this.$set(item, 'isCheck', true)
-      this.$set(item, 'subShow', false)
-      return item
-    })
-    if (list && list.length > 0) {
-      list[0].subShow = true
+    if (this.$parent.orderBy === '1') {
+      this.isOrder = true
+    } else {
+      this.isOrder = false
     }
-    this.list = list
+    this.handleChangeMode()
+    // let list = this.$parent.choosePersonCash.costData.map((item, index) => {
+    //   this.$set(item, 'isCheck', true)
+    //   this.$set(item, 'subShow', false)
+    //   item.dateData.forEach(sub => {
+    //     this.$set(sub, 'isCheck', true)
+    //   })
+    //   return item
+    // })
+    // if (list && list.length > 0) {
+    //   list[0].subShow = true
+    // }
+    // this.list = list
     // this.getPageData()
     this.getPageDataNet()
     // console.log(this.personCash, 'this.personCash')
@@ -113,15 +129,52 @@ export default {
     },
     totalMoney () {
       let money = this.list.reduce((before, item) => {
-        if (item.isCheck) {
-          before += item.moneyTotal - 0
-        }
+        before += item.dateData.reduce((subBefore, sub) => {
+          if (sub.isCheck) {
+            subBefore += ((sub.priFailures - 0) + (sub.lfFailures - 0))
+          }
+          return subBefore
+        }, 0)
         return before
       }, 0)
       return Math.round(parseFloat(money * 100)) / 100
     }
   },
   methods: {
+    // 更换页面模式
+    async handleChangeMode () {
+      this.isOrder = !this.isOrder
+      let p0 = 'UserAppFn_GetArrearsCost'
+      let res = await this.$xml(p0, {
+        orgID: this.orgId,
+        resID: this.$route.params.roomId,
+        OrderBy: this.isOrder ? '1' : '0'
+      })
+      if (res.data) {
+        local.set('cash_orderby', this.isOrder ? '1' : '0')
+        let data = this.$toLower(res.data)
+        console.log(data, 'data========')
+        this.noCash = false
+        let arr = data.filter(item => item.cstID === this.$parent.choosePersonCash.cstID)
+        if (arr) {
+          let list = arr[0].costData.map((item, index) => {
+            this.$set(item, 'isCheck', true)
+            this.$set(item, 'subShow', false)
+            item.dateData.forEach(sub => {
+              this.$set(sub, 'isCheck', true)
+            })
+            return item
+          })
+          if (list && list.length > 0) {
+            list[0].subShow = true
+          }
+          this.list = list
+        }
+        // this.userList = data
+      } else {
+        this.noCash = true
+      }
+    },
     // .net请求接口
     async getPageDataNet () {
       let p0 = 'UserAppFn_GetTradingWay'
@@ -146,19 +199,41 @@ export default {
       // console.log(data, '-data---||----')
     },
     isAllClick () {
-      console.log(this.list)
       if (this.allCheck) {
         this.list.forEach(item => {
           item.isCheck = false
+          item.dateData.forEach(sub => {
+            sub.isCheck = false
+          })
         })
       } else {
         this.list.forEach(item => {
           item.isCheck = true
+          item.dateData.forEach(sub => {
+            sub.isCheck = true
+          })
         })
       }
     },
     selectClick (item) {
       item.isCheck = !item.isCheck
+      if (item.isCheck) {
+        item.dateData.forEach(item => {
+          item.isCheck = true
+        })
+      } else {
+        item.dateData.forEach(item => {
+          item.isCheck = false
+        })
+      }
+    },
+    selectClickSub (sub, item) {
+      sub.isCheck = !sub.isCheck
+      if (item.dateData.every(item => item.isCheck)) {
+        item.isCheck = true
+      } else {
+        item.isCheck = false
+      }
     },
     showSubClick (item) {
       item.subShow = !item.subShow
@@ -203,90 +278,12 @@ export default {
       }
       this.payConfirmVisible = true
     },
-    // getPayList () {
-    //   let list = []
-    //   this.list.forEach(item => {
-    //     if (item.isCheck) {
-    //       item.dateData.forEach(sub => {
-    //         if (sub.id) {
-    //           list.push({id: sub.id, priFailures: sub.priFailures, lfFailures: sub.lfFailures})
-    //         }
-    //       })
-    //     }
-    //   })
-    //   return list
-    // },
-    // // 扫码支付
-    // async scanPay (id, name) {
-    //   try {
-    //     let res = await this.$app.scan()
-    //     this.payForm(id, name, res)
-    //   } catch (err) {
-    //     this.$toast('扫码已取消')
-    //   }
-    // },
-    // // java请求接口
-    // async getPageData () {
-    //   let url = '/ets/payment/trading/getTradingWay'
-    //   let res = await this.$http.post(url, {
-    //     orgID: this.orgId
-    //   })
-    //   console.log(res)
-    //   this.actions = res.data.map((item, index) => {
-    //     let that = this
-    //     item.method = function () {
-    //       that['payChoose'] (item.id, item.name)
-    //     }
-    //     return item
-    //   })
-    // },
-    // // 缴费支付 java用
-    // async payForm (id, name, scan) {
-    //   if (this.paying) return
-    //   this.paying = true
-    //   let params = {
-    //     name: name,
-    //     id: id,
-    //     fillPro: this.$parent.memberId, // 支付用户的memberID
-    //     fillProName: this.$parent.userId, //支付用户的userID
-    //     auth_code: scan, //扫码的结果
-    //     payList: this.getPayList()
-    //   }
-    //   let url = '/ets/payment/order/pay'
-    //   try {
-    //     this.btnTxt = '写入实收...'
-    //     let res = await this.$http.post(url, JSON.stringify(params), {
-    //       headers: {
-    //         'Content-Type': 'application/json;charset=UTF-8',
-    //         'X-Requested-With': 'XMLHttpRequest'
-    //       },
-    //       transformRequest: [function (data) {
-    //         return data
-    //       }]
-    //     })
-    //     if (res.data.fnpaidId !== '') {
-    //       this.$set(this.$parent.choosePersonCash,'totalMoney',this.totalMoney)
-    //       this.paying = false
-    //       this.$router.replace({name: 'cashPaySucc', params: {
-    //           id: res.data.fnpaidId
-    //         }
-    //       })
-    //     } else {
-    //       this.paying = false
-    //       this.btnTxt = '写入实收失败，请重试'
-    //       this.$toast('支付失败')
-    //     }
-    //   } catch (err) {
-    //     this.paying = false
-    //     this.btnTxt = '写入实收失败，请重试'
-    //     this.$toast('支付失败')
-    //   }
-    // },
     getXmlParamList (id, name) {
       let list = []
       this.list.forEach(item => {
-        if (item.isCheck) {
-          item.dateData.forEach(sub => {
+        // if (item.isCheck) {
+        item.dateData.forEach(sub => {
+          if (sub.isCheck) {
             list.push({
               RevID: sub.id,
               RevMoney: sub.priFailures,
@@ -298,8 +295,9 @@ export default {
               RAccount: '',
               OrgID: this.orgId
             })
-          })
-        }
+          }
+        })
+        // }
       })
       return list
     },
@@ -389,7 +387,7 @@ export default {
       let params = {
         AppName: '银行卡收款',
         BizName: '消费',
-        amt: this.totalMoney * 100,
+        amt: Math.round(this.totalMoney * 100),
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
         code: '',
@@ -428,7 +426,7 @@ export default {
       let params = {
         AppName: 'POS 通',
         BizName: '扫一扫',
-        amt: this.totalMoney * 100,
+        amt: Math.round(this.totalMoney * 100),
         isNeedPrintReceipt: false,
         tradeTyp: 'useScan',
         code: '',

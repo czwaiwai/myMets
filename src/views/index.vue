@@ -158,7 +158,7 @@ export default {
         this.$router.push({
           name: 'btnFunc',
           query: {
-            code: res,
+            code: encodeURIComponent(res),
             type: 'scan'
           }
         })
@@ -170,7 +170,7 @@ export default {
           this.$router.push({
             name: 'btnFunc',
             query: {
-              code: 'XM001RD-XF-CC001',
+              code: 'BYQ-27#-1B',
               type: 'scan'
             }
           })

@@ -140,6 +140,7 @@ export default {
         positionId: this.user.PositionID,
         memberId: this.user.memberId,
         memberName: this.user.memberName,
+        positionName: this.user.PositionName,
         workPosFrom: ''
       }
       this.notice(taskId).then(res => {

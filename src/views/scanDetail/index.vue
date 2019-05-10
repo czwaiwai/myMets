@@ -55,7 +55,7 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-import { Navbar } from 'mint-ui'
+import { Navbar, TabItem } from 'mint-ui'
 import ScanList from '@/components/pageList'
 import OtherDetail from './child/otherDetail'
 import navTitle from '@/components/navTitle'
@@ -89,7 +89,7 @@ export default {
       memberId: this.user.memberId || '1',
       workPosFrom: 'Equipment'
     }
-    this.deviceId = this.$route.params.id
+    this.deviceId = decodeURIComponent(this.$route.params.id)
     this.configList = [
       this.createPageConfig('list0', 'Inspection'),
       this.createPageConfig('list1', 'KeepFit'),
@@ -103,7 +103,8 @@ export default {
     list0: ScanList,
     list1: ScanList,
     list2: ScanList,
-    MtNavbar: Navbar
+    MtNavbar: Navbar,
+    MtTabItem: TabItem
   },
   methods: {
     tocustomerService () {

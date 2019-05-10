@@ -378,7 +378,7 @@ export default {
   },
   created () {
     if (this.$route.query.quick) {
-      this.searchKey = this.$route.query.key
+      this.searchKey = decodeURIComponent(this.$route.query.key)
       this.getSearchData()
     }
   },

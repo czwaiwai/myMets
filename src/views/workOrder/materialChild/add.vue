@@ -93,6 +93,7 @@
 import Search from '@/components/search'
 import matNumber from '../child/matNumber'
 import navTitle from '@/components/navTitle'
+import {mapGetters} from 'vuex'
 export default {
   name: 'materialAdd',
   components: {navTitle, Search, matNumber},
@@ -112,6 +113,9 @@ export default {
     console.log(this.work, '----')
   },
   computed: {
+    ...mapGetters({
+      user: 'user'
+    }),
     chooseShowList () {
       return this.chooseList.filter(item => item.num > 0)
     },
@@ -183,6 +187,8 @@ export default {
         'WordOrdId': this.work.WorkOrdID,
         'WordQuertionID': this.work.WorkQuestionID,
         'OrgID': this.work.OrgID,
+        'OpUser': this.user.UserID,
+        'EmployeeId': this.user.memberId,
         //   "OpUser": T.createNew.obj.userName,
         //   "EmployeeId": T.createNew.employeeID,
         'MaterialList': []

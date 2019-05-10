@@ -1,5 +1,4 @@
 <template>
-<div class="page_modal">
   <div class="page">
     <nav-title title="测试地图"></nav-title>
     <div>
@@ -9,7 +8,9 @@
       </select>
     </div>
     <div class="page_bd">
+
       <div ref="cashImg"></div>
+      <a @click="routeTo" style="font-size:30px;">跳转</a>
       <div  class=""  style="width: 1024px;height: 100px;overflow: auto;position: absolute;left: -99999px;">
         <div  ref="pageBD"  style="width:1024px" class="padding15 light_bg">
           <p>收据编码: 11132421</p>
@@ -65,8 +66,10 @@
       <!-- <ins-radio  v-model="formObj.input" :default-val="defaultValue" @input="optionChange" option-str="高|中|低" ></ins-radio> -->
       <!-- <div class="baidu_map" ref="baiduMap" style="width:100%;height:100%;"></div> -->
     </div>
+     <transition name="page" >
+      <router-view></router-view>
+    </transition>
   </div>
-</div>
 </template>
 <script>
 // import mapReady from '@/utils/getBaiduMap'
@@ -85,7 +88,16 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$root.$el.appendChild(this.$el)
+  },
+  destroyed () {
+    if (this.$el) {
+      this.$root.$el.removeChild(this.$el)
+    }
+  },
   created () {
+    console.log(this.$parent.myData, '获取类的结果')
     this.$nextTick(() => {
       // drawReceipt(this.$refs.pageBD)
       domtoimage.toBlob(this.$refs.pageBD).then(blob => {
@@ -104,6 +116,9 @@ export default {
     // })
   },
   methods: {
+    routeTo () {
+      this.$router.push({name: 'test2'})
+    },
     optionChange () {
       console.log(this.formObj)
     },
