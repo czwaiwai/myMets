@@ -22,6 +22,8 @@ import workOrder from './workOrder'
 import monitorCenter from './monitorCenter'
 // 整改对比
 import comparedBuild from './comparedBuild'
+// 地块统计
+import massifStatistics from './massifStatistics'
 // pos机模块
 import Pos from './pos'
 // 收款模块
@@ -204,6 +206,7 @@ export default new Router({
     ...rent,
     ...approval,
     ...comparedBuild,
+    ...massifStatistics,
     {
       path: '*',
       redirect: to => {

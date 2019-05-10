@@ -332,6 +332,7 @@ export default {
         'SaveType': 'RO',
         'BySector': this.cstBySector.value || '', // 所属行业
         'ConduitCompany': this.conduitCompanyName.value || '', // 中介公司
+        'ConduitCompanyName': this.conduitCompanyName.showText || '', // 中介公司
         'EmployeeID': this.locationData.employeeData.employeeId,
         'EmployeeJobID': this.locationData.employeeData.employeeJobId
       })

@@ -316,6 +316,7 @@ export default {
         'CognitiveWay': this.cognitiveWay.value || '',
         'BySector': this.cstBySector.value || '', // 所属行业
         'ConduitCompany': this.conduitCompanyName.value || '', // 中介公司
+        'ConduitCompanyName': this.conduitCompanyName.showText || '', // 中介公司
         'Fax': this.fax,
         'Memo': this.remark,
         'SaveType': 'RO'
@@ -340,6 +341,13 @@ export default {
       this.fax = this.guestDetail.Fax
       this.remark = this.guestDetail.Memo
       this.sexType = this.guestDetail.Sex || 'M'
+      if (this.guestDetail.ConduitCompany) {
+        this.conduitCompanyName = {
+          hasSelect: true,
+          value: this.guestDetail.ConduitCompany,
+          showText: this.guestDetail.ConduitCompanyName
+        }
+      }
       if (this.guestDetail.CstType) {
         this.cstType = {
           hasSelect: true,

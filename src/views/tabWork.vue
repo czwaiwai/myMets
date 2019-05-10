@@ -116,6 +116,12 @@
           </div>
           <p class="weui-grid__label">整改对比</p>
         </a>
+        <!-- <a v-show="auth['APP_Rectification']" @click="$router.forward('/massifStatistics')" href="javascript:;" class="weui-grid light_bg">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_compare.png" alt="">
+          </div>
+          <p class="weui-grid__label">地块统计</p>
+        </a> -->
         <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'chaobiao', isTitle: item.appName})" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img :src="item.h5Icon" alt="">
