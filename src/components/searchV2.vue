@@ -6,8 +6,8 @@
         <!-- v-model="search" -->
         <input ref="search" :value="value" @input="searchInput"  type="search" :placeholder="placeholder"  @focus="inputFocus"  @blur="inputBlur"
           class="weui-search-bar__input" style="width:75%;background-color:#fff;padding: 4px 5px;" id="searchInput"  >
-        <a v-show="value" @click="searchClear" href="javascript:" class="weui-icon-clear" id="searchClear" style="right: 65px;"></a>
-        <div class="right-position"><slot name="icon"><i class="weui-icon-search "></i></slot></div>
+        <a v-show="value" @click="searchClear" href="javascript:" class="weui-icon-clear" id="searchClear" style="right: 23%;"></a>
+        <div class="right-position" @click.stop="toSearch"><slot name="icon"><i class="weui-icon-search "></i></slot></div>
       </div>
       <label @click="$refs.search.focus()" class="weui-search-bar__label" id="searchText">
         <i class="weui-icon-search"></i>
@@ -106,6 +106,9 @@ export default {
         if (this.url) this.getSearchList(this.value)
       }
     },
+    toSearch () {
+      this.$emit('searchData')
+    },
     searchClear () {
       this.$emit('input', '')
       this.$emit('searchCancel')
@@ -148,8 +151,10 @@ export default {
 
   .search_list {
     position: absolute;
-    width: 84%;
+    /* width: 84%; */
     left: 8%;
+    left: 30px;
+    right: 30px;
     background: #FFF;
     top: 2.28rem;
     z-index: 2;
@@ -158,6 +163,8 @@ export default {
   .search-bar{
     padding: 0 0;
     margin: 40px 30px;
+    border-radius: 10px;
+    overflow: auto;
   }
   .weui-search-bar__box{
     padding:0 5px;

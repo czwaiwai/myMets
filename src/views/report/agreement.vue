@@ -83,13 +83,20 @@ export default {
       currDate: '',
       total: 0,
       list: [],
+      currentItem: {},
       pageConfig: {},
       filterVisible: false
     }
   },
   created () {
+    let grpId = ''
+    if (localStorage.AreaSelectGrpItem) {
+      this.currentItem = JSON.parse(localStorage.AreaSelectGrpItem)
+      this.search = this.currentItem.GrpName
+      grpId = this.currentItem.ID
+    }
     this.currDate = this.filterForm.date = (new Date()).format('yyyy-MM-dd')
-    this.pageConfig = this.pageListConfig({pageSize: 20, Etime: this.currDate})
+    this.pageConfig = this.pageListConfig({pageSize: 20, Etime: this.currDate, GrpID: grpId})
   },
   methods: {
     listDone (list) {
@@ -102,11 +109,13 @@ export default {
     searchRes (item) {
       console.log(item, 'searchRes')
       // this.grpId = item.ID
+      this.currentItem = item
       this.pageConfig.params.GrpID = item.ID
       this.$refs.pageList.refresh()
     },
     searchCancel () {
       this.pageConfig.params.GrpID = ''
+      this.currentItem = {}
       this.$refs.pageList.refresh()
     },
     filterSubmit (form) {

@@ -78,10 +78,15 @@ export default {
       filterForm: {
         date: ''
       },
+      currentItem: {},
       pageConfig: {}
     }
   },
   created () {
+    if (localStorage.AreaSelectGrpItem) {
+      this.currentItem = JSON.parse(localStorage.AreaSelectGrpItem)
+      this.search = this.currentItem.GrpName
+    }
     this.mapReady = mapReady()
     // let curr = new Date()
     let dateStr = new Date().format('yyyy-MM')
@@ -101,12 +106,14 @@ export default {
     },
     searchRes (item) {
       console.log(item, 'searchRes')
+      this.currentItem = item
       this.pageConfig.params.GrpID = item.ID
       this.mapNeedInit = true
       this.$refs.pageList.refresh()
     },
     searchCancel () {
       this.mapNeedInit = true
+      this.currentItem = {}
       this.pageConfig.params.GrpID = ''
       this.$refs.pageList.refresh()
     },

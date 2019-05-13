@@ -1,9 +1,10 @@
 <template>
   <div class="page report">
     <div class="page_hd">
-      <nav-title :title="$route.meta && $route.meta.title" :hasBtn="hasBtn"></nav-title>
+      <nav-title :title="$route.meta && $route.meta.title"></nav-title>
     </div>
     <div class="page_bd">
+      <div class="report-area"><div class="iconarea"></div><span>{{currentItem.GrpName}}</span></div>
       <mt-tab-container>
         <mt-tab-container-item>
          <div class="padding15">
@@ -39,6 +40,7 @@ export default {
     return {
       hasBtn: false,
       currRand: 0,
+      currentItem: {},
       leftList: []
     }
   },
@@ -49,6 +51,9 @@ export default {
       orgName: searchObj.projectName || this.user.OrgName,
       userId: searchObj.UserId || this.user.UserID,
       positionId: searchObj.PositionId || this.user.PositionID
+    }
+    if (localStorage.AreaSelectGrpItem) {
+      this.currentItem = JSON.parse(localStorage.AreaSelectGrpItem)
     }
     this.getPageData()
   },
@@ -84,7 +89,6 @@ export default {
         let arr = await this.leftbottomInfo()// await Promise.all([this.rightInfo(), this.leftTopInfo(), this.leftbottomInfo()])
         console.log(arr, 'getPageData')
         let leftValues = arr
-        // console.log('this.leftList', this.leftList)
         this.leftList.forEach((item, index) => {
           item.value = leftValues[index]
         })
@@ -121,6 +125,7 @@ export default {
       leftArr.forEach(item => {
         item.show = resData.some(sub => sub.Content === item.auth)
       })
+      leftArr.push({name: '整改比对', urlName: 'compared_comparedBuild', color: '#FC7676', icon: 'icon-copy', auth: '', show: true, value: []})
       // console.log(leftArr, '-------------------')
       if (leftArr.some(item => item.show)) {
         this.leftList = leftArr
@@ -210,5 +215,37 @@ export default {
 }
 .right_text_item + .right_text_item {
   padding-left:10px
+}
+.report-area{
+    // margin-left: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+    width: 100%;
+    >div{
+      float: left;
+      width:8px;
+      margin-top: 3px;
+      margin-left: 5px;
+    }
+    .iconarea::before{
+      content: " ";
+      display: inline-block;
+      height: 15px;
+      width: 3px;
+      //border: 2px;
+      //border-color: #C8C8CD;
+      // border-style: solid;
+      background-color: #46A9FC;
+      /* top: 50%; */
+      margin-top: 1px;
+      right: 2px;
+      position: absolute;
+      left: 15px;
+    }
+    >span{
+      // width:120px;
+      color: #000000;
+      font-size: 15px;
+    }
 }
 </style>

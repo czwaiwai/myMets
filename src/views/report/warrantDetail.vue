@@ -68,15 +68,24 @@ export default {
       filterForm: {
         date: ''
       },
+      currentItem: {},
       list: []
     }
   },
   created () {
-    this.title = this.$route.query.name
-    this.search = this.$parent.search || ''
-    this.currDate = this.$parent.currDate
-    this.filterForm.date = this.currDate
-    this.typeId = this.$route.params.id
+    // this.title = this.$route.query.name
+    // this.search = this.$parent.search || ''
+    // this.currDate = this.$parent.currDate
+    // this.filterForm.date = this.currDate
+    // this.typeId = this.$route.params.id
+
+    if (localStorage.AreaSelectGrpItem) {
+      this.currentItem = JSON.parse(localStorage.AreaSelectGrpItem)
+      this.title = this.currentItem.GrpName
+      this.search = this.currentItem.GrpName
+      this.currDate = (new Date()).format('yyyy-MM-dd')
+      this.filterForm.date = this.currDate
+    }
     this.getPageData()
   },
   methods: {
@@ -96,7 +105,7 @@ export default {
     async getPageData () {
       let p0 = 'UserCS_ReportPropertyRightCardDet'
       let res = await this.$xml(p0, {
-        PropertyRightCardTypeId: this.typeId,
+        PropertyRightCardTypeId: '32332',
         GrpID: this.grpId || '',
         FinanceDate: this.currDate
       })

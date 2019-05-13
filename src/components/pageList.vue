@@ -154,6 +154,9 @@ export default {
         this.$refs.loadmore.onTopLoaded()
         this.loading = false
       })
+      if (this.list.length === 0) {
+        this.listStatus = 'empty'
+      }
     },
     // 设置item对象
     setItem (item, index) {
@@ -172,6 +175,9 @@ export default {
       this.getData().then(res => {
         this.loading = false
       })
+      if (this.list.length === 0) {
+        this.listStatus = 'empty'
+      }
     }
   }
 }

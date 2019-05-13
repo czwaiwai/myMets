@@ -14,7 +14,7 @@ const DeviceRate = () => import(/* webpackChunkName:'report' */ '@/views/report/
 const Agreement = () => import(/* webpackChunkName:'report' */ '@/views/report/agreement') // 合同统计
 const AgreementDetail = () => import(/* webpackChunkName:'report' */ '@/views/report/agreementDetail') // 合同统计
 const CountLease = () => import(/* webpackChunkName:'report' */ '@/views/report/countLease') // 租赁统计
-const Warrant = () => import(/* webpackChunkName:'report' */ '@/views/report/warrant') // 权证统计
+// const Warrant = () => import(/* webpackChunkName:'report' */ '@/views/report/warrant') // 权证统计
 const WarrantDetail = () => import(/* webpackChunkName:'report' */ '@/views/report/warrantDetail') // 权证统计
 export default [
   {
@@ -178,7 +178,7 @@ export default [
   {
     path: '/report/warrant',
     name: 'report_warrant',
-    component: Warrant,
+    component: WarrantDetail, // Warrant,
     meta: {
       title: '权证统计'
     },

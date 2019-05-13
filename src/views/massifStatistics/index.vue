@@ -3,7 +3,7 @@
     <nav-title title="地块统计"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item search">
-        <search v-model="search" url="UserCS_GetRectificationGrpInfo" placeholder="搜索地块" searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
+        <search v-model="search" url="UserCS_GetRectificationGrpInfo" placeholder="搜索地块" searchName="GrpName" :noFocus="true" @searchData="toSearch" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
       </div>
       <!-- <div @click="filterVisible = true" class="padding-right padding-left5"><i class="main_color iconfont icon-shaixuan" style="font-size: 23px; line-height: 43px;"></i></div> -->
     </div>
@@ -18,7 +18,7 @@
           </div>
           <ul class="list clearfix">
             <li class="item" v-for="(item,index) in searchHistory" :key="index" @click="selectHistoryItem(item)">
-              <span>{{item.GrpName}}</span>
+              <span>{{item.GrpName+'-'+item.OrgName}}</span>
               <i class="iconfont icon-quxiao1" @click.stop="clearitem(item,index)"></i>
             </li>
           </ul>
@@ -34,7 +34,7 @@
 </template>
 <script>
 import {mapGetters} from 'Vuex'
-import Search from '@/components/search'
+import Search from '@/components/searchV2'
 import dialogConfire from '@/components/dialogConfire.vue'
 import mapReady from '@/utils/getEchars'
 // import qs from 'qs'
@@ -55,8 +55,9 @@ export default {
     }
   },
   created () {
+    // localStorage.searchHistory = []
     if (localStorage.searchHistory) {
-      console.log('tag', localStorage.searchHistory)
+      console.log('tag', JSON.parse(localStorage.searchHistory))
       this.searchHistory = JSON.parse(localStorage.searchHistory)
     }
   },
@@ -67,7 +68,6 @@ export default {
   },
   methods: {
     searchRes (item) {
-      console.log(item, 'searchRes')
       this.currentItem = item
       this.search = item.OrgName + '-' + item.GrpName
     },
@@ -80,11 +80,14 @@ export default {
       this.getPageData()
     },
     toSearch () {
+      console.log('this.currentItem', this.currentItem)
+      console.log('this.searchHistory', this.searchHistory)
       if (this.searchHistory.indexOf(this.currentItem) < 0) {
         this.searchHistory.push(this.currentItem)
         localStorage.searchHistory = JSON.stringify(this.searchHistory)
       }
-      this.$router.push('/massifStatisticsReport')
+      localStorage.AreaSelectGrpItem = JSON.stringify(this.currentItem)
+      this.$router.push({path: '/massifStatisticsReport'})
     },
     selectHistoryItem (item) {
       this.currentItem = item
@@ -166,6 +169,7 @@ export default {
   .search{
     height: 2.22rem;;
     background-color: #2A5EB3;
+    background-image: url('../../assets/img/report/indexV2_bg.png')
   }
   .history-key{
     margin: 10px 10px;
@@ -206,7 +210,7 @@ export default {
           margin-top: .3rem;
           span{
             display: block;
-            width: 1.415rem;
+            width: 3rem;
             height: .56rem;
             font-size: .3rem;
             color: #333;
