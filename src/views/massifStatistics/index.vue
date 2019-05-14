@@ -80,14 +80,14 @@ export default {
       this.getPageData()
     },
     toSearch () {
-      console.log('this.currentItem', this.currentItem)
-      console.log('this.searchHistory', this.searchHistory)
-      if (this.searchHistory.indexOf(this.currentItem) < 0) {
-        this.searchHistory.push(this.currentItem)
-        localStorage.searchHistory = JSON.stringify(this.searchHistory)
+      if (this.currentItem && this.currentItem.ID) {
+        if (this.searchHistory.indexOf(this.currentItem) < 0) {
+          this.searchHistory.push(this.currentItem)
+          localStorage.searchHistory = JSON.stringify(this.searchHistory)
+        }
+        localStorage.AreaSelectGrpItem = JSON.stringify(this.currentItem)
+        this.$router.push({path: '/massifStatisticsReport'})
       }
-      localStorage.AreaSelectGrpItem = JSON.stringify(this.currentItem)
-      this.$router.push({path: '/massifStatisticsReport'})
     },
     selectHistoryItem (item) {
       this.currentItem = item
@@ -167,7 +167,7 @@ export default {
     }
   }
   .search{
-    height: 2.22rem;;
+    height: 2.22rem;
     background-color: #2A5EB3;
     background-image: url('../../assets/img/report/indexV2_bg.png')
   }

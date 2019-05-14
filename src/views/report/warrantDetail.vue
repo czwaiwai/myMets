@@ -114,6 +114,8 @@ export default {
           item.show = false
           return item
         })
+      } else {
+        this.list = []
       }
       console.log(res)
     },

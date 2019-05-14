@@ -60,6 +60,7 @@ export default {
       groupName: '',
       list: [],
       grpList: [],
+      currentItem: {},
       typeList: [
         {id: 'BeforeRectification', name: '整改前', state: '5', badge: ''},
         {id: 'AfterRectification', name: '整改后', state: '1', badge: ''}
@@ -72,9 +73,16 @@ export default {
     // employeeId: this.$route.query.employeeId,
     // employeeJobId: this.$route.query.employeeJobId
     let searchObj = qs.parse(location.search.replace('?', ''))
+    let orgId = searchObj.orgId || this.user.OrgID
+    let orgName = searchObj.orgId || this.user.OrgID
+    if (localStorage.AreaSelectGrpItem) {
+      this.currentItem = JSON.parse(localStorage.AreaSelectGrpItem)
+      orgId = this.currentItem.OrgID
+      orgName = this.currentItem.OrgName
+    }
     this.nav = {
-      orgId: searchObj.orgId || this.user.OrgID,
-      orgName: searchObj.orgName || this.user.OrgName
+      orgId: orgId,
+      orgName: orgName
     }
     Object.assign(this, this.getGolb)
     this.getPageDataNet()
@@ -101,7 +109,7 @@ export default {
       if (!res.data) return
       let resData = this.$toLower(res.data)
       console.log(resData, '--------------')
-      this.groupId = resData[0].id
+      this.groupId = this.currentItem ? this.currentItem.ID : resData[0].id
       this.filterForm.groupId = this.groupId
       this.grpList = resData
       this.getPageData()

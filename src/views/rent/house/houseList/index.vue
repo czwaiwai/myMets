@@ -51,7 +51,7 @@
           <div class="header-wrap clearfix">
             <div class="search clearfix" @click.stop="toSearchHouse">
               <i class="iconfont icon-sousuo"></i>
-              <span>请输入资源编码</span>
+              <span>请输入资源编码或资源名称</span>
             </div>
           </div>
           <i class="iconfont icon-shaixuan" @click.stop="showFilterBox"></i>

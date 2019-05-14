@@ -5,7 +5,7 @@
       <div class="searchBox clearfix">
         <form class="searchWrap clearfix" action="" onsubmit="return false;">
             <i class="iconfont icon-sousuo"></i>
-            <input class="search-input" placeholder="请输入资源编码" type="search" v-model="searchKey" @keydown.13="searchList">
+            <input class="search-input" placeholder="请输入资源编码或资源名称" type="search" v-model="searchKey" @keydown.13="searchList">
             <i class="iconfont icon-quxiao1" v-show="searchKey.length" @click.stop="clearKey"></i>
         </form>
         <span class="searachBtn" v-if="searchKey.length" @click.stop="searchList">搜索</span>

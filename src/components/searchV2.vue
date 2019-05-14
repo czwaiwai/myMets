@@ -153,21 +153,23 @@ export default {
     position: absolute;
     /* width: 84%; */
     left: 8%;
-    left: 30px;
-    right: 30px;
+    left: 0.6rem;
+    right: 0.6rem;
     background: #FFF;
-    top: 2.28rem;
+    top: 2.18rem;
     z-index: 2;
     box-shadow: 0px 1px 6px -1px rgba(51, 51, 51, 0.4);
   }
   .search-bar{
     padding: 0 0;
-    margin: 40px 30px;
+    /* margin: 40px 30px; */
+    margin: 0.8rem 0.6rem;
     border-radius: 10px;
     overflow: auto;
   }
   .weui-search-bar__box{
     padding:0 5px;
+    /* border-radius: 10px 0 0 10px; */
   }
   .right-position{
     right: 10px;

@@ -83,9 +83,11 @@ export default {
     }
   },
   created () {
+    let grpId = ''
     if (localStorage.AreaSelectGrpItem) {
       this.currentItem = JSON.parse(localStorage.AreaSelectGrpItem)
       this.search = this.currentItem.GrpName
+      grpId = this.currentItem.ID
     }
     this.mapReady = mapReady()
     // let curr = new Date()
@@ -94,6 +96,7 @@ export default {
     this.mapNeedInit = true
     this.pageConfig = this.pageListConfig({
       pageSize: 20,
+      GrpID: grpId,
       Stime: dateStr + '-01',
       Etime: dateStr + '-' + this.getDays()
     })
