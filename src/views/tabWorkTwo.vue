@@ -3,8 +3,18 @@
   <div class="page_hd">
     <nav-title :title="user && user.OrgName" :hasBtn="hasBtn"></nav-title>
   </div>
-  <div class="page_bd">
-    <div class="scroll">
+  <div class="page_bd main_page">
+    <div class="title_gb">
+      <select v-model="currOrgID" @change="projectChange">
+        <!-- <option>银河世纪</option>
+        <option>思源软件</option>
+        <option>银河思源</option>
+        <option>银河思软世纪</option> -->
+        <option v-for="(item,index) in filterList" :key="index" :value='item.projectId'>{{item.projectName}}</option>
+      </select>
+      <span>亚洲的希望  产业的未来</span>
+    </div>
+    <div class="title_context clearfix">
       <div class="weui-grids">
         <a v-show="auth['ETS_APPAudit']" @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
@@ -18,36 +28,12 @@
           </div>
           <p class="weui-grid__label">抄表</p>
         </a>
-        <!-- <a @click="$app.loadView({url: chaoBiaoUrl, type:'chaobiao', isTitle: '抄表'})"  href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_work_cb.png" alt="">
-          </div>
-          <p class="weui-grid__label">抄表</p>
-        </a> -->
-        <!-- <a  @click="$app.loadView({url: 'http://' + ip +'/ETSInspection/#page=0', type:'xunjian'})" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon">
-            <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
-          </div>
-          <p class="weui-grid__label">巡检</p>
-        </a> -->
         <a v-show="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection/Inspection')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/icon_work_inspection.png"  alt="">
           </div>
           <p class="weui-grid__label">巡检</p>
         </a>
-        <!-- <a  @click="$router.forward('/workOrder/customerService')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon">
-            <img src="../assets/img/work/msg_list_icon_inspection.png"  alt="">
-          </div>
-          <p class="weui-grid__label">客服工单</p>
-        </a> -->
-        <!-- <a  @click="$app.loadView({url:'http://' + ip +'/ETSInspection/#page=0', type: 'baoyang'})" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_work_by.png"  alt="">
-          </div>
-          <p class="weui-grid__label">保养</p>
-        </a> -->
         <a v-show="auth['APP_Maintain']" @click="$router.forward('/workOrder/inspection/KeepFit')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_by.png"  alt="">
@@ -91,13 +77,6 @@
           <p class="weui-grid__label">离线中心</p>
           <span v-if="offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
         </a>
-        <!-- 暂时无用 -->
-        <!-- <a @click="$router.forward('/cash')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_off_download.png" alt="">
-          </div>
-          <p class="weui-grid__label">收款测试</p>
-        </a> -->
         <a v-show="auth['APP_Meeting']" @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_meeting.png" alt="">
@@ -110,12 +89,6 @@
           </div>
           <p class="weui-grid__label">投资性物业</p>
         </a>
-        <!-- <a v-show="auth['APP_Rectification']" @click="$router.forward('/comparedBuild')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon">
-            <img src="../assets/img/work/ic_work_compare.png" alt="">
-          </div>
-          <p class="weui-grid__label">整改对比</p>
-        </a> -->
         <a v-show="auth['APP_Rectification']" @click="$router.forward('/getCst')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_compare.png" alt="">
@@ -140,7 +113,76 @@
           </div>
           <p class="weui-grid__label">保养</p>
         </a>
-        <!-- <button @click="routeTest" style="width:100px;height:100px;">test</button> -->
+      </div>
+    </div>
+    <div class="notice">
+      <div clss='left_img'>图片</div>
+      <div clss='right_context'>内容</div>
+    </div>
+    <div class="scene_manage">
+      <div><span class="title">现场管理</span></div>
+      <div class="weui-grids">
+        <a v-show="auth['ETS_APPAudit']" @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid light_bg">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_sp.png" alt="">
+          </div>
+          <p class="weui-grid__label">设备保养</p>
+          <p class="weui-grid__context">设备日常保养</p>
+        </a>
+        <a v-show="auth['APP_MeterRead']" @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid light_bg">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_cb.png"  alt="">
+          </div>
+          <p class="weui-grid__label">设备巡检</p>
+          <p class="weui-grid__context">设备日常巡检</p>
+        </a>
+        <a v-show="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection/Inspection')" href="javascript:;" class="weui-grid light_bg">
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/icon_work_inspection.png"  alt="">
+          </div>
+          <p class="weui-grid__label">安防巡更</p>
+          <p class="weui-grid__context">安全日常巡检</p>
+        </a>
+      </div>
+    </div>
+    <div class="introduce">
+      <div class="weui-grids">
+        <div class="weui-grid light_bg">
+          <div class="title">
+            <p class="weui-grid__label title_p">业务介绍</p>
+            <p class="weui-grid__context title_c">产品方案介绍</p>
+          </div>
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_sp.png" alt="">
+          </div>
+        </div>
+        <div class="weui-grid light_bg">
+          <div class="title">
+            <p class="weui-grid__label title_p">市场合作</p>
+            <p class="weui-grid__context title_c">合作伙伴计划</p>
+          </div>
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_sp.png" alt="">
+          </div>
+        </div>
+        <div class="weui-grid light_bg">
+          <div class="title">
+            <p class="weui-grid__label title_p">入园指南</p>
+            <p class="weui-grid__context title_c">入园流程指引</p>
+          </div>
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_sp.png" alt="">
+          </div>
+        </div>
+        <div class="weui-grid light_bg">
+          <div class="title">
+            <p class="weui-grid__label title_p">关于我们</p>
+            <p class="weui-grid__context title_c">企业文化概况</p>
+          </div>
+          <div class="weui-grid__icon">
+            <img src="../assets/img/work/ic_work_sp.png" alt="">
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -157,7 +199,8 @@ export default {
       hasBtn: false,
       offBadge: 0,
       currRand: 0,
-      otherList: []
+      otherList: [],
+      orglist: []
     }
   },
   created () {
@@ -172,6 +215,8 @@ export default {
     if (this.auth['APP_Quality']) {
       this.getPageData()
     }
+    this.currOrgID = this.user.OrgID
+    this.getPageDataNet()
   },
   activated () {
     console.log('调用offlineBadge')
@@ -192,7 +237,11 @@ export default {
       'ip': 'ip',
       'auth': 'auth',
       'rand': 'rand'
-    })
+    }),
+    filterList () {
+      let list = this.orglist
+      return list
+    }
   },
   methods: {
     async getPageData () {
@@ -207,14 +256,6 @@ export default {
       } catch (e) {
         console.log(e)
       }
-
-      // console.log(res.data)
-      // window.md5 = this.md5
-      // let res = await this.authLogin()
-      // let info = await this.authGetInfo()
-      // console.log(res, info, 'res & info')
-      // this.otherList = info.data
-      // res.data
     },
     routeToOA () {
       if (this.$app.isIOS) {
@@ -245,6 +286,49 @@ export default {
       })
       console.log(res, '------')
       return res
+    },
+    async getPageDataNet () {
+      let p0 = 'UserCS_GetPositionIdInfo'
+      let res = await this.$xml(p0, {
+        EmployeeID: '1604271708130001001E'// this.user.memberId //
+      })
+      if (!res.data) return
+      let resData = this.$toLower(res.data)
+      if (!resData.status) {
+        let subList = []
+        resData.forEach(item => {
+          if (item.positionId === this.user.PositionID) {
+            subList = item
+          }
+        })
+        this.orglist = subList.areaInfo.map(item => {
+          item.projectId = item.id
+          item.projectName = item.organizationName
+          return item
+        })
+      }
+    },
+    projectChange () {
+      let projectName = ''
+      this.orglist.forEach(item => {
+        if (item.projectId === this.currOrgID) {
+          projectName = item.projectName
+        }
+      })
+      this.$app.changeProject({
+        projectId: this.currOrgID,
+        projectName: projectName
+      }).then(() => {
+        this.$store.dispatch('getUserAction')
+        this.$store.commit('setRandNum', Date.now())
+        // this.$root.back()
+      }).catch(err => {
+        console.log(err)
+        if (this.$dev) {
+          this.$store.commit('setRandNum', Date.now())
+        }
+      // this.$root.back()
+      })
     },
     async authGetInfo () {
       // /roc/workbench/member/app/getAppList?orgId=58
@@ -287,20 +371,144 @@ export default {
 }
 </script>
 
-<style scoped>
+<style  lang="scss" scoped>
+  .main_page{
+    margin: 0;
+    display:inline-block ;
+    .title_gb{
+      // text-align:center;
+      top:0px;
+      background-color: antiquewhite;
+      height: 120px;
+      width: 100%;
+      // position: absolute;
+      z-index: -1;
+    }
+    .title_context{
+        width: 90%;
+        height: auto;
+        background: #FFF;
+        border-radius: 20px;
+        margin: -66px auto 10px auto;
+    }
+    .notice{
+       height: 84px;
+       width: 100%;
+       display: inline-flex;
+       background: #FFF;
+      .left_img{
+        width: 40px;
+        height: 70px;
+        background-color: yellow;
+      }
+      .right_context{
+        width: 50px;
+        background-color: green;
+      }
+    }
+    .scene_manage{
+      height: 155px;
+      background: #FFF;
+      margin: 5px auto 5px auto;
+      color: #333333;
+      .title{
+        font-size: 16px;
+        margin-left: 21px;
+        line-height: 48px;
+      }
+      .title::before{
+        content: " ";
+        display: inline-block;
+        height: 16px;
+        width: 3px;
+        background-color: #46A9FC;
+        margin-top: 17px;
+        right: 2px;
+        position: absolute;
+        left: 12px;
+      }
+      .weui-grid__label {
+          margin-top: 10px;
+          font-size: 15px;
+          text-align: center;
+      }
+      .weui-grid__context {
+          margin-top: 5px;
+          font-size: 12px;
+          color: #A2A2A2;
+          text-align: center;
+      }
+      .weui-grid {
+        width: 33.333333%;
+        padding:5px 8px;
+      }
+      .weui-grid__icon {
+        width: 26px;
+        height: 31px;
+        margin: 0 auto;
+      }
+    }
+    .introduce{
+      height: 181px;
+      background: #FFF;
+      margin: 5px auto 5px auto;
+      display: inline-flex;
+      color: #333333;
+      .weui-grid {
+        width: 50%;
+        padding:5px 8px;
+        height: 90px;
+      }
+      .weui-grid__icon {
+        width: 50%;
+        height: 60px;
+        margin: 0 auto;
+        float: left;
+        img {
+          display: block;
+          width: 60px;
+          height: 60px;
+          margin: 13px auto;
+        }
+      }
+      .title{
+        float: left;
+        width: 50%;
+        margin: 20px auto 5px;
+      }
+      .title_p{
+        font-size: 15px;
+        font-weight:bold;
+      }
+      .title_c{
+        font-size: 12px;
+        margin: 4px auto 0px;
+      }
+    }
+  }
   .light_bg .weui-grid{
     background:#FFF;
   }
   .weui-grid__icon {
-    width: 40px;
-    height: 40px;
+    width: 25px;
+    height: 25px;
     margin: 0 auto;
   }
+  .weui-grids {
+    border-radius: 20px;
+  }
   .weui-grid {
-    padding:15px 10px;
+    width: 25%;
+    padding:8px 8px;
+  }
+  .weui-grid::before{
+      display: none;
+  }
+  .weui-grid::after{
+      display: none;
   }
   .weui-grid__label {
-    font-size:16px;
+    font-size:14px;
   }
   .weui-badge {
     position: absolute;

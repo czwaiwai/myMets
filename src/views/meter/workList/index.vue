@@ -205,7 +205,8 @@ export default {
   computed: {
     ...mapGetters({
       locationData: 'getMeterLocation',
-      dateTimes: 'getMeterDateTime'
+      dateTimes: 'getMeterDateTime',
+      userData: 'user'
     })
   },
   // 路由离开前弹窗提示
@@ -551,7 +552,7 @@ export default {
     // 数据提交
     async submit (params) {
       // this.$vux.loading.show()
-      let res = await this.$xml('Ima_SumbitImaReadInfo', {}, {p1: params.projectId, p2: params.accountDate, p7: JSON.stringify(params.imaReadList)})
+      let res = await this.$xml('Ima_SumbitImaReadInfo', {}, {p1: params.projectId, p2: params.accountDate, p3: this.userData.memberName, p7: JSON.stringify(params.imaReadList)})
       this.dialogData = {
         type: 5,
         title: res.data[0].info

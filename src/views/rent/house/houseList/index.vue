@@ -855,6 +855,7 @@ export default {
       bottom: 0;
       left: 0;
       right: 0;
+      overflow: scroll;
       -webkit-overflow-scrolling: touch;
       .area_item_list {
         float: right;

@@ -34,10 +34,10 @@
               <div class="weui-cells weui-cells_form  margin-top">
             <div v-if="type==='baoshi'" class="weui-cell weui-cell_select padding-left15 ">
               <div class="weui-cell__hd padding-right15 padding-v"><i class="iconfont icon-weizhibiaoji" ></i></div>
-              <div class="weui-cell__bd padding-v">
-                <input class="weui-input" type="text" v-model="formObj.workPos"  placeholder="选择地址（必填）">
+              <div class="padding-v" :class="isButler?'':'weui-cell__bd'">
+                <input class="weui-input" type="text" :readonly="isButler" v-model="formObj.workPos"  placeholder="选择地址（必填）">
                   </div>
-              <div style="width:60px;" class="weui-cell__ft padding-v" @click="routeTo('locationChoose')" >&nbsp;</div>
+              <div v-show="!isButler" style="width:60px;" class="weui-cell__ft padding-v" @click="routeTo('locationChoose')" >&nbsp;</div>
                 </div>
                 <a  v-if="type==='baoxiu'"  @click="routeTo('deviceChoose')" class="weui-cell weui-cell_access" href="javascript:;">
                   <div class="weui-cell__hd padding-right15"><i class="iconfont icon-shebei" ></i></div>
@@ -139,6 +139,7 @@ export default {
   data () {
     return {
       isSendForm: false,
+      isButler: false,
       options: [],
       imgs: [],
       title: '客服',
@@ -188,7 +189,9 @@ export default {
       'user': 'user',
       'ip': 'ip',
       'homePhoto': 'getHomePhoto',
-      'homeVoice': 'getHomeVoice'
+      'homeVoice': 'getHomeVoice',
+      'getResInfo': 'getResInfo', // 管家报事选择的位置
+      'getCstInfo': 'getCstInfo'// 管家报事选择的客户
     })
   },
   created () {
@@ -200,11 +203,20 @@ export default {
       this.type = 'baoxiu'
       this.formObj.workPosFrom = 'Equipment'
     }
-    if (this.$route.query.type === 'baoshi') {
+    if (this.$route.query.type === 'baoshi' || this.$route.query.type === 'gjbaoshi') {
       this.title = '客服'
       this.titleType = '报事'
       this.type = 'baoshi'
       this.formObj.workPosFrom = 'Resource'
+      if (this.$route.query.type === 'gjbaoshi') {
+        this.isButler = true
+        if (localStorage.SelectCustomerInfo) {
+          this.formObj.cstName = this.getCstInfo.cstName
+          this.formObj.callPhone = this.getCstInfo.callPhone
+          this.formObj.workPos = this.getResInfo.name
+          this.formObj.woId = this.getResInfo.ResID
+        }
+      }
     }
 
     this.nav = {

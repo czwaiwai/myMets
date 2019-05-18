@@ -228,7 +228,7 @@ export default {
     },
     async submit (params) {
       console.log(params)
-      let res = await this.$xml('Ima_SumbitImaReadInfo', {}, {p1: params.projectId, p2: params.accountDate, p7: JSON.stringify(params.imaReadList)})
+      let res = await this.$xml('Ima_SumbitImaReadInfo', {}, {p1: params.projectId, p2: params.accountDate, p3: this.userData.memberName, p7: JSON.stringify(params.imaReadList)})
       console.log(res)
       this.dialogData = {
         type: 2,

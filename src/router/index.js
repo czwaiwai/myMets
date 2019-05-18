@@ -24,6 +24,8 @@ import monitorCenter from './monitorCenter'
 import comparedBuild from './comparedBuild'
 // 地块统计
 import massifStatistics from './massifStatistics'
+// 管家服务
+import butlerService from './butlerService'
 // pos机模块
 import Pos from './pos'
 // 收款模块
@@ -34,7 +36,8 @@ import Energy from './energy'
 
 import Index from '@/views/index'
 import TabHome from '@/views/tabHome'
-import TabWork from '@/views/tabWork'
+// import TabWork from '@/views/tabWork'
+import TabWorkTwo from '@/views/tabWorkTwo'
 import TabReport from '@/views/tabReport'
 import TabMy from '@/views/tabMy'
 import About from '@/views/publicPage/about'
@@ -126,7 +129,7 @@ export default new Router({
         {
           path: 'work',
           name: 'tabWork',
-          component: TabWork,
+          component: TabWorkTwo,
           meta: {
             title: '工作'
           }
@@ -218,6 +221,7 @@ export default new Router({
     ...approval,
     ...comparedBuild,
     ...massifStatistics,
+    ...butlerService,
     ...Energy,
     {
       path: '*',

@@ -15,7 +15,7 @@
           消息
         </mt-tab-item>
         <mt-tab-item id="tabWork">
-          <img v-if="selected === 'tabWork'" slot="icon" src="../assets/img/tab/ic_tab_work_selected.png">
+          <img v-if="selected === 'tabWorkTwo'" slot="icon" src="../assets/img/tab/ic_tab_work_selected.png">
           <img v-else slot="icon" src="../assets/img/tab/ic_tab_work.png">
           工作
         </mt-tab-item>

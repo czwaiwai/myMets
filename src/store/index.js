@@ -7,6 +7,7 @@ import investment from './module/investment'
 import rent from './module/rent'
 import approval from './module/approval'
 import home from './module/home'
+import butlerServices from './module/butlerServices'
 Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     investment,
     rent,
     approval,
-    home
+    home,
+    butlerServices
   }
 })

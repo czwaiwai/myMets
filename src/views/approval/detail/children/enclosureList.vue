@@ -10,7 +10,7 @@
     <collapse-transition>
       <ul class="msg" v-show="showMsg">
         <li class="item" v-for="(item,index) in enclosureList" :key="index">
-          <a v-bind:href="item.FilePath" target="_blank">{{item.FileName}}</a>
+          <a v-bind:href="item.FilePath" target="_blank" @click="openFile(item.FilePath)">{{item.FileName}}</a>
         </li>
       </ul>
     </collapse-transition>
@@ -37,6 +37,58 @@ export default {
   methods: {
     showBox () {
       this.showMsg = !this.showMsg
+    },
+    openFile (filename, filepath) {
+      console.log('plus', window.plus)
+      if (window.plus) { // 支持plus
+        // 判断文件是否已经下载
+        console.log('plus', window.plus)
+        let plus = window.plus
+        plus.io.resolveLocalFileSystemURL(
+          '_downloads/' + filename,
+          function (entry) { // 如果已存在文件，则打开文件
+            if (entry.isFile) {
+              this.$toast('正在打开文件...')
+              plus.runtime.openFile('_downloads/' + filename)
+            }
+          }, function () { // 如果未下载文件，则下载后打开文件
+            var dtask = plus.downloader.createDownload(filepath, { filename: '_downloads/' + filename }, function (d, status) {
+              if (status === 200) {
+                plus.runtime.openFile('_downloads/' + filename)
+              } else {
+                this.$toast('下载失败: ' + status)
+              }
+            })
+            dtask.addEventListener('statechanged', function (task, status) {
+              if (!dtask) { return }
+              switch (task.state) {
+                case 1:
+                  this.$toast('开始下载...')
+                  break
+                case 2:
+                  this.$toast('正在下载...')
+                  break
+                // case 3: // 已接收到数据
+                //   var progressVal = (task.downloadedSize / task.totalSize) * 100
+                //   if (hui('.progress').length > 0) {
+                //     hui('.progress').html(parseInt(progressVal) + '%')
+                //   }
+                //   break
+                case 4:
+                  dtask = null
+                  // if (hui('.progress').length > 0) {
+                  //   hui('.progress').html('0%')
+                  // }
+                  this.$toast('正在打开文件...')
+                  break
+              }
+            })
+            dtask.start()
+          }
+        )
+      } else { // 不支持plus
+        window.open(filepath)
+      }
     }
   }
 }

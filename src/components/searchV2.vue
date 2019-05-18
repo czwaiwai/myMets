@@ -5,7 +5,7 @@
       <div class="weui-search-bar__box" style="background-color:#1B9BFE;padding-left:0px">
         <!-- v-model="search" -->
         <input ref="search" :value="value" @input="searchInput"  type="search" :placeholder="placeholder"  @focus="inputFocus"  @blur="inputBlur"
-          class="weui-search-bar__input" style="width:75%;background-color:#fff;padding: 4px 5px;" id="searchInput"  >
+          class="weui-search-bar__input" style="width:75%;background-color:#fff;padding: 4px 5px 4px 10px;-webkit-appearance: none;" id="searchInput"  >
         <a v-show="value" @click="searchClear" href="javascript:" class="weui-icon-clear" id="searchClear" style="right: 23%;"></a>
         <div class="right-position" @click.stop="toSearch"><slot name="icon"><i class="weui-icon-search "></i></slot></div>
       </div>
@@ -156,7 +156,7 @@ export default {
     left: 0.6rem;
     right: 0.6rem;
     background: #FFF;
-    top: 2.18rem;
+    top: 2.25rem;
     z-index: 2;
     box-shadow: 0px 1px 6px -1px rgba(51, 51, 51, 0.4);
   }
@@ -166,6 +166,10 @@ export default {
     margin: 0.8rem 0.6rem;
     border-radius: 10px;
     overflow: auto;
+    box-shadow: 2px 2px 3px #666;
+  }
+  .weui-icon-search:before {
+    color: #fff !important;
   }
   .weui-search-bar__box{
     padding:0 5px;

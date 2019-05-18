@@ -25,6 +25,44 @@
             {{formObj.plusEmployeeName || '选填(可多选)' }}
           </div>
         </a>
+        <a @click="$refs.rStartTime.open()" class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__bd">
+            <p>预计开工时间</p>
+          </div>
+          <div class="weui-cell__ft " :class="formObj.rStartTime?'dark_33':''">
+            {{formObj.rStartTime }}
+          </div>
+        </a>
+        <mt-datetime-picker class="mydate"  @confirm="rStartTimeConfirm" ref="rStartTime" type="datetime" v-model="sPickerValue" year-format="{value}年"  month-format="{value}月"  date-format="{value}日" hour-format="{value}时" minute-format="{value}分" ></mt-datetime-picker>
+        <a @click="$refs.eWholeTime.open()" class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__bd">
+            <p>预计完工时间</p>
+          </div>
+          <div class="weui-cell__ft " :class="formObj.eWholeTime?'dark_33':''">
+            {{formObj.eWholeTime }}
+          </div>
+        </a>
+        <mt-datetime-picker class="mydate"  @confirm="eWholeTimeConfirm" ref="eWholeTime" type="datetime" v-model="ePickerValue" year-format="{value}年"  month-format="{value}月"  date-format="{value}日" hour-format="{value}时" minute-format="{value}分" ></mt-datetime-picker>
+        <!-- <a class="weui-cell weui-cell_access" href="javascript:;">
+           <div class="weui-cell__hd">
+            <label for="" class="weui-label">备注</label>
+          </div>
+          <div class="weui-cell__bd">
+            <textarea v-model="formObj.idea" class="weui-textarea" maxlength="200" placeholder="" rows="3"></textarea>
+            <div class="weui-textarea-counter"><span>{{formObj.idea.length}}</span>/200</div>
+          </div>
+        </a> -->
+      </div>
+      <div class="weui-cells weui-cells_form">
+        <div class="weui-cell weui-cell_switch">
+          <div class="weui-cell__bd">备注</div>
+        </div>
+        <div class="weui-cell">
+          <div class="weui-cell__bd">
+            <textarea v-model="formObj.idea" class="weui-textarea" maxlength="200" placeholder="问题详情..." rows="3"></textarea>
+            <div class="weui-textarea-counter"><span>{{formObj.idea.length}}</span>/200</div>
+          </div>
+        </div>
       </div>
       <div class="padding15">
         <button @click="submit" class="ins_submit_btn">{{title}}</button>
@@ -54,6 +92,8 @@ export default {
   data () {
     return {
       title: '接单',
+      sPickerValue: new Date(),
+      ePickerValue: new Date(),
       formObj: {
         userName: '',
         workOrdId: '',
@@ -64,19 +104,24 @@ export default {
         ordersPositionId: '',
         UserId: '',
         noticeName: '',
-        plusEmployeeName: ''
+        plusEmployeeName: '',
+        rStartTime: '',
+        eWholeTime: ''
       }
     }
   },
   created () {
     console.log('parent:', this.$parent.nav)
+    console.log('workItem:', this.$parent.workItem)
     this.title = this.$route.query.title || '接单'
 
     this.nav = this.$parent.nav
     this.work = this.$parent.workItem
     this.formObj.userName = this.nav.memberName
     this.formObj.workOrdId = this.work.WorkOrdID
-
+    this.formObj.idea = this.work.QuesDeti
+    this.formObj.rStartTime = this.work.RStartTime
+    this.formObj.eWholeTime = this.work.EWholeTime
     this.formObj.orders = this.nav.memberName
     this.formObj.ordersDepart = this.nav.positionName
     this.formObj.ordersPositionId = this.nav.positionId
@@ -88,6 +133,18 @@ export default {
       console.log(this.formObj)
       this.formObj.plusEmployeeName = arr.join('、')
     })
+    if (this.formObj.rStartTime < '1901/1/1 0:00:00') {
+      this.formObj.rStartTime = ''
+    } else {
+      this.formObj.rStartTime = new Date(this.formObj.rStartTime).format('yyyy-MM-dd hh:mm:ss')
+    }
+    if (this.formObj.eWholeTime < '1901/1/1 0:00:00') {
+      this.formObj.eWholeTime = ''
+    } else {
+      this.formObj.eWholeTime = new Date(this.formObj.eWholeTime).format('yyyy-MM-dd hh:mm:ss')
+    }
+    this.sPickerValue = this.formObj.rStartTime !== '' ? this.formObj.rStartTime : (new Date())
+    this.ePickerValue = this.formObj.eWholeTime !== '' ? this.formObj.eWholeTime : (new Date())
   },
   computed: {
     isDetail () {
@@ -102,6 +159,12 @@ export default {
     chooseOther () {
       this.$router.push({path: this.$route.path + '/personSelectorMulti'})
     },
+    rStartTimeConfirm (date) {
+      this.formObj.rStartTime = date.format('yyyy-MM-dd hh:mm:ss')
+    },
+    eWholeTimeConfirm (date) {
+      this.formObj.eWholeTime = date.format('yyyy-MM-dd hh:mm:ss')
+    },
     setPerson (item) {
       let userName = this.formObj.userName
       let workOrdId = this.formObj.workOrdId
@@ -109,12 +172,14 @@ export default {
       this.formObj = {
         userName: userName,
         workOrdId: workOrdId,
-        Idea: '',
+        idea: '',
         ordersId: item.EmployeeID,
         orders: item.EmployeeName,
         ordersDepart: item.DeptName,
         ordersPositionId: item.PositionID,
         UserId: item.UserId,
+        rStartTime: '',
+        eWholeTime: '',
         plusEmployeeName: nameStr
       }
       console.log(item, 'setPerson')
@@ -135,13 +200,15 @@ export default {
       }
 
       let res = await this.$xml(p0, {
-        'Idea': this.formObj.Idea,
+        'Idea': this.formObj.idea,
         'Orders': this.formObj.orders,
         'OrdersDepart': this.formObj.ordersDepart,
         'OrdersID': this.formObj.ordersId,
         'OrdersPositionID': this.formObj.ordersPositionId,
         'PlusEmployeeName': this.formObj.plusEmployeeName,
-        'WorkOrdID': this.formObj.workOrdId
+        'WorkOrdID': this.formObj.workOrdId,
+        'RStartTime': this.formObj.rStartTime,
+        'EWholeTime': this.formObj.eWholeTime
       }, {
         p1: this.nav.userName
       })

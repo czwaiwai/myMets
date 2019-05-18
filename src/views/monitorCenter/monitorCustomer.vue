@@ -85,6 +85,7 @@ export default {
         endTime: ''
       },
       searchKey: '',
+      optionType: '0',
       workItem: {},
       typeList: [
         {id: 'all', name: '全部', state: '5', badge: ''},
@@ -112,8 +113,9 @@ export default {
     this.currMember = ''
     this.getStatus()
     this.configList = this.typeList.map(item => {
-      return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15})
+      return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, type: '0'})
     })
+    // this.typeList.params.type = '0'
     console.log(this.configList, 'configList')
     // 设置底部弹出按钮方法
     this.setActions()
@@ -123,7 +125,11 @@ export default {
       'user': 'user'
     }),
     currConfig () {
-      return this.configList.find(item => item.name === this.currIndex) || {}
+      let itemSelect = this.configList.find(item => item.name === this.currIndex) || {}
+      if (itemSelect.params) {
+        itemSelect.params.type = this.optionType
+      }
+      return itemSelect
     }
   },
   watch: {
@@ -137,8 +143,10 @@ export default {
         {
           name: '全部工单',
           method: (arg) => {
+            this.optionType = '0'
             this.currMember = ''
             this.currConfig.params.employeeId = this.currMember
+            this.currConfig.params.type = '0'
             this.configList = this.typeList.map(item => {
               return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, employeeId: this.currMember})
             })
@@ -148,8 +156,23 @@ export default {
         {
           name: '我的发布',
           method: (arg) => {
+            this.optionType = '0'
             this.currMember = this.nav.memberId
             this.currConfig.params.employeeId = this.currMember
+            this.currConfig.params.type = '0'
+            this.configList = this.typeList.map(item => {
+              return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, employeeId: this.currMember})
+            })
+            this.refresh()
+          }
+        },
+        {
+          name: '我的派单', // eventStateId: 10
+          method: (arg) => {
+            this.optionType = '1'
+            this.currMember = this.nav.memberId
+            this.currConfig.params.employeeId = this.currMember
+            this.currConfig.params.type = '1'
             this.configList = this.typeList.map(item => {
               return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, employeeId: this.currMember})
             })
@@ -165,6 +188,7 @@ export default {
     },
     searchHandle () {
       this.currConfig.params.workPos = this.searchKey
+      this.currConfig.params.type = this.optionType
       this.configList = this.typeList.map(item => {
         return this.createListConfig(item.id, {eventStateId: item.state, pageSize: 15, workPos: this.searchKey})
       })
@@ -222,7 +246,8 @@ export default {
         projectID: this.nav.orgId,
         EmployeeID: this.currMember,
         WorkPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
-        PositionID: this.nav.positionId
+        PositionID: this.nav.positionId,
+        type: this.optionType
       })
       // let data = this.$toLower(res.data)
       console.log(res.data)

@@ -46,7 +46,7 @@ export default {
     this.readonly = !!this.$route.query.show
     this.detail = this.$parent.detailItem
     console.log(this.detail)
-    this.onlyPhoto = this.$route.params.type === 'inspection'
+    this.onlyPhoto = false// this.$route.params.type === 'inspection' 放开巡检保养四张图片
     if (this.onlyPhoto) {
       this.maxImgNum = 1
     }
@@ -66,7 +66,7 @@ export default {
       if (res.data[0]) {
         let {Memo: remark, ImageList: imgs} = res.data[0]
         if (imgs && imgs.length > 0) {
-          this.imgs = [...imgs.map(item => item.Path)]
+          this.imgs = [...imgs.map(item => item.Path).splice(0, 4)] // 增加只显示四张图片.splice(0, 4)
           this.$previewRefresh()
         }
         this.remark = remark === '无' ? '' : remark

@@ -99,7 +99,7 @@ export default {
       isLoading: true,
       showLoadTip: false,
       hasHttp: false,
-      pageType: 0,
+      pageType: 1,
       propertylist: [],
       codeData: []
     }

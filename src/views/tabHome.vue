@@ -20,8 +20,10 @@
           </div>
         </div>
       </div> -->
-      <div class="weui-cells" style="margin-top:0;">
-        <div @click.stop="routeTo(item)" v-for="item in list" :key="item.GDType" class="weui-cell">
+      <div class="back_img">
+      </div>
+      <div  @click.stop="routeTo(item)" v-for="item in list" :key="item.GDType" class="weui-cells" style="margin-top:10px;">
+        <div class="weui-cell">
           <div class="weui-cell__hd" style="position: relative;margin-right: 10px;width:50px;height:50px;">
             <img :src="item.img" style="width: 50px;display: block">
           </div>
@@ -170,6 +172,17 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  .mint-loadmore{
+    .back_img{
+      height: 160px;
+      background-color: green;
+    }
+    .weui-cells:before{
+      display: none;
+    }
+    .weui-cell{
+      height: 84px;
+    }
+  }
 </style>
