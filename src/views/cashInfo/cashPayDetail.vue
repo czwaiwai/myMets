@@ -52,27 +52,39 @@
               </li>
             </ul>
           </div>
+            <div  class="weui-btn-area">
+                <a @click="$router.forward('/invoice/' + paidId +'/'+user.OrgID)" class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">开票</a>
+            </div>
         </div>
     </div>
   </div>
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import {mapGetters} from 'vuex'
 export default {
   name: 'cashPayDetail',
   components: {navTitle},
   data () {
     return {
+      paidId: '',
       detail: {}
     }
   },
+  computed: {
+    ...mapGetters({
+      'user': 'user'
+    })
+  },
   created () {
     if (this.$parent.payDetailData) {
+      this.paidId = this.$parent.payDetailData.id
       let data = Object.assign(this.$parent.payDetailData.customerFeeData[0])
       console.log(data, '--------------------')
       this.formatData(data)
     } else {
       // this.getPageData()
+      this.paidId = this.$route.params.id
       this.getPageDataNet()
     }
   },
@@ -95,6 +107,7 @@ export default {
       this.formatData(this.$toLower(data))
     },
     formatData (data) {
+      console.log(data, 'data-----')
       data.accountData.forEach(item => {
         this.$set(item, 'subShow', false)
         item.subShow = false

@@ -176,6 +176,14 @@ export default new Router({
         title: '个人信息'
       }
     },
+    {
+      path: '/testPos',
+      name: 'name',
+      component: () => import('@/views/testPos'),
+      meta: {
+        title: 'pos机打印pos'
+      }
+    },
     // 暂时无用
     // {
     //   path: '/status',

@@ -7,6 +7,7 @@ const CashPayDetail = () => import(/* webpackChunkName:'baseIndex' */ '@/views/c
 const CashInfo = () => import(/* webpackChunkName:'baseIndex' */ '@/views/cashInfo/index')
 const CashTest = () => import(/* webpackChunkName:'baseIndex' */ '@/views/cashInfo/cash')
 const CashHistory = () => import(/* webpackChunkName:'baseIndex' */ '@/views/cashInfo/cashHistory')
+const Invoice = () => import(/* webpackChunkName:'baseIndex' */ '@/views/cashInfo/invoice')
 export default [
   {
     path: '/getCash',
@@ -52,6 +53,11 @@ export default [
         component: CashPayDetail
       }
     ]
+  },
+  {
+    path: '/invoice/:id/:orgId',
+    name: 'invoice',
+    component: Invoice
   },
   // {
   //   path: '/cashDetail',

@@ -112,6 +112,7 @@ export default (function () {
     hasData: 'Native_Js_HasFile|2',
     getPic: 'Native_Js_GetPic|1',
     getRec: 'Native_Js_GetRec|1', // 语音播放
+    noWaterCamera: 'Native_Js_noWatermarkCamera|1', // 无水印相机
     waterCamera: 'Native_Js_WatermarkCamera|1', // 水印相机
     playAudio: 'Native_Js_playAudio',
     addXJBYData: 'Native_Js_addXJBYData|2', // 添加离线保养数据
@@ -123,6 +124,7 @@ export default (function () {
     changePosition: 'APP_changePosition', // 切换职位
     changeProject: 'APP_changeProject', // 切换项目
     posPay: 'APP_PosPay|2',
+    posPrint: 'APP_PosPrint|2',
     goBack: 'Native_Js_Goback|1' // 返回键注册
   }
   let callObj = {}
