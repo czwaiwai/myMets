@@ -64,7 +64,7 @@
           </div>
           <p class="weui-grid__label">会议预订</p>
         </a>
-        <a @click="displayAll" href="javascript:;" class="weui-grid light_bg">
+        <a  @click="displayAll" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon" style="text-align: center">
             <!-- <img src="../assets/img/work/ic_off_download.png" alt=""> -->
             <i class="iconfont icon-quanbu" style="font-size: 28px;color:#C0D8F1"></i>

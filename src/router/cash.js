@@ -32,7 +32,12 @@ export default [
       {
         path: 'cashPayDetail/:id',
         name: 'cashPayDetail',
-        component: CashPayDetail
+        component: CashPayDetail,
+        children: [{
+          path: 'invoice/:id/:orgId',
+          name: 'invoiceHis',
+          component: Invoice
+        }]
       }
     ]
   },
@@ -50,7 +55,12 @@ export default [
       {
         path: 'cashPayDetailProp',
         name: 'cashPayDetailProp',
-        component: CashPayDetail
+        component: CashPayDetail,
+        children: [{
+          path: 'invoice/:id/:orgId',
+          name: 'invoiceHis',
+          component: Invoice
+        }]
       }
     ]
   },
@@ -72,7 +82,12 @@ export default [
       {
         path: 'cashPayDetailHis',
         name: 'cashPayDetailHis',
-        component: CashPayDetail
+        component: CashPayDetail,
+        children: [{
+          path: 'invoice/:id/:orgId',
+          name: 'invoiceHis',
+          component: Invoice
+        }]
       }
     ]
   }
