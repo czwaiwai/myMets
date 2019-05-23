@@ -15,7 +15,7 @@
               <span class="title">{{detailData.CstName || ''}}
                 <span v-show="detailData.CstType=='P'">{{com_sex()}}</span>
               </span>
-              <span class="point" :class="detailData.CstLevel==='VIP'?'orange':'blue'" v-show="detailData.CstLevelName">{{detailData.CstLevelName}}</span>
+              <!-- <span class="point" :class="detailData.CstLevel==='VIP'?'orange':'blue'" v-show="detailData.CstLevelName">{{detailData.CstLevelName}}</span> -->
             </p>
             <p class="company">
               <span class="link" v-show="detailData.CstType!='P'">联系人：{{detailData.LinkMan}}</span>
@@ -36,23 +36,23 @@
         <div class="person">
           <p class="tip">更多信息</p>
           <div class="msg">
-            <div class="items"><p class="name">客户级别：</p><span>{{detailData.ConduitCompanyName || ''}}</span></div>
-            <div class="items"><p class="name">曾&nbsp;&nbsp;用&nbsp;名：</p><span>{{detailData.BySectorName || ''}}</span></div>
-            <div class="items"><p class="name">证件类型：</p><span>{{detailData.CategoryName || ''}}</span></div>
+            <div class="items"><p class="name">客户级别：</p><span>{{detailData.CstLevelName || ''}}</span></div>
+            <div class="items"><p class="name">曾&nbsp;&nbsp;用&nbsp;名：</p><span>{{detailData.OldName || ''}}</span></div>
+            <div class="items"><p class="name">证件类型：</p><span>{{detailData.CerName || ''}}</span></div>
             <div class="items"><p class="name">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</p><span>{{com_sex()}}</span></div>
-            <div class="items"><p class="name">出生日期：</p><span>{{detailData.CstLevelName || ''}}</span></div>
-            <div class="items"><p class="name">籍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贯：</p><span>{{detailData.CstLevelName || ''}}</span></div>
-            <div class="items"><p class="name">户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;籍：</p><span>{{detailData.CognitiveWayName || ''}}</span></div>
-            <div class="items"><p class="name">兴趣爱好：</p><span>{{detailData.CognitiveWayName || ''}}</span></div>
-            <div class="items"><p class="name">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</p><span>{{detailData.CognitiveWayName || ''}}</span></div>
+            <div class="items"><p class="name">出生日期：</p><span>{{convertBirthDay()}}</span></div>
+            <div class="items"><p class="name">籍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贯：</p><span>{{detailData.BirthPlace || ''}}</span></div>
+            <div class="items"><p class="name">户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;籍：</p><span>{{detailData.CensusReg || ''}}</span></div>
+            <div class="items"><p class="name">兴趣爱好：</p><span>{{detailData.Hobby || ''}}</span></div>
+            <div class="items"><p class="name">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</p><span>{{detailData.Memo || ''}}</span></div>
           </div>
         </div>
         <div class="person">
           <p class="tip">联系方式</p>
           <div class="msg">
             <div class="items"><p class="name">手机号码：</p><span>{{detailData.FirstPhone || ''}}</span></div>
-            <div class="items"><p class="name">办公电话：</p><span>{{detailData.BySectorName || ''}}</span></div>
-            <div class="items"><p class="name">传&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;真：</p><span>{{detailData.CognitiveWayName || ''}}</span></div>
+            <div class="items"><p class="name">办公电话：</p><span>{{detailData.ToWorkPhone || ''}}</span></div>
+            <div class="items"><p class="name">传&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;真：</p><span>{{detailData.Fax || ''}}</span></div>
           </div>
         </div>
         <!-- <div class="business">
@@ -105,6 +105,16 @@ export default {
         return ''
       }
     },
+    convertBirthDay () {
+      if (this.detailData) {
+        if (this.detailData.Birthday < '1901-01-01') {
+          return ''
+        } else {
+          return this.detailData.Birthday
+        }
+      }
+      return ''
+    },
     toCustomerDetail () {
       // this.$router.push(`/customerDetail`)
     },
@@ -114,7 +124,7 @@ export default {
     },
     async getData () {
       console.log('tag', this.$route.params)
-      let res = await this.$xml('UserCS_CustomerDetail', {
+      let res = await this.$xml('UserCS_CustomerDetailHousekeeper', {
         'CstID': this.$route.params.cstId
       })
       console.log(res)

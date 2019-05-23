@@ -22,7 +22,6 @@
 <script>
 import navTitle from '@/components/navTitle'
 import {mapGetters} from 'Vuex'
-import local from '@/utils/local'
 export default {
   name: 'customerList',
   components: {navTitle},
@@ -43,22 +42,18 @@ export default {
     this.orgId = this.$parent.orgId
     this.roomName = this.getResInfo.name
     // this.getPageData()
-    let orderBy = local.get('cash_orderby')
-    if (orderBy) {
-      this.orderBy = orderBy
-    }
     this.getPageDataNet()
   },
   methods: {
     async getPageDataNet () {
-      let p0 = 'UserAppFn_GetArrearsCost'
-      let res = await this.$xml(p0, {
-        orgID: this.orgId,
-        resID: this.$route.params.roomId,
-        OrderBy: this.orderBy
+      console.log('this.$route.params', this.$route.params)
+      let res = await this.$xml('UserAppHouse_SearchCttByHouse', {
+        'ResID': this.$route.params.roomId,
+        'Page': 0,
+        'PageSize': 0
       })
       if (res.data) {
-        let data = this.$toLower(res.data)
+        let data = this.$toLower(res.data.filter((ele) => { return ele.Status === 'NorC' }))
         console.log(data, 'data========')
         this.userList = data
       }

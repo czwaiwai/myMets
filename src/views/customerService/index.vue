@@ -210,9 +210,10 @@ export default {
       this.formObj.workPosFrom = 'Resource'
       if (this.$route.query.type === 'gjbaoshi') {
         this.isButler = true
-        if (localStorage.SelectCustomerInfo) {
-          this.formObj.cstName = this.getCstInfo.cstName
-          this.formObj.callPhone = this.getCstInfo.callPhone
+        if (this.getCstInfo) {
+          console.log('this.getResInfo', this.getResInfo)
+          this.formObj.cstName = this.getCstInfo.CstName
+          this.formObj.callPhone = this.getCstInfo.FirstPhone
           this.formObj.workPos = this.getResInfo.name
           this.formObj.woId = this.getResInfo.ResID
         }

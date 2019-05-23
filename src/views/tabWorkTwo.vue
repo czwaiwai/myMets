@@ -25,7 +25,7 @@
              </div>
           </div>
           <p class="weui-grid__label">{{item.displayName}}</p>
-          <span v-if="item.auth==='APP_MeterRead' && offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
+          <span v-if="item.auth==='APP_jumpOffline' && offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
         </a>
       </div>
       <div v-show="isDisplay" @click="isDisplay=false" style="text-align: center;color:#A9A8A8;font-size:12px;"><span>收起全部</span></div>
@@ -41,10 +41,10 @@
         <div><a>欢迎进驻到亚洲国际市场,商家永无后顾之忧!</a></div>
       </div>
     </div>
-    <div class="scene_manage" v-if="auth['APP_MarketCooperation'] &&(auth['APP_Service_Repair'] || auth['APP_Maintain'])" >
+    <div class="scene_manage" v-if="auth['APP_MarketCooperation'] &&(auth['APP_Inspection'] || twoOtherList.length>0)" >
       <div><span class="title">现场管理</span></div>
       <div class="weui-grids">
-        <a v-show="auth['APP_Service_Repair']" @click="$router.forward('/customerService?type=baoxiu')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection/Inspection')" href="javascript:;" class="weui-grid light_bg">
            <div class="weui-grid__icon text-center">
             <i class="iconfont icon-xunjian1 classgreen" style="font-size: 45px;"></i>
             <!-- <img src="../assets/img/work/icon_work_inspection.png"  alt=""> -->
@@ -193,6 +193,7 @@ export default {
           iconList = this.groupList
         }
       }
+      console.log('iconList', iconList)
       return iconList
     },
     twoOtherList () {
@@ -205,9 +206,10 @@ export default {
   },
   methods: {
     getSingleDynamicLink (itemName) {
+      console.log('this.appDynamicLink', this.appDynamicLink)
       let url = this.appDynamicLink.filter(ele => { return ele.Names === itemName })
       if (url && url.length > 0) {
-        return url.ShowLink
+        return url[0].ShowLink
       }
       return ''
     },
@@ -477,7 +479,7 @@ export default {
       if (res.data) {
         this.appDynamicLink = res.data
       }
-      console.log('getReportAuth', res.data)
+      // console.log('appDynamicLink', res.data)
     },
     async authGetInfo () {
       // /roc/workbench/member/app/getAppList?orgId=58
@@ -667,8 +669,8 @@ export default {
         float: left;
         img {
           display: block;
-          width: 70px;
-          height: 70px;
+          width: 60px;
+          height: 60px;
           margin: 7px auto;
         }
       }

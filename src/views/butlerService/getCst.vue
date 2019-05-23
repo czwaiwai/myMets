@@ -71,23 +71,8 @@ export default {
     this.orgName = this.user.OrgName
     this.userId = this.user.UserID
     this.memberId = this.user.memberId
-    if (!this.$isPos) {
-      this.$app.paymentData().then(res => {
-        this.orgId = res.projectID
-        this.orgName = res.projectName
-        this.memberId = res.memberID
-        this.userId = res.userID
-        this.roomName = ''
-        this.getPageDataNet()
-      }).catch(err => {
-        console.log(err)
-        this.roomName = ''
-        this.getPageDataNet()
-      })
-    } else { // pos机
-      this.roomName = ''
-      this.getPageDataNet()
-    }
+    this.roomName = ''
+    this.getPageDataNet()
   },
   methods: {
     // async getPageData () {
@@ -99,7 +84,8 @@ export default {
     async getPageDataNet () {
       let p0 = 'UserCS_GetGrpInfo'
       let res = await this.$xml(p0, {
-        OrgID: this.orgId
+        OrgID: this.orgId,
+        EmployeeID: this.memberId
       })
       // let data = this.$toLower(res.data)
       console.log(res.data)
@@ -112,7 +98,8 @@ export default {
       this.listIndex = index
       let p0 = 'UserCS_GetBudInfo'
       let res = await this.$xml(p0, {
-        GrpID: item.Id
+        GrpID: item.Id,
+        EmployeeID: this.memberId
       })
       // let data = this.$toLower(res.data)
       console.log(res.data)
