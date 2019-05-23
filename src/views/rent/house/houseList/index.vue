@@ -564,7 +564,7 @@ export default {
   created () {
         // console.log('tag2', localStorage.locationData)
     if (localStorage.locationData) {
-      localStorage.locationData= JSON.parse(localStorage.locationData)
+      this.locationData= JSON.parse(localStorage.locationData)
       // if (this.localStorage.orgData.orgId!==this.user.OrgID){        
       //   this.locationData.orgData.orgId=this.user.OrgID;
       //   this.locationData.orgData.orgName = this.user.OrgName

@@ -27,7 +27,12 @@ export default [
       {
         path: 'cashPaySucc/:id',
         name: 'cashPaySucc',
-        component: CashPaySucc
+        component: CashPaySucc,
+        children: [{
+          path: 'invoice/:id/:orgId',
+          name: 'invoiceCashPaySucc',
+          component: Invoice
+        }]
       },
       {
         path: 'cashPayDetail/:id',

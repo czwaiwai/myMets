@@ -93,10 +93,10 @@ export default {
           // --------------------------
           UserID: 'LiaoJiangWei',
           PositionName: '财务经理',
-          OrgName: '思源大厦',
-          OrgID: 10000,
-          // OrgName: '银河世纪花园',
-          // OrgID: '11091315263400010000', // 项目id
+          // OrgName: '思源大厦',
+          // OrgID: 10000,
+          OrgName: '银河世纪花园',
+          OrgID: '11091315263400010000', // 项目id
           PositionID: '11091316310300010000', // 职位id
           memberId: '18102416111400010024',
           memberName: '廖江伟'

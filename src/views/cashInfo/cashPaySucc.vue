@@ -12,6 +12,7 @@
             <p>收款成功</p>
           </div>
           <div class="weui-form-preview__ft">
+            <!-- {{$route.path + '/invoice/'+$route.params.id+'/'+orgId}} -->
             <a @click="$router.forward($route.path + '/invoice/'+$route.params.id+'/'+orgId)" class="weui-form-preview__btn weui-form-preview__btn_default" href="javascript:">开票</a>
             <button @click="routeTo" class="weui-form-preview__btn weui-form-preview__btn_primary" type="button">查看单据</button>
           </div>
