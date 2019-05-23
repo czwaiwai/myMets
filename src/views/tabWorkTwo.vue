@@ -16,132 +16,19 @@
     </div>
     <div class="title_context">
       <div class="weui-grids">
-        <a v-if="auth['APP_GovernmentService']" @click="$app.loadView({url: 'http://www.gdzwfw.gov.cn/',type: 'chaobiao', isTitle: '政务服务'})"  href="javascript:;" class="weui-grid light_bg">
-           <div class="weui-grid__icon text-center">
-             <i class="iconfont icon-jiguanzhengwu classblue" style="font-size: 32px;"></i>
+        <a v-for="(item,index) in getIconList" :key="item.displayName"  :index="index" @click="iconClick(item)"  href="javascript:;" class="weui-grid light_bg">
+           <div class="weui-grid__icon " :class="item.iconType==='icon' && item.auth!=='APP_DiKuai' ?' text-center':''"
+            :style="item.auth==='APP_DiKuai'?'font-size: 26px;line-height: 40px;text-align: center;color: orange;':''">
+             <i v-if="item.iconType==='icon'" :class="'iconfont '+item.iconName" :style="item.iconStyle===''?'':item.iconStyle"></i>
+             <div v-else style="margin: 0 auto;width: 35px;height: 35px;">
+                <img :src="item.iconName" alt="">
+             </div>
           </div>
-          <p class="weui-grid__label">政务服务</p>
-        </a>
-        <a v-if="auth['APP_FinancePay']" @click="$router.forward('/getCash')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_sk.png" alt=""> -->
-          <i class="iconfont icon-wuyefei classgreen" ></i>
-          </div>
-          <p class="weui-grid__label">物业缴费</p>
-        </a>
-        <a v-if="auth['APP_LifeMatch']" @click="$app.loadView({url: 'https://www.bayvalley.com.cn/?page_id=44',type: 'chaobiao', isTitle: '生活配套'})" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_compare.png" alt=""> -->
-          <i class="iconfont icon-ffcx classorange" ></i>
-          </div>
-          <p class="weui-grid__label">生活配套</p>
-        </a>
-        <a v-if="auth['ETS_APPAudit']" @click="$router.forward('/approvalIndex')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_sp.png" alt=""> -->
-            <i class="iconfont icon-shenpi classred" style='font-size: 35px;' ></i>
-          </div>
-          <p class="weui-grid__label">审批</p>
-        </a>
-        <a v-if="auth['APP_Service_PostIt']" @click="$router.forward('/customerService?type=baoshi')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_bs.png" alt=""> -->
-            <i class="iconfont icon-woyaobaoshi classblue"></i>
-          </div>
-          <p class="weui-grid__label">客户报事</p>
-        </a>
-        <a v-if="auth['APP_Lease']" @click="$router.forward('/rentIndex')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/icon_work_zl.png" alt=""> -->
-            <i class="iconfont icon-zu classred"  style='font-size: 25px;'></i>
-          </div>
-          <p class="weui-grid__label">招商租赁</p>
-        </a>
-        <a v-if="auth['APP_Meeting']" @click="$router.forward('/meeting')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_meeting.png" alt=""> -->
-            <i class="iconfont icon-meeting1 classred" style='font-size: 29px;'></i>
-          </div>
-          <p class="weui-grid__label">会议预订</p>
-        </a>
-        <a @click="displayAll" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon" style="text-align: center">
-            <!-- <img src="../assets/img/work/ic_off_download.png" alt=""> -->
-            <i class="iconfont icon-quanbu" style="font-size: 28px;color:#C0D8F1"></i>
-          </div>
-          <p class="weui-grid__label">全部</p>
-        </a>
-        <a v-if="auth['APP_MeterRead']||auth['APP_Inspection']||auth['APP_Maintain']" @click="jumpOffline" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_off_download.png" alt=""> -->
-            <i class="iconfont icon-lixianzhongxin classgreen" style="font-size: 45px;"></i>
-          </div>
-          <p class="weui-grid__label">离线中心</p>
-          <span v-if="offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
-        </a>
-        <a v-for="(item, index) in otherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'chaobiao', isTitle: item.appName})" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon">
-            <div style="margin: 0 auto;width: 35px;height: 35px;">
-              <img :src="item.h5Icon" alt="">
-            </div>
-          </div>
-          <p class="weui-grid__label" style="margin-top: 0px">{{item.appName}}</p>
-        </a>
-        <a v-if="auth['APP_Maintain']" @click="$router.forward('/workOrder/inspection/KeepFit')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_by.png"  alt=""> -->
-            <i class="iconfont icon-baoyang classblue"></i>
-          </div>
-          <p class="weui-grid__label">设备保养</p>
-        </a>
-        <a v-if="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection/Inspection')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <i class="iconfont icon-xunjian1 classgreen" style="font-size: 33px;"></i>
-            <!-- <img src="../assets/img/work/icon_work_inspection.png"  alt=""> -->
-          </div>
-          <p class="weui-grid__label">设备巡检</p>
-        </a>
-        <a v-if="auth['APP_Service_Repair']" @click="$router.forward('/customerService?type=baoxiu')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_wx.png" alt=""> -->
-            <i class="iconfont icon-weixiu classorange" style="font-size: 33px;"></i>
-          </div>
-          <p class="weui-grid__label">设备维修</p>
-        </a>
-        <a v-if="auth['APP_MeterRead']" @click="$router.forward('/meterLocation')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_cb.png"  alt=""> -->
-            <i class="iconfont icon-chaobiao classblue" style='font-size: 30px;'></i>
-          </div>
-          <p class="weui-grid__label">抄表</p>
-        </a>
-        <a v-if="auth['APP_LLOA']" @click="routeToOA" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/icon_oa.png" alt=""> -->
-            <i class="iconfont icon-oa1 classred" style="font-size: 32px;"></i>
-          </div>
-          <p class="weui-grid__label">OA</p>
-        </a>
-        <a v-if="auth['APP_Property']" @click="$router.forward('/investmentIndex')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <!-- <img src="../assets/img/work/ic_work_investment.png" alt=""> -->
-            <i class="iconfont icon-wuye classgreen" style="font-size: 32px;"></i>
-          </div>
-          <p class="weui-grid__label">投资性物业</p>
-        </a>
-        <a v-if="auth['APP_ButlerService']" @click="$router.forward('/getCst')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon text-center">
-            <i class="iconfont icon-guanjia classorange" style="font-size: 30px;"></i>
-          </div>
-          <p class="weui-grid__label">管家报事</p>
-        </a>
-        <a v-if="isDiKuai" @click="$router.forward('/massifStatistics')" href="javascript:;" class="weui-grid light_bg">
-          <div class="weui-grid__icon " style="font-size: 26px;line-height: 40px;text-align: center;color: orange;">
-            <i class="iconfont icon-dikuai classored" style="font-size: 27px;"></i>
-          </div>
-          <p class="weui-grid__label">地块统计</p>
+          <p class="weui-grid__label">{{item.displayName}}</p>
+          <span v-if="item.auth==='APP_MeterRead' && offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
         </a>
       </div>
+      <div v-show="isDisplay" @click="isDisplay=false" style="text-align: center;color:#A9A8A8;font-size:12px;"><span>收起全部</span></div>
     </div>
     <div class="notice" v-if="auth['APP_NoticeInformation']">
       <div class="left_title">
@@ -163,7 +50,16 @@
             <!-- <img src="../assets/img/work/icon_work_inspection.png"  alt=""> -->
           </div>
           <p class="weui-grid__label">设备巡检</p>
-          <p class="weui-grid__context">设备日常巡检</p>
+          <!-- <p class="weui-grid__context">设备日常巡检</p> -->
+        </a>
+
+        <a v-for="(item, index) in twoOtherList" :key="index"  @click="$app.loadView({url: item.h5Url, type: 'chaobiao', isTitle: item.appName})" href="javascript:;" class="weui-grid light_bg">
+          <div class="weui-grid__icon">
+            <div style="margin: 0 auto;width: 45px;height: 45px;">
+              <img :src="item.h5Icon" alt="">
+            </div>
+          </div>
+          <p class="weui-grid__label">{{item.appName}}</p>
         </a>
         <!-- <a v-show="auth['APP_Maintain']" @click="$router.forward('/workOrder/inspection/KeepFit')" href="javascript:;" class="weui-grid light_bg">
          <div class="weui-grid__icon text-center">
@@ -185,7 +81,7 @@
     </div>
     <div class="introduce" v-show="auth['APP_AboutUs']">
       <div class="weui-grids">
-        <div class="weui-grid light_bg">
+        <div class="weui-grid light_bg" @click="$app.loadView({url: getSingleDynamicLink('业务介绍'), type: 'chaobiao', isTitle: '业务介绍'})">
           <div class="title">
             <p class="weui-grid__label title_p">业务介绍</p>
             <p class="weui-grid__context title_c">产品方案介绍</p>
@@ -194,7 +90,7 @@
             <img src="../assets/img/work/ic_work_introduction.png" alt="">
           </div>
         </div>
-        <div class="weui-grid light_bg">
+        <div class="weui-grid light_bg" @click="$app.loadView({url: getSingleDynamicLink('市场合作'), type: 'chaobiao', isTitle: '市场合作'})">
           <div class="title">
             <p class="weui-grid__label title_p">市场合作</p>
             <p class="weui-grid__context title_c">合作伙伴计划</p>
@@ -203,7 +99,7 @@
             <img src="../assets/img/work/ic_workmc.png" alt="">
           </div>
         </div>
-        <div class="weui-grid light_bg">
+        <div class="weui-grid light_bg" @click="$app.loadView({url: getSingleDynamicLink('入园指南'), type: 'chaobiao', isTitle: '入园指南'})">
           <div class="title">
             <p class="weui-grid__label title_p">入园指南</p>
             <p class="weui-grid__context title_c">入园流程指引</p>
@@ -212,7 +108,7 @@
             <img src="../assets/img/work/ic_work_guide.png" alt="">
           </div>
         </div>
-        <div class="weui-grid light_bg">
+        <div class="weui-grid light_bg" @click="$app.loadView({url: getSingleDynamicLink('关于我们'), type: 'chaobiao', isTitle: '关于我们'})">
           <div class="title">
             <p class="weui-grid__label title_p">关于我们</p>
             <p class="weui-grid__context title_c">企业文化概况</p>
@@ -238,10 +134,12 @@ export default {
       offBadge: 0,
       currRand: 0,
       otherList: [],
-      groupList: [],
+      groupList: [], // 所有显示的APP
+      appDynamicLink: [], // APP动态链接地址
       currOrgID: '',
       currOrgName: '',
-      isDiKuai: false
+      isDiKuai: false, // 地块统计是否显示（包括某一报表权限）
+      isDisplay: false // 是否显示全部
     }
   },
   created () {
@@ -253,12 +151,14 @@ export default {
     //   console.log('执行tabwork方法')
     //   window.APP_pushMsg('{"fromTag":"","id":"20190220092648764888","status":"1","type":"CustomerService","url":""}')
     // }, 5000)
-    if (this.auth['APP_Quality']) {
-      this.getPageData()
-    }
     this.isDiKuai = this.auth['APP_Rectification']
     this.getReportRight()
-    // this.initIcon()
+    this.getAppDynamicLink()
+    if (this.auth['APP_Quality']) {
+      this.getPageData()
+    } else {
+      this.initIconList()
+    }
   },
   activated () {
     console.log('调用offlineBadge')
@@ -281,13 +181,235 @@ export default {
       'ip': 'ip',
       'auth': 'auth',
       'rand': 'rand'
-    })
+    }),
+    getIconList () {
+      let iconList = []
+      if (this.isDisplay) {
+        iconList = this.groupList
+      } else {
+        if (this.groupList.length > 8) {
+          iconList = this.getIconMin()
+        } else {
+          iconList = this.groupList
+        }
+      }
+      return iconList
+    },
+    twoOtherList () {
+      return this.otherList.filter((ele, index) => { return index < 2 })
+    }
     // filterList () {
     //   let list = this.orglist
     //   return list
     // }
   },
   methods: {
+    getSingleDynamicLink (itemName) {
+      let url = this.appDynamicLink.filter(ele => { return ele.Names === itemName })
+      if (url && url.length > 0) {
+        return url.ShowLink
+      }
+      return ''
+    },
+    getIconMin () {
+      let iconList = this.groupList.filter((ele, index) => { return index < 7 })
+      iconList.push({'auth': 'APP_DisplayAll',
+        'iconName': 'icon-quanbu classgray',
+        'iconType': 'icon',
+        'iconStyle': 'font-size: 28px;color:#C0D8F1',
+        'openType': 'clickEventJump',
+        'pathParams': {url: '', type: '', isTitle: ''},
+        'displayName': '全部'})
+      return iconList
+    },
+    initIconList () {
+      let url = ''
+      if (this.auth['APP_GovernmentService']) {
+        url = this.getSingleDynamicLink('政务服务')
+        this.addGroup({'auth': 'APP_GovernmentService',
+          'iconName': 'icon-jiguanzhengwu classblue',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 32px;',
+          'openType': 'loadView',
+          'pathParams': {url: url, type: 'chaobiao', isTitle: '政务服务'},
+          'displayName': '政务服务'})
+      }
+      if (this.auth['APP_FinancePay']) {
+        this.addGroup({'auth': 'APP_FinancePay',
+          'iconName': 'icon-wuyefei classgreen',
+          'iconType': 'icon',
+          'iconStyle': '',
+          'openType': 'routerJump',
+          'pathParams': {url: '/getCash', type: '', isTitle: ''},
+          'displayName': '物业缴费'})
+      }
+      if (this.auth['APP_LifeMatch']) {
+        url = this.getSingleDynamicLink('生活配套')
+        this.addGroup({'auth': 'APP_LifeMatch',
+          'iconName': 'icon-ffcx classorange',
+          'iconType': 'icon',
+          'iconStyle': '',
+          'openType': 'loadView',
+          'pathParams': {url: url, type: 'chaobiao', isTitle: '生活配套'},
+          'displayName': '生活配套'})
+      }
+      if (this.auth['ETS_APPAudit']) {
+        this.addGroup({'auth': 'ETS_APPAudit',
+          'iconName': 'icon-shenpi classred',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 33px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/approvalIndex', type: '', isTitle: ''},
+          'displayName': '移动审批'})
+      }
+      if (this.auth['APP_Service_PostIt']) {
+        this.addGroup({'auth': 'APP_Service_PostIt',
+          'iconName': 'icon-woyaobaoshi classblue',
+          'iconType': 'icon',
+          'iconStyle': '',
+          'openType': 'routerJump',
+          'pathParams': {url: '/customerService?type=baoshi', type: '', isTitle: ''},
+          'displayName': '客户报事'})
+      }
+      if (this.auth['APP_Lease']) {
+        this.addGroup({'auth': 'APP_Lease',
+          'iconName': 'icon-zu classred',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 25px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/rentIndex', type: '', isTitle: ''},
+          'displayName': '招商租赁'})
+      }
+      if (this.auth['APP_Meeting']) {
+        this.addGroup({'auth': 'APP_Meeting',
+          'iconName': 'icon-meeting1 classred',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 29px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/meeting', type: '', isTitle: ''},
+          'displayName': '会议预订'})
+      }
+      if (this.auth['APP_MeterRead'] || this.auth['APP_Inspection'] || this.auth['APP_Maintain']) {
+        this.addGroup({'auth': 'APP_jumpOffline',
+          'iconName': 'icon-lixianzhongxin classgreen',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 45px;',
+          'openType': 'clickEventJump',
+          'pathParams': {url: '', type: '', isTitle: ''},
+          'displayName': '离线中心'})
+      }
+      // 品质接口
+      this.otherList.forEach(item => {
+        this.addGroup({'auth': 'APP_' + item.appName,
+          'iconName': item.h5Icon,
+          'iconType': 'img',
+          'iconStyle': '',
+          'openType': 'loadView',
+          'pathParams': {url: item.h5Url, type: 'chaobiao', isTitle: item.appName},
+          'displayName': item.appName})
+      })
+      if (this.auth['APP_Maintain']) {
+        this.addGroup({'auth': 'APP_Maintain',
+          'iconName': 'icon-baoyang classblue',
+          'iconType': 'icon',
+          'iconStyle': '',
+          'openType': 'routerJump',
+          'pathParams': {url: '/workOrder/inspection/KeepFit', type: '', isTitle: ''},
+          'displayName': '设备保养'})
+      }
+      if (this.auth['APP_Inspection']) {
+        this.addGroup({'auth': 'APP_Inspection',
+          'iconName': 'icon-xunjian1 classgreen',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 33px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/workOrder/inspection/Inspection', type: '', isTitle: ''},
+          'displayName': '设备巡检'})
+      }
+      if (this.auth['APP_Service_Repair']) {
+        this.addGroup({'auth': 'APP_Service_Repair',
+          'iconName': 'icon-weixiu classorange',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 33px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/customerService?type=baoxiu', type: '', isTitle: ''},
+          'displayName': '设备维修'})
+      }
+      if (this.auth['APP_MeterRead']) {
+        this.addGroup({'auth': 'APP_MeterRead',
+          'iconName': 'icon-chaobiao classblue',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 33px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/meterLocation', type: '', isTitle: ''},
+          'displayName': '移动抄表'})
+      }
+      if (this.auth['APP_LLOA']) {
+        this.addGroup({'auth': 'APP_LLOA',
+          'iconName': 'icon-oa1 classred',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 32px;',
+          'openType': 'clickEventJump',
+          'pathParams': {url: '', type: '', isTitle: ''},
+          'displayName': 'OA'})
+      }
+      if (this.auth['APP_Property']) {
+        this.addGroup({'auth': 'APP_Property',
+          'iconName': 'icon-wuye classgreen',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 32px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/investmentIndex', type: '', isTitle: ''},
+          'displayName': '投资物业'})
+      }
+      if (this.auth['APP_ButlerService']) {
+        this.addGroup({'auth': 'APP_ButlerService',
+          'iconName': 'icon-guanjia classorange',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 30px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/getCst', type: '', isTitle: ''},
+          'displayName': '管家报事'})
+      }
+      if (this.isDiKuai) {
+        this.addGroup({'auth': 'APP_DiKuai',
+          'iconName': 'icon-dikuai classored',
+          'iconType': 'icon',
+          'iconStyle': 'font-size: 27px;',
+          'openType': 'routerJump',
+          'pathParams': {url: '/getCst', type: '', isTitle: ''},
+          'displayName': '地块统计'})
+      }
+    },
+    iconClick (iconItem) {
+      switch (iconItem.openType) {
+        case 'routerJump':
+          this.$router.forward(iconItem.pathParams.url)
+          break
+        case 'loadView':
+          this.$app.loadView(iconItem.pathParams)
+          break
+        case 'clickEventJump':
+          this.customClickJump(iconItem.auth)
+          break
+      }
+    },
+    addGroup (iconGroup) {
+      this.groupList.push(iconGroup)
+    },
+    customClickJump (auth) {
+      switch (auth) {
+        case 'APP_jumpOffline': // 离线中心
+          this.jumpOffline()
+          break
+        case 'APP_LLOA': // OA
+          this.routeToOA()
+          break
+        case 'APP_DisplayAll': // 显示全部
+          this.displayAll()
+          break
+      }
+    },
     async getPageData () {
       try {
         let p0 = 'UserCS_ConnectionQuality'
@@ -297,7 +419,8 @@ export default {
           PassWord: ''
         })
         this.otherList = res.data.filter(item => item.h5Url)
-        // this.initIcon()
+        this.groupList = []
+        this.initIconList()
       } catch (e) {
         console.log(e)
       }
@@ -332,27 +455,6 @@ export default {
       console.log(res, '------')
       return res
     },
-    // async getPageDataNet () {
-    //   let p0 = 'UserCS_GetPositionIdInfo'
-    //   let res = await this.$xml(p0, {
-    //     EmployeeID: this.user.memberId //
-    //   })
-    //   if (!res.data) return
-    //   let resData = this.$toLower(res.data)
-    //   if (!resData.status) {
-    //     let subList = []
-    //     resData.forEach(item => {
-    //       if (item.positionId === this.user.PositionID) {
-    //         subList = item
-    //       }
-    //     })
-    //     this.orglist = subList.areaInfo.map(item => {
-    //       item.projectId = item.id
-    //       item.projectName = item.organizationName
-    //       return item
-    //     })
-    //   }
-    // },
     async getReportRight () {
       let p7 = {
         UserId: this.user.UserID,
@@ -367,28 +469,16 @@ export default {
       }
       console.log('getReportAuth', resData)
     },
-    // projectChange () {
-    //   let projectName = ''
-    //   this.orglist.forEach(item => {
-    //     if (item.projectId === this.currOrgID) {
-    //       projectName = item.projectName
-    //     }
-    //   })
-    //   this.$app.changeProject({
-    //     projectId: this.currOrgID,
-    //     projectName: projectName
-    //   }).then(() => {
-    //     this.$store.dispatch('getUserAction')
-    //     this.$store.commit('setRandNum', Date.now())
-    //     // this.$root.back()
-    //   }).catch(err => {
-    //     console.log(err)
-    //     if (this.$dev) {
-    //       this.$store.commit('setRandNum', Date.now())
-    //     }
-    //   // this.$root.back()
-    //   })
-    // },
+    async getAppDynamicLink () {
+      let p7 = {
+        OrgID: this.user.OrgID
+      }
+      let res = await this.$xml('UserCS_GetAppShowModules', p7)
+      if (res.data) {
+        this.appDynamicLink = res.data
+      }
+      console.log('getReportAuth', res.data)
+    },
     async authGetInfo () {
       // /roc/workbench/member/app/getAppList?orgId=58
       let url = '/roc/workbench/member/app/getAppList?orgId=58'
@@ -401,29 +491,11 @@ export default {
       console.log(res)
       return res
     },
-    // md5 (word) {
-    //   return CryptoJS.MD5(word).toString()
-    // },
-    // shenliangTest () {
-    //   var key = CryptoJS.enc.Base64.parse('SE83232U')
-    //   var message = CryptoJS.enc.Base64.parse('test20')
-    //   var encrypted = CryptoJS.DES.encrypt(message, key, {
-    //     mode: CryptoJS.mode.ECB,
-    //     padding: CryptoJS.pad.Pkcs7
-    //   })
-    //   // AZ+wtAtBLpk=
-    //   // qahmXfF8euU=
-    //   // 0stzyYStVxs=
-    //   console.log(encrypted.ciphertext.toString(), 'encrypted.ciphertext.toString-------------')
-    //   console.log(CryptoJS.enc.Base64.stringify(encrypted.ciphertext))
-    //   return CryptoJS.enc.Base64.stringify(encrypted.ciphertext)
-    // },
     jumpOffline () {
       this.$app.jumpOffline()
     },
     displayAll () {
-      let allP = this.$el.querySelectorAll('.title_context a')
-      console.log('tag', allP)
+      this.isDisplay = true
     },
     initIcon () {
       let allP = this.$el.querySelectorAll('.title_context a')
@@ -494,7 +566,7 @@ export default {
         background: #FFF;
         border-radius: 10px;
         margin: -80px auto 10px auto;
-        padding: 15px 0;
+        padding: 5px 0;
     }
     .notice{
       height: 84px;
@@ -532,7 +604,7 @@ export default {
     .scene_manage{
       height: 155px;
       background: #FFF;
-      margin: 5px auto 5px auto;
+      margin: 10px auto 0px auto;
       color: #333333;
       .title{
         font-size: 16px;
@@ -561,6 +633,9 @@ export default {
           color: #A2A2A2;
           text-align: center;
       }
+      .weui-grids {
+        padding: 7px 10px;
+      }
       .weui-grid {
         width: 33.333333%;
         padding:5px 8px;
@@ -576,7 +651,7 @@ export default {
     .introduce{
       height: 181px;
       background: #FFF;
-      margin: 5px auto 5px auto;
+      margin: 10px auto;
       display: inline-flex;
       color: #333333;
       width: 100%;
@@ -647,6 +722,9 @@ export default {
     .classred{
       background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, from(rgba(247, 86, 84, 1)), to(rgba(254, 106, 106, 1)));
     }
+    .classgray{
+      background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, from(#C0D8F1), to(#C0D8F1));
+    }
   }
   .weui-grids {
     border-radius: 20px;
@@ -666,7 +744,7 @@ export default {
       display: none;
   }
   .weui-grid__label {
-    font-size:17px;
+    font-size:15px;
     margin-top: 0px;
     //  margin-top: 15px;
   }
