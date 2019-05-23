@@ -1,7 +1,7 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <nav-title :title="title"></nav-title>
+    <nav-title title="权证统计"></nav-title>
     <div class="weui-flex">
       <div class="weui-flex__item">
         <search v-model="search" url="UserCS_GetRectificationGrpInfo" placeholder="请输入地块名称" searchName="GrpName" :noFocus="true" @searchCancel="searchCancel" @searchConfirm="searchRes"></search>
@@ -83,6 +83,7 @@ export default {
       this.currentItem = JSON.parse(localStorage.AreaSelectGrpItem)
       this.title = this.currentItem.GrpName
       this.search = this.currentItem.GrpName
+      this.grpId = this.currentItem.ID
       this.currDate = (new Date()).format('yyyy-MM-dd')
       this.filterForm.date = this.currDate
     }

@@ -21,11 +21,14 @@
         </div>
       </div> -->
       <div class="back_img">
+        <div class="backtitle"><span>亚洲的希望&nbsp;&nbsp;产业的未来</span></div>
       </div>
       <div  @click.stop="routeTo(item)" v-for="item in list" :key="item.GDType" class="weui-cells" style="margin-top:10px;">
         <div class="weui-cell">
-          <div class="weui-cell__hd" style="position: relative;margin-right: 10px;width:50px;height:50px;">
-            <img :src="item.img" style="width: 50px;display: block">
+          <div class="weui-cell__hd" :class="getIconClass(item.GDType)"
+          style="position: relative;margin-right: 10px;width:50px;height:50px;border-radius: 100px;padding-top: 5px;color: #fff;text-align: center;">
+            <!-- <img :src="item.img" style="width: 50px;display: block"> -->
+            <i class="iconfont " :class="getIconName(item.GDType)" style="font-size: 25px;"></i>
           </div>
           <div class="weui-cell__bd">
             <p>{{item.name}}</p>
@@ -117,6 +120,40 @@ export default {
         this.$router.forward(item.url.url)
       }
     },
+    getIconClass (itemType) {
+      let iconClass = 'iconblue'
+      switch (itemType) {
+        case '1':
+        case '4':
+          iconClass = 'iconblue'
+          break
+        case '2':
+          iconClass = 'iconred'
+          break
+        case '3':
+          iconClass = 'icongreen'
+          break
+      }
+      return iconClass
+    },
+    getIconName (itemType) {
+      let iconName = 'icon-kefuzhongxin'
+      switch (itemType) {
+        case '1':
+          iconName = 'icon-kefuzhongxin'
+          break
+        case '2':
+          iconName = 'icon-weixiu'
+          break
+        case '3':
+          iconName = 'icon-xunjian1'
+          break
+        case '4':
+          iconName = 'icon-baoyang'
+          break
+      }
+      return iconName
+    },
     // async getPageData1 () {
     //
     //   console.log(res, '----哈哈哈--')
@@ -162,6 +199,7 @@ export default {
             return false
           }
         })
+        console.log('tag', this.list)
         localStorage.tabHome = JSON.stringify(this.list)
       } catch (e) {
         console.log(e + 'catch')
@@ -175,8 +213,9 @@ export default {
 <style lang="scss" scoped>
   .mint-loadmore{
     .back_img{
-      height: 160px;
-      background-color: green;
+      height: 140px;
+      // background-color: green;
+      background-image: url('../assets/img/work/i_work_titlebg.png');
     }
     .weui-cells:before{
       display: none;
@@ -184,5 +223,21 @@ export default {
     .weui-cell{
       height: 84px;
     }
+  }
+  .backtitle{
+    color: #fff;
+    padding-top: 30px;
+    padding-left: 33px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .iconblue{
+    background-color: #2D93E9;
+  }
+  .iconred{
+    background-color: #F85A59;
+  }
+  .icongreen{
+    background-color: #02BD9B;
   }
 </style>

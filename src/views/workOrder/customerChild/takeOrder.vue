@@ -36,7 +36,7 @@
         <mt-datetime-picker class="mydate"  @confirm="rStartTimeConfirm" ref="rStartTime" type="datetime" v-model="sPickerValue" year-format="{value}年"  month-format="{value}月"  date-format="{value}日" hour-format="{value}时" minute-format="{value}分" ></mt-datetime-picker>
         <a @click="$refs.eWholeTime.open()" class="weui-cell weui-cell_access" href="javascript:;">
           <div class="weui-cell__bd">
-            <p>预计完工时间</p>
+            <p>预期完工时间</p>
           </div>
           <div class="weui-cell__ft " :class="formObj.eWholeTime?'dark_33':''">
             {{formObj.eWholeTime }}
@@ -169,17 +169,20 @@ export default {
       let userName = this.formObj.userName
       let workOrdId = this.formObj.workOrdId
       let nameStr = this.formObj.plusEmployeeName
+      let startTime = this.formObj.rStartTime
+      let endTime = this.formObj.eWholeTime
+      let idea = this.formObj.idea
       this.formObj = {
         userName: userName,
         workOrdId: workOrdId,
-        idea: '',
+        idea: idea,
         ordersId: item.EmployeeID,
         orders: item.EmployeeName,
         ordersDepart: item.DeptName,
         ordersPositionId: item.PositionID,
         UserId: item.UserId,
-        rStartTime: '',
-        eWholeTime: '',
+        rStartTime: startTime,
+        eWholeTime: endTime,
         plusEmployeeName: nameStr
       }
       console.log(item, 'setPerson')
@@ -187,6 +190,11 @@ export default {
     validateForm () {
       if (!this.formObj.orders) {
         return '责任人不能为空'
+      }
+      if (this.formObj.rStartTime && this.formObj.eWholeTime) {
+        if (Date.parse(this.formObj.rStartTime) >= Date.parse(this.formObj.eWholeTime)) {
+          return '预期完工时间必须大于预计开工时间'
+        }
       }
     },
     async submit () {

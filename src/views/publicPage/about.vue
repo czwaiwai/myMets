@@ -9,7 +9,7 @@
         <div class="box-wrap">
           <div class="selectItem clearfix noneBb">
             <span class="name">版本名称：</span>
-            <span class="value textLeft">M-ETS</span>
+            <span class="value textLeft">物业通</span>
           </div>
           <div class="selectItem clearfix noneBb">
             <span class="name">版本：</span>

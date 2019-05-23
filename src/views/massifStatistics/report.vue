@@ -76,7 +76,8 @@ export default {
   computed: {
     ...mapGetters({
       'user': 'user',
-      'rand': 'rand'
+      'rand': 'rand',
+      'auth': 'auth'
     })
   },
   methods: {
@@ -125,7 +126,9 @@ export default {
       leftArr.forEach(item => {
         item.show = resData.some(sub => sub.Content === item.auth)
       })
-      leftArr.push({name: '整改比对', urlName: 'compared_comparedBuild', color: '#FC7676', icon: 'icon-copy', auth: '', show: true, value: []})
+      if (this.auth['APP_Rectification']) {
+        leftArr.push({name: '整改比对', urlName: 'compared_comparedBuild', color: '#FC7676', icon: 'icon-copy', auth: '', show: true, value: []})
+      }
       // console.log(leftArr, '-------------------')
       if (leftArr.some(item => item.show)) {
         this.leftList = leftArr

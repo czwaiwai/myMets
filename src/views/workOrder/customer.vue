@@ -191,6 +191,10 @@ export default {
           employeeId: this.nav.memberId,
           workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
           positionID: this.nav.positionId,
+          // projectId: '11091315263400010000',
+          // employeeId: '18102416111400010024',
+          // workPosFrom: 'Resource', // （Equipment设备（维修）、Resource资源(客服)
+          // positionID: '11091316310300010000',
           sort: '-1', // 1为升序，其他为降序
           workPos: this.searchKey, // search 筛选
           ...params

@@ -31,6 +31,14 @@ if (process.env.NODE_ENV === 'development') {
     APP_Maintain_SwitchSingle: true, // 保养转单
     APP_Inspection_SwitchSingle: true, // 巡检转单
     APP_Quality: true,
+    APP_ButlerService: true, // 管家服务
+    APP_GovernmentService: true, // 政务服务
+    APP_LifeMatch: true, // 生活配套
+    APP_NoticeInformation: true, // 公告资讯
+    APP_BusinessInfo: true, // 业务介绍
+    APP_MarketCooperation: true, // 市场合作
+    APP_Guide: true, // 入园指南
+    APP_AboutUs: true, // 关于我们
     // 租赁
     APP_LeaseCst: true,
     APP_LeaseHouse: true,
@@ -73,25 +81,25 @@ export default {
           // memberId: '1604271708130001001E',
           // memberName: '糖新村'
           // --------------------------
-          UserID: 'Demo1',
-          PositionName: '财务经理',
-          // OrgName: '思源大厦',
-          // OrgID: 10000,
-          OrgName: '银河世纪花园',
-          OrgID: '11091315263400010000', // 项目id
-          PositionID: '11091316310300010000', // 职位id
-          memberId: '4AA397BC156920F58334',
-          memberName: '陈闵'
-          // --------------------------
-          // UserID: 'LiaoJiangWei',
+          // UserID: 'Demo1',
           // PositionName: '财务经理',
           // // OrgName: '思源大厦',
           // // OrgID: 10000,
           // OrgName: '银河世纪花园',
           // OrgID: '11091315263400010000', // 项目id
           // PositionID: '11091316310300010000', // 职位id
-          // memberId: '18102416111400010024',
-          // memberName: '廖江伟'
+          // memberId: '4AA397BC156920F58334',
+          // memberName: '陈闵'
+          // --------------------------
+          UserID: 'LiaoJiangWei',
+          PositionName: '财务经理',
+          OrgName: '思源大厦',
+          OrgID: 10000,
+          // OrgName: '银河世纪花园',
+          // OrgID: '11091315263400010000', // 项目id
+          PositionID: '11091316310300010000', // 职位id
+          memberId: '18102416111400010024',
+          memberName: '廖江伟'
           // --------------------------
           // UserID: 'DaiRongHua',
           // PositionName: '财务经理',

@@ -116,7 +116,7 @@
           </div>
           <p class="weui-grid__label">整改对比</p>
         </a> -->
-        <a v-show="auth['APP_Rectification']" @click="$router.forward('/getCst')" href="javascript:;" class="weui-grid light_bg">
+        <a v-show="auth['APP_ButlerService']" @click="$router.forward('/getCst')" href="javascript:;" class="weui-grid light_bg">
           <div class="weui-grid__icon">
             <img src="../assets/img/work/ic_work_compare.png" alt="">
           </div>

@@ -197,7 +197,7 @@ export default {
     routeTo (item) {
       console.log(item)
       this.workItem = item
-      this.$router.push({path: this.$route.path + '/detail', query: {monitor: true}})
+      this.$router.push({path: this.$route.path + '/detail', query: {monitor: true, workPosFrom: 'Resource'}})
     },
     listDone () {
       this.$previewRefresh()

@@ -216,7 +216,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      pageStatus: 'getPageStatus'
+      pageStatus: 'getPageStatus',
+      'user': 'user'
     })
   },
   methods: {
@@ -561,10 +562,18 @@ export default {
     }
   },
   created () {
+        // console.log('tag2', localStorage.locationData)
     if (localStorage.locationData) {
-      this.locationData = JSON.parse(localStorage.locationData)
+      localStorage.locationData= JSON.parse(localStorage.locationData)
+      // if (this.localStorage.orgData.orgId!==this.user.OrgID){        
+      //   this.locationData.orgData.orgId=this.user.OrgID;
+      //   this.locationData.orgData.orgName = this.user.OrgName
+      //   this.locationData.budItem={}
+      //   this.locationData.grpItem={}
+      // }
+      console.log('tag2', localStorage.locationData)
     }
-    console.log(this.pageStatus)
+    console.log('pageStatus',this.pageStatus)
     if (this.pageStatus.pageType===1) {
       this.init()
     } else {

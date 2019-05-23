@@ -154,7 +154,7 @@ export default {
         this.init()
       })
     } else {
-      this.workPosFrom = this.$route.params.workPosFrom
+      this.workPosFrom = this.$route.params.workPosFrom || this.$route.query.workPosFrom
       if (this.workPosFrom === 'Resource') {
         this.title = '客服详情'
       } else {
