@@ -53,10 +53,13 @@
             </ul>
           </div>
             <div  class="weui-btn-area">
-                <a @click="$router.forward('/invoice/' + paidId +'/'+user.OrgID)" class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">开票</a>
+                <a @click="$router.forward($route.path + '/invoice/' + paidId +'/'+user.OrgID)" class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">开票</a>
             </div>
         </div>
     </div>
+    <transition name="page">
+      <router-view/>
+    </transition>
   </div>
 </template>
 <script>

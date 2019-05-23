@@ -104,6 +104,7 @@ store.dispatch('getUserAction').then(user => {
   console.log(user)
   // if (Vue.dev) {
   //   Vue.isPos = true
+  //   Vue.prototype.$isPos = true
   // }
   if (user && user.isEnergy) {
     Vue.isEnergy = true
@@ -111,6 +112,9 @@ store.dispatch('getUserAction').then(user => {
   if (store.getters.isPos) {
     Vue.isPos = true
     Vue.prototype.$isPos = true
+  } else {
+    Vue.isPos = false
+    Vue.prototype.$isPos = false
   }
   Vue.use(axiosHelper, {
     ip: store.getters.ip,
@@ -127,6 +131,7 @@ store.dispatch('getUserAction').then(user => {
   console.log(err)
   // 开发环境虚假登录
   if (Vue.dev) {
+    console.log('开发环境')
     Vue.isEnergy = true
     if (store.getters.isPos) {
       Vue.isPos = true

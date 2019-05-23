@@ -214,6 +214,7 @@ export default {
           employeeId: this.currMember,
           workPosFrom: this.workPosFrom, // （Equipment设备（维修）、Resource资源(客服)
           positionID: this.nav.positionId,
+          type: '0',
           sort: '-1', // 1为升序，其他为降序
           workPos: this.searchKey, // search 筛选
           ...params
