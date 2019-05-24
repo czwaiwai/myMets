@@ -82,7 +82,7 @@ export default {
       this.$app.logout()
     },
     clearCache () {
-      this.$message.confirm('确定要清楚缓存数据?<br />您将会退出登录').then(action => {
+      this.$message.confirm('确定要清除缓存数据?<br />您将会退出登录').then(action => {
         localStorage.clear()
         this.$app.clearCache()
       })

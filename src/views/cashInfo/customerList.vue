@@ -85,12 +85,16 @@ export default {
       }
     },
     jumpExpenseList (item) {
+      console.log(this.orderBy, '----orderBy--')
       console.log(item)
       this.$parent.choosePersonCash = item
       // this.$parent.costData = item
       this.$router.forward({name: 'expenseList',
         params: {
           roomId: this.$route.params.roomId
+        },
+        query: {
+          orderBy: this.orderBy
         }
       })
       // var oMessage = {

@@ -52,7 +52,7 @@
               </li>
             </ul>
           </div>
-            <div  class="weui-btn-area">
+            <div v-if="showBtn"  class="weui-btn-area">
                 <a @click="$router.forward($route.path + '/invoice/' + paidId +'/'+user.OrgID)" class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">开票</a>
             </div>
         </div>
@@ -71,7 +71,8 @@ export default {
   data () {
     return {
       paidId: '',
-      detail: {}
+      detail: {},
+      showBtn: false
     }
   },
   computed: {
@@ -82,6 +83,7 @@ export default {
   created () {
     if (this.$parent.payDetailData) {
       this.paidId = this.$parent.payDetailData.id
+      this.showBtn = this.$parent.payDetailData.billType === 0
       let data = Object.assign(this.$parent.payDetailData.customerFeeData[0])
       console.log(data, '--------------------')
       this.formatData(data)
@@ -116,6 +118,7 @@ export default {
         item.subShow = false
       })
       data.accountData[0].subShow = true
+      this.showBtn = data.billType === 0
       this.detail = data
     },
     showSubClick (item) {

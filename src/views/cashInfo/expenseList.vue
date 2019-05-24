@@ -30,7 +30,7 @@
                   <li class="sub_item weui-flex" @click="selectClickSub(sub, item)" :key="index"  v-for="(sub, index) in item.dateData" >
                     <i v-if="payMode===2" class="iconfont padding-right5" style="color: #3395FF;" :class="sub.isCheck?'icon-select-copy':'icon-Ellipse'"></i>
                     <div class="weui-flex__item ">{{sub.ipItemName || sub.repYears}}</div>
-                    <div>￥{{sub.priFailures}}</div>
+                    <div>￥{{sub.priFailures | formatNum}}</div>
                   </li>
                 </ul>
               </div>
@@ -94,7 +94,7 @@ export default {
     this.orgId = this.$parent.orgId
     this.roomName = this.$parent.roomName
     this.personCash = this.$parent.choosePersonCash
-    if (this.$parent.orderBy === '1') {
+    if (this.$route.query.orderBy === '0') {
       this.isOrder = true
     } else {
       this.isOrder = false
@@ -151,9 +151,9 @@ export default {
         OrderBy: this.isOrder ? '1' : '0'
       })
       if (res.data) {
+        // this.$parent.orderBy = this.isOrder ? '1' : '0'
         local.set('cash_orderby', this.isOrder ? '1' : '0')
         let data = this.$toLower(res.data)
-        console.log(data, 'data========')
         this.noCash = false
         let arr = data.filter(item => item.cstID === this.$parent.choosePersonCash.cstID)
         if (arr) {
@@ -185,7 +185,7 @@ export default {
         let that = this
         // [Pos机刷卡, Pos机扫码]
         let arr = this.$dev ? [] : ['1812031513470001002K', '1812031514190001002K']
-        console.log(item.id, item.name)
+        // console.log(item.id, item.name)
         item.method = function () {
           that['payChoose'](item.id, item.name)
         }
@@ -195,8 +195,6 @@ export default {
         before.push(item)
         return before
       }, [])
-      console.log(this.actions, '------')
-      // console.log(data, '-data---||----')
     },
     isAllClick () {
       if (this.allCheck) {
@@ -403,8 +401,8 @@ export default {
         if (typeof res === 'string') {
           data = JSON.parse(res.replace(/("(\{.*\})")/g, '$2'))
         }
-        console.log('pos通刷卡2', data)
-        console.log('is Object', typeof data)
+        // console.log('pos通刷卡2', data)
+        // console.log('is Object', typeof data)
         if (data.transData.resCode === '00' && data.transData.resDesc === '交易成功') {
           return data
         } else {
@@ -415,7 +413,7 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err, '??----------------------err')
+        // console.log(err, '??----------------------err')
         this.$toast(err.message)
         this.paying = false
         console.warn(err)
@@ -442,9 +440,6 @@ export default {
         if (typeof res === 'string') {
           data = JSON.parse(res.replace(/("(\{.*\})")/g, '$2'))
         }
-        console.log('is Object', typeof data)
-        console.log('pos扫一扫2', data)
-
         if (data.transData.resCode === '00' && data.transData.resDesc === '交易成功') {
           return data
         } else {
@@ -456,7 +451,6 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err, '??----------------------err')
         this.$toast(err.message)
         this.paying = false
         console.warn(err)

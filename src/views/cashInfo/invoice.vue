@@ -17,6 +17,7 @@
 </div>
 </template>
 <script>
+import Vue from 'vue'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 export default {
   name: 'invoice',
@@ -43,7 +44,7 @@ export default {
         let resData = res.data[0]
         let params = {
           CstID: resData.CstID,
-          InvoiceTotalMoney: resData.Totalmoney,
+          InvoiceTotalMoney: Vue.filter('formatNum')(resData.Totalmoney),
           'Email': '',
           'Remark': '',
           List: []
@@ -53,7 +54,7 @@ export default {
             params.List.push({
               'OrgID': orgId,
               'PaidID': PaidId,
-              'PaidMoney': sub.Cvsm
+              'PaidMoney': Vue.filter('formatNum')(sub.Cvsm)
             })
           })
         })

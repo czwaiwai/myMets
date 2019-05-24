@@ -11,6 +11,20 @@ export default function (Vue) {
     if (!value) return ''
     return (new Date(value)).format('yyyy-MM')
   })
+  // 保留两位小叔
+  Vue.filter('formatNum', function (x) {
+    var f = Math.round(x * 100) / 100
+    var s = f.toString()
+    var rs = s.indexOf('.')
+    if (rs < 0) {
+      rs = s.length
+      s += '.'
+    }
+    while (s.length <= rs + 2) {
+      s += '0'
+    }
+    return s
+  })
   // 截取.net时间格式中的月份
   Vue.filter('sMonth', function (value) {
     if (!value) return ''
