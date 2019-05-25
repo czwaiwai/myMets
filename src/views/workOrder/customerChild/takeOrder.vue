@@ -36,7 +36,7 @@
         <mt-datetime-picker class="mydate"  @confirm="rStartTimeConfirm" ref="rStartTime" type="datetime" v-model="sPickerValue" year-format="{value}年"  month-format="{value}月"  date-format="{value}日" hour-format="{value}时" minute-format="{value}分" ></mt-datetime-picker>
         <a @click="$refs.eWholeTime.open()" class="weui-cell weui-cell_access" href="javascript:;">
           <div class="weui-cell__bd">
-            <p>预期完工时间</p>
+            <p>期望完工时间</p>
           </div>
           <div class="weui-cell__ft " :class="formObj.eWholeTime?'dark_33':''">
             {{formObj.eWholeTime }}
@@ -193,7 +193,7 @@ export default {
       }
       if (this.formObj.rStartTime && this.formObj.eWholeTime) {
         if (Date.parse(this.formObj.rStartTime) >= Date.parse(this.formObj.eWholeTime)) {
-          return '预期完工时间必须大于预计开工时间'
+          return '期望完工时间必须大于预计开工时间'
         }
       }
     },

@@ -110,7 +110,7 @@ export default {
         if (this.detailData.Birthday < '1901-01-01') {
           return ''
         } else {
-          return this.detailData.Birthday
+          return new Date(this.detailData.Birthday).format('yyyy-MM-dd')
         }
       }
       return ''

@@ -28,7 +28,7 @@
           <span v-if="item.auth==='APP_jumpOffline' && offBadge" class="weui-badge" >{{offBadge > 99 ?'99': offBadge}}</span>
         </a>
       </div>
-      <div v-show="isDisplay" @click="isDisplay=false" style="text-align: center;color:#A9A8A8;font-size:12px;"><span>收起全部</span></div>
+      <div v-show="isDisplay" @click="isDisplay=false" style="text-align: center;color:#A9A8A8;font-size:15px;"><span>收起全部</span></div>
     </div>
     <div class="notice" v-if="auth['APP_NoticeInformation']">
       <div class="left_title">
@@ -151,6 +151,8 @@ export default {
     //   console.log('执行tabwork方法')
     //   window.APP_pushMsg('{"fromTag":"","id":"20190220092648764888","status":"1","type":"CustomerService","url":""}')
     // }, 5000)
+    this.currOrgID = this.user.OrgID
+    this.currOrgName = this.user.OrgName
     this.isDiKuai = this.auth['APP_Rectification']
     this.getReportRight()
     this.getAppDynamicLink()
@@ -174,6 +176,7 @@ export default {
     this.currOrgID = this.user.OrgID
     this.currOrgName = this.user.OrgName
     this.offlineBadge()
+    this.getAppDynamicLink()
   },
   computed: {
     ...mapGetters({
@@ -429,6 +432,7 @@ export default {
         this.groupList = []
         this.initIconList()
       } catch (e) {
+        this.initIconList()
         console.log(e)
       }
     },
@@ -742,7 +746,7 @@ export default {
   }
   .weui-grid {
     width: 25%;
-    padding: 6px 1px;
+    padding: 10px 1px;
   }
   .weui-grid::before{
       display: none;

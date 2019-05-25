@@ -78,7 +78,7 @@ export default {
   methods: {
     imgClick () {
       this.$app.longClick({
-        img:this.imgBase,
+        img: this.imgBase,
         type: 'base64'
       }).then(res => {
         console.log(res)
@@ -88,30 +88,30 @@ export default {
     },
     urlImgClick () {
       this.$app.longClick({
-        img:'http://172.31.118.201:8092/version/test.png',
+        img: 'http://172.31.118.201:8092/version/test.png',
         type: 'url'
       }).then(res => {
-          this.resData = res
-          this.$toast('操作成功' + 'http://172.31.118.201:8092/version/test.png')
-        })
+        this.resData = res
+        this.$toast('操作成功' + 'http://172.31.118.201:8092/version/test.png')
+      })
     },
-    download(doc) {
-      let file= 'http://172.31.118.201:8092/version/test.'+doc
+    download (doc) {
+      let file = 'http://172.31.118.201:8092/version/test.' + doc
       this.$app.download({
-        file:file
+        file: file
       }).then((res) => {
-          this.resData = res
-          this.$toast('下载成功' + file)
-        })
+        this.resData = res
+        this.$toast('下载成功' + file)
+      })
     },
     thirdOpen (doc) {
-      let file= 'http://172.31.118.201:8092/version/test.'+doc
+      let file = 'http://172.31.118.201:8092/version/test.' + doc
       this.$app.openThird({
-        file:file,
+        file: file
       }).then((res) => {
-          this.resData = res
-          this.$toast('下载成功' + file)
-        })
+        this.resData = res
+        this.$toast('下载成功' + file)
+      })
     }
   }
 }
