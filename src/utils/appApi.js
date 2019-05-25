@@ -100,6 +100,9 @@ export default (function () {
     routeOA: 'APP_routeOA',
     topView: 'App_topView',
     outApp: 'APP_outApp',
+    longClick: 'APP_LongClick|2', // 长按保存
+    download: 'APP_Download|2', // 下载文件
+    openThird: 'APP_OpenThird|2', // 第三方打开
     network: 'APP_network|1',
     offlineBadge: 'APP_offlineBadge|1', // 调用offline角标
     setOptions: 'APP_setOptions',

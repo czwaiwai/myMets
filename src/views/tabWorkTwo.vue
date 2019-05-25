@@ -209,7 +209,12 @@ export default {
       console.log('this.appDynamicLink', this.appDynamicLink)
       let url = this.appDynamicLink.filter(ele => { return ele.Names === itemName })
       if (url && url.length > 0) {
-        return url[0].ShowLink
+        let link = url[0].ShowLink
+        if (link.indexOf('?') > -1) {
+          return link + '&time=' + (new Date().valueOf())
+        } else {
+          return link + '?time=' + (new Date().valueOf())
+        }
       }
       return ''
     },

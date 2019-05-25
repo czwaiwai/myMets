@@ -69,6 +69,13 @@
           </div>
           <div class="weui-cell__ft"></div>
         </a>
+        <a v-if="(!$store.getters.ip || $store.getters.ip==='172.31.118.201:8092')" @click="$router.forward('/test2')" class="weui-cell weui-cell_access" href="javascript:;">
+          <div class="weui-cell__hd"><img src="../assets/img/tabMy/ic_me_icon_about.png" alt="" style="width:20px;margin-right:15px;display:block"></div>
+          <div class="weui-cell__bd">
+            <p>测试app功能</p>
+          </div>
+          <div class="weui-cell__ft"></div>
+        </a>
       </div>
       <!--<button @click="testAddData">添加数据</button>-->
       <!--<button @click="testGetData">取出出去</button>-->

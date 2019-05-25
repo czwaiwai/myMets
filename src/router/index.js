@@ -214,6 +214,11 @@ export default new Router({
       name: 'test',
       component: () => import('@/views/test')
     },
+    {
+      path: '/test2',
+      name: 'test2',
+      component: () => import('@/views/test2')
+    },
     // 测试用 end
     ...Cash,
     ...Pos,
