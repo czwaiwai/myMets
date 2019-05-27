@@ -85,7 +85,6 @@ export default {
       }).then(() => {
         this.$store.dispatch('getUserAction')
         this.$store.commit('setRandNum', Date.now())
-        // localStorage.currentProject = JSON.stringify(item)
         this.$root.back()
       }).catch(err => {
         console.log(err)

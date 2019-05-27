@@ -31,14 +31,14 @@
       <div v-show="isDisplay" @click="isDisplay=false" style="text-align: center;color:#A9A8A8;font-size:15px;"><span>收起全部</span></div>
     </div>
     <div class="notice" v-if="auth['APP_NoticeInformation']"
-      @click="$app.loadView({url: getSingleDynamicLink('现场管理'), type: 'chaobiao', isTitle: '现场管理'})">
+      @click="$app.loadView({url: getSingleDynamicLink('公告咨讯'), type: 'chaobiao', isTitle: '公告咨讯'})">
       <div class="left_title">
          <div class="weui-grid__icon">
             <i class="iconfont icon-gonggaozixun classorange"></i>
           </div>
       </div>
       <div class='right_context'>
-          <div v-for="(notice,indexN) in GetNoticeRollList"  :key="indexN"><span>{{notice.itemName}}</span></div>
+          <div v-for="(notice,indexN) in GetNoticeRollList"  :key="indexN"><span>{{notice.rotationName}}</span></div>
         <!-- <div><span>广东家居设计谷进驻亚洲国际!</span></div>
         <div><span>欢迎进驻到亚洲国际市场,商家永无后顾之忧!</span></div> -->
       </div>
@@ -141,7 +141,7 @@ export default {
       otherList: [],
       groupList: [], // 所有显示的APP
       appDynamicLink: [], // APP动态链接地址
-      noticeList: [], // 公告信息{itemName: '1111'}, {itemName: '222'}, {itemName: '333'}, {itemName: '4444'}, {itemName: '555'}
+      noticeList: [], // 公告信息{rotationName: '1111'}, {rotationName: '222'}, {rotationName: '333'}, {rotationName: '4444'}, {rotationName: '555'}
       noticeRollIndexId: [0, 1], // 滚动信息索引值
       currOrgID: '',
       currOrgName: '',
@@ -162,6 +162,7 @@ export default {
     this.currOrgName = this.user.OrgName
     this.isDiKuai = this.auth['APP_Rectification']
     this.getReportRight()
+    this.getNoticeInfo()
     this.getAppDynamicLink()
     if (this.auth['APP_Quality']) {
       this.getPageData()
@@ -171,20 +172,28 @@ export default {
   },
   activated () {
     console.log('调用offlineBadge')
+    this.getReportRight()
+    console.log('activated', '1')
     // 当切换职位或项目之后重新调用更新数据
     if (this.currRand !== 0 && this.currRand !== this.rand) {
       if (this.auth['APP_Quality']) {
         this.getPageData()
+      } else {
+        this.initIconList()
       }
+      console.log('activated', '2222')
+      this.getNoticeInfo()
+      this.getAppDynamicLink()
       this.currRand = this.rand
     } else {
       this.currRand = this.rand
     }
+    console.log('activated', '2222')
+    this.getNoticeInfo()
+    this.getAppDynamicLink()
     this.currOrgID = this.user.OrgID
     this.currOrgName = this.user.OrgName
     this.offlineBadge()
-    this.getAppDynamicLink()
-    // this.noticeRollList = this.noticeList.filter((ele, index) => { return index < 2 })
     clearInterval(this.timer)
     this.timer = setInterval(this.getRollNotice, 10000)
   },
@@ -493,6 +502,7 @@ export default {
       }
     },
     async authLogin () {
+      console.log('authLogin', '------')
       let url = '/roc/open/app/admin/login?userNam=liaojiangwei&password=59adb24ef3cdbe0297f05b395827453f'
       let res = await this.$http.post(url, {}, {
         headers: {
@@ -517,7 +527,18 @@ export default {
       if (reportRight) {
         this.isDiKuai = reportRight
       }
-      console.log('getReportAuth', resData)
+    },
+    async getNoticeInfo () {
+      let p7 = {
+        OrgID: this.user.OrgID
+      }
+      let res = await this.$xml('UserCS_ConnectionAnnouncement', p7)
+      if (!res.data) return
+      let resData = res.data
+      if (resData && resData.data) {
+        this.noticeList = resData.data.list
+      }
+      console.log('resData', resData)
     },
     async getAppDynamicLink () {
       let p7 = {
