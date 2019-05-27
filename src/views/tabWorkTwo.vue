@@ -449,7 +449,7 @@ export default {
           'iconType': 'icon',
           'iconStyle': 'font-size: 27px;',
           'openType': 'routerJump',
-          'pathParams': {url: '/getCst', type: '', isTitle: ''},
+          'pathParams': {url: '/massifStatistics', type: '', isTitle: ''},
           'displayName': '地块统计'})
       }
     },
