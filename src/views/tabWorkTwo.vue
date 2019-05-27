@@ -185,8 +185,8 @@ export default {
         this.initIconList()
       }
       console.log('activated', '2222')
-      this.getNoticeInfo()
-      this.getAppDynamicLink()
+      // this.getNoticeInfo()
+      // this.getAppDynamicLink()
       this.currRand = this.rand
     } else {
       this.currRand = this.rand
@@ -285,6 +285,7 @@ export default {
     },
     initIconList () {
       let url = ''
+      this.groupList = []
       if (this.auth['APP_GovernmentService']) {
         url = this.getSingleDynamicLink('政务服务')
         this.addGroup({'auth': 'APP_GovernmentService',
