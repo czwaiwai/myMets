@@ -167,7 +167,7 @@ export default {
     }
   },
   activated () {
-    console.log('调用offlineBadge')
+    console.log('调用offlineBadge activated')
     console.log(this.user.OrgID, this.user.OrgName)
     this.getReportRight()
     this.getAppDynamicLink()
