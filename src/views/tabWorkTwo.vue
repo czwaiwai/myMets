@@ -6,12 +6,9 @@
   <div class="page_bd main_page">
     <div class="title_gb">
       <p class="orgInfo">
-        <span  @click="$router.forward('/changeProject')">{{currOrgName}}</span>
+        <span  @click="$router.forward('/changeProject')">{{user.OrgName}}</span>
         <i class="iconfont icon-open-close-selected classblue"  @click="$router.forward('/changeProject')" style="font-size: 33px;font-size:#fff"></i>
       </p>
-      <!-- <select v-model="currOrgID" @change="projectChange">
-        <option v-for="(item,index) in filterList" :key="index" :value='item.projectId'>{{item.projectName}}</option>
-      </select> -->
       <span class="title">亚洲的希望  产业的未来</span>
     </div>
     <div class="title_context">
@@ -38,7 +35,7 @@
           </div>
       </div>
       <div class='right_context'>
-        <swipe :auto="400000">
+        <swipe :auto="4000">
           <swipe-item  v-for="(item,index) in GetNoticeRollList"  :key="index">
             <div v-for="(notice,indexN) in item"  :key="indexN"><span>{{notice.rotationName}}</span></div>
           </swipe-item>
@@ -139,7 +136,7 @@ export default {
   data () {
     return {
       hasBtn: false,
-      timer: '',
+      // timer: '',
       offBadge: 0,
       currRand: 0,
       otherList: [],
@@ -147,8 +144,6 @@ export default {
       appDynamicLink: [], // APP动态链接地址
       noticeList: [], // 公告信息{rotationName: '1111'}, {rotationName: '222'}, {rotationName: '333'}, {rotationName: '4444'}, {rotationName: '555'}
       noticeRollIndexId: [0, 1], // 滚动信息索引值
-      currOrgID: '',
-      currOrgName: '',
       isDiKuai: false, // 地块统计是否显示（包括某一报表权限）
       isDisplay: false // 是否显示全部
     }
@@ -162,8 +157,6 @@ export default {
     //   console.log('执行tabwork方法')
     //   window.APP_pushMsg('{"fromTag":"","id":"20190220092648764888","status":"1","type":"CustomerService","url":""}')
     // }, 5000)
-    this.currOrgID = this.user.OrgID
-    this.currOrgName = this.user.OrgName
     this.isDiKuai = this.auth['APP_Rectification']
     this.getReportRight()
     this.getNoticeInfo()
@@ -175,8 +168,9 @@ export default {
   },
   activated () {
     console.log('调用offlineBadge')
+    console.log(this.user.OrgID, this.user.OrgName)
     this.getReportRight()
-    console.log('tag', '')
+    this.getAppDynamicLink()
     // 当切换职位或项目之后重新调用更新数据
     if (this.currRand !== 0 && this.currRand !== this.rand) {
       if (this.auth['APP_Quality']) {
@@ -185,16 +179,13 @@ export default {
         this.initIconList()
       }
       this.getNoticeInfo()
-      this.getAppDynamicLink()
       this.currRand = this.rand
     } else {
       this.currRand = this.rand
     }
-    this.currOrgID = this.user.OrgID
-    this.currOrgName = this.user.OrgName
     this.offlineBadge()
-    clearInterval(this.timer)
-    this.timer = setInterval(this.getRollNotice, 10000)
+    // clearInterval(this.timer)
+    // this.timer = setInterval(this.getRollNotice, 10000)
   },
   computed: {
     ...mapGetters({
@@ -529,6 +520,7 @@ export default {
       return res
     },
     async getReportRight () {
+      console.log('this.user.OrgID', 'getReportRight')
       let p7 = {
         UserId: this.user.UserID,
         PositionId: this.user.PositionID
@@ -542,6 +534,7 @@ export default {
       }
     },
     async getNoticeInfo () {
+      console.log('this.user.OrgID', 'getNoticeInfo')
       let p7 = {
         OrgID: this.user.OrgID
       }
@@ -554,6 +547,7 @@ export default {
       console.log('resData', resData)
     },
     async getAppDynamicLink () {
+      console.log('this.user.OrgID', 'getAppDynamicLink')
       let p7 = {
         OrgID: this.user.OrgID
       }
@@ -581,12 +575,8 @@ export default {
     displayAll () {
       this.isDisplay = true
     },
-    changeProject (item) {
-      this.currOrgID = item.projectId
-      this.currOrgName = this.user.projectName
-    },
     beforeDestroy () {
-      clearInterval(this.timer)
+      // clearInterval(this.timer)
     },
     async offlineBadge () {
       let res = await this.$app.offlineBadge()
