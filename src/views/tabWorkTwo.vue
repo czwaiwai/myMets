@@ -5,9 +5,9 @@
   </div>
   <div class="page_bd main_page">
     <div class="title_gb">
-      <p class="orgInfo" @click="$router.forward('/changeProject')">
-        <span>{{currOrgName}}</span>
-        <i class="iconfont icon-open-close-selected classblue" style="font-size: 33px;font-size:#fff"></i>
+      <p class="orgInfo">
+        <span  @click="$router.forward('/changeProject')">{{currOrgName}}</span>
+        <i class="iconfont icon-open-close-selected classblue"  @click="$router.forward('/changeProject')" style="font-size: 33px;font-size:#fff"></i>
       </p>
       <!-- <select v-model="currOrgID" @change="projectChange">
         <option v-for="(item,index) in filterList" :key="index" :value='item.projectId'>{{item.projectName}}</option>
@@ -30,18 +30,20 @@
       </div>
       <div v-show="isDisplay" @click="isDisplay=false" style="text-align: center;color:#A9A8A8;font-size:15px;"><span>收起全部</span></div>
     </div>
-    <div class="notice" v-if="auth['APP_NoticeInformation']">
+    <div class="notice" v-if="auth['APP_NoticeInformation']"
+      @click="$app.loadView({url: getSingleDynamicLink('现场管理'), type: 'chaobiao', isTitle: '现场管理'})">
       <div class="left_title">
          <div class="weui-grid__icon">
             <i class="iconfont icon-gonggaozixun classorange"></i>
           </div>
       </div>
       <div class='right_context'>
-        <div><a href="javascript:;" @click="$app.loadView({url: 'http://wwww.baidu.com',type: 'chaobiao', isTitle: '公告咨讯'})">广东家居设计谷进驻亚洲国际!</a></div>
-        <div><a>欢迎进驻到亚洲国际市场,商家永无后顾之忧!</a></div>
+          <div v-for="(notice,indexN) in GetNoticeRollList"  :key="indexN"><span>{{notice.itemName}}</span></div>
+        <!-- <div><span>广东家居设计谷进驻亚洲国际!</span></div>
+        <div><span>欢迎进驻到亚洲国际市场,商家永无后顾之忧!</span></div> -->
       </div>
     </div>
-    <div class="scene_manage" v-if="auth['APP_MarketCooperation'] &&(auth['APP_Inspection'] || twoOtherList.length>0)" >
+    <div class="scene_manage" v-if="auth['APP_MarketCooperation'] &&(auth['APP_Inspection'] || twoOtherList.length>0)">
       <div><span class="title">现场管理</span></div>
       <div class="weui-grids">
         <a v-show="auth['APP_Inspection']" @click="$router.forward('/workOrder/inspection/Inspection')" href="javascript:;" class="weui-grid light_bg">
@@ -125,17 +127,22 @@
 
 <script>
 import {mapGetters} from 'Vuex'
+import { Swipe, SwipeItem } from 'mint-ui'
 // import CryptoJS from 'crypto-js'
 export default {
   name: 'tabWork',
+  components: {Swipe, SwipeItem},
   data () {
     return {
       hasBtn: false,
+      timer: '',
       offBadge: 0,
       currRand: 0,
       otherList: [],
       groupList: [], // 所有显示的APP
       appDynamicLink: [], // APP动态链接地址
+      noticeList: [], // 公告信息{itemName: '1111'}, {itemName: '222'}, {itemName: '333'}, {itemName: '4444'}, {itemName: '555'}
+      noticeRollIndexId: [0, 1], // 滚动信息索引值
       currOrgID: '',
       currOrgName: '',
       isDiKuai: false, // 地块统计是否显示（包括某一报表权限）
@@ -177,6 +184,9 @@ export default {
     this.currOrgName = this.user.OrgName
     this.offlineBadge()
     this.getAppDynamicLink()
+    // this.noticeRollList = this.noticeList.filter((ele, index) => { return index < 2 })
+    clearInterval(this.timer)
+    this.timer = setInterval(this.getRollNotice, 10000)
   },
   computed: {
     ...mapGetters({
@@ -201,6 +211,17 @@ export default {
     },
     twoOtherList () {
       return this.otherList.filter((ele, index) => { return index < 2 })
+    },
+    GetNoticeRollList () {
+      let noticeRollList = []
+      this.noticeRollIndexId.forEach(ele => {
+        // console.log('GetNoticeRollList', ele)
+        if (this.noticeList && this.noticeList[ele]) {
+          noticeRollList.push(this.noticeList[ele])
+        }
+      })
+      // console.log('noticeRollList', noticeRollList)
+      return noticeRollList
     }
     // filterList () {
     //   let list = this.orglist
@@ -208,8 +229,26 @@ export default {
     // }
   },
   methods: {
+    getRollNotice () {
+      let maxIndexId = -1
+      if (this.noticeRollIndexId && this.noticeRollIndexId.length > 0) {
+        maxIndexId = this.noticeRollIndexId[this.noticeRollIndexId.length - 1]
+      }
+      maxIndexId++
+      if (maxIndexId >= this.noticeList.length) {
+        maxIndexId = 0
+      }
+      this.noticeRollIndexId = []
+      this.noticeRollIndexId.push(maxIndexId)
+      maxIndexId++
+      if (maxIndexId === this.noticeList.length) {
+        maxIndexId = 0
+      }
+      this.noticeRollIndexId.push(maxIndexId)
+      // console.log('this.noticeRollIndexId', this.noticeRollIndexId)
+    },
     getSingleDynamicLink (itemName) {
-      console.log('this.appDynamicLink', this.appDynamicLink)
+      // console.log('this.appDynamicLink', this.appDynamicLink)
       let url = this.appDynamicLink.filter(ele => { return ele.Names === itemName })
       if (url && url.length > 0) {
         let link = url[0].ShowLink
@@ -508,16 +547,12 @@ export default {
     displayAll () {
       this.isDisplay = true
     },
-    initIcon () {
-      let allP = this.$el.querySelectorAll('.title_context a')
-      if (allP.length > 8) {
-        allP.forEach((ele, index) => {
-          if (index > 6) {
-            ele.style.display = 'none'
-          }
-          console.log('tag', index)
-        })
-      }
+    changeProject (item) {
+      this.currOrgID = item.projectId
+      this.currOrgName = this.user.projectName
+    },
+    beforeDestroy () {
+      clearInterval(this.timer)
     },
     async offlineBadge () {
       let res = await this.$app.offlineBadge()
@@ -546,6 +581,7 @@ export default {
         font-size: 16px;
         padding-top: 10px;
         text-align: left;
+        width:auto;
         .iconfont{
           padding-left:3px;
         }
@@ -604,7 +640,7 @@ export default {
           line-height: 31px;
           height: 32px;
           overflow: hidden;
-          a{
+          span{
             color: #333333;
             font-size: 16px;
           }
