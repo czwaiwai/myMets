@@ -167,8 +167,6 @@ export default {
     }
   },
   activated () {
-    console.log('调用offlineBadge activated')
-    console.log(this.user.OrgID, this.user.OrgName)
     this.getReportRight()
     this.getAppDynamicLink()
     // 当切换职位或项目之后重新调用更新数据
@@ -520,7 +518,6 @@ export default {
       return res
     },
     async getReportRight () {
-      console.log('this.user.OrgID', 'getReportRight')
       let p7 = {
         UserId: this.user.UserID,
         PositionId: this.user.PositionID
@@ -534,7 +531,6 @@ export default {
       }
     },
     async getNoticeInfo () {
-      console.log('this.user.OrgID', 'getNoticeInfo')
       let p7 = {
         OrgID: this.user.OrgID
       }
@@ -547,7 +543,6 @@ export default {
       console.log('resData', resData)
     },
     async getAppDynamicLink () {
-      console.log('this.user.OrgID', 'getAppDynamicLink')
       let p7 = {
         OrgID: this.user.OrgID
       }
