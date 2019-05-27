@@ -20,6 +20,8 @@
         <button class="weui-btn weui-btn_mini weui-btn_primary" @click="thirdOpen('xls')">第三方xls</button>
         <button class="weui-btn weui-btn_mini weui-btn_primary" @click="thirdOpen('pdf')">第三方pdf</button>
       </div>
+        <audio ref="mp3" loop autoplay="autoplay" controls id="bgMusic" src="http://172.31.118.201:8092/version/test.mp3"></audio>
+        <button class="weui-btn weui-btn_mini weui-btn_primary" @click="clickMp3()">播放MP3</button>
     </div>
   </div>
 </template>
@@ -76,6 +78,14 @@ export default {
     // })
   },
   methods: {
+    clickMp3 () {
+      let audio = this.$refs.mp3
+      if (audio.paused) {
+        audio.play()
+        return
+      }
+      audio.pause()
+    },
     imgClick () {
       this.$app.longClick({
         img: this.imgBase,

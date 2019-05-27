@@ -128,6 +128,7 @@
 <script>
 import {mapGetters} from 'Vuex'
 import { Swipe, SwipeItem } from 'mint-ui'
+import pushBus from '@/utils/pushMsg'
 // import CryptoJS from 'crypto-js'
 export default {
   name: 'tabWork',
@@ -160,14 +161,16 @@ export default {
     // }, 5000)
     this.currOrgID = this.user.OrgID
     this.currOrgName = this.user.OrgName
+    pushBus.$on('subBack', data => {
+      this.offlineBadge()
+    })
     this.isDiKuai = this.auth['APP_Rectification']
     this.getReportRight()
     this.getNoticeInfo()
     this.getAppDynamicLink()
+    this.initIconList()
     if (this.auth['APP_Quality']) {
       this.getPageData()
-    } else {
-      this.initIconList()
     }
   },
   activated () {
