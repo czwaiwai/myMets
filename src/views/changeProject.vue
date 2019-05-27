@@ -83,9 +83,10 @@ export default {
         projectId: item.projectId,
         projectName: item.projectName
       }).then(() => {
-        this.$store.dispatch('getUserAction')
-        this.$store.commit('setRandNum', Date.now())
-        this.$root.back()
+        this.$store.dispatch('getUserAction').then(res => {
+          this.$store.commit('setRandNum', Date.now())
+          this.$root.back()
+        })
       }).catch(err => {
         console.log(err)
         if (this.$dev) {
