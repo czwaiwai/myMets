@@ -38,7 +38,11 @@
           </div>
       </div>
       <div class='right_context'>
-          <div v-for="(notice,indexN) in GetNoticeRollList"  :key="indexN"><span>{{notice.rotationName}}</span></div>
+        <swipe :auto="400000">
+          <swipe-item  v-for="(item,index) in GetNoticeRollList"  :key="index">
+            <div v-for="(notice,indexN) in item"  :key="indexN"><span>{{notice.rotationName}}</span></div>
+          </swipe-item>
+        </swipe>
         <!-- <div><span>广东家居设计谷进驻亚洲国际!</span></div>
         <div><span>欢迎进驻到亚洲国际市场,商家永无后顾之忧!</span></div> -->
       </div>
@@ -128,7 +132,6 @@
 <script>
 import {mapGetters} from 'Vuex'
 import { Swipe, SwipeItem } from 'mint-ui'
-import pushBus from '@/utils/pushMsg'
 // import CryptoJS from 'crypto-js'
 export default {
   name: 'tabWork',
@@ -161,9 +164,6 @@ export default {
     // }, 5000)
     this.currOrgID = this.user.OrgID
     this.currOrgName = this.user.OrgName
-    pushBus.$on('subBack', data => {
-      this.offlineBadge()
-    })
     this.isDiKuai = this.auth['APP_Rectification']
     this.getReportRight()
     this.getNoticeInfo()
@@ -176,7 +176,7 @@ export default {
   activated () {
     console.log('调用offlineBadge')
     this.getReportRight()
-    console.log('activated', '1')
+    console.log('tag', '')
     // 当切换职位或项目之后重新调用更新数据
     if (this.currRand !== 0 && this.currRand !== this.rand) {
       if (this.auth['APP_Quality']) {
@@ -184,16 +184,12 @@ export default {
       } else {
         this.initIconList()
       }
-      console.log('activated', '2222')
       this.getNoticeInfo()
       this.getAppDynamicLink()
       this.currRand = this.rand
     } else {
       this.currRand = this.rand
     }
-    console.log('activated', '2222')
-    this.getNoticeInfo()
-    this.getAppDynamicLink()
     this.currOrgID = this.user.OrgID
     this.currOrgName = this.user.OrgName
     this.offlineBadge()
@@ -226,13 +222,27 @@ export default {
     },
     GetNoticeRollList () {
       let noticeRollList = []
-      this.noticeRollIndexId.forEach(ele => {
-        // console.log('GetNoticeRollList', ele)
-        if (this.noticeList && this.noticeList[ele]) {
-          noticeRollList.push(this.noticeList[ele])
+      // this.noticeRollIndexId.forEach(ele => {
+      //   // console.log('GetNoticeRollList', ele)
+      //   if (this.noticeList && this.noticeList[ele]) {
+      //     noticeRollList.push(this.noticeList[ele])
+      //   }
+      // })
+      let noticeitem = []
+      this.noticeList.forEach((ele, index) => {
+        if (index % 2 === 0) {
+          noticeitem = []
+          noticeitem.push(ele)
+        } else {
+          noticeitem.push(ele)
+          noticeRollList.push(noticeitem)
+          noticeitem = []
         }
       })
-      // console.log('noticeRollList', noticeRollList)
+      if (noticeitem) {
+        noticeRollList.push(noticeitem)
+      }
+      console.log('noticeRollList', noticeRollList)
       return noticeRollList
     }
     // filterList () {
@@ -285,6 +295,7 @@ export default {
     },
     initIconList () {
       let url = ''
+      this.groupList = []
       if (this.auth['APP_GovernmentService']) {
         url = this.getSingleDynamicLink('政务服务')
         this.addGroup({'auth': 'APP_GovernmentService',
@@ -505,7 +516,6 @@ export default {
       }
     },
     async authLogin () {
-      console.log('authLogin', '------')
       let url = '/roc/open/app/admin/login?userNam=liaojiangwei&password=59adb24ef3cdbe0297f05b395827453f'
       let res = await this.$http.post(url, {}, {
         headers: {
@@ -655,20 +665,20 @@ export default {
         }
       }
       .right_context{
-        margin: 10px 10px 0 97px;
-        /* line-height: 35px; */
+        margin: 10px 20px 10px 97px;
         height: 80px;
-        div{
-          left: 70px;
+        white-space: nowrap;
+
+          // left: 70px;
           font-size: 14px;
-          line-height: 31px;
-          height: 32px;
+          line-height: 30px;
+          height: 60px;
           overflow: hidden;
           span{
             color: #333333;
             font-size: 16px;
           }
-        }
+        // }
       }
 
     }
