@@ -144,6 +144,7 @@ export default {
     }
     this.canActionBtn = !!parseInt(this.work.strBillStatus)
     this.getPageData()
+    this.getMaterialCost()
     // 开工时间设置默认值
     if (!this.canActionBtn) {
       this.formObj.startTime = (new Date()).format('yyyy-MM-dd hh:mm')
@@ -174,6 +175,16 @@ export default {
       if (res.data && res.data[0]) {
         // console.log(res.data)
         this.options = res.data.filter(item => item.value !== 'Add')
+      }
+    },
+    async getMaterialCost () {
+      let p0 = 'UserCS_GetClaimsInfoH5'
+      let params = {OrgID: this.work.OrgID, WordQuertionID: this.work.WorkQuestionID}
+      let res = await this.$xml(p0, params)
+      let total = 0.00
+      if (res.data && res.data[0]) {
+        total = this.$toLower(res.data).reduce((before, item) => before + ((item.price - 0) * (item.actualNum - 0)), 0)
+        this.formObj.materialCostSum = total.toString(10)
       }
     },
     routeMaterial () {

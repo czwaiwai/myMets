@@ -91,7 +91,7 @@ export default {
           // memberId: '4AA397BC156920F58334',
           // memberName: '陈闵'
           // --------------------------
-          UserID: 'LiaoJiangWei',
+          UserID: 'tangxc',
           PositionName: '财务经理',
           // OrgName: '思源大厦',
           // OrgID: 10000,
@@ -99,7 +99,7 @@ export default {
           OrgID: '11091315263400010000', // 项目id
           PositionID: '11091316310300010000', // 职位id
           memberId: '18102416111400010024',
-          memberName: '廖江伟'
+          memberName: '汤新春'
           // --------------------------
           // UserID: 'DaiRongHua',
           // PositionName: '财务经理',

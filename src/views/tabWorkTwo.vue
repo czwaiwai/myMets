@@ -35,11 +35,14 @@
           </div>
       </div>
       <div class='right_context'>
-        <swipe :auto="4000">
+        <ul class="marquee_list" :class="{marquee_top:animate}">
+          <li v-for="(item,index) in noticeList" :key="index">{{item.rotationName}}</li>
+        </ul>
+        <!-- <swipe :auto="2000"  :show-indicators="false">
           <swipe-item  v-for="(item,index) in GetNoticeRollList"  :key="index">
             <div v-for="(notice,indexN) in item"  :key="indexN"><span>{{notice.rotationName}}</span></div>
           </swipe-item>
-        </swipe>
+        </swipe> -->
         <!-- <div><span>广东家居设计谷进驻亚洲国际!</span></div>
         <div><span>欢迎进驻到亚洲国际市场,商家永无后顾之忧!</span></div> -->
       </div>
@@ -129,6 +132,7 @@
 <script>
 import {mapGetters} from 'Vuex'
 import { Swipe, SwipeItem } from 'mint-ui'
+import { clearInterval } from 'timers'
 // import CryptoJS from 'crypto-js'
 export default {
   name: 'tabWork',
@@ -136,7 +140,8 @@ export default {
   data () {
     return {
       hasBtn: false,
-      // timer: '',
+      animate: false,
+      timer: '',
       offBadge: 0,
       currRand: 0,
       otherList: [],
@@ -165,6 +170,7 @@ export default {
     if (this.auth['APP_Quality']) {
       this.getPageData()
     }
+    this.timer = setInterval(this.showMarquee, 2000)
   },
   activated () {
     this.getReportRight()
@@ -184,6 +190,9 @@ export default {
     this.offlineBadge()
     // clearInterval(this.timer)
     // this.timer = setInterval(this.getRollNotice, 10000)
+  },
+  deactivated () {
+    clearInterval(this.timer)
   },
   computed: {
     ...mapGetters({
@@ -240,6 +249,14 @@ export default {
     // }
   },
   methods: {
+    showMarquee: function () {
+      this.animate = true
+      setTimeout(() => {
+        this.noticeList.push(this.noticeList[0])
+        this.noticeList.shift()
+        this.animate = false
+      }, 500)
+    },
     getRollNotice () {
       let maxIndexId = -1
       if (this.noticeRollIndexId && this.noticeRollIndexId.length > 0) {
@@ -537,6 +554,7 @@ export default {
       let res = await this.$xml('UserCS_ConnectionAnnouncement', p7)
       if (!res.data) return
       let resData = res.data
+      this.noticeList = []
       if (resData && resData.data) {
         this.noticeList = resData.data.list
       }
@@ -651,18 +669,44 @@ export default {
       }
       .right_context{
         margin: 10px 20px 10px 97px;
-        height: 80px;
         white-space: nowrap;
-
+        overflow:hidden;
+        text-overflow:ellipsis;
           // left: 70px;
-          font-size: 14px;
+        font-size: 14px;
+        line-height: 30px;
+        height: 60px;
+        overflow: hidden;
+        display: block;
+        position: relative;
+        width: 65%;
+        span{
+          color: #333333;
+          font-size: 16px;
+        }
+        // .mint-swipe-item .is-active {
+        //   white-space: nowrap;
+        //   overflow:hidden;
+        //   text-overflow:ellipsis;
+        // }
+        .marquee_list {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 70px;
+        }
+        .marquee_top {
+          transition: all 0.5s;
+          margin-top: -30px;
+        }
+        .marquee_list li {
+          height: 30px;
           line-height: 30px;
-          height: 60px;
-          overflow: hidden;
-          span{
-            color: #333333;
-            font-size: 16px;
-          }
+          font-size: 14px;
+          color: #333333;
+          padding-left: 0px;
+        }
         // }
       }
 

@@ -148,6 +148,10 @@ export default {
     //     this.showBusiness = false
     //   }
     // }
+  },
+  activated () {
+    this.setAuth()
+    this.setLocationData()
   }
 }
 </script>
