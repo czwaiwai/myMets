@@ -21,7 +21,7 @@
         </div>
       </div> -->
       <div class="back_img">
-        <div class="backtitle"><span>亚洲的希望&nbsp;&nbsp;产业的未来</span></div>
+        <!-- <div class="backtitle"><span>亚洲的希望&nbsp;&nbsp;产业的未来</span></div> -->
       </div>
       <div  @click.stop="routeTo(item)" v-for="item in list" :key="item.GDType" class="weui-cells" style="margin-top:10px;">
         <div class="weui-cell">

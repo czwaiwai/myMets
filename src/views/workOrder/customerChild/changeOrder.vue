@@ -38,21 +38,13 @@
 </div>
 </template>
 <script>
-// // 客服工单接单
-// var userServiceWorkOrdAccept = '/ets/syswin/smd/userServiceWorkOrdAccept'
-// // 客服工单接单（抢单专用）
-// var userCSWorkOrdAccept = '/ets/syswin/smd/userCSWorkOrdAccept'
-// // 转单
-// var userServiceSingleBill = '/ets/syswin/smd/userServiceSingleBill'
-// // 消息推送
-// var getMetsMessage = '/ets/message/getMessage'
 import navTitle from '@/components/navTitle'
 export default {
   name: 'takeOrder',
   components: {navTitle},
   data () {
     return {
-      title: '接单',
+      title: '转单',
       sPickerValue: new Date(),
       ePickerValue: new Date(),
       formObj: {
@@ -90,10 +82,6 @@ export default {
     })
   },
   computed: {
-    isDetail () {
-      let arr = this.$route.path.match(/\/customerService\/(Resource|Equipment)\/detail/)
-      return arr || this.$route.path.indexOf('/customerNotice') > -1
-    }
   },
   methods: {
     chooseMain () {
@@ -187,7 +175,7 @@ export default {
     },
     async sendMsg (work, person) {
       let state = ''
-      let title = this.nav.workPosFrom === 'Resource' ? '客服工单' : '维修工单'
+      let title = '客服工单'
       let type = 'CustomerService'
       switch (work.WorkOrdState) {
         case 'WOSta_Sub': state = '待接单'; break
@@ -212,10 +200,6 @@ export default {
   },
   destroyed () {
     this.$root.$off('personMulti')
-    // if (this.isDetail) {
-    //   this.$parent.reload && this.$parent.reload() // 在详情页时reload
-    //   this.$parent.$parent && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
-    // }
   }
 }
 </script>

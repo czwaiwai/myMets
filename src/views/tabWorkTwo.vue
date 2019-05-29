@@ -9,7 +9,7 @@
         <span  @click="$router.forward('/changeProject')">{{user.OrgName}}</span>
         <i class="iconfont icon-open-close-selected classblue"  @click="$router.forward('/changeProject')" style="font-size: 33px;font-size:#fff"></i>
       </p>
-      <span class="title">亚洲的希望  产业的未来</span>
+      <!-- <span class="title">亚洲的希望  产业的未来</span> -->
     </div>
     <div class="title_context">
       <div class="weui-grids">
