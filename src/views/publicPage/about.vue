@@ -13,7 +13,7 @@
           </div>
           <div class="selectItem clearfix noneBb">
             <span class="name">版本：</span>
-            <span class="value textLeft">3.0.0</span>
+            <span class="value textLeft">3.1.0</span>
           </div>
           <div class="selectItem clearfix noneBb">
             <span class="name">版权所有：</span>
