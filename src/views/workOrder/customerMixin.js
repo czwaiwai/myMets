@@ -73,7 +73,11 @@ export default {
     },
     // 转单
     covertOrder (obj) {
-      this.$router.push({path: this.$route.path + '/personSelector'})
+      this.$router.push({path: this.$route.path + '/changeOrder'})
+      // let routerPath = this.$route.path + '/changeOrder'
+      // console.log('routerPath', routerPath)
+      // this.$router.push({path: routerPath})
+      // this.$router.push({path: this.$route.path + '/personSelector'})
     },
     // 反馈
     routeFeedback (obj) {

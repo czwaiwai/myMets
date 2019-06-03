@@ -132,7 +132,7 @@
 <script>
 import {mapGetters} from 'Vuex'
 import { Swipe, SwipeItem } from 'mint-ui'
-import { clearInterval } from 'timers'
+// import { clearInterval } from 'timers'
 // import CryptoJS from 'crypto-js'
 export default {
   name: 'tabWork',
@@ -170,7 +170,6 @@ export default {
     if (this.auth['APP_Quality']) {
       this.getPageData()
     }
-    this.timer = setInterval(this.showMarquee, 2000)
   },
   activated () {
     this.getReportRight()
@@ -188,6 +187,7 @@ export default {
       this.currRand = this.rand
     }
     this.offlineBadge()
+    this.timer = setInterval(this.showMarquee, 2000)
     // clearInterval(this.timer)
     // this.timer = setInterval(this.getRollNotice, 10000)
   },
@@ -250,6 +250,8 @@ export default {
   },
   methods: {
     showMarquee: function () {
+      // this.index = this.index + 1
+      // console.log('tag', this.index)
       this.animate = true
       setTimeout(() => {
         this.noticeList.push(this.noticeList[0])

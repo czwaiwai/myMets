@@ -1,7 +1,7 @@
 <template>
 <div class="page_modal">
   <div class="page">
-    <nav-title :title="title"></nav-title>
+    <nav-title title="转单"></nav-title>
     <div class="page_bd">
       <div class="weui-cells" style="margin:0;">
         <div class="weui-cell padding15 " href="javascript:;">
@@ -25,8 +25,9 @@
             {{formObj.plusEmployeeName || '选填(可多选)' }}
           </div>
         </a>
+      </div>
       <div class="padding15">
-        <button @click="submit" class="ins_submit_btn">{{title}}</button>
+        <button @click="submit" class="ins_submit_btn">转单</button>
       </div>
     </div>
     <transition name="page">
@@ -39,9 +40,11 @@
 </template>
 <script>
 import navTitle from '@/components/navTitle'
+import customerMixin from '../customerMixin'
 export default {
-  name: 'takeOrder',
+  name: 'changeOrder',
   components: {navTitle},
+  mixins: [customerMixin],
   data () {
     return {
       title: '转单',
@@ -62,44 +65,39 @@ export default {
     }
   },
   created () {
-    this.title = this.$route.query.title || '转单'
+    // this.title = this.$route.query.title || '转单'
 
     this.nav = this.$parent.nav
     this.work = this.$parent.workItem
-    this.formObj.userName = this.nav.memberName
+    this.formObj.userName = ''
     this.formObj.workOrdId = this.work.WorkOrdID
     this.formObj.idea = this.work.QuesDeti
-    this.formObj.orders = this.nav.memberName
-    this.formObj.ordersDepart = this.nav.positionName
-    this.formObj.ordersPositionId = this.nav.positionId
-    this.formObj.ordersId = this.nav.memberId
-    this.formObj.UserId = this.nav.userName
+    this.formObj.orders = ''
+    this.formObj.ordersDepart = ''
+    this.formObj.ordersPositionId = ''
+    this.formObj.ordersId = ''
+    this.formObj.UserId = ''
+    this.formObj.plusEmployeeName = this.work.PlusEmployeeName
+    console.log('personMulti', 'personMulti')
     this.$root.$on('personMulti', list => {
       let arr = list.map(item => item.EmployeeName)
-      console.log(arr)
-      console.log(this.formObj)
       this.formObj.plusEmployeeName = arr.join('、')
     })
   },
   computed: {
+    isDetail () {
+      let arr = this.$route.path.match(/\/customerService\/(Resource|Equipment)\/detail/)
+      return arr || this.$route.path.indexOf('/customerNotice') > -1
+    }
   },
   methods: {
     chooseMain () {
-      this.$router.push({path: this.$route.path + '/personSelector'})
+      this.$router.push({path: this.$route.path + '/changeOrderPersonSelector'})
     },
     chooseOther () {
-      this.$router.push({path: this.$route.path + '/personSelectorMulti'})
+      this.$router.push({path: this.$route.path + '/changeOrderPersonSelectorMulti'})
     },
     setPerson (item) {
-      //  let params = {
-      //   strWorkOrdID: this.workItem.WorkOrdID,
-      //   PositionId: item.PositionID,
-      //   PositionName: item.PositionName,
-      //   OrdersID: item.EmployeeID,
-      //   Orders: item.EmployeeName,
-      //   OrdersDepart: item.DeptName,
-      //   PlusEmployeeName: ''
-      // }
       let userName = this.formObj.userName
       let workOrdId = this.formObj.workOrdId
       let nameStr = this.formObj.plusEmployeeName
@@ -129,73 +127,32 @@ export default {
       let params = {
         strWorkOrdID: this.formObj.workOrdId,
         PositionId: this.formObj.ordersPositionId,
-        PositionName: this.formObj.PositionName,
-        // OrdersID: item.EmployeeID,
-        // Orders: item.EmployeeName,
-        // OrdersDepart: item.DeptName,
-        PlusEmployeeName: ''
+        PositionName: this.formObj.ordersPositionName,
+        OrdersID: this.formObj.ordersId,
+        Orders: this.formObj.orders,
+        OrdersDepart: this.formObj.ordersDepart,
+        PlusEmployeeName: this.formObj.plusEmployeeName
       }
-
+      // console.log('tag', params)
       let p0 = 'UserService_SingleBill'
       let res = await this.$xml(p0, params)
       console.log(res)
-      this.$parent.refresh && this.$parent.refresh()
-      this.$root.back()
-      this.$store.commit('setHomeRand', Date.now())
       try {
-        // await this.sendMsg(this.workItem, item)
+        await this.sendMsg(this.work, this.formObj)
         this.$toast('转单成功并推送消息')
       } catch (error) {
+        console.log('error', error)
         this.$toast('转单成功但消息推送失败')
+      } finally {
+        this.$store.commit('setHomeRand', Date.now())
+        if (!this.isDetail) {
+          this.$root.back()
+          this.$parent.refresh()
+        } else {
+          this.$parent.$parent && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
+          this.$router.go(-2)
+        }
       }
-
-      // let res = await this.$xml(p0, {
-      //   'Idea': this.formObj.idea,
-      //   'Orders': this.formObj.orders,
-      //   'OrdersDepart': this.formObj.ordersDepart,
-      //   'OrdersID': this.formObj.ordersId,
-      //   'OrdersPositionID': this.formObj.ordersPositionId,
-      //   'PlusEmployeeName': this.formObj.plusEmployeeName,
-      //   'WorkOrdID': this.formObj.workOrdId,
-      //   'RStartTime': this.formObj.rStartTime,
-      //   'EWholeTime': this.formObj.eWholeTime
-      // }, {
-      //   p1: this.nav.userName
-      // })
-      // console.log(res, 'res')
-      // this.$toast(this.title + '成功')
-      // this.$store.commit('setHomeRand', Date.now())
-      // if (!this.isDetail) {
-      //   this.$root.back()
-      //   this.$parent.refresh()
-      // } else {
-      //   this.$parent.$parent && this.$parent.$parent.refresh && this.$parent.$parent.refresh()
-      //   this.$router.go(-2)
-      // }
-    },
-    async sendMsg (work, person) {
-      let state = ''
-      let title = '客服工单'
-      let type = 'CustomerService'
-      switch (work.WorkOrdState) {
-        case 'WOSta_Sub': state = '待接单'; break
-        case 'WOSta_Proc': state = '待完工'; break
-        case 'WOSta_Finish': state = '待回访'; break
-        case 'WOSta_Visit': state = '待关闭'; break
-      }
-      let params = {
-        'ID': work.WorkOrdID,
-        'Type': type,
-        'Title': title,
-        'Content': this.nav.memberName + '给您转发一个新的' + state + '工单，请及时处理',
-        'Tag': person.UserId,
-        'Status': '1',
-        'FromTag': ''
-      }
-      let p0 = 'AppWeChat_JGWorkPush'
-      let res = await this.$xml(p0, params, {}, true)
-      // this.$toast('消息推送成功')
-      console.log(res)
     }
   },
   destroyed () {
