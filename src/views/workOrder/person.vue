@@ -84,6 +84,7 @@ export default {
       // this.$root.back()
     },
     submitPerson () {
+      console.log('submitPerson', this.chooseList)
       this.$root.$emit('personMulti', this.chooseList)
       this.$root.back()
     },
