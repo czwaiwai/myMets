@@ -10,10 +10,31 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
-
+const fs = require('fs')
+const archiver = require('archiver')
 const spinner = ora('building for production...')
 spinner.start()
 
+function zip() {
+  let output = fs.createWriteStream(path.resolve(__dirname, '../dist/update.zip'))
+  let archive = archiver('zip', {
+    zlib: { level: 9}
+  })
+  output.on('close', function() {
+    console.log('压缩文件大小为:' + archive.pointer() + ' total bytes')
+    console.log(chalk.cyan('  压缩完成.\n'))
+  })
+  archive.on('error', function(err) {
+    console.log(chalk.red('压缩文件报错'))
+    console.log("error:" + err.message)
+    process.exit(1)
+  })
+  archive.pipe(output)
+  let index = path.resolve(__dirname, '../dist/index.html')
+  archive.append(fs.createReadStream(index), {name: 'index.html'})
+  archive.directory(path.resolve(__dirname, '../dist/static/'), 'static')
+  archive.finalize()
+}
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, (err, stats) => {
@@ -37,5 +58,6 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       '  Tip: built files are meant to be served over an HTTP server.\n' +
       '  Opening index.html over file:// won\'t work.\n'
     ))
+    zip()
   })
 })
