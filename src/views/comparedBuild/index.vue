@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import Navbar from '@/components/navbar'
 import FilterModal from '@/components/filterModal'
 import FilterRadio from '@/components/filter/radio'

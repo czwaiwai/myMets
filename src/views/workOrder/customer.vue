@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import navbar from '@/components/navbar'
 import PageList from '@/components/pageList'
 import customerMixin from './customerMixin'

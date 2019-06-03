@@ -59,7 +59,7 @@
 </template>
 <script>
 import {Actionsheet} from 'mint-ui'
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import Search from '@/components/search'
 import navbar from '@/components/navbar'
 import PageList from '@/components/pageList'

@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import Search from '@/components/searchV2'
 import dialogConfire from '@/components/dialogConfire.vue'
 import mapReady from '@/utils/getEchars'

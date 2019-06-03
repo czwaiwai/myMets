@@ -20,7 +20,7 @@
 </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import Search from '@/components/search'
 import statusColor from '../../components/statusColor'
 export default {

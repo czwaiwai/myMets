@@ -88,7 +88,7 @@
 
 <script>
 import navTitle from '@/components/navTitle'
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 export default {
   name: 'tabMy',
   components: {navTitle},

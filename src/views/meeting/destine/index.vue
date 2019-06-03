@@ -88,6 +88,7 @@ export default {
     ...mapGetters({
       dateDate: 'getDate',
       key: 'getSearchKey',
+      user: 'user',
       navData: 'getMeetingLocation',
       destineConfig: 'destineConfig'
     })

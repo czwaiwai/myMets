@@ -29,7 +29,7 @@
 
 <script>
 
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import qs from 'qs'
 import navTitle from '@/components/navTitle'
 import {Navbar, TabItem, TabContainer, TabContainerItem} from 'mint-ui'

@@ -126,9 +126,9 @@
 import navTitle from '@/components/navTitle'
 import dateChange from '@/mixins/dateChange'
 import { Swipe, SwipeItem } from 'mint-ui'
-import BaiduMap from 'vue-baidu-map/components/Map/Map.vue'
+import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BmGeolocation from 'vue-baidu-map/components/controls/Geolocation.vue'
-import BmMarker from 'vue-baidu-map/components/overlays/marker.vue'
+import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
 export default {
   name: 'investmentDetail',
   components: {navTitle, Swipe, SwipeItem, BaiduMap, BmGeolocation, BmMarker},

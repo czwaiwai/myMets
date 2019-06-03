@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import { Navbar, TabItem } from 'mint-ui'
 import ScanList from '@/components/pageList'
 import OtherDetail from './child/otherDetail'

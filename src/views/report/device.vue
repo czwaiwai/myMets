@@ -177,7 +177,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import mapReady from '@/utils/getEchars'
 import {option1, option2, option3} from './child/deviceMap'
 import qs from 'qs'

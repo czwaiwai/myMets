@@ -86,6 +86,7 @@ export default {
       btnTxt: '确定收款',
       list: [],
       isOrder: false, // false按账期排序, true按项目排序
+      sortArr: [], // 日期排序规则
       actions: []
     }
   },
@@ -138,9 +139,33 @@ export default {
         return before
       }, 0)
       return Math.round(parseFloat(money * 100)) / 100
+    },
+    // 判断用户是否需要按日期连续选择缴费项目
+    isStepByStepChoose () {
+      if (this.list.length === 0) {
+        return true
+      }
+      let list = JSON.parse(JSON.stringify(this.list))
+      if (list[0].repYears) {
+        return this.stepChoose(list)
+      } else {
+        return list.every(item => this.stepChoose(item.dateData))
+      }
     }
   },
   methods: {
+    // 判断用户是否需要按日期连续选择缴费项目
+    stepChoose (list) {
+      list.reverse()
+      let filterList = list.filter(item => item.isCheck)
+      if (filterList.length === 0) return true
+      let max = Math.max.apply(Math, filterList.map(item => item.yearNum))
+      let arr = list.filter(item => item.yearNum <= max)
+      if (arr.length === 0) {
+        return true
+      }
+      return arr.every(item => item.isCheck)
+    },
     // 更换页面模式
     async handleChangeMode () {
       this.isOrder = !this.isOrder
@@ -154,13 +179,22 @@ export default {
         // this.$parent.orderBy = this.isOrder ? '1' : '0'
         local.set('cash_orderby', this.isOrder ? '1' : '0')
         let data = this.$toLower(res.data)
+        // console.log('data=====', data)
+        // this.sortArr = data[0].costData.map(item => item.repYears).sort((a, b) => a.replace('-', '') - b.replace('-', ''))
+        // console.log(this.sortArr, 'sortArr')
         this.noCash = false
         let arr = data.filter(item => item.cstID === this.$parent.choosePersonCash.cstID)
         if (arr) {
           let list = arr[0].costData.map((item, index) => {
             this.$set(item, 'isCheck', true)
             this.$set(item, 'subShow', false)
+            if (item.repYears) {
+              item.yearNum = parseInt(item.repYears.replace('-', ''))
+            }
             item.dateData.forEach(sub => {
+              if (sub.repYears) {
+                sub.yearNum = parseInt(sub.repYears.replace('-', ''))
+              }
               this.$set(sub, 'isCheck', true)
             })
             return item
@@ -237,6 +271,9 @@ export default {
       item.subShow = !item.subShow
     },
     payUp () {
+      if (!this.isStepByStepChoose) {
+        return this.$toast('你必须从最小账期开始收款')
+      }
       if (this.actions.length === 0) {
         return this.$toast('支付方式正在获取中...,请稍后尝试')
       }

@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import { Swipe, SwipeItem } from 'mint-ui'
 // import { clearInterval } from 'timers'
 // import CryptoJS from 'crypto-js'
@@ -141,7 +141,7 @@ export default {
     return {
       hasBtn: false,
       animate: false,
-      timer: '',
+      timer: 0,
       offBadge: 0,
       currRand: 0,
       otherList: [],
@@ -192,7 +192,9 @@ export default {
     // this.timer = setInterval(this.getRollNotice, 10000)
   },
   deactivated () {
-    clearInterval(this.timer)
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   },
   computed: {
     ...mapGetters({

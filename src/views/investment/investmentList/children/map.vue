@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import BaiduMap from 'vue-baidu-map/components/Map/Map.vue'
+import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BmLabel from 'vue-baidu-map/components/overlays/Label.vue'
 export default {
   name: 'mapBox',

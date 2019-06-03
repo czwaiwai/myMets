@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 // import CryptoJS from 'crypto-js'
 export default {
   name: 'tabWork',

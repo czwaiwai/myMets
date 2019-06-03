@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import { DatetimePicker } from 'mint-ui'
 import navTitle from '@/components/navTitle'
 export default {

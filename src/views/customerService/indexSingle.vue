@@ -130,7 +130,7 @@
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui'
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 export default {
   name: 'customerService',
   components: { DatetimePicker },

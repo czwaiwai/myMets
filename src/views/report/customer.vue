@@ -157,7 +157,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import mapReady from '@/utils/getEchars'
 // import sleep from '@/utils/sleep'
 import {option1, option2, option3, option4} from './child/customerMap'

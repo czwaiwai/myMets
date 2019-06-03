@@ -93,7 +93,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import mapReady from '@/utils/getEchars'
 import {option1, option2} from './child/cashMap'
 import qs from 'qs'
