@@ -98,7 +98,7 @@
 </template>
 <script>
 import ready from '@/utils/getEchars'
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import qs from 'qs'
 import navTitle from '@/components/navTitle'
 export default {

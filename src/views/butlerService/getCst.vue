@@ -34,7 +34,7 @@
 </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import navTitle from '@/components/navTitle'
 export default {
   name: 'getCst',

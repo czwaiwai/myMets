@@ -95,7 +95,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import voiceIcon from '@/components/voiceIcon'
 import customerMixin from './customerMixin'
 import Star from './child/star'

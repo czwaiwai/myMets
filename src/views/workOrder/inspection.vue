@@ -81,7 +81,7 @@ import FilterDateEnd from '@/components/filter/dateEnd'
 import FilterRadio from '@/components/filter/radio'
 // import FilterCheckbox from '@/components/filter/checkbox'
 
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import navbar from '@/components/navbar'
 import PageList from '@/components/pageList'
 import navTitle from '@/components/navTitle'

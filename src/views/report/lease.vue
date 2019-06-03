@@ -186,7 +186,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import {Popup} from 'mint-ui'
 import ready from '@/utils/getEchars'
 import qs from 'qs'

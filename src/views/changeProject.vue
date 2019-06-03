@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import Search from '@/components/search'
 export default {
   name: 'detail',

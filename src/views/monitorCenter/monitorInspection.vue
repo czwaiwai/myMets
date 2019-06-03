@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import navbar from '@/views/workOrder/child/navbar'
 import PageList from '@/components/pageList'
 import qs from 'qs'

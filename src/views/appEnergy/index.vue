@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import local from '@/utils/local'
 // import CryptoJS from 'crypto-js'
 export default {

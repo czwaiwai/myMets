@@ -30,7 +30,7 @@
                     <span v-if="item.ImageExsit === '0'"><i class="iconfont icon-paizhao"></i>&nbsp;拍照</span>
                     <span v-if="item.ImageExsit === '1'">查看签到</span>
                   </button>
-                  <button class="photo_btn" @click="toPhotoShow(item)" v-if="['3','4'].includes(work.WorkState) && item.ImageExsit === '1'"><span>查看签到</span></button>
+                  <button class="photo_btn" @click="toPhotoShow(item)" v-if="(['3','4'].indexOf(work.WorkState)>-1) && item.ImageExsit === '1'"><span>查看签到</span></button>
                 </div>
                 <div v-show="item.show" class="sub_item_content">
                   <ul v-if="work.WorkState === '2'"  class="sub_ul_opera ">
@@ -108,7 +108,7 @@
 import Search from '@/components/search'
 import InsRadio from './child/insRadio'
 import InsNumber from './child/insNumber'
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import local from '@/utils/local'
 import navTitle from '@/components/navTitle'
 import dialogText from '@/components/dialogText'

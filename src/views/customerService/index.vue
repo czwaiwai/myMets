@@ -130,7 +130,7 @@
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui'
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 // import Vue from 'vue'
 import sess from '../../utils/sess'
 export default {

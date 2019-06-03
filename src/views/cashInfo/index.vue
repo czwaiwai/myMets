@@ -37,7 +37,7 @@
 // 欠费查询接口
 // var getArrearsCost = '/ets/payment/house/getArrearsCost';
 
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import navTitle from '@/components/navTitle'
 export default {
   name: 'cashInfo',

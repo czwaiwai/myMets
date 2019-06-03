@@ -73,7 +73,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import {Tabbar, TabItem} from 'mint-ui'
 export default {
   name: 'index',

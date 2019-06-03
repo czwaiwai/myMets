@@ -73,7 +73,7 @@
 
 <script>
 // http://localhost:8080/mets/report/docs/index.html?UserId=test30&PositionId=11091316310300010000&projectID=11091315263400010000&memberId=30&projectName=测试项目&Report=APP_Report&ReportWork=APP_ReportWork&ReportEquip=APP_ReportEquip&ReportCollection=APP_ReportCollection#page=0
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 import qs from 'qs'
 import navTitle from '@/components/navTitle'
 import {Navbar, TabItem, TabContainer, TabContainerItem} from 'mint-ui'

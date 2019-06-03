@@ -59,7 +59,7 @@
 </div>
 </template>
 <script>
-import {mapGetters} from 'Vuex'
+import {mapGetters} from 'vuex'
 export default {
   name: 'detail',
   components: {},
