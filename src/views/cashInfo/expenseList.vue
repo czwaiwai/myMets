@@ -87,6 +87,7 @@ export default {
       list: [],
       isOrder: false, // false按账期排序, true按项目排序
       sortArr: [], // 日期排序规则
+      isContinuous: true, // 是否可以跨账期 true 为可以跨账期,false为不可以
       actions: []
     }
   },
@@ -179,6 +180,11 @@ export default {
         // this.$parent.orderBy = this.isOrder ? '1' : '0'
         local.set('cash_orderby', this.isOrder ? '1' : '0')
         let data = this.$toLower(res.data)
+        if (data[0].continuous === '1') {
+          this.isContinuous = false
+        } else {
+          this.isContinuous = true
+        }
         // console.log('data=====', data)
         // this.sortArr = data[0].costData.map(item => item.repYears).sort((a, b) => a.replace('-', '') - b.replace('-', ''))
         // console.log(this.sortArr, 'sortArr')
@@ -271,7 +277,7 @@ export default {
       item.subShow = !item.subShow
     },
     payUp () {
-      if (!this.isStepByStepChoose) {
+      if (!this.isContinuous && !this.isStepByStepChoose) {
         return this.$toast('你必须从最小账期开始收款')
       }
       if (this.actions.length === 0) {
